@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ul class="sidebar-menu">
+        <li>
+            <p:link href="/pages/tarefa/lista-tarefa.xhtml">
+                <i class="fa fa-home"></i>
+                <span>Home</span>
+            </p:link>
+        </li>
+        
+         <li>
+            <p:link href="#">
+                <i class="fa fa-cog"></i>
+                <span>Configuração</span>
+            </p:link>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-list-alt"></i>
+            <span>Pedido</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="#"><i class="fa fa-circle-o"></i>Cliente</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>Cardário</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>Pedido</a></li>
+          </ul>
+        </li>
+         
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-map"></i>
+            <span>Localização</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="#"><i class="fa fa-circle-o"></i> Cidade</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Bairro</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Área</a></li>
+            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i>Entregador</a></li>
+          </ul>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+           <i class="fa fa-server"></i>
+            <span>Ficha Técnica</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="#"><i class="fa fa-circle-o"></i> Insumo</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Item</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Preparo</a></li>
+          </ul>
+        </li>
+       
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-money"></i>
+            <span>Financeiro</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="#"><i class="fa fa-circle-o"></i> Preço do Prato</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Forma de Pagamento</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Fornecedor</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Entrada de Produtos</a></li>
+          </ul>
+        </li>
+       
+       
+       <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>Relatório</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="#"><i class="fa fa-circle-o"></i>Inumos</a></li>
+			<li><a href="#"><i class="fa fa-circle-o"></i>Ficha Técnica</a></li>
+			<li><a href="#"><i class="fa fa-circle-o"></i>Rotas</a></li>
+			<li><a href="#"><i class="fa fa-circle-o"></i>Devedores</a></li>
+			<li><a href="#"><i class="fa fa-circle-o"></i>Pedidos</a></li>
+			<li><a href="#"><i class="fa fa-circle-o"></i>Receitas</a></li>
+			<li><a href="#"><i class="fa fa-circle-o"></i>Melhor compra</a></li>
+          </ul>
+        </li>
+       
+        
+    </ul>
+
+
+</ui:composition>

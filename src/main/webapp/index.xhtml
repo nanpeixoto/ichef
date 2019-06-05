@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head-end">
+        <ui:param name="renderBreadCrumb" value="false"/>
+    </ui:define>
+
+    <ui:define name="title">
+        <p:growl autoUpdate="true" life="4000"/>
+
+		<section class="content">
+	        <h2 class="align-center">
+		    
+	        
+	            Bem vindo ao <span class="text-aqua"> <i>
+	            	<a href="http://karanalpe.com.br/" target="_blank" style="text-transform: none;text-decoration: none"> Cozinha de Chefe</a></i></span>!
+	            <br/>
+	           <!--  <small>Utilizando <p:link value="Primefaces" href="http://primefaces.org" target="_blank"/>, <p:link value="Bootstrap"
+	                                                                                                  href="http://getbootstrap.com/" target="_blank"/> e
+	                <p:link value="Admin LTE" href="https://almsaeedstudio.com/themes/AdminLTE/index2.html" target="_blank"/> com
+	                <p:link value="JSF" href="https://javaserverfaces.java.net/" target="_blank"/>.
+	            </small> -->
+	        </h2>
+	        
+	        
+	        <div class="row">
+	        	<div class="col-sm-6 col-xs-12">
+                	<div class="info-box bg-aqua">
+                    	<span class="info-box-icon"><i class="fa fa-list"></i></span>
+                    	<div class="info-box-content">
+                        	<span class="info-box-text">Pedidos</span>
+                        	<span class="info-box-number">350</span>
+                        	<div class="progress">
+                            	<div class="progress-bar" style="width: 70%"></div>
+                        	</div>
+                        	<span class="progress-description">70% dos pratos diponíveis </span>
+                    	</div><!-- /.info-box-content -->
+                	</div><!-- /.info-box -->
+            	</div>
+            	
+            	<div class="col-sm-6 col-xs-12">
+                	<div class="info-box bg-green">
+                    	<span class="info-box-icon"><i class="fa fa-money"></i></span>
+                    	<div class="info-box-content">
+                        	<span class="info-box-text">Pagamentos em Dinheiro</span>
+                        	<span class="info-box-number">10</span>
+                        	<div class="progress">
+                            	<div class="progress-bar" style="width: 2%"></div>
+                        	</div>
+                        	<span class="progress-description">2% dos pedidos  </span>
+		               	</div><!-- /.info-box-content -->
+					</div><!-- /.info-box -->
+				</div>
+            
+	            <div class="col-sm-6 col-xs-12">
+	                <div class="info-box bg-yellow">
+	                    <span class="info-box-icon"><i class="fa fa-credit-card"></i></span>
+	                    <div class="info-box-content">
+	                        <span class="info-box-text">Pagamentos em Cartão</span>
+	                        <span class="info-box-number">50</span>
+	                        <div class="progress">
+	                            <div class="progress-bar" style="width: 14%"></div>
+	                        </div>
+	                        <span class="progress-description">14% dos pedidos</span>
+	                    </div><!-- /.info-box-content -->
+	                </div><!-- /.info-box -->
+	            </div>
+	            
+	            <div class="col-sm-6 col-xs-12">
+	                <div class="info-box bg-red">
+	                    <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
+	                    <div class="info-box-content">
+	                        <span class="info-box-text">Pagamentos em Carteira</span>
+	                        <span class="info-box-number">290</span>
+	                        <div class="progress">
+	                            <div class="progress-bar" style="width: 82%"></div>
+	                        </div>
+	                        <span class="progress-description">82% dos pedidos</span>
+	                    </div><!-- /.info-box-content -->
+	                </div><!-- /.info-box -->
+	            </div>
+	            
+	             <div class="col-sm-12 col-xs-12">
+              <!-- USERS LIST -->
+              <div class="box box-danger">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Última Hora</h3>
+
+                  <div class="box-tools pull-right">
+                    <span class="label label-danger">10 novos pedidos</span>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                  <ul class="users-list clearfix">
+                    <li>
+                      <img src="resources/images/prato1.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">Alexander Pierce</a>
+                      <span class="users-list-date">28/05</span>
+                    </li>
+                    <li>
+                      <img src="resources/images/prato2.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">Norman</a>
+                      <span class="users-list-date">28/05</span>
+                    </li>
+                    <li>
+                      <img src="resources/images/prato3.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">Jane</a>
+                      <span class="users-list-date">28/05</span>
+                    </li>
+                    <li>
+                      <img src="resources/images/prato4.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">John</a>
+                      <span class="users-list-date">28/05</span>
+                    </li>
+                    <li>
+                      <img src="resources/images/prato5.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">Alexander</a>
+                      <span class="users-list-date">27/05</span>
+                    </li>
+                    <li>
+                      <img src="resources/images/prato6.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">Sarah</a>
+                      <span class="users-list-date">27/05</span>
+                    </li>
+                    <li>
+                      <img src="resources/images/prato7.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">Nora</a>
+                      <span class="users-list-date">27/05</span>
+                    </li>
+                    <li>
+                      <img src="resources/images/prato8.jpg" alt="User Image" style="width: 105px;"/>
+                      <a class="users-list-name" href="#">Nadia</a>
+                      <span class="users-list-date">27/05</span>
+                    </li>
+                  </ul>
+                  <!-- /.users-list -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                  <a href="javascript:void(0)" class="uppercase">Ver todos os Pedidos</a>
+                </div>
+                <!-- /.box-footer -->
+              </div>
+              <!--/.box -->
+            </div>
+	           
+		        <!-- /.col -->
+		      </div>
+		</section>
+
+    </ui:define>
+
+
+</ui:composition>

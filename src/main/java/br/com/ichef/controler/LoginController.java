@@ -1,0 +1,83 @@
+package br.com.ichef.controler;
+
+import java.util.List;
+
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.omnifaces.util.Faces;
+import org.omnifaces.util.Messages;
+
+import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.model.Usuario;
+import br.com.ichef.service.UsuarioService;
+import br.com.ichef.util.JSFUtil;
+import br.com.ichef.util.StringUtil;
+
+@Named
+@ViewScoped
+public class LoginController extends BaseController {
+
+	private static final long serialVersionUID = 1L;
+	
+	@Inject
+	private UsuarioService service;
+	
+	private Usuario usuario = new Usuario();
+	
+	private String senha;
+
+	private String login;
+	
+	public String autenticar() throws Exception {
+		
+		Usuario filter = new Usuario();
+
+		
+		filter.setSenha(StringUtil.criptografa(senha));
+		filter.setLogin( login );
+		
+		List<Usuario> usuarios = service.findByParameters(filter);
+		Faces.getFlash().setKeepMessages(true);
+		
+		if (usuarios != null && usuarios.size() > 0) {
+			usuario = usuarios.get(0);
+			if (usuario.getAtivo().equalsIgnoreCase("N")) {
+				Messages.addGlobalError("O usuário não está ativo");
+				return null;
+			} else {
+				JSFUtil.setSessionMapValue("loggedUser",	usuario.getLogin());
+				JSFUtil.setSessionMapValue("usuario", usuario);
+				JSFUtil.setSessionMapValue("loggedUserPassword",usuario.getSenha());
+				//JsfUtil.setSessionMapValue("perfisUsuario",usuario.getPapel());
+				JSFUtil.setSessionMapValue("loggedMatricula",usuario.getLogin());
+				  return "/index.xhtml?faces-redirect=true";
+			}
+		} else {
+			Messages.addGlobalError("Usuário ou senha inválidos");
+			return null;
+		}
+	
+		
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	
+	
+	
+}
