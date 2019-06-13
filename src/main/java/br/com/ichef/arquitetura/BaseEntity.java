@@ -28,6 +28,8 @@ public abstract class BaseEntity implements Serializable {
 	
 	public abstract Date getDataCadastro();
 	
+	public abstract boolean isEdicao();
+	
 	
 	
 }

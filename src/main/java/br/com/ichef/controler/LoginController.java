@@ -30,6 +30,10 @@ public class LoginController extends BaseController {
 
 	private String login;
 	
+	public Usuario getUsuarioLogado() {
+		return getUserLogado();
+	}
+	
 	public String autenticar() throws Exception {
 		
 		Usuario filter = new Usuario();

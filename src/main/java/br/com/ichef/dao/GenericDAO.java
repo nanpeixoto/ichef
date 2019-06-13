@@ -87,8 +87,10 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	public void excluir(BaseEntity entity) {
 		try {
 			entity = getById(entity.getId());
+			manager.getTransaction().begin();
 			manager.remove(entity);
 			manager.flush();
+			manager.getTransaction().commit();
 		} catch (Exception e) {
 			throw new NegocioExcepticon("Item não pode ser excluído.");
 		}

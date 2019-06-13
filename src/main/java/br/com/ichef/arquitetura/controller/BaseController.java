@@ -26,7 +26,14 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	protected static String ERRO_GENERICO = "Erro ao gerar relatório, por favor entre em contato com o Administrator do Sistema.";
 
-	protected Usuario userLogado = (Usuario) JSFUtil.getSessionMapValue("usuarioLogado");
+	protected Usuario userLogado = (Usuario) JSFUtil.getSessionMapValue("usuario");
+
+	public String getMaskCpf(String cpf) {
+		cpf = cpf.replace(".", "");
+		cpf = cpf.replace("-", "");
+		
+		return cpf.substring(0, 2) + "." + cpf.substring(2, 5) + "." + cpf.substring(5, 8) + "/" + cpf.substring(8,12)+"-" + cpf.substring(12,cpf.length());
+	}
 
 	public String criptografa(String senha) {
 

@@ -30,7 +30,6 @@
     </ui:define>
 
     <ui:define name="description">
-        Pesquise de acordo com os filtros 
     </ui:define>
 
     <ui:define name="body">
@@ -60,6 +59,8 @@
 	                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
 	                                 currentPageReportTemplate=""
 	                                 rowsPerPageTemplate="5,10,15,20,30">
+	                                 
+	                               
 	
 	                        <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>	 
 	                        <p:column headerText="Título" filterBy="#{tarefa.titulo}" filterMatchMode="contains"  sortBy="#{tarefa.titulo}">

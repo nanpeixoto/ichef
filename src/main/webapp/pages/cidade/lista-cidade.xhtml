@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<style type="text/css">
+.ui-grid-row .ui-grid-col-2, .ui-grid-row .ui-grid-col-10 {
+	padding: 0.5em 0;
+	margin-left: 10px;
+}
+
+.ui-orderlist .ui-orderlist-list {
+	height: auto;
+}
+
+.ui-orderlist .ui-grid-row .ui-grid-col-2, .ui-orderlist .ui-grid-row .ui-grid-col-10
+	{
+	padding: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">
+        Pesquisa Cidade
+    </ui:define>
+
+	<ui:define name="description">
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb title="Pesquisa" />
+
+		<h:form>
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<p:commandButton action="cadastro-cidade?faces-redirect=true"
+						ajax="false" icon="fa fa-plus" value="Novo"
+						styleClass="btn-primary" />
+					<p:spacer width="5" />
+					<p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash"
+						styleClass="btn-danger" process="@form" update="@form"
+						action="#{cidadeController.excluirSelecionados()}" />
+					<p:spacer width="5" />
+					<p:commandButton value="Olhar Selecionado(s)"
+						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
+						styleClass="btn-info" icon="fa fa-search" />
+					<p:separator />
+
+
+					<p:dataTable id="TarefaTable" widgetVar="itens" rows="10"
+						paginator="true" value="#{cidadeController.lista}" var="item"
+						rowKey="#{item.id}"  reflow="true"
+						selection="#{cidadeController.listaSelecionadas}"
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+						currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+
+						<f:facet name="header">
+							<p:outputPanel style="text-align:right; margin-right:-10px"
+								styleClass="ui-widget-auxiliar">
+
+								<h:outputText value="Pesquisar: " escape="false" />
+
+								<p:inputText id="globalFilter" onkeyup="PF('itens').filter()"
+									style="width:150px;" maxlength="255"
+									styleClass="letras-maiusculas semClear">
+
+								</p:inputText>
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column selectionMode="multiple" width="5%" styleClass="align-center" />
+						
+						<p:column headerText="Cidade" filterBy="#{item.descricao}"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricao}">
+							<h:link value="#{item.descricao}"
+								outcome="cadastro-cidade.xhtml">
+								<f:param name="id" value="#{item.id}" />
+							</h:link>
+						</p:column>
+
+						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" filterBy="#{item.situacao}"
+							filterMatchMode="contains" sortBy="#{item.situacao}">
+							<h:outputLabel value="#{item.situacao}" />
+						</p:column>
+
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Itens Selecionadas" widgetVar="ItensSelecionados"
+			height="250" width="400" responsive="true" styleClass="box-success">
+			<p:dataList id="listaSelecionadas"
+				value="#{cidadeController.listaSelecionadas}" var="item"
+				type="definition">
+					ID: #{item.id} 
+	            </p:dataList>
+		</p:dialog>
+
+
+	</ui:define>
+
+</ui:composition>

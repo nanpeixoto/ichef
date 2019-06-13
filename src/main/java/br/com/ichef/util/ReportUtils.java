@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 
+@SuppressWarnings("deprecation")
 public class ReportUtils {
     public static final String REL_TIPO_PDF = "PDF";
 
@@ -47,7 +48,8 @@ public class ReportUtils {
     /**
      * @return the xlsExporter
      */
-    private JExcelApiExporter getXlsExporter() {
+
+	private JExcelApiExporter getXlsExporter() {
         if (xlsExporter == null) {
             xlsExporter = new JExcelApiExporter();
         }
@@ -61,7 +63,7 @@ public class ReportUtils {
         return docxExporter;
     }
 
-    @SuppressWarnings("deprecation")
+
 	public URL getJarURLFromURLEntry(URL url, String entry) throws Exception {
         String urlEntry = entry; 
         URL jarUrl;
@@ -116,7 +118,8 @@ public class ReportUtils {
         return streamArray.toByteArray();
     }
 
-    private byte[] toDocx(InputStream stream, Map<String, Object> parametros,
+   
+	private byte[] toDocx(InputStream stream, Map<String, Object> parametros,
             Object dataSource) throws JRException {
         ByteArrayOutputStream streamArray = new ByteArrayOutputStream();
         JasperPrint print = null;

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Cadastro Empresa
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+        	<f:viewParam name="id" value="#{empresaController.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{empresaController.inicializar()}" type="preRenderView"></f:event>
+        </f:metadata>
+
+        <adm:breadcrumb title="Cadastro Empresa #{empresaController.entity.id}" link="cadastro-empresa.xhtml?id=#{empresaController.entity.id}"/>
+        <h:form id="form" prependId="false">
+            <p:focus/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{empresaController.Salvar()}"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger" action="#{empresaController.excluir()}" rendered="#{empresaController.entity.edicao}">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="lista-empresa?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                                         
+                    </div>
+                    
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{empresaController.Salvar()}">
+                        <p:menuitem value="Excluir"
+                                    process="@this"
+                                    icon="fa fa-trash" action="#{empresaController.excluir()}" rendered="#{empresaController.entity.edicao}"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="lista-empresa?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+                    
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+                    	<p:panelGrid id="capaPanel" columns="4" layout="grid">
+                    		<p:outputLabel value="Razão Social" for="razao"/>
+                    		<p:inputText value="#{empresaController.entity.razaoSocal}" id="razao"   styleClass="letras-maiusculas"
+                    		required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Razão Social')}"/>
+                    		
+                    		<p:outputLabel value="CNPJ" for="cnpj"/>
+                    		<p:inputMask id="cnpj" value="#{empresaController.entity.CNPJ}" mask="99.999.999/9999-99" converter="cnpjConverter"
+                    		required="true" requiredMessage="#{configuracaoController.getRequiredMessage('CNPJ')}"/>
+                    		
+                    		<p:outputLabel value="Custo Máximo" for="customaximo"/>
+                    		<p:inputNumber id="customaximo" value="#{empresaController.entity.valorCustoMaximo}" 
+     							symbol="R$ " decimalSeparator="," thousandSeparator="."   >
+     							<f:validator validatorId="decimalConverter"  /> 
+							</p:inputNumber>  
+							
+							<p:outputLabel value="Llimitar o Custo Máximo" for="limitar"/>
+							<p:selectBooleanCheckbox value="#{empresaController.entity.limitaCustoFicha}" id="limitar" itemLabel=""/>							
+     					
+                    		<p:outputLabel value="Criação" for="criacao"/>
+                    		<p:inputText id="criacao" value="#{empresaController.entity.dataCadastro}" disabled="true">
+                    			<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+                    		</p:inputText>
+                    		
+                    		
+                    		<p:outputLabel value="Alteração" for="alteracao" rendered="#{empresaController.entity.dataAlteracao != null}"/>
+                    		<p:inputText id="alteracao" value="#{empresaController.entity.dataAlteracao}" disabled="true" rendered="#{empresaController.entity.dataAlteracao != null}">
+                    			<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+                    		</p:inputText>
+                    		
+                    		
+                    	</p:panelGrid>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   

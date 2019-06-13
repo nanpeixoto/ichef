@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,12 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
+@Table(name = "usuario")
 public class Usuario extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -62,6 +66,10 @@ public class Usuario extends BaseEntity {
 	@NotEmpty
 	@Column(name = "DS_SENHA")
 	private String senha;
+
+	// bi-directional many-to-one association to UsuarioEmpresa
+	@OneToMany(mappedBy = "usuario")
+	private List<UsuarioEmpresa> usuarioEmpresas;
 
 	public boolean isInclusao() {
 		return (getId() == null ? true : false);
@@ -189,6 +197,14 @@ public class Usuario extends BaseEntity {
 
 	public void setUsuarioCadastro(Usuario usuarioCadastro) {
 		this.usuarioCadastro = usuarioCadastro;
+	}
+
+	public List<UsuarioEmpresa> getUsuarioEmpresas() {
+		return usuarioEmpresas;
+	}
+
+	public void setUsuarioEmpresas(List<UsuarioEmpresa> usuarioEmpresas) {
+		this.usuarioEmpresas = usuarioEmpresas;
 	}
 
 }
