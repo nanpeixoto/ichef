@@ -8,13 +8,36 @@
     <ul class="nav navbar-nav">
       
       
-        <li class="dropdown user user-menu">
+      <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                 <pe:gravatar id="userImage"  value="nonexisting"/>
-                 <span class="hidden-xs">#{loginController.usuarioLogado.nomeAbreviado}</span> 
-               <!-- <img src="resources/images/sair.jpg" style="    height: 25px;  border-radius: 50%; margin-right: 10px; margin-top: -2px;" /> -->
-                
+                <pe:gravatar id="userImage"
+                             value="nonexisting"/>
+                <span class="hidden-xs"> #{loginController.usuarioLogado.nomeAbreviado}</span>
             </a>
+            <ul class="dropdown-menu">
+                <li class="user-header">
+                    <div class="hidden-xs">
+                        <pe:gravatar style="border-radius: 50%"
+                                     value="#{loginController.usuarioLogado.email}"/>
+                    </div>
+                    <p>
+                        #{loginController.usuarioLogado.nome}
+                        <small>  #{loginController.usuarioLogado.email} </small>
+                    </p>
+                </li>
+                <li class="user-footer">
+                    <h:form prependId="false">
+                        <div class="pull-left">
+                            <p:commandLink  styleClass="btn btn-danger"  value="Change password"/>
+                        </div>
+                        <div class="pull-right">
+                            <p:commandLink id="logout" action="#{loginController.logout()}"  title="Logoff">
+                                <i class="fa fa-sign-out fa-2x"></i>
+                            </p:commandLink>
+                        </div>
+                    </h:form>
+                </li>
+            </ul>
         </li>
     </ul>
 
