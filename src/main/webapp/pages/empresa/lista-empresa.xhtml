@@ -45,10 +45,10 @@
 						styleClass="btn-danger" process="@form" update="@form"
 						action="#{empresaController.excluirSelecionados()}" />
 					<p:spacer width="5" />
-					<p:commandButton value="Olhar Selecionado(s)"
+					<!-- <p:commandButton value="Olhar Selecionado(s)"
 						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
 						styleClass="btn-info" icon="fa fa-search" />
-					<p:separator />
+					<p:separator /> -->
 
 
 					<p:dataTable id="TarefaTable" widgetVar="itens" rows="10"
@@ -74,6 +74,14 @@
 						</f:facet>
 
 						<p:column selectionMode="multiple" width="5%" styleClass="align-center" />
+						
+						<p:column headerText="Nome Fantasia" filterBy="#{item.nomeFantasia}"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.nomeFantasia}">
+							<h:link value="#{item.nomeFantasia}"
+								outcome="cadastro-empresa.xhtml">
+								<f:param name="id" value="#{item.id}" />
+							</h:link>
+						</p:column>
 						
 						<p:column headerText="Razão Social" filterBy="#{item.razaoSocal}"
 							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.razaoSocal}">

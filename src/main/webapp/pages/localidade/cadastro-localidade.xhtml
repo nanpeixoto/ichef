@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Cadastro Localidade
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+        	<f:viewParam name="id" value="#{localidadeController.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{localidadeController.inicializar()}" type="preRenderView"></f:event>
+        </f:metadata>
+
+        <adm:breadcrumb title="Cadastro Localidade #{localidadeController.entity.id}" link="cadastro-localidade.xhtml?id=#{localidadeController.entity.id}"/>
+        <h:form id="form" prependId="false">
+            <p:focus/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{localidadeController.Salvar()}"/>
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Excluir" process="@this"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger" action="#{localidadeController.excluir()}" rendered="#{localidadeController.entity.edicao}">
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="lista-localidade?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                                         
+                    </div>
+                    
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{localidadeController.Salvar()}">
+                        <p:menuitem value="Excluir"
+                                    process="@this"
+                                    icon="fa fa-trash" action="#{localidadeController.excluir()}" rendered="#{localidadeController.entity.edicao}"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="lista-localidade?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+                    	<p:panelGrid id="capaPanel" columns="4" layout="grid">
+                    	
+                    		<p:outputLabel value="Tipo de Localidade" for="tipo"/>
+                    		 <p:selectOneMenu id="tipo" value="#{localidadeController.entity.tipoLocalidade}"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Tipo de Localidade')}">
+					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{localidadeController.tipoLocalidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+					        
+                    		<p:outputLabel value="Cidade" for="cidade"/>
+                    		 <p:selectOneMenu id="cidade" value="#{localidadeController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
+					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{localidadeController.cidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+					        
+					        <p:outputLabel value="Localidade" for="descricao"/>
+                    		<p:inputText value="#{localidadeController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Descrição')}"/>
+                    			
+                    		<p:outputLabel value="Empresa" for="empresa"/>
+                    		 <p:selectOneMenu id="empresa" value="#{localidadeController.entity.empresa}"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Empresa')}">
+					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{localidadeController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+					        
+					        <p:outputLabel value="Ativo" for="ativo"/>
+					        <p:selectBooleanButton id="ativo" value="#{localidadeController.entity.ativo}" 
+					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+						
+						</p:panelGrid>
+							
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="4" layout="grid">
+							<p:outputLabel value="Criação" for="criacao"/>
+	                    	<p:inputText id="criacao" value="#{localidadeController.entity.dataCadastro}" disabled="true">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    		
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{localidadeController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{localidadeController.entity.dataAlteracao}" disabled="true" rendered="#{localidadeController.entity.dataAlteracao != null}">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    </p:panelGrid>	
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   

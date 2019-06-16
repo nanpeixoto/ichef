@@ -25,7 +25,7 @@
 	</ui:define>
 
 	<ui:define name="title">
-        Pesquisa Cidade
+        Pesquisa Localidade
     </ui:define>
 
 	<ui:define name="description">
@@ -37,27 +37,29 @@
 		<h:form>
 			<div class="box box-primary">
 				<div class="box-header with-border">
-					<p:commandButton action="cadastro-cidade?faces-redirect=true"
+					<p:commandButton action="cadastro-localidade?faces-redirect=true"
 						ajax="false" icon="fa fa-plus" value="Novo"
 						styleClass="btn-primary" />
 					<p:spacer width="5" />
 					<p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash"
 						styleClass="btn-danger" process="@form" update="@form"
-						action="#{cidadeController.excluirSelecionados()}" />
+						action="#{localidadeController.excluirSelecionados()}" />
 					<p:spacer width="5" />
 					<!-- <p:commandButton value="Olhar Selecionado(s)"
 						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
-						styleClass="btn-info" icon="fa fa-search" /> -->
+						styleClass="btn-info" icon="fa fa-search" /> --> 
 					<p:separator />
 
 
 					<p:dataTable id="TarefaTable" widgetVar="itens" rows="10"
-						paginator="true" value="#{cidadeController.lista}" var="item"
-						rowKey="#{item.id}"  reflow="true"
-						selection="#{cidadeController.listaSelecionadas}"
+						paginator="true" value="#{localidadeController.lista}" var="item"
+						rowKey="#{item.id}" reflow="true"
+						selection="#{localidadeController.listaSelecionadas}"
 						paginatorPosition="bottom"
-						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
-						currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+						mptyMessage="Nenhum item encontrado" 
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
+						 sortBy="#{item.descricao}">
 
 						<f:facet name="header">
 							<p:outputPanel style="text-align:right; margin-right:-10px"
@@ -75,14 +77,42 @@
 
 						<p:column selectionMode="multiple" width="5%" styleClass="align-center" />
 						
-						<p:column headerText="Cidade" filterBy="#{item.descricao}"
+						<p:column headerText="Cód." filterBy="#{item.id}" width="8%"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.id}">
+							<h:link value="#{item.id}"
+								outcome="cadastro-localidade.xhtml">
+								<f:param name="id" value="#{item.id}" />
+							</h:link>
+						</p:column>
+						
+						
+						<p:column headerText="Tipo" filterBy="#{item.tipoLocalidade.descricao}"  width="13%"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.tipoLocalidade.descricao}">
+							<h:link value="#{item.tipoLocalidade.descricao}"
+								outcome="cadastro-localidade.xhtml">
+								<f:param name="id" value="#{item.id}" />
+							</h:link>
+						</p:column>
+						
+						<p:column headerText="Localidade" filterBy="#{item.descricao}"
 							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricao}">
 							<h:link value="#{item.descricao}"
-								outcome="cadastro-cidade.xhtml">
+								outcome="cadastro-localidade.xhtml">
 								<f:param name="id" value="#{item.id}" />
 							</h:link>
 						</p:column>
 
+						<p:column headerText="Empesa" filterStyle="display:none; visibility:hidden;" filterBy="#{item.empresa.nomeFantasia}"
+							filterMatchMode="contains" sortBy="#{item.empresa.nomeFantasia}">
+							<h:outputLabel value="#{item.empresa.nomeFantasia}" />
+						</p:column>
+						
+						
+						<p:column headerText="Cidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.cidade.descricao}"
+							filterMatchMode="contains" sortBy="#{item.cidade.descricao}"  width="15%">
+							<h:outputLabel value="#{item.cidade.descricao}" />
+						</p:column>
+						
 						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" filterBy="#{item.situacao}"
 							filterMatchMode="contains" sortBy="#{item.situacao}">
 							<h:outputLabel value="#{item.situacao}" />
@@ -94,9 +124,9 @@
 		</h:form>
 
 		<p:dialog header="Itens Selecionadas" widgetVar="ItensSelecionados"
-			height="250" width="400" responsive="true" styleClass="box-success">
+			height="250" minWidth="200" width="400" responsive="true" styleClass="box-success">
 			<p:dataList id="listaSelecionadas"
-				value="#{cidadeController.listaSelecionadas}" var="item"
+				value="#{localidadeController.listaSelecionadas}" var="item"
 				type="definition">
 					ID: #{item.id} 
 	            </p:dataList>

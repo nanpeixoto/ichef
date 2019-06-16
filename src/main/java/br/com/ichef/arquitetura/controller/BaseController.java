@@ -24,15 +24,19 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	protected static String DIALOG_CADASTRAR = "cadastrarForm";
 
-	protected static String ERRO_GENERICO = "Erro ao gerar relatório, por favor entre em contato com o Administrator do Sistema.";
+	protected static String ERRO_GENERICO = "Erro ao gerar relatï¿½rio, por favor entre em contato com o Administrator do Sistema.";
 
 	protected Usuario userLogado = (Usuario) JSFUtil.getSessionMapValue("usuario");
 
 	public String getMaskCpf(String cpf) {
 		cpf = cpf.replace(".", "");
 		cpf = cpf.replace("-", "");
+		try {
+			return cpf.substring(0, 2) + "." + cpf.substring(2, 5) + "." + cpf.substring(5, 8) + "/" + cpf.substring(8,12)+"-" + cpf.substring(12,cpf.length());
+		} catch (Exception e) {
+			return cpf;
+		}
 		
-		return cpf.substring(0, 2) + "." + cpf.substring(2, 5) + "." + cpf.substring(5, 8) + "/" + cpf.substring(8,12)+"-" + cpf.substring(12,cpf.length());
 	}
 
 	public String criptografa(String senha) {
@@ -88,7 +92,7 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	}
 
 	public String getRequiredMessage(String label) {
-		return "O campo " + label + " é de preenchimento obrigatório.";
+		return "O campo " + label + " ï¿½ de preenchimento obrigatï¿½rio.";
 	}
 
 	public String getImagem(String imagem) {

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
-import org.primefaces.context.RequestContext;
 
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Usuario;

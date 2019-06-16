@@ -25,7 +25,7 @@
 	</ui:define>
 
 	<ui:define name="title">
-        Pesquisa Bairro
+        Pesquisa Tipo de Localidade
     </ui:define>
 
 	<ui:define name="description">
@@ -37,26 +37,26 @@
 		<h:form>
 			<div class="box box-primary">
 				<div class="box-header with-border">
-					<p:commandButton action="cadastro-bairro?faces-redirect=true"
+					<p:commandButton action="cadastro-tipolocalidade?faces-redirect=true"
 						ajax="false" icon="fa fa-plus" value="Novo"
 						styleClass="btn-primary" />
 					<p:spacer width="5" />
 					<p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash"
 						styleClass="btn-danger" process="@form" update="@form"
-						action="#{bairroController.excluirSelecionados()}" />
+						action="#{tipoLocalidadeController.excluirSelecionados()}" />
 					<p:spacer width="5" />
-					<p:commandButton value="Olhar Selecionado(s)"
+					<!-- <p:commandButton value="Olhar Selecionado(s)"
 						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
-						styleClass="btn-info" icon="fa fa-search" />
+						styleClass="btn-info" icon="fa fa-search" /> --> 
 					<p:separator />
 
 
 					<p:dataTable id="TarefaTable" widgetVar="itens" rows="10"
-						paginator="true" value="#{bairroController.lista}" var="item"
-						rowKey="#{item.id}" reflow="true"
-						selection="#{bairroController.listaSelecionadas}"
-						paginatorPosition="bottom"
-						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+						paginator="true" value="#{tipoLocalidadeController.lista}" var="item"
+						rowKey="#{item.id}" reflow="true" 
+						selection="#{tipoLocalidadeController.listaSelecionadas}" sortBy="#{item.descricao}"
+						paginatorPosition="bottom" emptyMessage="Nenhum item encontrado" 
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
 
 						<f:facet name="header">
@@ -75,19 +75,14 @@
 
 						<p:column selectionMode="multiple" width="5%" styleClass="align-center" />
 						
-						<p:column headerText="Bairro" filterBy="#{item.descricao}"
+						<p:column headerText="Tipo de Localidade" filterBy="#{item.descricao}"
 							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricao}">
 							<h:link value="#{item.descricao}"
-								outcome="cadastro-bairro.xhtml">
+								outcome="cadastro-tipolocalidade.xhtml">
 								<f:param name="id" value="#{item.id}" />
 							</h:link>
 						</p:column>
 
-						<p:column headerText="Cidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.cidade.descricao}"
-							filterMatchMode="contains" sortBy="#{item.cidade.descricao}">
-							<h:outputLabel value="#{item.cidade.descricao}" />
-						</p:column>
-						
 						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" filterBy="#{item.situacao}"
 							filterMatchMode="contains" sortBy="#{item.situacao}">
 							<h:outputLabel value="#{item.situacao}" />
@@ -99,9 +94,9 @@
 		</h:form>
 
 		<p:dialog header="Itens Selecionadas" widgetVar="ItensSelecionados"
-			height="250" width="400" responsive="true" styleClass="box-success">
+			height="250" minWidth="200" width="400" responsive="true" styleClass="box-success">
 			<p:dataList id="listaSelecionadas"
-				value="#{bairroController.listaSelecionadas}" var="item"
+				value="#{tipoLocalidadeController.listaSelecionadas}" var="item"
 				type="definition">
 					ID: #{item.id} 
 	            </p:dataList>

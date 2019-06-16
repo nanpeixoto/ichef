@@ -11,31 +11,28 @@ import javax.inject.Named;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
-import br.com.ichef.model.Bairro;
 import br.com.ichef.model.Cidade;
-import br.com.ichef.service.BairroService;
-import br.com.ichef.service.CidadeService;
+import br.com.ichef.model.TipoLocalidade;
+import br.com.ichef.service.TipoLocalidadeService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class BairroController extends BaseController {
+public class TipoLocalidadeController extends BaseController {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private BairroService service;
+	private TipoLocalidadeService service;
 	
-	@Inject
-	private CidadeService cidadeService;
 
-	private Bairro entity;
+	private TipoLocalidade entity;
 
 	private Long id;
 
-	private List<Bairro> lista = new ArrayList<Bairro>();
+	private List<TipoLocalidade> lista = new ArrayList<TipoLocalidade>();
 
-	private List<Bairro> listaSelecionadas = new ArrayList<Bairro>();
+	private List<TipoLocalidade> listaSelecionadas = new ArrayList<TipoLocalidade>();
 
 	private List<Cidade> cidades = new ArrayList<Cidade>();
 
@@ -43,29 +40,15 @@ public class BairroController extends BaseController {
 		if (id != null) {
 			setEntity(service.getById(id));
 		} else {
-			setEntity(new Bairro());
+			setEntity(new TipoLocalidade());
 			getEntity().setAtivo(true);
-			getEntity().setCidade(obterCidadeSalvador());
 		}
 		obterListas();
 	}
 
-	private Cidade obterCidadeSalvador() {
-		Cidade cidadeSalvador = new Cidade();
-		cidadeSalvador.setDescricao("SALVADOR");
-		
-		try {
-			return cidadeService.findByParameters(cidadeSalvador).get(0);
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-		return null;
-	}
-
+	
 	private void obterListas() {
-		cidades = cidadeService.listAll();
-
+	
 	}
 
 	@PostConstruct
@@ -78,7 +61,7 @@ public class BairroController extends BaseController {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Bairros excluídas com sucesso");
+		FacesUtil.addInfoMessage("TipoLocalidades excluï¿½das com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -90,27 +73,27 @@ public class BairroController extends BaseController {
 			entity.setDataCadastro(new Date());
 		}
 		service.saveOrUpdade(entity);
-		return "lista-bairro.xhtml?faces-redirect=true";
+		return "lista-tipolocalidade.xhtml?faces-redirect=true";
 	}
 
 	public String excluir() {
 		service.excluir(entity);
-		return "lista-bairro.xhtml?faces-redirect=true";
+		return "lista-tipolocalidade.xhtml?faces-redirect=true";
 	}
 
-	public BairroService getService() {
+	public TipoLocalidadeService getService() {
 		return service;
 	}
 
-	public void setService(BairroService service) {
+	public void setService(TipoLocalidadeService service) {
 		this.service = service;
 	}
 
-	public Bairro getEntity() {
+	public TipoLocalidade getEntity() {
 		return entity;
 	}
 
-	public void setEntity(Bairro entity) {
+	public void setEntity(TipoLocalidade entity) {
 		this.entity = entity;
 	}
 
@@ -122,19 +105,19 @@ public class BairroController extends BaseController {
 		this.id = id;
 	}
 
-	public List<Bairro> getLista() {
+	public List<TipoLocalidade> getLista() {
 		return lista;
 	}
 
-	public void setLista(List<Bairro> lista) {
+	public void setLista(List<TipoLocalidade> lista) {
 		this.lista = lista;
 	}
 
-	public List<Bairro> getListaSelecionadas() {
+	public List<TipoLocalidade> getListaSelecionadas() {
 		return listaSelecionadas;
 	}
 
-	public void setListaSelecionadas(List<Bairro> listaSelecionadas) {
+	public void setListaSelecionadas(List<TipoLocalidade> listaSelecionadas) {
 		this.listaSelecionadas = listaSelecionadas;
 	}
 

@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -37,7 +38,7 @@ public class Empresa extends BaseEntity {
 	private BigDecimal valorCustoMaximo;
 
 	@Column(name = "SN_LIMITA_FICHA_TEC_CUSTO")
-	private String limitaFichaTécnicaPeloCusto;
+	private String limitaFichaTecnicaPeloCusto;
 
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastro;
@@ -56,12 +57,50 @@ public class Empresa extends BaseEntity {
 	@OneToMany(mappedBy = "empresa")
 	private List<UsuarioEmpresa> usuarioEmpresas;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_CIDADE")
+	private Cidade cidade;
+
+	@Column(name = "DS_ENDERECO")
+	private String endereco;
+
+	@Column(name = "NM_FANTASIA")
+	private String nomeFantasia;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_LOCALIDADE")
+	private Localidade localidade;
+
 	@javax.persistence.Transient
 	private boolean limitaCustoFicha;
-	
+
+	@Transient
+	private boolean isAtivo;
+
+	@Column(name = "SN_ATIVO")
+	private String ativo;
+
+	public boolean isAtivo() {
+		if (ativo != null) {
+			if (ativo.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isAtivo;
+	}
+
+	public void setAtivo(boolean isAtivo) {
+		this.isAtivo = isAtivo;
+		if (isAtivo == Boolean.TRUE) {
+			setAtivo("S");
+		} else
+			setAtivo("N");
+	}
+
 	public boolean isLimitaCustoFicha() {
-		if (limitaFichaTécnicaPeloCusto != null) {
-			if (limitaFichaTécnicaPeloCusto.equalsIgnoreCase("S"))
+		if (limitaFichaTecnicaPeloCusto != null) {
+			if (limitaFichaTecnicaPeloCusto.equalsIgnoreCase("S"))
 				return true;
 			else
 				return false;
@@ -72,13 +111,11 @@ public class Empresa extends BaseEntity {
 	public void setLimitaCustoFicha(boolean limitaCustoFicha) {
 		this.limitaCustoFicha = limitaCustoFicha;
 		if (limitaCustoFicha == Boolean.TRUE) {
-			setLimitaFichaTécnicaPeloCusto("S");
+			setLimitaFichaTecnicaPeloCusto("S");
 		} else
-			setLimitaFichaTécnicaPeloCusto("N");
+			setLimitaFichaTecnicaPeloCusto("N");
 	}
 
-	
-	
 	public Long getId() {
 		return id;
 	}
@@ -180,12 +217,12 @@ public class Empresa extends BaseEntity {
 		this.valorCustoMaximo = valorCustoMaximo;
 	}
 
-	public String getLimitaFichaTécnicaPeloCusto() {
-		return limitaFichaTécnicaPeloCusto;
+	public String getLimitaFichaTecnicaPeloCusto() {
+		return limitaFichaTecnicaPeloCusto;
 	}
 
-	public void setLimitaFichaTécnicaPeloCusto(String limitaFichaTécnicaPeloCusto) {
-		this.limitaFichaTécnicaPeloCusto = limitaFichaTécnicaPeloCusto;
+	public void setLimitaFichaTecnicaPeloCusto(String limitaFichaTecnicaPeloCusto) {
+		this.limitaFichaTecnicaPeloCusto = limitaFichaTecnicaPeloCusto;
 	}
 
 	public void setDataAlteracao(Date dataAlteracao) {
@@ -212,8 +249,44 @@ public class Empresa extends BaseEntity {
 		this.dataCadastro = dataCadastro;
 	}
 
+	public Cidade getCidade() {
+		return cidade;
+	}
 
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+	}
 
-	
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco.toUpperCase();
+	}
+
+	public String getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(String ativo) {
+		this.ativo = ativo.toUpperCase();
+	}
+
+	public String getNomeFantasia() {
+		return nomeFantasia;
+	}
+
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia.toUpperCase();
+	}
+
+	public Localidade getLocalidade() {
+		return localidade;
+	}
+
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
+	}
 
 }

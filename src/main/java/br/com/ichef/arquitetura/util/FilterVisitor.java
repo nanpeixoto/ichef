@@ -4,7 +4,7 @@ import org.hibernate.Criteria;
 
 public class FilterVisitor {
 
-	public void visitCriteria(Criteria criteria) {
+	public void visitCriteria(Criteria  criteria) {
 
 	}
 

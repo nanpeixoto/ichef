@@ -15,17 +15,17 @@ import javax.persistence.Transient;
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
-@Table(name = "bairro")
-public class Bairro extends BaseEntity {
+@Table(name = "localidade")
+public class Localidade extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CD_BAIRO")
+	@Column(name = "CD_LOCALIDADE")
 	private Long id;
 
-	@Column(name = "DS_BAIRRO")
+	@Column(name = "DS_LOCALIDADE")
 	private String descricao;
 
 	@Column(name = "SN_ATIVO")
@@ -36,10 +36,14 @@ public class Bairro extends BaseEntity {
 
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "CD_CIDADE")
 	private Cidade cidade;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_TIP_LOCALIDADE")
+	private TipoLocalidade tipoLocalidade;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -48,6 +52,10 @@ public class Bairro extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_EMPRESA")
+	private Empresa empresa;
 
 	@Transient
 	private boolean isAtivo;
@@ -94,7 +102,7 @@ public class Bairro extends BaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Bairro other = (Bairro) obj;
+		Localidade other = (Localidade) obj;
 		if (id == null) {
 			if (other.getId() != null)
 				return false;
@@ -186,13 +194,27 @@ public class Bairro extends BaseEntity {
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
-	
-	public String getSituacao () {
-		if(getAtivo().equals("S"))
-			return "Ativo";
-		return "Inativo";
+
+	public String getSituacao() {
+		if (getAtivo().equals("S"))
+			return "Ativo".toUpperCase();
+		return "Inativo".toUpperCase();
 	}
-	
-	
+
+	public TipoLocalidade getTipoLocalidade() {
+		return tipoLocalidade;
+	}
+
+	public void setTipoLocalidade(TipoLocalidade tipoLocalidade) {
+		this.tipoLocalidade = tipoLocalidade;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
 
 }

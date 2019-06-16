@@ -59,10 +59,34 @@
                     		<p:inputText value="#{empresaController.entity.razaoSocal}" id="razao"   styleClass="letras-maiusculas"
                     		required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Razão Social')}"/>
                     		
+                    		<p:outputLabel value="Nome Fantasia" for="fantasia"/>
+                    		<p:inputText value="#{empresaController.entity.nomeFantasia}" id="fantasia"   styleClass="letras-maiusculas"
+                    		required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Nome Fantasia')}"/>
+                    		
                     		<p:outputLabel value="CNPJ" for="cnpj"/>
                     		<p:inputMask id="cnpj" value="#{empresaController.entity.CNPJ}" mask="99.999.999/9999-99" converter="cnpjConverter"
                     		required="true" requiredMessage="#{configuracaoController.getRequiredMessage('CNPJ')}"/>
                     		
+                    		 <p:outputLabel value="Enredeço" for="endereco"/>
+                    		<p:inputText value="#{empresaController.entity.endereco}" id="endereco"   styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Endereço')}"/>
+                    			
+                    			  <p:outputLabel value="Localidade" for="localidade"/>
+                    		 <p:selectOneMenu id="localidade" value="#{empresaController.entity.localidade}"  style="   min-width: 100% !important;  width: 100%;"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
+					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{empresaController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+                    		
+                    		<p:outputLabel value="Cidade" for="cidade"/>
+                    		 <p:selectOneMenu id="cidade" value="#{empresaController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
+					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{empresaController.cidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+					        
+					      
+                   		
                     		<p:outputLabel value="Custo Máximo" for="customaximo"/>
                     		<p:inputNumber id="customaximo" value="#{empresaController.entity.valorCustoMaximo}" 
      							symbol="R$ " decimalSeparator="," thousandSeparator="."   >
@@ -70,8 +94,17 @@
 							</p:inputNumber>  
 							
 							<p:outputLabel value="Llimitar o Custo Máximo" for="limitar"/>
-							<p:selectBooleanCheckbox value="#{empresaController.entity.limitaCustoFicha}" id="limitar" itemLabel=""/>							
-     					
+							<p:selectBooleanCheckbox value="#{empresaController.entity.limitaCustoFicha}" id="limitar" itemLabel=""/>
+							
+							<p:outputLabel value="Ativo" for="ativo"/>
+					        <p:selectBooleanButton id="ativo" value="#{empresaController.entity.ativo}" 
+					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+							
+						</p:panelGrid>
+							
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>	
+											
+     					<p:panelGrid  columns="4" layout="grid">
                     		<p:outputLabel value="Criação" for="criacao"/>
                     		<p:inputText id="criacao" value="#{empresaController.entity.dataCadastro}" disabled="true">
                     			<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>

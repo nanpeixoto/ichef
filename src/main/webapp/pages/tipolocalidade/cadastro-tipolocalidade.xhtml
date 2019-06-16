@@ -5,16 +5,16 @@
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">
-        Cadastro Bairro
+        Cadastro Tipo de Localidade
     </ui:define>
 
     <ui:define name="body">
         <f:metadata>
-        	<f:viewParam name="id" value="#{bairroController.id}" converter="javax.faces.Long"/>
-        	<f:event listener="#{bairroController.inicializar()}" type="preRenderView"></f:event>
+        	<f:viewParam name="id" value="#{tipoLocalidadeController.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{tipoLocalidadeController.inicializar()}" type="preRenderView"></f:event>
         </f:metadata>
 
-        <adm:breadcrumb title="Cadastro Bairro #{bairroController.entity.id}" link="cadastro-bairro.xhtml?id=#{bairroController.entity.id}"/>
+        <adm:breadcrumb title="Cadastro Tipo de Localidade #{tipoLocalidadeController.entity.id}" link="cadastro-tipolocalidade.xhtml?id=#{tipoLocalidadeController.entity.id}"/>
         <h:form id="form" prependId="false">
             <p:focus/>
 
@@ -23,16 +23,16 @@
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
                         <p:commandButton value="Salvar" update="@form"
-                                         icon="fa fa-check" styleClass="btn-primary" action="#{bairroController.Salvar()}"/>
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{tipoLocalidadeController.Salvar()}"/>
                         <p:spacer width="5"/>
 
                         <p:commandButton value="Excluir" process="@this"
                                          icon="fa fa-trash"
-                                         styleClass="btn-danger" action="#{bairroController.excluir()}" rendered="#{bairroController.entity.edicao}">
+                                         styleClass="btn-danger" action="#{tipoLocalidadeController.excluir()}" rendered="#{tipoLocalidadeController.entity.edicao}">
                         </p:commandButton>
                         <p:spacer width="5"/>
                         <p:commandButton value="Voltar" immediate="true"
-                                         action="lista-bairro?faces-redirect=true"
+                                         action="lista-tipolocalidade?faces-redirect=true"
                                          process="@this"
                                          icon="fa fa-close"/>
                                          
@@ -40,12 +40,12 @@
                     
                     <p:splitButton value="Salvar" update="@form"
                                    icon="fa fa-check"
-                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{bairroController.Salvar()}">
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{tipoLocalidadeController.Salvar()}">
                         <p:menuitem value="Excluir"
                                     process="@this"
-                                    icon="fa fa-trash" action="#{bairroController.excluir()}" rendered="#{bairroController.entity.edicao}"/>
+                                    icon="fa fa-trash" action="#{tipoLocalidadeController.excluir()}" rendered="#{tipoLocalidadeController.entity.edicao}"/>
                         <p:separator/>
-                        <p:menuitem value="Voltar" action="lista-bairro?faces-redirect=true" process="@this"
+                        <p:menuitem value="Voltar" action="lista-tipolocalidade?faces-redirect=true" process="@this"
                                     icon="fa fa-close"/>
                     </p:splitButton>
 
@@ -55,19 +55,12 @@
 
                     <div class="ui-fluid">
                     	<p:panelGrid id="capaPanel" columns="4" layout="grid">
-                    		<p:outputLabel value="Bairro" for="descricao"/>
-                    		<p:inputText value="#{bairroController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Bairro')}"/>
+                    		<p:outputLabel value="Tipo de Localidade" for="descricao"/>
+                    		<p:inputText value="#{tipoLocalidadeController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Tipo de Localidade')}"/>
                     		
-                    		<p:outputLabel value="Cidade" for="cidade"/>
-                    		 <p:selectOneMenu id="cidade" value="#{bairroController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
-                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
-					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
-					            <f:selectItems value="#{bairroController.cidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
-					        </p:selectOneMenu>
-					        
-					        <p:outputLabel value="Ativo" for="ativo"/>
-					        <p:selectBooleanButton id="ativo" value="#{bairroController.entity.ativo}" 
+                    		<p:outputLabel value="Ativo" for="ativo"/>
+					        <p:selectBooleanButton id="ativo" value="#{tipoLocalidadeController.entity.ativo}" 
 					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
 						
 						</p:panelGrid>
@@ -76,12 +69,12 @@
 						
 						<p:panelGrid  columns="4" layout="grid">
 							<p:outputLabel value="Criação" for="criacao"/>
-	                    	<p:inputText id="criacao" value="#{bairroController.entity.dataCadastro}" disabled="true">
+	                    	<p:inputText id="criacao" value="#{tipoLocalidadeController.entity.dataCadastro}" disabled="true">
 	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
 	                    	</p:inputText>
 	                    		
-	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{bairroController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{bairroController.entity.dataAlteracao}" disabled="true" rendered="#{bairroController.entity.dataAlteracao != null}">
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{tipoLocalidadeController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{tipoLocalidadeController.entity.dataAlteracao}" disabled="true" rendered="#{tipoLocalidadeController.entity.dataAlteracao != null}">
 	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
 	                    	</p:inputText>
 	                    </p:panelGrid>	
