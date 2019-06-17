@@ -3,17 +3,17 @@ package br.com.ichef.service;
 import java.util.List;
 
 import br.com.ichef.dao.GenericDAO;
-import br.com.ichef.model.Cidade;
+import br.com.ichef.model.Cliente;
 
-public class CidadeService extends GenericDAO<Cidade> {
+public class ClienteService extends GenericDAO<Cliente> {
 	private static final long serialVersionUID = 1L;
 
-	public List<Cidade> listAll(Boolean ativo) {
-		Cidade cidade = new Cidade();
-		cidade.setAtivo("S");
+	public List<Cliente> listAll(Boolean ativo) {
+		Cliente filter = new Cliente();
+		filter.setAtivo("S");
 		try {
 			if (ativo)
-				return super.findByParameters(cidade);
+				return super.findByParameters(filter);
 			else
 				return super.listAll();
 		} catch (Exception e) {
@@ -21,7 +21,5 @@ public class CidadeService extends GenericDAO<Cidade> {
 		}
 		return null;
 	}
-	
-	
 
 }

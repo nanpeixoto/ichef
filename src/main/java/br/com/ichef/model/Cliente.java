@@ -1,0 +1,335 @@
+package br.com.ichef.model;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import br.com.ichef.arquitetura.BaseEntity;
+
+@Entity
+@Table(name = "cliente")
+public class Cliente extends BaseEntity {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "CD_CLIENTE")
+	private Long id;
+
+	@Column(name = "NM_CLIENTE")
+	private String nome;
+
+	@Column(name = "DS_EMAIL")
+	private String email;
+
+	@Column(name = "SN_ATIVO")
+	private String ativo;
+
+	@Column(name = "SN_MALA_DIRETA")
+	private String malaDireta;
+
+	@Column(name = "SN_CARTEIRA")
+	private String carteira;
+
+	@Column(name = "SN_BLOQUEADO")
+	private String bloqueado;
+
+	@Column(name = "SN_SMS")
+	private String sms;
+
+	@Column(name = "DT_CADASTRO")
+	private Date dataCadastro;
+
+	@Column(name = "DT_ALTERACAO")
+	private Date dataAlteracao;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_USUARIO_CADASTRO")
+	private Usuario usuarioCadastro;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_CIDADE")
+	private Cidade cidade;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
+	private Usuario usuarioAlteracao;
+
+	@Transient
+	private boolean isAtivo;
+
+	@Transient
+	private boolean recebeSMS;
+
+	@Transient
+	private boolean estaBloqueado;
+
+	@Transient
+	private boolean recebeMaladireta;
+
+	@Transient
+	private boolean pagaEmCarteira;
+
+	public boolean isAtivo() {
+		if (ativo != null) {
+			if (ativo.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isAtivo;
+	}
+
+	public void setAtivo(boolean isAtivo) {
+		this.isAtivo = isAtivo;
+		if (isAtivo == Boolean.TRUE) {
+			setAtivo("S");
+		} else
+			setAtivo("N");
+	}
+
+	public boolean isRecebeSMS() {
+		if (sms != null) {
+			if (sms.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return recebeSMS;
+	}
+
+	public void setRecebeSMS(boolean recebeSMS) {
+		this.recebeSMS = recebeSMS;
+		if (recebeSMS == Boolean.TRUE) {
+			setSms("S");
+		} else
+			setSms("N");
+	}
+
+	public boolean isEstaBloqueado() {
+		if (bloqueado != null) {
+			if (bloqueado.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return estaBloqueado;
+	}
+
+	public void setEstaBloqueado(boolean estaBloqueado) {
+		this.estaBloqueado = estaBloqueado;
+		if (estaBloqueado == Boolean.TRUE) {
+			setBloqueado("S");
+		} else
+			setBloqueado("N");
+	}
+
+	public boolean isRecebeMaladireta() {
+		if (malaDireta != null) {
+			if (malaDireta.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return recebeMaladireta;
+	}
+
+	public void setRecebeMaladireta(boolean recebeMaladireta) {
+		this.recebeMaladireta = recebeMaladireta;
+		if (recebeMaladireta == Boolean.TRUE) {
+			setMalaDireta("S");
+		} else
+			setMalaDireta("N");
+	}
+
+	public boolean isPagaEmCarteira() {
+		if (carteira != null) {
+			if (carteira.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return pagaEmCarteira;
+	}
+
+	public void setPagaEmCarteira(boolean pagaEmCarteira) {
+		this.pagaEmCarteira = pagaEmCarteira;
+		if (pagaEmCarteira == Boolean.TRUE) {
+			setCarteira("S");
+		} else
+			setCarteira("N");
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		if (id == null) {
+			if (other.getId() != null)
+				return false;
+		} else if (!id.equals(other.getId()))
+			return false;
+		return true;
+	}
+
+	public boolean isInclusao() {
+		return (getId() == null ? true : false);
+	}
+
+	public boolean isEdicao() {
+		return !isInclusao();
+	}
+
+	@Override
+	public void setId(Object id) {
+		this.id = (Long) id;
+
+	}
+
+	@Override
+	public String getColumnOrderBy() {
+		return null;
+	}
+
+	@Override
+	public String getAuditoria() {
+		return null;
+	}
+
+	@Override
+	public Usuario getUsuarioAlteracao() {
+		return usuarioAlteracao;
+	}
+
+	@Override
+	public Date getDataAlteracao() {
+		return dataAlteracao;
+	}
+
+	@Override
+	public Usuario getUsuarioCadastro() {
+		return usuarioCadastro;
+	}
+
+	@Override
+	public Date getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome.toString();
+	}
+
+	public String getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(String ativo) {
+		this.ativo = ativo;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+	public void setDataAlteracao(Date dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
+	}
+
+	public void setUsuarioCadastro(Usuario usuarioCadastro) {
+		this.usuarioCadastro = usuarioCadastro;
+	}
+
+	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
+		this.usuarioAlteracao = usuarioAlteracao;
+	}
+
+	public String getSituacao() {
+		if (getAtivo().equals("S"))
+			return "Ativo".toUpperCase();
+		return "Inativo".toUpperCase();
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMalaDireta() {
+		return malaDireta;
+	}
+
+	public void setMalaDireta(String malaDireta) {
+		this.malaDireta = malaDireta;
+	}
+
+	public String getCarteira() {
+		return carteira;
+	}
+
+	public void setCarteira(String carteira) {
+		this.carteira = carteira;
+	}
+
+	public String getBloqueado() {
+		return bloqueado;
+	}
+
+	public void setBloqueado(String bloqueado) {
+		this.bloqueado = bloqueado;
+	}
+
+	public String getSms() {
+		return sms;
+	}
+
+	public void setSms(String sms) {
+		this.sms = sms;
+	}
+
+	public Cidade getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+	}
+
+}

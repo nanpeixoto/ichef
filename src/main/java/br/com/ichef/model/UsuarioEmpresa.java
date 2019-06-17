@@ -81,6 +81,12 @@ public class UsuarioEmpresa extends BaseEntity {
 		return null;
 	}
 
+	@Override
+	public boolean isEdicao() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 
 }

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Cadastro Cliente
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+        	<f:viewParam name="id" value="#{clienteController.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{clienteController.inicializar()}" type="preRenderView"></f:event>
+        </f:metadata>
+
+        <adm:breadcrumb title="Cadastro Cliente #{clienteController.entity.id}" link="cadastro-cliente.xhtml?id=#{clienteController.entity.id}"/>
+        <h:form id="form" prependId="false">
+            <p:focus/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{clienteController.Salvar()}"/>
+                        <p:spacer width="5"/>
+
+                       <!-- <p:commandButton value="Excluir" process="@this"
+                                         icon="fa fa-trash"
+                                         styleClass="btn-danger" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}">
+                        </p:commandButton> --> 
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="lista-cliente?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                                         
+                    </div>
+                    
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{clienteController.Salvar()}">
+                        <p:menuitem value="Excluir"
+                                    process="@this"
+                                    icon="fa fa-trash" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}"/>
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="lista-cliente?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+
+                    <p:separator/>
+
+                    <div class="ui-fluid"  >
+                    	<p:panelGrid id="capaPanel" columnClasses="ui-g-12 ui-md-1,  ui-g-12 ui-md-3, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"    columns="6" layout="grid">
+                    		<p:outputLabel value="Cidade" for="cidade"/>
+                    		 <p:selectOneMenu id="cidade" value="#{clienteController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
+                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{clienteController.cidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+					        <p:selectBooleanButton id="bloqueado" value="#{clienteController.entity.estaBloqueado}" 
+					        	onLabel="Bloqueado" offLabel="Desbloqueado" onIcon="fa fa-lock" offIcon="fa fa-unlock"/>
+							  <p:selectBooleanButton id="maladireta" value="#{clienteController.entity.recebeMaladireta}" 
+					        	onLabel="Com Mala Direta" offLabel="Sem Mala Direta" onIcon="fa fa-envelope-o" offIcon="fa fa-envelope"/>
+					          <p:selectBooleanButton id="sms" value="#{clienteController.entity.recebeSMS}" 
+					        	onLabel="Com SMS" offLabel="Sem SMS" onIcon="fa fa-commenting-o" offIcon="fa fa-commenting"/>
+					          <p:selectBooleanButton id="carteira" value="#{clienteController.entity.pagaEmCarteira}" 
+					        	onLabel="Com Carteira" offLabel="Sem Carteira" onIcon="fa fa-shopping-basket" offIcon="fa fa-money"/>
+					        
+						</p:panelGrid>
+						<p:panelGrid  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-6,ui-g-12 ui-md-1,ui-g-12 ui-md-4"    columns="4" layout="grid">
+					           
+					        <p:outputLabel value="Cliente" for="nome"/>
+                    		<p:inputText value="#{clienteController.entity.nome}" id="nome" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Nome')}"/>
+                    			
+                    		<p:outputLabel value="E-mail" for="email"/>
+                    		<p:inputText value="#{clienteController.entity.email}" id="email" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
+					   </p:panelGrid>
+					   <p:panelGrid columnClasses="ui-g-12 ui-md-6 ui-lg-12"  columns="1" layout="grid">
+                    	  
+					        	
+							
+					        <p:selectBooleanButton id="ativo" value="#{clienteController.entity.ativo}" 
+					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+						
+						</p:panelGrid>
+							
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
+							<p:outputLabel value="Criação" for="criacao"/>
+	                    	<p:inputText id="criacao" value="#{clienteController.entity.dataCadastro}" disabled="true">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    		
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{clienteController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{clienteController.entity.dataAlteracao}" disabled="true" rendered="#{clienteController.entity.dataAlteracao != null}">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    </p:panelGrid>	
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   

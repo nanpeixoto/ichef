@@ -8,22 +8,18 @@ import br.com.ichef.model.TipoLocalidade;
 public class TipoLocalidadeService extends GenericDAO<TipoLocalidade> {
 	private static final long serialVersionUID = 1L;
 
-	
-	@Override
-	public List<TipoLocalidade> listAll() {
+	public List<TipoLocalidade> listAll(Boolean ativo) {
 		TipoLocalidade filter = new TipoLocalidade();
 		filter.setAtivo("S");
 		try {
-			return super.findByParameters(filter);
+			if (ativo)
+				return super.findByParameters(filter);
+			else
+				return super.listAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-
-
-
-
-	
 
 }

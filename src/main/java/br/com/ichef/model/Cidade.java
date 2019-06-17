@@ -148,7 +148,7 @@ public class Cidade extends BaseEntity {
 	}
 
 	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+		this.descricao = descricao.toUpperCase();
 	}
 
 	public String getAtivo() {
@@ -177,8 +177,8 @@ public class Cidade extends BaseEntity {
 	
 	public String getSituacao () {
 		if(getAtivo().equals("S"))
-			return "Ativo";
-		return "Inativo";
+			return "Ativo".toUpperCase();
+		return "Inativo".toUpperCase();
 	}
 
 }

@@ -8,12 +8,14 @@ import br.com.ichef.model.Empresa;
 public class EmpresaService extends GenericDAO<Empresa> {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public List<Empresa> listAll() {
+	public List<Empresa> listAll(Boolean ativo) {
 		Empresa filter = new Empresa();
 		filter.setAtivo("S");
 		try {
-			return super.findByParameters(filter);
+			if (ativo)
+				return super.findByParameters(filter);
+			else
+				return super.listAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

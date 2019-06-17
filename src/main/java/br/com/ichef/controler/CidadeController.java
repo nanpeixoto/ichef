@@ -29,6 +29,7 @@ public class CidadeController extends BaseController {
 	private Long id;
 
 	private List<Cidade> lista 				= new ArrayList<Cidade>();
+	private List<Cidade> listaFiltro		= new ArrayList<Cidade>();
 
 	private List<Cidade> listaSelecionadas 	= new ArrayList<Cidade>();
 	
@@ -38,6 +39,7 @@ public class CidadeController extends BaseController {
 			setEntity(service.getById(id));
 		} else {
 			setEntity(new Cidade());
+			getEntity().setAtivo("S");
 		}
 	}
 
@@ -63,12 +65,12 @@ public class CidadeController extends BaseController {
 			entity.setDataCadastro(new Date());
 		}
 		service.saveOrUpdade(entity);
-		return "lista-empresa.xhtml?faces-redirect=true";
+		return "lista-cidade.xhtml?faces-redirect=true";
 	}
 
 	public String excluir() {
 		service.excluir(entity);
-		return "lista-empresa.xhtml?faces-redirect=true";
+		return "lista-cidade.xhtml?faces-redirect=true";
 	}
 
 	public CidadeService getService() {
@@ -109,6 +111,14 @@ public class CidadeController extends BaseController {
 
 	public void setListaSelecionadas(List<Cidade> listaSelecionadas) {
 		this.listaSelecionadas = listaSelecionadas;
+	}
+
+	public List<Cidade> getListaFiltro() {
+		return listaFiltro;
+	}
+
+	public void setListaFiltro(List<Cidade> listaFiltro) {
+		this.listaFiltro = listaFiltro;
 	}
 
 }

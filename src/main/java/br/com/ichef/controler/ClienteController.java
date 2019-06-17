@@ -12,48 +12,48 @@ import javax.inject.Named;
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Cidade;
+import br.com.ichef.model.Cliente;
 import br.com.ichef.model.Empresa;
-import br.com.ichef.model.Localidade;
 import br.com.ichef.service.CidadeService;
-import br.com.ichef.service.EmpresaService;
-import br.com.ichef.service.LocalidadeService;
+import br.com.ichef.service.ClienteService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class EmpresaController extends BaseController {
+public class ClienteController extends BaseController {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private EmpresaService service;
-
-	private Empresa entity;
+	private ClienteService service;
 
 	@Inject
 	private CidadeService cidadeService;
-	
-	@Inject
-	private LocalidadeService localidadeService;
+
+	private Cliente entity;
 
 	private Long id;
 
-	private List<Empresa> lista = new ArrayList<Empresa>();
+	private List<Cliente> lista = new ArrayList<Cliente>();
+	private List<Cliente> listaFiltro = new ArrayList<Cliente>();
 
-	private List<Empresa> listaSelecionadas = new ArrayList<Empresa>();
+	private List<Cliente> listaSelecionadas = new ArrayList<Cliente>();
 
 	private List<Cidade> cidades = new ArrayList<Cidade>();
-	private List<Localidade> localidades = new ArrayList<Localidade>();
+	private List<Empresa> empresas = new ArrayList<Empresa>();
 
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
 		} else {
-			setEntity(new Empresa());
+			setEntity(new Cliente());
 			getEntity().setAtivo(true);
 			getEntity().setCidade(obterCidadeSalvador());
+			getEntity().setRecebeMaladireta(true);
+			getEntity().setRecebeSMS(true);
+			getEntity().setPagaEmCarteira(false);
+			getEntity().setEstaBloqueado(false);
 		}
-
 		obterListas();
 	}
 
@@ -72,8 +72,6 @@ public class EmpresaController extends BaseController {
 
 	private void obterListas() {
 		cidades = cidadeService.listAll(true);
-		localidades = localidadeService.listAllResidencial();
-
 	}
 
 	@PostConstruct
@@ -86,7 +84,7 @@ public class EmpresaController extends BaseController {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Empresas excluídas com sucesso");
+		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -98,27 +96,27 @@ public class EmpresaController extends BaseController {
 			entity.setDataCadastro(new Date());
 		}
 		service.saveOrUpdade(entity);
-		return "lista-empresa.xhtml?faces-redirect=true";
+		return "lista-cliente.xhtml?faces-redirect=true";
 	}
 
 	public String excluir() {
 		service.excluir(entity);
-		return "lista-empresa.xhtml?faces-redirect=true";
+		return "lista-cliente.xhtml?faces-redirect=true";
 	}
 
-	public EmpresaService getService() {
+	public ClienteService getService() {
 		return service;
 	}
 
-	public void setService(EmpresaService service) {
+	public void setService(ClienteService service) {
 		this.service = service;
 	}
 
-	public Empresa getEntity() {
+	public Cliente getEntity() {
 		return entity;
 	}
 
-	public void setEntity(Empresa entity) {
+	public void setEntity(Cliente entity) {
 		this.entity = entity;
 	}
 
@@ -130,19 +128,19 @@ public class EmpresaController extends BaseController {
 		this.id = id;
 	}
 
-	public List<Empresa> getLista() {
+	public List<Cliente> getLista() {
 		return lista;
 	}
 
-	public void setLista(List<Empresa> lista) {
+	public void setLista(List<Cliente> lista) {
 		this.lista = lista;
 	}
 
-	public List<Empresa> getListaSelecionadas() {
+	public List<Cliente> getListaSelecionadas() {
 		return listaSelecionadas;
 	}
-	
-	public void setListaSelecionadas(List<Empresa> listaSelecionadas) {
+
+	public void setListaSelecionadas(List<Cliente> listaSelecionadas) {
 		this.listaSelecionadas = listaSelecionadas;
 	}
 
@@ -154,12 +152,20 @@ public class EmpresaController extends BaseController {
 		this.cidades = cidades;
 	}
 
-	public List<Localidade> getLocalidades() {
-		return localidades;
+	public List<Empresa> getEmpresas() {
+		return empresas;
 	}
 
-	public void setLocalidades(List<Localidade> localidades) {
-		this.localidades = localidades;
+	public void setEmpresas(List<Empresa> empresas) {
+		this.empresas = empresas;
+	}
+
+	public List<Cliente> getListaFiltro() {
+		return listaFiltro;
+	}
+
+	public void setListaFiltro(List<Cliente> listaFiltro) {
+		this.listaFiltro = listaFiltro;
 	}
 
 }

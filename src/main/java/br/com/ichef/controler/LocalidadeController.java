@@ -76,9 +76,9 @@ public class LocalidadeController extends BaseController {
 	}
 
 	private void obterListas() {
-		cidades = cidadeService.listAll();
-		tipoLocalidades = tipoLocalidadeService.listAll();
-		empresas = empresaService.listAll();
+		cidades = cidadeService.listAll(true);
+		tipoLocalidades = tipoLocalidadeService.listAll(true);
+		empresas = empresaService.listAll(true);
 
 	}
 
@@ -92,7 +92,7 @@ public class LocalidadeController extends BaseController {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluÃ­dos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
 	public String Salvar() throws Exception {
