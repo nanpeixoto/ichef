@@ -58,6 +58,7 @@ public class LocalidadeController extends BaseController {
 			setEntity(new Localidade());
 			getEntity().setAtivo(true);
 			getEntity().setCidade(obterCidadeSalvador());
+			getEntity().setEmpresa(userLogado.getEmpresaLogada());
 		}
 		obterListas();
 	}

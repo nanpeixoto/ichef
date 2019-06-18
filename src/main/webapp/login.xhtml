@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" 
       xmlns:adm="http://github.com/adminfaces"
       xmlns:p="http://primefaces.org/ui">
 
@@ -101,15 +102,27 @@
                     <div class="form-group has-feedback">
                         <p:inputText value="#{loginController.login}" type="email" styleClass="form-control" placeholder="Email"
                                      required="true" autocomplete="off"
-                                     requiredMessage="Email is required."/>
-                        <i class="fa fa-envelope form-control-feedback"></i>
+                                     requiredMessage="Email is required." onblur="#{loginController.buscarEmpresa()}" onchange="#{loginController.buscarEmpresa()}">
+							<p:ajax event="blur" update="empresa" listener="#{loginController.buscarEmpresa()}" />      
+							<p:ajax event="blur"
+								      listener="#{loginController.buscarEmpresa()}"
+								      process="@this" partialSubmit="true"
+								      update="empresa" />                               
+						</p:inputText>
+                        <i class="fa fa-user form-control-feedback"></i>
                     </div>
                     <div class="form-group has-feedback">
                         <p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
                                      placeholder="Password" required="true" autocomplete="off"
                                      requiredMessage="Password is required."/>
                         <i class="fa fa-lock form-control-feedback" style="font-size: 18px" ></i>
-                    </div>
+                  	</div>
+                  	<div class="form-group has-feedback"> 
+                        <p:selectOneMenu id="empresa" value="#{loginController.empresa}"  converter= "omnifaces.SelectItemsConverter">
+					            <f:selectItem itemLabel="Selecione a Empresa...." itemValue=""  noSelectionOption="true" />
+					            <f:selectItems value="#{loginController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" /> 
+					     </p:selectOneMenu>
+					</div>
                     <div class="row">
                         
                         <p:spacer height="10"/>

@@ -65,7 +65,7 @@
 
 								<h:outputText value="Pesquisar: " escape="false" />
 
-								<p:inputText id="globalFilter" onkeypress="PF('itens').filter()"
+								<p:inputText id="globalFilter"  onkeyup="PF('itens').filter(); hideBar();"
 									style="width:150px;" maxlength="255"  
 									styleClass="letras-maiusculas semClear"/>
 							</p:outputPanel>

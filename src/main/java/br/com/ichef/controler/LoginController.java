@@ -1,7 +1,9 @@
 package br.com.ichef.controler;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -12,7 +14,9 @@ import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
 import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Usuario;
+import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.UsuarioService;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.util.StringUtil;
@@ -26,11 +30,44 @@ public class LoginController extends BaseController {
 	@Inject
 	private UsuarioService service;
 
+	@Inject
+	private EmpresaService empresaService;
+
 	private Usuario usuario = new Usuario();
 
 	private String senha;
-
+	private Empresa empresa;
+	private List<Empresa> empresas;
 	private String login;
+
+	@PostConstruct
+	public void init() {
+
+	}
+
+	public void buscarEmpresa() {
+		empresas = new ArrayList<Empresa>();
+		List<Usuario> usuarios;
+		try {
+			if (login != null) {
+				usuarios = service.findByLogin(login);
+				if (usuarios != null && usuarios.size() > 0) {
+					usuario = usuarios.get(0);
+					empresas = empresaService.listAll(true);
+				} else {
+					empresas = new ArrayList<Empresa>();
+				}
+			} else {
+				empresas = new ArrayList<Empresa>();
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			empresas = new ArrayList<Empresa>();
+		}
+
+	}
 
 	public Usuario getUsuarioLogado() {
 		return getUserLogado();
@@ -38,12 +75,8 @@ public class LoginController extends BaseController {
 
 	public String autenticar() throws Exception {
 
-		Usuario filter = new Usuario();
-
-		filter.setSenha(StringUtil.criptografa(senha));
-		filter.setLogin(login);
-
-		List<Usuario> usuarios = service.findByParameters(filter);
+		List<Usuario> usuarios = new ArrayList<>();
+		usuarios = (List<Usuario>) service.findByLogin(login, 	StringUtil.criptografa(senha));
 		Faces.getFlash().setKeepMessages(true);
 
 		if (usuarios != null && usuarios.size() > 0) {
@@ -51,7 +84,13 @@ public class LoginController extends BaseController {
 			if (usuario.getAtivo().equalsIgnoreCase("N")) {
 				Messages.addGlobalError("O usuário não está ativo");
 				return null;
+			}
+			if (empresa == null) {
+				Messages.addGlobalError("Seleciona a empresa para entrar");
+				return null;
+
 			} else {
+				usuario.setEmpresaLogada(empresa);
 				JSFUtil.setSessionMapValue("loggedUser", usuario.getLogin());
 				JSFUtil.setSessionMapValue("usuario", usuario);
 				JSFUtil.setSessionMapValue("loggedUserPassword", usuario.getSenha());
@@ -73,7 +112,7 @@ public class LoginController extends BaseController {
 
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
-		//RequestContext.getCurrentInstance().execute("hideStatus();");
+		// RequestContext.getCurrentInstance().execute("hideStatus();");
 		return "/index.xhtml?faces-redirect=true";
 	}
 
@@ -91,6 +130,22 @@ public class LoginController extends BaseController {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public List<Empresa> getEmpresas() {
+		return empresas;
+	}
+
+	public void setEmpresas(List<Empresa> empresas) {
+		this.empresas = empresas;
 	}
 
 }

@@ -67,8 +67,8 @@
 
 								<h:outputText value="Pesquisar: " escape="false" />
 
-								<p:inputText id="globalFilter" onkeyup="PF('itens').filter()"
-									style="width:150px;" maxlength="255"
+								<p:inputText id="globalFilter" onkeyup="PF('itens').filter(); hideBar();"
+									style="width:150px;" maxlength="255" 
 									styleClass="letras-maiusculas semClear">
 
 								</p:inputText>

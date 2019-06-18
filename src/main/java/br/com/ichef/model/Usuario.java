@@ -1,5 +1,6 @@
 package br.com.ichef.model;
 
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -67,9 +69,11 @@ public class Usuario extends BaseEntity {
 	@Column(name = "DS_SENHA")
 	private String senha;
 
-	// bi-directional many-to-one association to UsuarioEmpresa
 	@OneToMany(mappedBy = "usuario")
 	private List<UsuarioEmpresa> usuarioEmpresas;
+	
+	@Transient
+	private Empresa empresaLogada;
 
 	public boolean isInclusao() {
 		return (getId() == null ? true : false);
@@ -206,5 +210,15 @@ public class Usuario extends BaseEntity {
 	public void setUsuarioEmpresas(List<UsuarioEmpresa> usuarioEmpresas) {
 		this.usuarioEmpresas = usuarioEmpresas;
 	}
+
+	public Empresa getEmpresaLogada() {
+		return empresaLogada;
+	}
+
+	public void setEmpresaLogada(Empresa empresaLogada) {
+		this.empresaLogada = empresaLogada;
+	}
+	
+	
 
 }

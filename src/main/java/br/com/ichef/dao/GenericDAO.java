@@ -126,7 +126,7 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	@SuppressWarnings("deprecation")
 	protected Criteria createCriteria(T object, FilterVisitor visitor, Integer maxResul) throws Exception {
 		Criteria criteria = null;
-		criteria = getSession().createCriteria(object.getClass()) ;
+		criteria = getSession().createCriteria(object.getClass());
 		if (object.getId() != null) {
 			criteria.add(Restrictions.idEq(object.getId()));
 		}
@@ -275,6 +275,14 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 		Class<?> clazz = object.getClass(); // (Class<?>) ((ParameterizedType)
 											// object.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 		return clazz;
+	}
+
+	public EntityManager getManager() {
+		return manager;
+	}
+
+	public void setManager(EntityManager manager) {
+		this.manager = manager;
 	}
 
 }
