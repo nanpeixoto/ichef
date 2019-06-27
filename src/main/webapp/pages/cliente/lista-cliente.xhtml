@@ -37,15 +37,22 @@
 		<h:form>
 			<div class="box box-primary">
 				<div class="box-header with-border">
-					<p:commandButton action="cadastro-cliente?faces-redirect=true"
+					<!-- <p:commandButton action="cadastro-cliente?faces-redirect=true"
 						ajax="false" icon="fa fa-plus" value="Novo"
-						styleClass="btn-primary" />
+						styleClass="btn-primary" /> -->
+					<p:commandButton icon="fa fa-plus" value="Novo" oncomplete="PF('VerificarTelefone').show()"
+						styleClass="btn-primary" /> 
 					<p:spacer width="5" />
 					<p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash"
 						styleClass="btn-danger" process="@form" update="@form"
 						action="#{clienteController.excluirSelecionados()}" />
 					<p:spacer width="5" />
-					<!-- <p:commandButton value="Olhar Selecionado(s)"
+					
+					<!--<p:commandButton value="Olhar Selecionado(s)"
+						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
+						styleClass="btn-info" icon="fa fa-search" /> 
+						
+					 <p:commandButton value="Olhar Selecionado(s)"
 						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
 						styleClass="btn-info" icon="fa fa-search" /> --> 
 					<p:separator />
@@ -109,14 +116,17 @@
 			</div>
 		</h:form>
 
-		<p:dialog header="Itens Selecionadas" widgetVar="ItensSelecionados"
-			height="250" minWidth="200" width="400" responsive="true" styleClass="box-success">
-			<p:dataList id="listaSelecionadas"
-				value="#{clienteController.listaSelecionadas}" var="item"
-				type="definition">
-					ID: #{item.id} 
-	            </p:dataList>
+		<p:dialog header="Telefone" widgetVar="VerificarTelefone" height="120" minWidth="200" width="220" 
+			responsive="true" styleClass="box-success" modal="true"
+			resizable="false">
+				<h:form>
+					Infome o telefone do Cliente:
+					<p:inputMask value="#{clienteController.telefone}" id="telefoneValidacao" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
+					<p:commandButton action="#{clienteController.validarCliente}" ajax="false" icon="fa fa-plus" value="Novo" styleClass="btn-primary" />
+	            </h:form>
 		</p:dialog>
+
+
 
 
 	</ui:define>

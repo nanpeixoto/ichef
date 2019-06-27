@@ -95,13 +95,13 @@
             </div>
             <!-- /.login-logo -->
             <div class="box login-box-body">
-                <h:form>
+                <h:form >
                     <p class="login-box-msg">Faça o login</p>
                     <p:messages closable="true" />
                     <p:growl sticky="true"/>
                     <div class="form-group has-feedback">
-                        <p:inputText value="#{loginController.login}" type="email" styleClass="form-control" placeholder="Email"
-                                     required="true" autocomplete="off"
+                        <p:inputText value="#{loginController.login}" styleClass="form-control" placeholder="Login"
+                                     required="true" autocomplete="off" id="usuario"
                                      requiredMessage="Email is required." onblur="#{loginController.buscarEmpresa()}" onchange="#{loginController.buscarEmpresa()}">
 							<p:ajax event="blur" update="empresa" listener="#{loginController.buscarEmpresa()}" />      
 							<p:ajax event="blur"
@@ -113,7 +113,7 @@
                     </div>
                     <div class="form-group has-feedback">
                         <p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
-                                     placeholder="Password" required="true" autocomplete="off"
+                                     placeholder="Password" required="true" autocomplete="off" id="password"
                                      requiredMessage="Password is required."/>
                         <i class="fa fa-lock form-control-feedback" style="font-size: 18px" ></i>
                   	</div>

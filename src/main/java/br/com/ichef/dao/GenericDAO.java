@@ -35,7 +35,8 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	@Inject
 	private EntityManager manager;
 
-	public T save(T entity) throws Exception {
+	@SuppressWarnings("unused")
+	private T save(T entity) throws Exception {
 		try {
 			return saveImpl(entity);
 		} catch (Exception e) {
@@ -117,6 +118,23 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 		Criteria criteria = createCriteria(object);
 
 		return criteria.list();
+	}
+
+	public List<T> findByParameters(T object, FilterVisitor visitor) throws Exception {
+		Criteria criteria = null;
+		if (visitor != null)
+			criteria = createCriteria(object, visitor);
+		else
+			criteria = createCriteria(object);
+
+		if (criteria != null)
+			return criteria.list();
+		else
+			return null;
+	}
+
+	protected Criteria createCriteria(T object, FilterVisitor visitor) throws Exception  {
+		return createCriteria(object, visitor, null);
 	}
 
 	protected Criteria createCriteria(T object) throws Exception {

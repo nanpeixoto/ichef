@@ -11,7 +11,9 @@
     <ui:define name="body">
         <f:metadata>
         	<f:viewParam name="id" value="#{clienteController.id}" converter="javax.faces.Long"/>
+        	<f:viewParam name="telefone" value="#{clienteController.telefone}" />
         	<f:event listener="#{clienteController.inicializar()}" type="preRenderView"></f:event>
+        	
         </f:metadata>
 
         <adm:breadcrumb title="Cadastro Cliente #{clienteController.entity.id}" link="cadastro-cliente.xhtml?id=#{clienteController.entity.id}"/>
@@ -76,6 +78,10 @@
                     		<p:inputText value="#{clienteController.entity.nome}" id="nome" styleClass="letras-maiusculas"
                     			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Nome')}"/>
                     			
+                    		<p:outputLabel value="Apelido" for="apelido"/>
+                    		<p:inputText value="#{clienteController.entity.apelido}" id="apelido" styleClass="letras-maiusculas"
+                    			  requiredMessage="#{configuracaoController.getRequiredMessage('Nome')}"/>
+                    			
                     		<p:outputLabel value="E-mail" for="email"/>
                     		<p:inputText value="#{clienteController.entity.email}" id="email" styleClass="letras-maiusculas"
                     			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
@@ -86,6 +92,59 @@
 							
 					        <p:selectBooleanButton id="ativo" value="#{clienteController.entity.ativo}" 
 					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+						
+						</p:panelGrid>
+						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="5" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-1"  layout="grid">
+						
+							<p:outputLabel value="Principal" for="telprincipal"/>
+						 	<p:selectBooleanButton id="telprincipal"  value="#{clienteController.stsTelefonePrincipal}" onLabel="Sim" offLabel="Não" 
+						  		onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+						 	
+						 	<p:outputLabel value="Número" for="numero"/>
+                    		<p:inputMask value="#{clienteController.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
+                    	 	
+                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtn" styleClass="btn-primary" update="dttel, telprincipal, numero" action="#{clienteController.adicionarTelefone}"/>
+                    	</p:panelGrid>
+                    	<p:panelGrid  columns="1"  layout="grid"> 	
+                    	 	<p:dataTable id="dttel" widgetVar="itens" rows="10" 
+								paginator="false" value="#{clienteController.entity.telefones}" var="item"
+								rowKey="#{item.id}" reflow="true"
+								paginatorPosition="bottom" editable="true"
+								mptyMessage="Nenhum item encontrado" 
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+								
+								 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaTelefone}" update="dttel" />
+       							 <p:ajax event="rowEditCancel"  update="dttel" />
+ 
+								<p:column headerText="Principal" width="15%" >
+									<p:cellEditor>
+										<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
+										<f:facet name="input">
+											<p:selectBooleanButton id="telprincipal"  value="#{item.telefonePrincipal}" onLabel="Sim" offLabel="Não" 
+						  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+						  				</f:facet>
+          							</p:cellEditor>
+								</p:column>
+								
+								<p:column headerText="Telefone" width="50%" >
+								 	<p:cellEditor>
+										<f:facet name="output"><h:outputLabel value="#{item.telefone}" /></f:facet>
+										<f:facet name="input">
+											<p:inputMask value="#{item.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
+						  				</f:facet>
+          							</p:cellEditor>
+									
+								</p:column>
+								
+								<p:column style="width:35px">
+						            <p:rowEditor />
+						        </p:column>
+		
+							</p:dataTable>
 						
 						</p:panelGrid>
 							

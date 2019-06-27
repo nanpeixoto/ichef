@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cascade;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -63,6 +67,13 @@ public class Cliente extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
+
+	@OneToMany(mappedBy = "cliente")
+	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
+	private List<ClienteTelefone> telefones;
+	
+	@Column(name = "DS_APELIDO")
+	private String apelido;
 
 	@Transient
 	private boolean isAtivo;
@@ -251,7 +262,7 @@ public class Cliente extends BaseEntity {
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome.toString();
+		this.nome = nome.toUpperCase();
 	}
 
 	public String getAtivo() {
@@ -289,7 +300,7 @@ public class Cliente extends BaseEntity {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = email.toUpperCase();
 	}
 
 	public String getMalaDireta() {
@@ -331,5 +342,23 @@ public class Cliente extends BaseEntity {
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
+
+	public List<ClienteTelefone> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(List<ClienteTelefone> telefones) {
+		this.telefones = telefones;
+	}
+
+	public String getApelido() {
+		return apelido;
+	}
+
+	public void setApelido(String apelido) {
+		this.apelido = apelido.toUpperCase();
+	}
+	
+	
 
 }

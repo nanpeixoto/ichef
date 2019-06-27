@@ -5,6 +5,7 @@
 	<persistence-unit name="PU" transaction-type="RESOURCE_LOCAL"> 
 
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>br.com.ichef.model.ClienteTelefone</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ichef" />
