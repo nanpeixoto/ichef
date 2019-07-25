@@ -160,7 +160,7 @@ public class ClienteController extends BaseController {
 	}
 
 	private boolean existeTelefonePrincipal(ClienteTelefone telefoneEditado) {
-		if (stsTelefonePrincipal) {
+		if (stsTelefonePrincipal && entity.getTelefones() !=null) {
 			for (ClienteTelefone telefone : entity.getTelefones()) {
 				if (telefone.isTelefonePrincipal())
 					if (telefoneEditado != null && telefone.getId().equals(telefoneEditado.getId()))

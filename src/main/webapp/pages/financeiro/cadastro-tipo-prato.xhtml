@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Cadastro Tipo de Prato
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+        	<f:viewParam name="id" value="#{tipoPratoController.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{tipoPratoController.inicializar()}" type="preRenderView"></f:event>
+        </f:metadata>
+
+        <adm:breadcrumb title="Cadastro Cliente #{tipoPratoController.entity.id}" link="cadastro-tipo-prato.xhtml?id=#{tipoPratoController.entity.id}"/>
+        <h:form id="form" prependId="false">
+            <p:focus/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{tipoPratoController.Salvar()}"/>
+                        <p:spacer width="5"/>
+
+                      
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                         action="lista-tipo-prato?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                                         
+                    </div>
+                    
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{tipoPratoController.Salvar()}">
+                        
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="lista-tipo-prato?faces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+                    	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-12 ui-md-1">
+                    	
+                    	    <p:outputLabel value="Descrição" for="descricao"/>
+                    		<p:inputText value="#{tipoPratoController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Descrição')}"/>
+                    			
+                    		<p:outputLabel value="Ativo" for="ativo"/>
+					        <p:selectBooleanButton id="ativo" value="#{tipoPratoController.entity.ativo}" 
+					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+						
+						</p:panelGrid>
+						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="5" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-1"  layout="grid">
+						
+							<p:outputLabel value="Valor" for="valor"/>
+							<p:inputNumber   id="valor" value="#{tipoPratoController.preco}" symbol="R$ " decimalSeparator="," thousandSeparator="." /> 
+						 	
+						 	<p:outputLabel value="Vigência" for="vigencia"/>
+						 	<p:calendar id="vigencia" value="#{tipoPratoController.dataVigencia}"  pattern="dd/MM/yyyy" size="10" ></p:calendar>
+                    	 	
+                    	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
+                    	 	 id="btnSurname" process="@this,vigencia,valor" update="tbPreco,valor,vigencia" actionListener="#{tipoPratoController.adicionarPreco}" 
+                    	 	 styleClass="btn-primary" 
+                    	 	/>
+                    	</p:panelGrid>
+						
+						<p:panelGrid  columns="1"  layout="grid"> 	
+                    	 	<p:dataTable id="tbPreco" widgetVar="itens" rows="10" 
+								paginator="false" value="#{tipoPratoController.entity.precos}" var="item"
+								rowKey="#{item.id}" reflow="true"
+								paginatorPosition="bottom" editable="true"
+								mptyMessage="Nenhum item encontrado" 
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+								
+								
+								<p:column headerText="Preço" filterStyle="display:none; visibility:hidden;" filterBy="#{item.preco}"
+									filterMatchMode="contains" sortBy="#{item.precoFormatado}">
+									<h:outputLabel value="#{item.precoFormatado}" />
+								</p:column>
+								
+								<p:column headerText="Data Vigência" filterStyle="display:none; visibility:hidden;" filterBy="#{item.dataVigenciaFormatada}"
+									filterMatchMode="contains" sortBy="#{item.dataVigenciaFormatada}">
+									<h:outputLabel value="#{item.dataVigenciaFormatada}" />
+								</p:column>
+		
+							</p:dataTable>
+						
+						</p:panelGrid>
+							
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="4" layout="grid">
+							<p:outputLabel value="Criação" for="criacao"/>
+	                    	<p:inputText id="criacao" value="#{tipoPratoController.entity.dataCadastro}" disabled="true">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    		
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{tipoPratoController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{tipoPratoController.entity.dataAlteracao}" disabled="true" rendered="#{tipoPratoController.entity.dataAlteracao != null}">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    </p:panelGrid>	
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   
