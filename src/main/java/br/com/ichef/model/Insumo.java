@@ -101,7 +101,7 @@ public class Insumo extends BaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cidade other = (Cidade) obj;
+		Insumo other = (Insumo) obj;
 		if (id == null) {
 			if (other.getId() != null)
 				return false;
