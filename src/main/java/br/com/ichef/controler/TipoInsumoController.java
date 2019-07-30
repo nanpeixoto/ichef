@@ -60,7 +60,7 @@ public class TipoInsumoController extends BaseController {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("TipoInsumos excluídas com sucesso");
+		FacesUtil.addInfoMessage("Item excluído com sucesso");
 	}
 
 	public String Salvar() throws Exception {

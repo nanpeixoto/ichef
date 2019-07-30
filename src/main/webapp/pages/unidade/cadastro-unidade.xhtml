@@ -41,9 +41,7 @@
                     <p:splitButton value="Salvar" update="@form"
                                    icon="fa fa-check"
                                    styleClass="hidden-md hidden-lg btn-primary"  action="#{unidadeController.Salvar()}">
-                        <p:menuitem value="Excluir"
-                                    process="@this"
-                                    icon="fa fa-trash" action="#{unidadeController.excluir()}" rendered="#{unidadeController.entity.edicao}"/>
+                        
                         <p:separator/>
                         <p:menuitem value="Voltar" action="lista-unidade?faces-redirect=true" process="@this"
                                     icon="fa fa-close"/>
