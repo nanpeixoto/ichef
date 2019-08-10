@@ -15,11 +15,15 @@ import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Cidade;
 import br.com.ichef.model.Cliente;
+import br.com.ichef.model.ClienteEndereco;
 import br.com.ichef.model.ClienteTelefone;
 import br.com.ichef.model.Empresa;
+import br.com.ichef.model.Localidade;
 import br.com.ichef.service.CidadeService;
+import br.com.ichef.service.ClienteEnderecoService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.ClienteTelefoneService;
+import br.com.ichef.service.LocalidadeService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
@@ -35,7 +39,13 @@ public class ClienteController extends BaseController {
 	private CidadeService cidadeService;
 
 	@Inject
+	private ClienteEnderecoService clienteEnderecoService;
+	
+	@Inject
 	private ClienteTelefoneService clienteTelefoneService;
+
+	@Inject
+	private LocalidadeService localidadeService;
 
 	private Cliente entity;
 
@@ -48,8 +58,12 @@ public class ClienteController extends BaseController {
 
 	private List<Cidade> cidades = new ArrayList<Cidade>();
 	private List<Empresa> empresas = new ArrayList<Empresa>();
+	private List<Localidade> localidades = new ArrayList<Localidade>();
 
 	private boolean stsTelefonePrincipal;
+	private boolean stsEnderecoPrincipal;
+	private Localidade localidade;
+	private String endereco;
 	private String telefone;
 
 	public void inicializar() {
@@ -57,17 +71,40 @@ public class ClienteController extends BaseController {
 			setEntity(service.getById(id));
 			telefone = "5571 ";
 		} else {
-			System.out.println(telefone);
-			setEntity(new Cliente());
-			setStsTelefonePrincipal(true);
-			getEntity().setAtivo(true);
-			getEntity().setCidade(obterCidadeSalvador());
-			getEntity().setRecebeMaladireta(true);
-			getEntity().setRecebeSMS(true);
-			getEntity().setPagaEmCarteira(false);
-			getEntity().setEstaBloqueado(false);
+			if (telefone != null) {
+				adicionarTelefone();
+				telefone = "5571 ";
+			}
+		}
+	}
+
+ 
+
+	@PostConstruct
+	public void init() {
+
+		if (id != null) {
+			setEntity(service.getById(id));
+			telefone = "5571 ";
+		} else {
+			if (telefone == null) {
+				newInstance();
+				telefone = "5571 ";
+				lista = service.listAll();
+			}
 		}
 		obterListas();
+	}
+
+	private void newInstance() {
+		setEntity(new Cliente());
+		setStsTelefonePrincipal(true);
+		getEntity().setAtivo(true);
+		getEntity().setCidade(obterCidadeSalvador());
+		getEntity().setRecebeMaladireta(true);
+		getEntity().setRecebeSMS(true);
+		getEntity().setPagaEmCarteira(false);
+		getEntity().setEstaBloqueado(false);
 	}
 
 	private Cidade obterCidadeSalvador() {
@@ -85,12 +122,7 @@ public class ClienteController extends BaseController {
 
 	private void obterListas() {
 		cidades = cidadeService.listAll(true);
-	}
-
-	@PostConstruct
-	public void init() {
-		telefone = "5571 ";
-		lista = service.listAll();
+		localidades = localidadeService.listAll(true);
 	}
 
 	public void excluirSelecionados() {
@@ -145,6 +177,34 @@ public class ClienteController extends BaseController {
 		}
 	}
 
+	public void adicionarEndereco() {
+		// if (!existeTelefonePrincipal(null)) {
+		ClienteEndereco endereco = new ClienteEndereco();
+		endereco.setDataCadastro(new Date());
+		if (stsEnderecoPrincipal)
+			endereco.setPrincipal("S");
+		else
+			endereco.setPrincipal("N");
+		endereco.setEndereco(getEndereco());
+		endereco.setLocalidade(getLocalidade());
+		endereco.setUsuarioCadastro(getUserLogado());
+		endereco.setCliente(getEntity());
+		endereco.setUsuarioCadastro(getUserLogado());
+		endereco.setDataCadastro(new Date());
+
+		if (getEntity().getEnderecos() == null)
+			getEntity().setEnderecos(new ArrayList<ClienteEndereco>());
+		getEntity().getEnderecos().add(endereco);
+
+		setStsEnderecoPrincipal(false);
+		setEndereco(null);
+		setLocalidade(null);
+		// } else {
+		// FacesUtil.addErroMessage("Já existe um telefone principal para esse
+		// cliente");
+		// }
+	}
+
 	public String validarCliente() throws Exception {
 		System.out.println(telefone);
 
@@ -160,7 +220,7 @@ public class ClienteController extends BaseController {
 	}
 
 	private boolean existeTelefonePrincipal(ClienteTelefone telefoneEditado) {
-		if (stsTelefonePrincipal && entity.getTelefones() !=null) {
+		if (stsTelefonePrincipal && entity.getTelefones() != null) {
 			for (ClienteTelefone telefone : entity.getTelefones()) {
 				if (telefone.isTelefonePrincipal())
 					if (telefoneEditado != null && telefone.getId().equals(telefoneEditado.getId()))
@@ -185,6 +245,19 @@ public class ClienteController extends BaseController {
 			}
 		}
 
+	}
+	
+	public void editarLinhaEndereco(RowEditEvent event)  throws Exception {
+		ClienteEndereco itemEditado = (ClienteEndereco) event.getObject();
+	//	if (itemEditado.isTelefonePrincipal()) {
+		//	if (!existeTelefonePrincipal(telefoneEditado)) {
+				itemEditado.setUsuarioAlteracao(getUserLogado());
+				itemEditado.setDataAlteracao(new Date());
+				clienteEnderecoService.saveOrUpdade(itemEditado);
+		//	} else {
+		//		FacesUtil.addErroMessage("Já existe um telefone principal para esse cliente");
+		//	}
+		//}
 	}
 
 	public ClienteService getService() {
@@ -265,6 +338,38 @@ public class ClienteController extends BaseController {
 
 	public void setStsTelefonePrincipal(boolean stsTelefonePrincipal) {
 		this.stsTelefonePrincipal = stsTelefonePrincipal;
+	}
+
+	public boolean isStsEnderecoPrincipal() {
+		return stsEnderecoPrincipal;
+	}
+
+	public void setStsEnderecoPrincipal(boolean stsEnderecoPrincipal) {
+		this.stsEnderecoPrincipal = stsEnderecoPrincipal;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	public List<Localidade> getLocalidades() {
+		return localidades;
+	}
+
+	public void setLocalidades(List<Localidade> localidades) {
+		this.localidades = localidades;
+	}
+
+	public Localidade getLocalidade() {
+		return localidade;
+	}
+
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
 	}
 
 }

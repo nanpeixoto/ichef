@@ -71,7 +71,11 @@ public class Cliente extends BaseEntity {
 	@OneToMany(mappedBy = "cliente")
 	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
 	private List<ClienteTelefone> telefones;
-	
+
+	@OneToMany(mappedBy = "cliente")
+	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
+	private List<ClienteEndereco> enderecos;
+
 	@Column(name = "DS_APELIDO")
 	private String apelido;
 
@@ -258,11 +262,24 @@ public class Cliente extends BaseEntity {
 	}
 
 	public String getNome() {
-		return nome;
+		try {
+			return nome;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome.toUpperCase();
+		try {
+
+			if (nome != null)
+				this.nome = nome.toUpperCase();
+			else
+				this.nome = nome;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getAtivo() {
@@ -358,7 +375,13 @@ public class Cliente extends BaseEntity {
 	public void setApelido(String apelido) {
 		this.apelido = apelido.toUpperCase();
 	}
-	
-	
+
+	public List<ClienteEndereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<ClienteEndereco> enderecos) {
+		this.enderecos = enderecos;
+	}
 
 }

@@ -84,7 +84,7 @@
                     			
                     		<p:outputLabel value="E-mail" for="email"/>
                     		<p:inputText value="#{clienteController.entity.email}" id="email" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
+                    			required="false" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
 					   </p:panelGrid>
 					   <p:panelGrid columnClasses="ui-g-12 ui-md-6 ui-lg-12"  columns="1" layout="grid">
                     	  
@@ -106,7 +106,9 @@
 						 	<p:outputLabel value="Número" for="numero"/>
                     		<p:inputMask value="#{clienteController.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
                     	 	
-                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtn" styleClass="btn-primary" update="dttel, telprincipal, numero" action="#{clienteController.adicionarTelefone}"/>
+                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtn" 
+                    	 	process="@this,numero,telprincipal" 
+                    	 	styleClass="btn-primary" update="dttel, telprincipal, numero" action="#{clienteController.adicionarTelefone}"/>
                     	</p:panelGrid>
                     	<p:panelGrid  columns="1"  layout="grid"> 	
                     	 	<p:dataTable id="dttel" widgetVar="itens" rows="10" 
@@ -143,9 +145,80 @@
 								<p:column style="width:35px">
 						            <p:rowEditor />
 						        </p:column>
-		
-							</p:dataTable>
+							</p:dataTable>						
+						</p:panelGrid>
 						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="4" columnClasses="ui-g-12 ui-md-6 ui-lg-1, ui-g-12 ui-lg-9,  ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-lg-9"  layout="grid">
+						
+							<p:outputLabel value="Principal" for="enderecoPrincipal"/>
+						 	<p:selectBooleanButton id="enderecoPrincipal"  value="#{clienteController.stsEnderecoPrincipal}" onLabel="Sim" offLabel="Não" 
+						  		onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+						 	
+						 	<p:outputLabel value="Endereço" for="endereco"/>
+                    		<p:inputText value="#{clienteController.endereco}" id="endereco" styleClass="letras-maiusculas" />
+                    		
+                    		<p:outputLabel value="Localidade" for="localidade"/>
+                    		<p:selectOneMenu id="localidade" value="#{clienteController.localidade}"  converter= "omnifaces.SelectItemsConverter">
+                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{clienteController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+                    	 	
+                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
+                    	 	process="@this,enderecoPrincipal,endereco,localidade" 
+                    	 	styleClass="btn-primary" update="dtendereco,enderecoPrincipal,endereco,localidade" action="#{clienteController.adicionarEndereco}"/>
+                    	</p:panelGrid>
+                    	
+                    	<p:panelGrid  columns="1"  layout="grid"> 	
+                    	 	<p:dataTable id="dtendereco" widgetVar="itens" rows="10" 
+								paginator="false" value="#{clienteController.entity.enderecos}" var="item"
+								rowKey="#{item.id}" reflow="true"
+								paginatorPosition="bottom" editable="true"
+								mptyMessage="Nenhum item encontrado" 
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+								
+								 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaEndereco}" update="dtendereco" />
+       							 <p:ajax event="rowEditCancel"  update="dtendereco" />
+ 
+								<p:column headerText="Principal" width="6%" >
+									<p:cellEditor>
+										<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
+										<f:facet name="input">
+											<p:selectBooleanButton id="dtendprincipal"  value="#{item.endPrincipal}" onLabel="Sim" offLabel="Não" 
+						  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+						  				</f:facet>
+          							</p:cellEditor>
+								</p:column>
+								
+								<p:column headerText="Endereço" width="30%" >
+								 	<p:cellEditor>
+										<f:facet name="output"><h:outputLabel value="#{item.endereco}" /></f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{item.endereco}" id="dtendereco" styleClass="letras-maiusculas" />
+						  				</f:facet>
+          							</p:cellEditor>
+									
+								</p:column>
+								
+								<p:column headerText="Localidade" width="30%" >
+								 	<p:cellEditor>
+										<f:facet name="output"><h:outputLabel value="#{item.localidade.descricao}" /></f:facet>
+										<f:facet name="input">
+											<p:selectOneMenu id="localidade" value="#{item.localidade}"  converter= "omnifaces.SelectItemsConverter">
+				                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+									            <f:selectItems value="#{clienteController.localidades}" var="loc" itemLabel="#{loc.descricao}" itemValue="#{loc}" />
+									        </p:selectOneMenu>
+						  				</f:facet>
+          							</p:cellEditor>
+									
+								</p:column>
+								
+								<p:column style="width:5px">
+						            <p:rowEditor />
+						        </p:column>
+							</p:dataTable>						
 						</p:panelGrid>
 							
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
