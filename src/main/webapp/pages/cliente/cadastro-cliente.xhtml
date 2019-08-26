@@ -160,7 +160,7 @@
                     		<p:inputText value="#{clienteController.endereco}" id="endereco" styleClass="letras-maiusculas" />
                     		
                     		<p:outputLabel value="Localidade" for="localidade"/>
-                    		<p:selectOneMenu id="localidade" value="#{clienteController.localidade}"  converter= "omnifaces.SelectItemsConverter">
+                    		<p:selectOneMenu id="localidade" value="#{clienteController.localidade}" filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
                     		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{clienteController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>
@@ -206,7 +206,7 @@
 								 	<p:cellEditor>
 										<f:facet name="output"><h:outputLabel value="#{item.localidade.descricao}" /></f:facet>
 										<f:facet name="input">
-											<p:selectOneMenu id="localidade" value="#{item.localidade}"  converter= "omnifaces.SelectItemsConverter">
+											<p:selectOneMenu id="localidade" value="#{item.localidade}"  filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
 				                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 									            <f:selectItems value="#{clienteController.localidades}" var="loc" itemLabel="#{loc.descricao}" itemValue="#{loc}" />
 									        </p:selectOneMenu>

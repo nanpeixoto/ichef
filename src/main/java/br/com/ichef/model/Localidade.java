@@ -127,7 +127,7 @@ public class Localidade extends BaseEntity {
 
 	@Override
 	public String getColumnOrderBy() {
-		return null;
+		return "descricao";
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import org.omnifaces.util.Messages;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Usuario;
+import br.com.ichef.model.UsuarioEmpresa;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.UsuarioService;
 import br.com.ichef.util.JSFUtil;
@@ -53,7 +54,16 @@ public class LoginController extends BaseController {
 				usuarios = service.findByLogin(login);
 				if (usuarios != null && usuarios.size() > 0) {
 					usuario = usuarios.get(0);
-					empresas = empresaService.listAll(true);
+					Empresa filterEmpresa = new Empresa();
+					filterEmpresa.setUsuarioEmpresas(usuario.getUsuarioEmpresas());
+					if( usuario.getUsuarioEmpresas().size() == 1 )
+						empresa = usuario.getUsuarioEmpresas().get(0).getEmpresa();
+					else 
+						empresa = null;
+					for (UsuarioEmpresa usuarioEmpresa : usuario.getUsuarioEmpresas()) {
+						empresas.add(usuarioEmpresa.getEmpresa());
+					}
+					//empresas = empresaService.findByParameters(filterEmpresa);
 				} else {
 					empresas = new ArrayList<Empresa>();
 				}
