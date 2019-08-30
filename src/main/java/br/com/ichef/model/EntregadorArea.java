@@ -12,23 +12,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.primefaces.model.SelectableDataModel;
-
 import br.com.ichef.arquitetura.BaseEntity;
 
+/**
+ * The persistent class for the entregador_area database table.
+ * 
+ */
 @Entity
-@Table(name = "localidade")
-public class Localidade extends BaseEntity  {
-
+@Table(name = "entregador_area")
+public class EntregadorArea extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CD_LOCALIDADE")
+	@Column(name = "CD_ENTREGADOR_AREA")
 	private Long id;
-
-	@Column(name = "DS_LOCALIDADE")
-	private String descricao;
 
 	@Column(name = "SN_ATIVO")
 	private String ativo;
@@ -40,14 +38,6 @@ public class Localidade extends BaseEntity  {
 	private Date dataAlteracao;
 
 	@ManyToOne
-	@JoinColumn(name = "CD_CIDADE")
-	private Cidade cidade;
-
-	@ManyToOne
-	@JoinColumn(name = "CD_TIP_LOCALIDADE")
-	private TipoLocalidade tipoLocalidade;
-
-	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
@@ -56,9 +46,12 @@ public class Localidade extends BaseEntity  {
 	private Usuario usuarioAlteracao;
 
 	@ManyToOne
-	@JoinColumn(name = "CD_EMPRESA")
-	private Empresa empresa;
+	@JoinColumn(name = "CD_AREA")
+	private Area area;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_ENTREGADOR")
+	private Entregador entregador;
 	@Transient
 	private boolean isAtivo;
 
@@ -104,7 +97,7 @@ public class Localidade extends BaseEntity  {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Localidade other = (Localidade) obj;
+		EntregadorArea other = (EntregadorArea) obj;
 		if (id == null) {
 			if (other.getId() != null)
 				return false;
@@ -157,13 +150,6 @@ public class Localidade extends BaseEntity  {
 		return dataCadastro;
 	}
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao.toUpperCase();
-	}
 
 	public String getAtivo() {
 		return ativo;
@@ -189,36 +175,11 @@ public class Localidade extends BaseEntity  {
 		this.usuarioAlteracao = usuarioAlteracao;
 	}
 
-	public Cidade getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
-	}
 
 	public String getSituacao() {
 		if (getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
 	}
-
-	public TipoLocalidade getTipoLocalidade() {
-		return tipoLocalidade;
-	}
-
-	public void setTipoLocalidade(TipoLocalidade tipoLocalidade) {
-		this.tipoLocalidade = tipoLocalidade;
-	}
-
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-
-
 
 }

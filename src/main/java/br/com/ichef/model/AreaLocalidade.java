@@ -17,35 +17,24 @@ import org.primefaces.model.SelectableDataModel;
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
-@Table(name = "localidade")
-public class Localidade extends BaseEntity  {
-
+@Table(name = "area_localidade")
+public class AreaLocalidade extends BaseEntity  implements  SelectableDataModel<AreaLocalidade> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CD_LOCALIDADE")
+	@Column(name = "CD_AREA_LOCALIDADE")
 	private Long id;
 
-	@Column(name = "DS_LOCALIDADE")
-	private String descricao;
-
-	@Column(name = "SN_ATIVO")
-	private String ativo;
+	@ManyToOne
+	@JoinColumn(name = "CD_LOCALIDADE")
+	private Localidade localidade;
 
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastro;
 
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
-
-	@ManyToOne
-	@JoinColumn(name = "CD_CIDADE")
-	private Cidade cidade;
-
-	@ManyToOne
-	@JoinColumn(name = "CD_TIP_LOCALIDADE")
-	private TipoLocalidade tipoLocalidade;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -55,9 +44,12 @@ public class Localidade extends BaseEntity  {
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
+	@Column(name = "SN_ATIVO")
+	private String ativo;
+
 	@ManyToOne
-	@JoinColumn(name = "CD_EMPRESA")
-	private Empresa empresa;
+	@JoinColumn(name = "CD_AREA")
+	private Area area;
 
 	@Transient
 	private boolean isAtivo;
@@ -104,7 +96,7 @@ public class Localidade extends BaseEntity  {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Localidade other = (Localidade) obj;
+		AreaLocalidade other = (AreaLocalidade) obj;
 		if (id == null) {
 			if (other.getId() != null)
 				return false;
@@ -157,14 +149,6 @@ public class Localidade extends BaseEntity  {
 		return dataCadastro;
 	}
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao.toUpperCase();
-	}
-
 	public String getAtivo() {
 		return ativo;
 	}
@@ -189,36 +173,37 @@ public class Localidade extends BaseEntity  {
 		this.usuarioAlteracao = usuarioAlteracao;
 	}
 
-	public Cidade getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
-	}
-
 	public String getSituacao() {
 		if (getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
 	}
 
-	public TipoLocalidade getTipoLocalidade() {
-		return tipoLocalidade;
+	public Localidade getLocalidade() {
+		return localidade;
 	}
 
-	public void setTipoLocalidade(TipoLocalidade tipoLocalidade) {
-		this.tipoLocalidade = tipoLocalidade;
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
 	}
 
-	public Empresa getEmpresa() {
-		return empresa;
+	public Area getArea() {
+		return area;
 	}
 
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
+	public void setArea(Area area) {
+		this.area = area;
 	}
 
+	@Override
+	public AreaLocalidade getRowData(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public Object getRowKey(AreaLocalidade arg0) {
+		return getId(); 
+	}
 
 }

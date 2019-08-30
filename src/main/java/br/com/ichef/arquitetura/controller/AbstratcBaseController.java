@@ -71,7 +71,7 @@ public abstract class AbstratcBaseController implements Serializable {
 	protected void updateComponentes(String... idComponente) {
 		for (String id : idComponente) {
 			FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(id);
-			//RequestContext.getCurrentInstance().showMessageInDialog(new FacesMessage(FacesMessage.SEVERITY_INFO, "What we do in life", "Echoes in eternity."));
+			RequestContext.getCurrentInstance().update(id);
 		}
 	}
 
