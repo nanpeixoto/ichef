@@ -5,16 +5,16 @@
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">
-        Cadastro Área
+        Cadastro Entregador
     </ui:define>
 
     <ui:define name="body">
         <f:metadata>
-        	<f:viewParam name="id" value="#{areaController.id}" converter="javax.faces.Long"/>
-        	<f:event listener="#{areaController.inicializar()}" type="preRenderView"></f:event>
+        	<f:viewParam name="id" value="#{entregadorController.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{entregadorController.inicializar()}" type="preRenderView"></f:event>
         </f:metadata>
 
-        <adm:breadcrumb title="Cadastro Cliente #{areaController.entity.id}" link="cadastro-tipo-prato.xhtml?id=#{areaController.entity.id}"/>
+        <adm:breadcrumb title="Cadastro Entregador #{entregadorController.entity.id}" link="cadastro-entregador.xhtml?id=#{entregadorController.entity.id}"/>
         <h:form id="form" prependId="false">
             <p:focus/>
 
@@ -23,13 +23,13 @@
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
                         <p:commandButton value="Salvar" update="@form"
-                                         icon="fa fa-check" styleClass="btn-primary" action="#{areaController.Salvar()}"/>
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{entregadorController.Salvar()}"/>
                         <p:spacer width="5"/>
 
                       
                         <p:spacer width="5"/>
                         <p:commandButton value="Voltar" immediate="true"
-                                          action="lista-area?faces-redirect=true"
+                                          action="lista-entregador?faces-redirect=true"
                                          process="@this"
                                          icon="fa fa-close"/>
                                          
@@ -37,10 +37,10 @@
                     
                     <p:splitButton value="Salvar" update="@form"
                                    icon="fa fa-check"
-                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{areaController.Salvar()}">
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{entregadorController.Salvar()}">
                         
                         <p:separator/>
-                        <p:menuitem value="Voltar" action="lista-areafaces-redirect=true" process="@this"
+                        <p:menuitem value="Voltar" action="lista-entregadorfaces-redirect=true" process="@this"
                                     icon="fa fa-close"/>
                     </p:splitButton>
 
@@ -51,11 +51,14 @@
                     	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-12 ui-md-1">
                     	
                     	    <p:outputLabel value="Descrição" for="descricao"/>
-                    		<p:inputText value="#{areaController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
+                    		<p:inputText value="#{entregadorController.entity.nome}" id="descricao" styleClass="letras-maiusculas"
                     			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Descrição')}"/>
                     			
+                    			<p:outputLabel for="dtInicio" value="Data de Início" />
+       						 	<p:calendar id="dtInicio" value="#{entregadorController.entity.dataInicio}" pattern="dd/MM/yyyy" mask="true" />
+                    			
                     		<p:outputLabel value="Ativo" for="ativo"/>
-					        <p:selectBooleanButton id="ativo" value="#{areaController.entity.ativo}" 
+					        <p:selectBooleanButton id="ativo" value="#{entregadorController.entity.ativo}" 
 					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
 						
 						</p:panelGrid>
@@ -64,15 +67,15 @@
 						
 						<p:panelGrid  columns="5"   layout="grid">
 						
-							<p:outputLabel value="Localidade" for="selectLocalidade"/>
-                    		<p:selectOneMenu id="selectLocalidade" value="#{areaController.localidade}" filter="true"  filterMatchMode="contains" 
+							<p:outputLabel value="Área" for="selectArea"/>
+                    		<p:selectOneMenu id="selectArea" value="#{entregadorController.area}" filter="true"  filterMatchMode="contains" 
                     			converter= "omnifaces.SelectItemsConverter">
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
-					            <f:selectItems value="#{areaController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					            <f:selectItems value="#{entregadorController.areas}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>
 						 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
-                    	 	 id="btnSurname" process="@this,selectLocalidade" update="Stable,selectLocalidade" actionListener="#{areaController.adicionarLocalidade()}" 
+                    	 	 id="btnSurname" process="@this,selectArea" update="Stable,selectArea" actionListener="#{entregadorController.adicionarArea()}" 
                     	 	 styleClass="btn-primary" 
                     	 	/>
                     	</p:panelGrid>
@@ -80,22 +83,23 @@
 						<p:panelGrid  columns="1"  layout="grid"> 	
 						
 							<p:dataTable id="Stable" widgetVar="itens" rows="10"
-							paginator="true" value="#{areaController.entity.localidades}" var="item"
+							paginator="true" value="#{entregadorController.entity.areas}" var="item"
 							rowKey="#{item.id}" reflow="true"
 							paginatorPosition="bottom"
 							mptyMessage="Nenhum item encontrado" 
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
-							 sortBy="#{item.localidade.descricao}">
-						 	   
-								<p:column headerText="Localidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.descricao}"
-									filterMatchMode="contains" sortBy="#{item.localidade.descricao}" style="width:95%">
-									<h:outputLabel value="#{item.localidade.descricao}" />
+							 sortBy="#{item.area.descricao}">
+						 
+						 		  
+								<p:column headerText="Área" filterStyle="display:none; visibility:hidden;" filterBy="#{item.area.descricao}"
+									filterMatchMode="contains" sortBy="#{item.area.descricao}" style="width:95%">
+									<h:outputLabel value="#{item.area.descricao}" />
 								</p:column>
 								
 								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
 									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
-									 	 actionListener="#{areaController.excluirLocalidadesSelecionadas( item )}"/>
+									 	 actionListener="#{entregadorController.excluirAreasSelecionadas( item )}"/>
 								</p:column>
 								
 								
@@ -108,12 +112,12 @@
 						
 						<p:panelGrid  columns="4" layout="grid">
 							<p:outputLabel value="Criação" for="criacao"/>
-	                    	<p:inputText id="criacao" value="#{areaController.entity.dataCadastro}" disabled="true">
+	                    	<p:inputText id="criacao" value="#{entregadorController.entity.dataCadastro}" disabled="true">
 	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
 	                    	</p:inputText>
 	                    		
-	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{areaController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{areaController.entity.dataAlteracao}" disabled="true" rendered="#{areaController.entity.dataAlteracao != null}">
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{entregadorController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{entregadorController.entity.dataAlteracao}" disabled="true" rendered="#{entregadorController.entity.dataAlteracao != null}">
 	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
 	                    	</p:inputText>
 	                    </p:panelGrid>	

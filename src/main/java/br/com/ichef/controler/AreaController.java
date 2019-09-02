@@ -80,10 +80,11 @@ public class AreaController extends BaseController {
 		boolean existe = false;
 		ArrayList<Localidade> listaLocal = new ArrayList<>();
 
-		for (AreaLocalidade areaLocalidade : getEntity().getLocalidades()) {
-			if( areaLocalidade.getLocalidade().getId().equals( getLocalidade().getId() ))
-				existe = true;
-		}
+		if( getEntity().getLocalidades()!=null )
+			for (AreaLocalidade areaLocalidade : getEntity().getLocalidades()) {
+				if( areaLocalidade.getLocalidade().getId().equals( getLocalidade().getId() ))
+					existe = true;
+			}
 
 		if (!existe) {
 

@@ -150,7 +150,6 @@ public class EntregadorArea extends BaseEntity {
 		return dataCadastro;
 	}
 
-
 	public String getAtivo() {
 		return ativo;
 	}
@@ -175,11 +174,26 @@ public class EntregadorArea extends BaseEntity {
 		this.usuarioAlteracao = usuarioAlteracao;
 	}
 
-
 	public String getSituacao() {
 		if (getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
+	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
+
+	public Entregador getEntregador() {
+		return entregador;
+	}
+
+	public void setEntregador(Entregador entregador) {
+		this.entregador = entregador;
 	}
 
 }
