@@ -46,6 +46,10 @@ public class Area extends BaseEntity {
 
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
+	
+	@ManyToOne
+	@JoinColumn(name = "CD_EMPRESA")
+	private Empresa empresa;
 
 	// bi-directional many-to-one association to AreaLocalidade
 	@OneToMany(mappedBy = "area",  cascade = CascadeType.ALL, orphanRemoval = true)
@@ -194,5 +198,15 @@ public class Area extends BaseEntity {
 	public void setLocalidades(List<AreaLocalidade> localidades) {
 		this.localidades = localidades;
 	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
+	
 
 }

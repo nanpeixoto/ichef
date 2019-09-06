@@ -12,9 +12,11 @@ import javax.inject.Named;
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Area;
+import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Entregador;
 import br.com.ichef.model.EntregadorArea;
 import br.com.ichef.service.AreaService;
+import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.EntregadorService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.AreaVisitor;
@@ -43,6 +45,10 @@ public class EntregadorController extends BaseController {
 	private List<Area> listaAreaSelecionadas = new ArrayList<Area>();
 	private List<Area> localidades = new ArrayList<Area>();
 	private Area localidade;
+	
+	@Inject
+	private EmpresaService empresaService;
+	private List<Empresa> empresas = new ArrayList<Empresa>();
 
 	public void inicializar() {
 		if (id != null) {
@@ -59,6 +65,7 @@ public class EntregadorController extends BaseController {
 		} else {
 			setEntity(new Entregador());
 			getEntity().setAtivo("S");
+			getEntity().setEmpresa(userLogado.getEmpresaLogada());
 		}
 		localidade = null;
 		lista = service.listAll();
@@ -66,10 +73,15 @@ public class EntregadorController extends BaseController {
 	}
 
 	private void obterListas() {
+		
+		Area filter = new Area();
+		filter.setEmpresa(getUserLogado().getEmpresaLogada());
+		
 		AreaVisitor visitor = new AreaVisitor();
 		visitor.setListaDesvinculados(true);
+		empresas = empresaService.listAll(true);
 		try {
-			localidades = areaService.findByParameters(new Area(), visitor);
+			localidades = areaService.findByParameters(filter, visitor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -229,5 +241,15 @@ public class EntregadorController extends BaseController {
 	public void setListaAreaSelecionadas(List<Area> listaAreaSelecionadas) {
 		this.listaAreaSelecionadas = listaAreaSelecionadas;
 	}
+
+	public List<Empresa> getEmpresas() {
+		return empresas;
+	}
+
+	public void setEmpresas(List<Empresa> empresas) {
+		this.empresas = empresas;
+	}
+	
+	
 
 }

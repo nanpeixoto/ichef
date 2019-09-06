@@ -13,8 +13,10 @@ import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Area;
 import br.com.ichef.model.AreaLocalidade;
+import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Localidade;
 import br.com.ichef.service.AreaService;
+import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.LocalidadeService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.LocalidadeVisitor;
@@ -31,6 +33,9 @@ public class AreaController extends BaseController {
 	@Inject
 	private LocalidadeService localidadeService;
 
+	@Inject
+	private EmpresaService empresaService;
+
 	private Area entity;
 
 	private Long id;
@@ -43,6 +48,8 @@ public class AreaController extends BaseController {
 	private List<Localidade> listaLocalidadeSelecionadas = new ArrayList<Localidade>();
 	private List<Localidade> localidades = new ArrayList<Localidade>();
 	private Localidade localidade;
+
+	private List<Empresa> empresas = new ArrayList<Empresa>();
 
 	public void inicializar() {
 		if (id != null) {
@@ -59,6 +66,7 @@ public class AreaController extends BaseController {
 		} else {
 			setEntity(new Area());
 			getEntity().setAtivo("S");
+			getEntity().setEmpresa(userLogado.getEmpresaLogada());
 		}
 		localidade = null;
 		lista = service.listAll();
@@ -66,23 +74,31 @@ public class AreaController extends BaseController {
 	}
 
 	private void obterListas() {
+
+		Localidade filter = new Localidade();
+		filter.setEmpresa(getUserLogado().getEmpresaLogada());
+		
+		
 		LocalidadeVisitor visitor = new LocalidadeVisitor();
 		visitor.setListaDesvinculadosDasAreas(true);
+		
+		empresas = empresaService.listAll(true);
+		
 		try {
-			localidades = localidadeService.findByParameters(new Localidade(), visitor);
+			localidades = localidadeService.findByParameters(filter, visitor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-
+	
 	public void adicionarLocalidade() {
 		boolean existe = false;
 		ArrayList<Localidade> listaLocal = new ArrayList<>();
 
-		if( getEntity().getLocalidades()!=null )
+		if (getEntity().getLocalidades() != null)
 			for (AreaLocalidade areaLocalidade : getEntity().getLocalidades()) {
-				if( areaLocalidade.getLocalidade().getId().equals( getLocalidade().getId() ))
+				if (areaLocalidade.getLocalidade().getId().equals(getLocalidade().getId()))
 					existe = true;
 			}
 
@@ -130,7 +146,7 @@ public class AreaController extends BaseController {
 		List<AreaLocalidade> temp = new ArrayList<>();
 		temp.addAll(entity.getLocalidades());
 		for (AreaLocalidade arealoc : entity.getLocalidades()) {
-			if( local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()) )
+			if (local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()))
 				temp.remove(arealoc);
 		}
 		entity.getLocalidades().clear();
@@ -228,6 +244,14 @@ public class AreaController extends BaseController {
 
 	public void setListaLocalidadeSelecionadas(List<Localidade> listaLocalidadeSelecionadas) {
 		this.listaLocalidadeSelecionadas = listaLocalidadeSelecionadas;
+	}
+
+	public List<Empresa> getEmpresas() {
+		return empresas;
+	}
+
+	public void setEmpresas(List<Empresa> empresas) {
+		this.empresas = empresas;
 	}
 
 }

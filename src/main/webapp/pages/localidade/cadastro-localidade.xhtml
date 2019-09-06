@@ -75,7 +75,7 @@
                     			
                     		<p:outputLabel value="Empresa" for="empresa"/>
                     		 <p:selectOneMenu id="empresa" value="#{localidadeController.entity.empresa}"  converter= "omnifaces.SelectItemsConverter"
-                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Empresa')}">
+                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Empresa')}" disabled="true">
 					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{localidadeController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
 					        </p:selectOneMenu>

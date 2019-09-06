@@ -57,6 +57,10 @@ public class Entregador extends BaseEntity {
 	@OneToMany(mappedBy = "entregador", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<EntregadorArea> areas;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_EMPRESA")
+	private Empresa empresa;
+
 	public boolean isAtivo() {
 		if (ativo != null) {
 			if (ativo.equalsIgnoreCase("S"))
@@ -204,6 +208,14 @@ public class Entregador extends BaseEntity {
 
 	public void setAreas(List<EntregadorArea> areas) {
 		this.areas = areas;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 }

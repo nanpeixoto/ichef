@@ -3,6 +3,7 @@ package br.com.ichef.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -68,12 +69,10 @@ public class Cliente extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@OneToMany(mappedBy = "cliente")
-	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ClienteTelefone> telefones;
 
-	@OneToMany(mappedBy = "cliente")
-	@Cascade(value = { org.hibernate.annotations.CascadeType.ALL })
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ClienteEndereco> enderecos;
 
 	@Column(name = "DS_APELIDO")

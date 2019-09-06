@@ -52,11 +52,21 @@
                     	
                     	    <p:outputLabel value="Descrição" for="descricao"/>
                     		<p:inputText value="#{areaController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Descrição')}"/>
+                    			required="true" requiredMessage="#{areaController.getRequiredMessage('Descrição')}"/>
+                    			
+                    				
+                    		<p:outputLabel value="Empresa" for="empresa"/>
+                    		 <p:selectOneMenu id="empresa" value="#{areaController.entity.empresa}"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{areaController.getRequiredMessage('Empresa')}" disabled="true">
+					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{areaController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
+					        </p:selectOneMenu>
                     			
                     		<p:outputLabel value="Ativo" for="ativo"/>
 					        <p:selectBooleanButton id="ativo" value="#{areaController.entity.ativo}" 
 					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+					        	
+					        	
 						
 						</p:panelGrid>
 						
@@ -95,7 +105,7 @@
 								
 								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
 									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
-									 	 actionListener="#{areaController.excluirLocalidadesSelecionadas( item )}"/>
+									 	 actionListener="#{areaController.excluirLocalidadesSelecionados( item )}"/>
 								</p:column>
 								
 								

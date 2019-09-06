@@ -77,6 +77,8 @@ public class Empresa extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
+	
+
 	@Column(name = "SN_ATIVO")
 	private String ativo;
 

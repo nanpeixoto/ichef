@@ -132,6 +132,34 @@ public class ClienteController extends BaseController {
 		}
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
+	
+	public void excluirTelefonesSelecionados(ClienteTelefone obj) {
+		List<ClienteTelefone> temp = new ArrayList<>();
+		temp.addAll(entity.getTelefones());
+		for (ClienteTelefone item : entity.getTelefones()) {
+			if (obj.getTelefone().equals(item.getTelefone()))
+				temp.remove(item);
+		}
+		entity.getTelefones().clear();
+		entity.getTelefones().addAll(temp);
+		updateComponentes("dttel");
+		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+	}
+	
+	public void excluirLocalidadesSelecionadas(ClienteEndereco obj) {
+		List<ClienteEndereco> temp = new ArrayList<>();
+		temp.addAll(entity.getEnderecos());
+		for (ClienteEndereco item : entity.getEnderecos()) {
+			if (obj.getLocalidade().getId().equals(item.getLocalidade().getId()))
+				temp.remove(item);
+		}
+		entity.getEnderecos().clear();
+		entity.getEnderecos().addAll(temp);
+		updateComponentes("dtendereco");
+		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+	}
+	
+	
 
 	public String Salvar() throws Exception {
 

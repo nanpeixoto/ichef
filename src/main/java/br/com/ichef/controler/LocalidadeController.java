@@ -79,7 +79,7 @@ public class LocalidadeController extends BaseController {
 	private void obterListas() {
 		cidades = cidadeService.listAll(true);
 		tipoLocalidades = tipoLocalidadeService.listAll(true);
-		empresas = empresaService.listAll(true);
+		empresas = empresaService.empresasUsuario(getUserLogado());
 
 	}
 

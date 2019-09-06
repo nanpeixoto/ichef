@@ -56,6 +56,13 @@
                     			
                     			<p:outputLabel for="dtInicio" value="Data de Início" />
        						 	<p:calendar id="dtInicio" value="#{entregadorController.entity.dataInicio}" pattern="dd/MM/yyyy" mask="true" />
+       						 	
+       						 	<p:outputLabel value="Empresa" for="empresa"/>
+                    		 <p:selectOneMenu id="empresa" value="#{entregadorController.entity.empresa}"  converter= "omnifaces.SelectItemsConverter"
+                    		 	required="true" requiredMessage="#{entregadorController.getRequiredMessage('Empresa')}" disabled="true">
+					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{entregadorController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
+					        </p:selectOneMenu>
                     			
                     		<p:outputLabel value="Ativo" for="ativo"/>
 					        <p:selectBooleanButton id="ativo" value="#{entregadorController.entity.ativo}" 
