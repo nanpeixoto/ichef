@@ -195,11 +195,13 @@ public class Entregador extends BaseEntity {
 	}
 
 	public String getNome() {
-		return nome;
+		if (nome == null)
+			return nome;
+		return nome.toUpperCase();
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.nome = nome.toUpperCase();
 	}
 
 	public List<EntregadorArea> getAreas() {

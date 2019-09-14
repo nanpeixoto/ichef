@@ -15,8 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
-
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -381,6 +379,17 @@ public class Cliente extends BaseEntity {
 
 	public void setEnderecos(List<ClienteEndereco> enderecos) {
 		this.enderecos = enderecos;
+	}
+	
+	public String getAllTelefones() {
+		String listaTelefones = "";
+		for (ClienteTelefone tel : telefones) {
+			if(listaTelefones != null && !listaTelefones.equalsIgnoreCase(""))
+				listaTelefones = listaTelefones+" / ";
+			listaTelefones = listaTelefones + tel.getTelefone().replace("-", "").replace("(", "").replace(")", "").replace("+", "").replace(" ", "").trim();
+		}
+		
+		return listaTelefones;
 	}
 
 }

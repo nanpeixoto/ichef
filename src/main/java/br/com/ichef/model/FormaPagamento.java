@@ -1,9 +1,7 @@
 package br.com.ichef.model;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,24 +9,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
-@Table(name = "area")
-public class Area extends BaseEntity {
+@Table(name = "forma_pagamento")
+public class FormaPagamento extends BaseEntity {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CD_AREA")
+	@Column(name = "CD_FORMA_PAGAMENTO")
 	private Long id;
 
-	@Column(name = "DS_AREA")
+	@Column(name = "DS_FORMA_PAGAMENTO")
 	private String descricao;
+
+	@Column(name = "SN_ATIVO")
+	private String ativo;
+
+	@Column(name = "SN_CARTEIRA")
+	private String carteira;
+
+	@Column(name = "DT_CADASTRO")
+	private Date dataCadastro;
+
+	@Column(name = "DT_ALTERACAO")
+	private Date dataAlteracao;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -38,25 +48,11 @@ public class Area extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@Column(name = "SN_ATIVO")
-	private String ativo;
-
-	@Column(name = "DT_CADASTRO")
-	private Date dataCadastro;
-
-	@Column(name = "DT_ALTERACAO")
-	private Date dataAlteracao;
-	
-	@ManyToOne
-	@JoinColumn(name = "CD_EMPRESA")
-	private Empresa empresa;
-
-	// bi-directional many-to-one association to AreaLocalidade
-	@OneToMany(mappedBy = "area",  cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<AreaLocalidade> localidades;
-
 	@Transient
 	private boolean isAtivo;
+
+	@Transient
+	private boolean isCarteira;
 
 	public boolean isAtivo() {
 		if (ativo != null) {
@@ -68,12 +64,30 @@ public class Area extends BaseEntity {
 		return isAtivo;
 	}
 
+	public boolean isCarteira() {
+		if (carteira != null) {
+			if (carteira.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isCarteira;
+	}
+
 	public void setAtivo(boolean isAtivo) {
 		this.isAtivo = isAtivo;
 		if (isAtivo == Boolean.TRUE) {
 			setAtivo("S");
 		} else
 			setAtivo("N");
+	}
+
+	public void setCarteira(boolean isCarteira) {
+		this.isCarteira = isCarteira;
+		if (isCarteira == Boolean.TRUE) {
+			setCarteira("S");
+		} else
+			setCarteira("N");
 	}
 
 	public Long getId() {
@@ -100,7 +114,7 @@ public class Area extends BaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Area other = (Area) obj;
+		FormaPagamento other = (FormaPagamento) obj;
 		if (id == null) {
 			if (other.getId() != null)
 				return false;
@@ -125,7 +139,7 @@ public class Area extends BaseEntity {
 
 	@Override
 	public String getColumnOrderBy() {
-		return "descricao";
+		return null;
 	}
 
 	@Override
@@ -193,22 +207,18 @@ public class Area extends BaseEntity {
 		return "Inativo".toUpperCase();
 	}
 
-	public List<AreaLocalidade> getLocalidades() {
-		return localidades;
+	public String geteCarteira() {
+		if (getCarteira().equals("S"))
+			return "Sim".toUpperCase();
+		return "Não".toUpperCase();
 	}
 
-	public void setLocalidades(List<AreaLocalidade> localidades) {
-		this.localidades = localidades;
+	public String getCarteira() {
+		return carteira;
 	}
 
-	public Empresa getEmpresa() {
-		return empresa;
+	public void setCarteira(String carteira) {
+		this.carteira = carteira;
 	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-	
-	
 
 }
