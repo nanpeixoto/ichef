@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Cadastro Ficha Tecnica de Preparo
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+        	<f:viewParam name="id" value="#{fichaTecnicaPreparoController.id}" converter="javax.faces.Long"/>
+        	<f:event listener="#{fichaTecnicaPreparoController.inicializar()}" type="preRenderView"></f:event>
+        </f:metadata>
+
+        <adm:breadcrumb title="Cadastro Preparo #{fichaTecnicaPreparoController.entity.id}" link="cadastro-ficha-tecnica-prepato.xhtml?id=#{fichaTecnicaPreparoController.entity.id}"/>
+        <h:form id="form" prependId="false">
+            <p:focus/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{fichaTecnicaPreparoController.Salvar()}"/>
+                        <p:spacer width="5"/>
+
+                      
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                          action="lista-ficha-tecnica-preparo?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                                         
+                    </div>
+                    
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{fichaTecnicaPreparoController.Salvar()}">
+                        
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="lista-ficha-tecnica-preparofaces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+                    	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-12 ui-md-1">
+                    	
+                    	    <p:outputLabel value="Descrição" for="descricao"/>
+                    		<p:inputText value="#{fichaTecnicaPreparoController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{fichaTecnicaPreparoController.getRequiredMessage('Descrição')}"/>
+                    			
+                    				
+                    		
+                    			
+                    		<p:outputLabel value="Ativo" for="ativo"/>
+					        <p:selectBooleanButton id="ativo" value="#{fichaTecnicaPreparoController.entity.ativo}" 
+					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+					        	
+					        	
+						
+						</p:panelGrid>
+						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="5"   layout="grid">
+						
+							<!-- <p:outputLabel value="Localidade" for="selectLocalidade"/>
+                    		<p:selectOneMenu id="selectLocalidade" value="#{fichaTecnicaPreparoController.insumos}" filter="true"  filterMatchMode="contains" 
+                    			converter= "omnifaces.SelectItemsConverter">
+                    			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{fichaTecnicaPreparoController.insumos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+						 	
+                    	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
+                    	 	 id="btnSurname" process="@this,selectLocalidade" update="Stable,selectLocalidade" actionListener="#{fichaTecnicaPreparoController.adicionarInsumo()}" 
+                    	 	 styleClass="btn-primary" 
+                    	 	/> -->
+                    	</p:panelGrid>
+						
+						<p:panelGrid  columns="1"  layout="grid"> 	
+						
+							<p:dataTable id="Stable" widgetVar="itens" rows="10"
+							paginator="true" value="#{fichaTecnicaPreparoController.entity.insumos}" var="item"
+							rowKey="#{item.id}" reflow="true"
+							paginatorPosition="bottom"
+							mptyMessage="Nenhum item encontrado" 
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
+							 sortBy="#{item.insumo.descricao}">
+						 	   
+								<p:column headerText="Localidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.insumo.descricao}"
+									filterMatchMode="contains" sortBy="#{item.insumo.descricao}" style="width:95%">
+									<h:outputLabel value="#{item.insumo.descricao}" />
+								</p:column>
+								
+								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
+									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
+									 	 actionListener="#{fichaTecnicaPreparoController.excluirItensSelecionadas( item )}"/>
+								</p:column>
+								
+								
+								
+							</p:dataTable>
+						
+						</p:panelGrid>
+							
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="4" layout="grid">
+							<p:outputLabel value="Criação" for="criacao"/>
+	                    	<p:inputText id="criacao" value="#{fichaTecnicaPreparoController.entity.dataCadastro}" disabled="true">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    		
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{fichaTecnicaPreparoController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{fichaTecnicaPreparoController.entity.dataAlteracao}" disabled="true" rendered="#{fichaTecnicaPreparoController.entity.dataAlteracao != null}">
+	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
+	                    	</p:inputText>
+	                    </p:panelGrid>	
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   
