@@ -71,17 +71,13 @@
 							
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
-						<p:panelGrid  columns="4" layout="grid">
-							<p:outputLabel value="Criação" for="criacao"/>
-	                    	<p:inputText id="criacao" value="#{formaPagamentoController.entity.dataCadastro}" disabled="true">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
+						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
+							<p:outputLabel value="Criação" for="criacao" rendered="#{formaPagamentoController.entity.dataCadastro != null}"/>
+	                    	<p:inputText id="criacao" value="#{formaPagamentoController.getUsuarioCadastro(formaPagamentoController.entity)}" disabled="true" rendered="#{formaPagamentoController.entity.dataCadastro != null}"/>
 	                    		
 	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{formaPagamentoController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{formaPagamentoController.entity.dataAlteracao}" disabled="true" rendered="#{formaPagamentoController.entity.dataAlteracao != null}">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
-	                    </p:panelGrid>	
+	                    	<p:inputText id="alteracao" value="#{formaPagamentoController.getUsuarioAlteracao(formaPagamentoController.entity)}" disabled="true" rendered="#{formaPagamentoController.entity.dataAlteracao != null}"/>
+	                    </p:panelGrid>		
                     </div>
                 </div>
             </div>

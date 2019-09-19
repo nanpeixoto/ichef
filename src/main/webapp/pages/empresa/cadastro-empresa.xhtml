@@ -104,20 +104,13 @@
 							
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>	
 											
-     					<p:panelGrid  columns="4" layout="grid">
-                    		<p:outputLabel value="Criação" for="criacao"/>
-                    		<p:inputText id="criacao" value="#{empresaController.entity.dataCadastro}" disabled="true">
-                    			<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-                    		</p:inputText>
-                    		
-                    		
-                    		<p:outputLabel value="Alteração" for="alteracao" rendered="#{empresaController.entity.dataAlteracao != null}"/>
-                    		<p:inputText id="alteracao" value="#{empresaController.entity.dataAlteracao}" disabled="true" rendered="#{empresaController.entity.dataAlteracao != null}">
-                    			<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-                    		</p:inputText>
-                    		
-                    		
-                    	</p:panelGrid>
+     					<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
+							<p:outputLabel value="Criação" for="criacao" rendered="#{empresaController.entity.dataCadastro != null}"/>
+	                    	<p:inputText id="criacao" value="#{empresaController.getUsuarioCadastro(empresaController.entity)}" disabled="true" rendered="#{empresaController.entity.dataCadastro != null}"/>
+	                    		
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{empresaController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{empresaController.getUsuarioAlteracao(empresaController.entity)}" disabled="true" rendered="#{empresaController.entity.dataAlteracao != null}"/>
+	                    </p:panelGrid>	
                     </div>
                 </div>
             </div>

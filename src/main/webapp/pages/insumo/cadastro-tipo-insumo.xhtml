@@ -67,16 +67,12 @@
 							
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
-						<p:panelGrid  columns="4" layout="grid">
-							<p:outputLabel value="Criação" for="criacao"/>
-	                    	<p:inputText id="criacao" value="#{tipoInsumoController.entity.dataCadastro}" disabled="true">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
+						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
+							<p:outputLabel value="Criação" for="criacao" rendered="#{tipoInsumoController.entity.dataCadastro != null}"/>
+	                    	<p:inputText id="criacao" value="#{tipoInsumoController.getUsuarioCadastro(tipoInsumoController.entity)}" disabled="true" rendered="#{tipoInsumoController.entity.dataCadastro != null}"/>
 	                    		
 	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{tipoInsumoController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{tipoInsumoController.entity.dataAlteracao}" disabled="true" rendered="#{tipoInsumoController.entity.dataAlteracao != null}">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
+	                    	<p:inputText id="alteracao" value="#{tipoInsumoController.getUsuarioAlteracao(tipoInsumoController.entity)}" disabled="true" rendered="#{tipoInsumoController.entity.dataAlteracao != null}"/>
 	                    </p:panelGrid>	
                     </div>
                 </div>

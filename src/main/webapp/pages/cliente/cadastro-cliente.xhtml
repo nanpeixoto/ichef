@@ -238,15 +238,11 @@
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
 						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
-							<p:outputLabel value="Criação" for="criacao"/>
-	                    	<p:inputText id="criacao" value="#{clienteController.entity.dataCadastro}" disabled="true">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
+							<p:outputLabel value="Criação" for="criacao" rendered="#{clienteController.entity.dataCadastro != null}"/>
+	                    	<p:inputText id="criacao" value="#{clienteController.getUsuarioCadastro(clienteController.entity)}" disabled="true" rendered="#{clienteController.entity.dataCadastro != null}"/>
 	                    		
 	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{clienteController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{clienteController.entity.dataAlteracao}" disabled="true" rendered="#{clienteController.entity.dataAlteracao != null}">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
+	                    	<p:inputText id="alteracao" value="#{clienteController.getUsuarioAlteracao(clienteController.entity)}" disabled="true" rendered="#{clienteController.entity.dataAlteracao != null}"/>
 	                    </p:panelGrid>	
                     </div>
                 </div>

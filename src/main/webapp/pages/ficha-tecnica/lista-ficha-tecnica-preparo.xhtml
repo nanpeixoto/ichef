@@ -104,6 +104,31 @@
 							</h:link>
 						</p:column>
 						
+						
+						<p:column headerText="Custo Receita" filterStyle="display:none; visibility:hidden;" filterBy="#{fichaTecnicaPreparoController.formataValor(item.precoCustoReceita)}"
+							filterMatchMode="contains" sortBy="#{fichaTecnicaPreparoController.formataValor(item.precoCustoReceita)}">
+							<h:outputLabel value="#{fichaTecnicaPreparoController.formataValor(item.precoCustoReceita)}" />
+						</p:column>
+					
+						
+						<p:column headerText="Tamanho" filterStyle="display:none; visibility:hidden;" filterBy="#{item.tamanho}"
+							filterMatchMode="contains" sortBy="#{item.tamanho}">
+							<h:outputLabel value="#{item.tamanho}" />
+						</p:column>
+						
+						
+						
+						<p:column headerText="Custo Porção" filterStyle="display:none; visibility:hidden;" filterBy="#{fichaTecnicaPreparoController.formataValor(item.precoCustoPorcao)}"
+							filterMatchMode="contains" sortBy="#{fichaTecnicaPreparoController.formataValor(item.precoCustoPorcao)}">
+							<h:outputLabel value="#{fichaTecnicaPreparoController.formataValor(item.precoCustoPorcao)}" />
+						</p:column>
+						
+						
+						
+						
+						
+						
+						
 						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;"  width="10%"  filterBy="#{item.situacao}"
 							filterMatchMode="contains" sortBy="#{item.situacao}">
 							<h:outputLabel value="#{item.situacao}" />

@@ -57,7 +57,7 @@
                     	<p:panelGrid id="capaPanel" columns="4" layout="grid">
                     		<p:outputLabel value="Tipo de Localidade" for="descricao"/>
                     		<p:inputText value="#{tipoLocalidadeController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Tipo de Localidade')}"/>
+                    			required="true" requiredMessage="#{tipoLocalidadeController.getRequiredMessage('Tipo de Localidade')}"/>
                     		
                     		<p:outputLabel value="Ativo" for="ativo"/>
 					        <p:selectBooleanButton id="ativo" value="#{tipoLocalidadeController.entity.ativo}" 
@@ -67,16 +67,12 @@
 							
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
-						<p:panelGrid  columns="4" layout="grid">
-							<p:outputLabel value="Criação" for="criacao"/>
-	                    	<p:inputText id="criacao" value="#{tipoLocalidadeController.entity.dataCadastro}" disabled="true">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
+						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
+							<p:outputLabel value="Criação" for="criacao" rendered="#{tipoLocalidadeController.entity.dataCadastro != null}"/>
+	                    	<p:inputText id="criacao" value="#{tipoLocalidadeController.getUsuarioCadastro(tipoLocalidadeController.entity)}" disabled="true" rendered="#{tipoLocalidadeController.entity.dataCadastro != null}"/>
 	                    		
 	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{tipoLocalidadeController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{tipoLocalidadeController.entity.dataAlteracao}" disabled="true" rendered="#{tipoLocalidadeController.entity.dataAlteracao != null}">
-	                    		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo"/>
-	                    	</p:inputText>
+	                    	<p:inputText id="alteracao" value="#{tipoLocalidadeController.getUsuarioAlteracao(tipoLocalidadeController.entity)}" disabled="true" rendered="#{tipoLocalidadeController.entity.dataAlteracao != null}"/>
 	                    </p:panelGrid>	
                     </div>
                 </div>
