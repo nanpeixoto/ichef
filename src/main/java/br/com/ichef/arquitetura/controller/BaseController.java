@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Usuario;
 import br.com.ichef.util.JSFUtil;
 
@@ -28,15 +29,18 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	protected Usuario userLogado = (Usuario) JSFUtil.getSessionMapValue("usuario");
 
+	protected Configuracao configuracao = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+
 	public String getMaskCpf(String cpf) {
 		cpf = cpf.replace(".", "");
 		cpf = cpf.replace("-", "");
 		try {
-			return cpf.substring(0, 2) + "." + cpf.substring(2, 5) + "." + cpf.substring(5, 8) + "/" + cpf.substring(8,12)+"-" + cpf.substring(12,cpf.length());
+			return cpf.substring(0, 2) + "." + cpf.substring(2, 5) + "." + cpf.substring(5, 8) + "/"
+					+ cpf.substring(8, 12) + "-" + cpf.substring(12, cpf.length());
 		} catch (Exception e) {
 			return cpf;
 		}
-		
+
 	}
 
 	public String criptografa(String senha) {
@@ -92,7 +96,7 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	}
 
 	public String getRequiredMessage(String label) {
-		return "O campo " + label + " ï¿½ de preenchimento obrigatï¿½rio.";
+		return "O campo " + label + " é de preenchimento obrigatório.";
 	}
 
 	public String getImagem(String imagem) {
@@ -105,6 +109,24 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	public String getCaminhoSubRelatorio() {
 		return getServlet().getRealPath("/WEB-INF/report/") + "/";
+	}
+
+	public Object formataValor(Object valor) {
+		try {
+
+			if (valor != null) {
+				return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			return valor.toString();
+		} catch (Exception e) {
+			return valor;
+		}
+
 	}
 
 	protected HttpServletResponse getResponse() {
@@ -127,6 +149,10 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	public void reset() {
 		RequestContext.getCurrentInstance().reset(DIALOG_CADASTRAR);
+	}
+
+	public Configuracao getConfiguracao() {
+		return configuracao;
 	}
 
 }

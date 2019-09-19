@@ -21,8 +21,8 @@ public class Configuracao extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="CD_CONFIGURACAO")
-	private Long id;
+	@Column(name = "CD_CONFIGURACAO")
+	private Integer id;
 
 	@Column(name = "HOST_SMTP")
 	private String hostSMTP;
@@ -34,50 +34,18 @@ public class Configuracao extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	public Long getId() {
+	@Column(name = "NR_CMV")
+	private Integer custoMercadoriaVendida;
+
+	@Override
+	public Object getId() {
+		// TODO Auto-generated method stub
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Configuracao other = (Configuracao) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	public boolean isInclusao() {
-		return (getId() == null ? true : false);
-	}
-
-	public boolean isEdicao() {
-		return !isInclusao();
 	}
 
 	@Override
 	public void setId(Object id) {
-		this.id = (Long) id;
+		this.id = (Integer) id;
 
 	}
 
@@ -117,12 +85,10 @@ public class Configuracao extends BaseEntity {
 		return null;
 	}
 
-	public void setDataAlteracao(Date dataAlteracao) {
-		this.dataAlteracao = dataAlteracao;
-	}
-
-	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
-		this.usuarioAlteracao = usuarioAlteracao;
+	@Override
+	public boolean isEdicao() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	public String getHostSMTP() {
@@ -131,6 +97,18 @@ public class Configuracao extends BaseEntity {
 
 	public void setHostSMTP(String hostSMTP) {
 		this.hostSMTP = hostSMTP;
+	}
+
+	public Integer getCustoMercadoriaVendida() {
+		return custoMercadoriaVendida;
+	}
+
+	public void setCustoMercadoriaVendida(Integer custoMercadoriaVendida) {
+		this.custoMercadoriaVendida = custoMercadoriaVendida;
+	}
+
+	public void setDataAlteracao(Date dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
 	}
 
 }

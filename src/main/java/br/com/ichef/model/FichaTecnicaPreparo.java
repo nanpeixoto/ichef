@@ -1,12 +1,12 @@
 package br.com.ichef.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,9 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.enumerator.Classificacao;
 
 /**
  * The persistent class for the ficha_tecnica_preparo database table.
@@ -58,30 +58,50 @@ public class FichaTecnicaPreparo extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@Column(name = "NR_PERCO_CUSTO_RECEITA")
-	private int nrPercoCustoReceita;
+	@Column(name = "NR_PRECO_CUSTO_RECEITA")
+	private BigDecimal precoCustoReceita;
 
 	@Column(name = "NR_PRECO_CUSTO_PORCAO")
-	private int nrPrecoCustoPorcao;
+	private BigDecimal precoCustoPorcao;
 
 	@Column(name = "NR_PRECO_VENDA_PORCAO")
-	private int nrPrecoVendaPorcao;
+	private BigDecimal precoVendaPorcao;
 
 	@Column(name = "NR_PRECO_VENDA_RECEITA")
-	private int nrPrecoVendaReceita;
+	private BigDecimal precoVendaReceita;
 
 	@Column(name = "NR_TAMANHO")
-	private int nrTamanho;
+	private Long tamanho;
 
 	@Column(name = "NR_TAMANHO_PORCAO_GRAMAS")
-	private int nrTamanhoPorcaoGramas;
+	private Long tamanhoPorcaoGramas;
 
 	@Column(name = "TP_CLASSIFICACAO")
-	@Enumerated(EnumType.STRING)
-	private Classificacao classificacao;
+	private String classificacao;
 
-	@OneToMany(mappedBy = "fichaTecnicaPreparo")
+	@OneToMany(mappedBy = "fichaTecnicaPreparo",  cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FichaTecnicaPreparoInsumo> insumos;
+
+	@Transient
+	private boolean isAtivo;
+
+	public boolean isAtivo() {
+		if (ativo != null) {
+			if (ativo.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isAtivo;
+	}
+
+	public void setAtivo(boolean isAtivo) {
+		this.isAtivo = isAtivo;
+		if (isAtivo == Boolean.TRUE) {
+			setAtivo("S");
+		} else
+			setAtivo("N");
+	}
 
 	@Override
 	public Object getId() {
@@ -173,59 +193,59 @@ public class FichaTecnicaPreparo extends BaseEntity {
 		this.ativo = ativo;
 	}
 
-	public int getNrPercoCustoReceita() {
-		return nrPercoCustoReceita;
+	public BigDecimal getPrecoCustoReceita() {
+		return precoCustoReceita;
 	}
 
-	public void setNrPercoCustoReceita(int nrPercoCustoReceita) {
-		this.nrPercoCustoReceita = nrPercoCustoReceita;
+	public void setPrecoCustoReceita(BigDecimal precoCustoReceita) {
+		this.precoCustoReceita = precoCustoReceita;
 	}
 
-	public int getNrPrecoCustoPorcao() {
-		return nrPrecoCustoPorcao;
+	public BigDecimal getPrecoCustoPorcao() {
+		return precoCustoPorcao;
 	}
 
-	public void setNrPrecoCustoPorcao(int nrPrecoCustoPorcao) {
-		this.nrPrecoCustoPorcao = nrPrecoCustoPorcao;
+	public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
+		this.precoCustoPorcao = precoCustoPorcao;
 	}
 
-	public int getNrPrecoVendaPorcao() {
-		return nrPrecoVendaPorcao;
+	public BigDecimal getPrecoVendaPorcao() {
+		return precoVendaPorcao;
 	}
 
-	public void setNrPrecoVendaPorcao(int nrPrecoVendaPorcao) {
-		this.nrPrecoVendaPorcao = nrPrecoVendaPorcao;
+	public void setPrecoVendaPorcao(BigDecimal precoVendaPorcao) {
+		this.precoVendaPorcao = precoVendaPorcao;
 	}
 
-	public int getNrPrecoVendaReceita() {
-		return nrPrecoVendaReceita;
+	public BigDecimal getPrecoVendaReceita() {
+		return precoVendaReceita;
 	}
 
-	public void setNrPrecoVendaReceita(int nrPrecoVendaReceita) {
-		this.nrPrecoVendaReceita = nrPrecoVendaReceita;
+	public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
+		this.precoVendaReceita = precoVendaReceita;
 	}
 
-	public int getNrTamanho() {
-		return nrTamanho;
+	public Long getTamanho() {
+		return tamanho;
 	}
 
-	public void setNrTamanho(int nrTamanho) {
-		this.nrTamanho = nrTamanho;
+	public void setTamanho(Long tamanho) {
+		this.tamanho = tamanho;
 	}
 
-	public int getNrTamanhoPorcaoGramas() {
-		return nrTamanhoPorcaoGramas;
+	public Long getTamanhoPorcaoGramas() {
+		return tamanhoPorcaoGramas;
 	}
 
-	public void setNrTamanhoPorcaoGramas(int nrTamanhoPorcaoGramas) {
-		this.nrTamanhoPorcaoGramas = nrTamanhoPorcaoGramas;
+	public void setTamanhoPorcaoGramas(Long tamanhoPorcaoGramas) {
+		this.tamanhoPorcaoGramas = tamanhoPorcaoGramas;
 	}
 
-	public Classificacao getClassificacao() {
+	public String getClassificacao() {
 		return classificacao;
 	}
 
-	public void setClassificacao(Classificacao classificacao) {
+	public void setClassificacao(String classificacao) {
 		this.classificacao = classificacao;
 	}
 
@@ -252,5 +272,8 @@ public class FichaTecnicaPreparo extends BaseEntity {
 	public void setDataAlteracao(Date dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
 	}
+	
+	
+
 
 }

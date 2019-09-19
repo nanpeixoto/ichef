@@ -1,5 +1,6 @@
 package br.com.ichef.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,20 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
-
 
 /**
  * The persistent class for the ficha_tecnica_preparo_insumo database table.
  * 
  */
 @Entity
-@Table(name="ficha_tecnica_preparo_insumo")
-public class FichaTecnicaPreparoInsumo extends BaseEntity   {
+@Table(name = "ficha_tecnica_preparo_insumo")
+public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CD_FICHA_TEC_INSUMO")
@@ -33,27 +33,48 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity   {
 	@JoinColumn(name = "CD_INSUMO")
 	private Insumo insumo;
 
-	@Column(name="NR_APROVEITAMENTO")
-	private int nrAproveitamento;
+	@Column(name = "NR_APROVEITAMENTO")
+	private Long aproveitamento;
 
-	@Column(name="NR_CUSTO_BRUNO")
-	private int nrCustoBruno;
+	@Column(name = "NR_CUSTO_BRUTO")
+	private BigDecimal custoBruto;
 
-	@Column(name="NR_CUSTO_TOTAL")
-	private int nrCustoTotal;
+	@Column(name = "NR_CUSTO_TOTAL")
+	private BigDecimal custoTotal;
 
-	@Column(name="NR_QTD_BRUTA")
-	private int nrQtdBruta;
+	@Column(name = "NR_QTD_BRUTA")
+	private BigDecimal quantidadeBruta;
 
-	@Column(name="NR_QTD_LIQUIDA")
-	private int nrQtdLiquida;
+	@Column(name = "NR_QTD_LIQUIDA")
+	private BigDecimal quantidadeLiquida;
 
-	@Column(name="SN_ATIVO")
-	private String snAtivo;
+	@Column(name = "SN_ATIVO")
+	private String ativo;
 
 	@ManyToOne
-	@JoinColumn(name="CD_FICHA_TECNICA_PREPATO")
+	@JoinColumn(name = "CD_FICHA_TECNICA_PREPATO")
 	private FichaTecnicaPreparo fichaTecnicaPreparo;
+
+	@Transient
+	private boolean isAtivo;
+
+	public boolean isAtivo() {
+		if (ativo != null) {
+			if (ativo.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isAtivo;
+	}
+
+	public void setAtivo(boolean isAtivo) {
+		this.isAtivo = isAtivo;
+		if (isAtivo == Boolean.TRUE) {
+			setAtivo("S");
+		} else
+			setAtivo("N");
+	}
 
 	@Override
 	public Object getId() {
@@ -63,7 +84,7 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity   {
 	@Override
 	public void setId(Object id) {
 		this.id = (Long) id;
-		
+
 	}
 
 	@Override
@@ -117,52 +138,12 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity   {
 		this.insumo = insumo;
 	}
 
-	public int getNrAproveitamento() {
-		return nrAproveitamento;
+	public String getAtivo() {
+		return ativo;
 	}
 
-	public void setNrAproveitamento(int nrAproveitamento) {
-		this.nrAproveitamento = nrAproveitamento;
-	}
-
-	public int getNrCustoBruno() {
-		return nrCustoBruno;
-	}
-
-	public void setNrCustoBruno(int nrCustoBruno) {
-		this.nrCustoBruno = nrCustoBruno;
-	}
-
-	public int getNrCustoTotal() {
-		return nrCustoTotal;
-	}
-
-	public void setNrCustoTotal(int nrCustoTotal) {
-		this.nrCustoTotal = nrCustoTotal;
-	}
-
-	public int getNrQtdBruta() {
-		return nrQtdBruta;
-	}
-
-	public void setNrQtdBruta(int nrQtdBruta) {
-		this.nrQtdBruta = nrQtdBruta;
-	}
-
-	public int getNrQtdLiquida() {
-		return nrQtdLiquida;
-	}
-
-	public void setNrQtdLiquida(int nrQtdLiquida) {
-		this.nrQtdLiquida = nrQtdLiquida;
-	}
-
-	public String getSnAtivo() {
-		return snAtivo;
-	}
-
-	public void setSnAtivo(String snAtivo) {
-		this.snAtivo = snAtivo;
+	public void setAtivo(String ativo) {
+		this.ativo = ativo;
 	}
 
 	public FichaTecnicaPreparo getFichaTecnicaPreparo() {
@@ -172,9 +153,45 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity   {
 	public void setFichaTecnicaPreparo(FichaTecnicaPreparo fichaTecnicaPreparo) {
 		this.fichaTecnicaPreparo = fichaTecnicaPreparo;
 	}
-	
-	
 
-	
+	public Long getAproveitamento() {
+		return aproveitamento;
+	}
+
+	public void setAproveitamento(Long aproveitamento) {
+		this.aproveitamento = aproveitamento;
+	}
+
+	public BigDecimal getCustoBruto() {
+		return custoBruto;
+	}
+
+	public void setCustoBruto(BigDecimal custoBruto) {
+		this.custoBruto = custoBruto;
+	}
+
+	public BigDecimal getCustoTotal() {
+		return custoTotal;
+	}
+
+	public void setCustoTotal(BigDecimal custoTotal) {
+		this.custoTotal = custoTotal;
+	}
+
+	public BigDecimal getQuantidadeBruta() {
+		return quantidadeBruta;
+	}
+
+	public void setQuantidadeBruta(BigDecimal quantidadeBruta) {
+		this.quantidadeBruta = quantidadeBruta;
+	}
+
+	public BigDecimal getQuantidadeLiquida() {
+		return quantidadeLiquida;
+	}
+
+	public void setQuantidadeLiquida(BigDecimal quantidadeLiquida) {
+		this.quantidadeLiquida = quantidadeLiquida;
+	}
 
 }

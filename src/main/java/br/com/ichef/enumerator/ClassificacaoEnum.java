@@ -1,27 +1,27 @@
 package br.com.ichef.enumerator;
 
-public enum Classificacao {
+public enum ClassificacaoEnum {
 
 	A("A", "Acompanhamento"), P("P", "Prato Principal");
 
 	private String id;
 	private String descricao;
 
-	private Classificacao(String id, String descricao) {
+	private ClassificacaoEnum(String id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}
 
-	public static Classificacao getEnumByValor(String valor) {
-		for (Classificacao status : Classificacao.values()) {
+	public static ClassificacaoEnum getEnumByValor(String valor) {
+		for (ClassificacaoEnum status : ClassificacaoEnum.values()) {
 			if (status.getDescricao().equals(valor))
 				return status;
 		}
 		return null;
 	}
 
-	public static Classificacao getEnumById(Long id) {
-		for (Classificacao status : Classificacao.values()) {
+	public static ClassificacaoEnum getEnumById(Long id) {
+		for (ClassificacaoEnum status : ClassificacaoEnum.values()) {
 			if (status.getId().equals(id))
 				return status;
 		}

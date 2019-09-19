@@ -15,6 +15,7 @@
         </f:metadata>
 
         <adm:breadcrumb title="Cadastro Preparo #{fichaTecnicaPreparoController.entity.id}" link="cadastro-ficha-tecnica-prepato.xhtml?id=#{fichaTecnicaPreparoController.entity.id}"/>
+        <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
         <h:form id="form" prependId="false">
             <p:focus/>
 
@@ -48,38 +49,71 @@
                     <p:separator/>
 
                     <div class="ui-fluid">
-                    	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-12 ui-md-1">
+                    
+                    	<p:panelGrid id="capaPanel" columns="4" layout="grid"  >
                     	
                     	    <p:outputLabel value="Descrição" for="descricao"/>
                     		<p:inputText value="#{fichaTecnicaPreparoController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
                     			required="true" requiredMessage="#{fichaTecnicaPreparoController.getRequiredMessage('Descrição')}"/>
                     			
-                    				
-                    		
+                    		<p:outputLabel value="Classificação" for="classificacao"/>
+                    		<p:selectOneMenu id="classificacao" value="#{fichaTecnicaPreparoController.entity.classificacao}" style="width:125px"
+                    		required="true" requiredMessage="#{fichaTecnicaPreparoController.getRequiredMessage('Classificacao')}">
+					            <f:selectItem itemLabel="Selecione" itemValue="" />
+					            <f:selectItem itemLabel="Acompanhamento" itemValue="A" />
+					            <f:selectItem itemLabel="Prato Principal" itemValue="P" />
+					        </p:selectOneMenu>		
+					        
+					        <p:outputLabel value="Tamanho da Receita" for="tamanhoreceita"/>
+                    		<p:inputMask  value="#{fichaTecnicaPreparoController.entity.tamanho}" id="tamanhoreceita" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{fichaTecnicaPreparoController.getRequiredMessage('Tamanho da Receita')}" mask="9?999"/>
                     			
                     		<p:outputLabel value="Ativo" for="ativo"/>
-					        <p:selectBooleanButton id="ativo" value="#{fichaTecnicaPreparoController.entity.ativo}" 
-					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
-					        	
-					        	
-						
-						</p:panelGrid>
-						
+						       <p:selectBooleanButton id="ativo" value="#{fichaTecnicaPreparoController.entity.ativo}" 
+						        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+                    	
+                    	</p:panelGrid>		
+                    	<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+                    	<p:panelGrid id="capaPanelpreco" columns="4" layout="grid"  >
+                    		<p:outputLabel value="Preço de Venda Receita" id="pvr2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPreparoController.formataValor(fichaTecnicaPreparoController.entity.precoVendaReceita)}" id="pvr"  />
+                    		 
+                    		 <p:outputLabel value="Preço de Custo Receita" id="pcr2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPreparoController.formataValor(fichaTecnicaPreparoController.entity.precoCustoReceita)}"  id="pcr"/>
+                    		 
+                    		 <p:outputLabel value="Preço de Venda Porção" id="pvc2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPreparoController.formataValor(fichaTecnicaPreparoController.entity.precoVendaPorcao)}" id="pvp" />
+                    		 
+                    		 <p:outputLabel value="Preço de Custo Poção" id="pcp2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPreparoController.formataValor(fichaTecnicaPreparoController.entity.precoCustoPorcao)}"  id="pcp" />
+                    	</p:panelGrid>	
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
-						<p:panelGrid  columns="5"   layout="grid">
+						<p:panelGrid  columns="7" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
 						
-							<!-- <p:outputLabel value="Localidade" for="selectLocalidade"/>
-                    		<p:selectOneMenu id="selectLocalidade" value="#{fichaTecnicaPreparoController.insumos}" filter="true"  filterMatchMode="contains" 
+							<p:outputLabel value="Insumo" for="Insumo"/>
+                    		<p:selectOneMenu id="Insumo" value="#{fichaTecnicaPreparoController.insumo}" filter="true"  filterMatchMode="contains" 
                     			converter= "omnifaces.SelectItemsConverter">
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{fichaTecnicaPreparoController.insumos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>
+						
+						
+							<p:outputLabel value="Qtd. Liquida" for="qtdl"/>
+							<p:inputNumber   id="qtdl" value="#{fichaTecnicaPreparoController.qtdLiquida}" symbol="" decimalSeparator="," thousandSeparator="." />
+                    		
 						 	
+						 	<p:outputLabel value="Aproveitamento" for="aproveitamento"/>
+							<p:inputNumber   id="aproveitamento" value="#{fichaTecnicaPreparoController.aproveitamento}" symbol=" %"  emptyValue="zero" symbolPosition="s" decimalSeparator="," thousandSeparator="." /> 
+						 	
+                    	 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
-                    	 	 id="btnSurname" process="@this,selectLocalidade" update="Stable,selectLocalidade" actionListener="#{fichaTecnicaPreparoController.adicionarInsumo()}" 
+                    	 	 id="btnSurname" process="@this,Insumo,qtdl,aproveitamento,tamanhoreceita" update="growl,Stable,Insumo,qtdl,aproveitamento,pvr,pvp,pcr,pcp"
+                    	 	 	 actionListener="#{fichaTecnicaPreparoController.adicionarInsumo()}" 
                     	 	 styleClass="btn-primary" 
-                    	 	/> -->
+                    	 	/>
+                    	 	
+                    	 	
                     	</p:panelGrid>
 						
 						<p:panelGrid  columns="1"  layout="grid"> 	
@@ -93,13 +127,44 @@
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
 							 sortBy="#{item.insumo.descricao}">
 						 	   
-								<p:column headerText="Localidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.insumo.descricao}"
-									filterMatchMode="contains" sortBy="#{item.insumo.descricao}" style="width:95%">
+								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.insumo.descricao}"
+									filterMatchMode="contains" sortBy="#{item.insumo.descricao}" style="width:25%">
 									<h:outputLabel value="#{item.insumo.descricao}" />
 								</p:column>
 								
-								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
-									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
+								<p:column headerText="Qtd. Liquida" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeLiquida}"
+									filterMatchMode="contains" sortBy="#{item.quantidadeLiquida}" style="width:15%">
+									<h:outputLabel value="#{item.quantidadeLiquida}" />
+								</p:column>
+								
+								<p:column headerText="Und." filterStyle="display:none; visibility:hidden;" filterBy="#{item.insumo.unidade.sigla}"
+									filterMatchMode="contains" sortBy="#{item.insumo.unidade.sigla}" style="width:15%"	>
+									<h:outputLabel value="#{item.insumo.unidade.sigla}" />
+								</p:column>
+								
+								<p:column headerText="Aprov." filterStyle="display:none; visibility:hidden;" filterBy="#{item.aproveitamento}"
+									filterMatchMode="contains" sortBy="#{item.aproveitamento}" style="width:15%">
+									<h:outputLabel value="#{item.aproveitamento}" />
+								</p:column>
+								
+								<p:column headerText="Qtd. Bruta" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeBruta}"
+									filterMatchMode="contains" sortBy="#{item.quantidadeBruta}" style="width:15%">
+									<h:outputLabel value="#{item.quantidadeBruta}" />
+								</p:column>
+								
+								<p:column headerText="Custo Bruto" filterStyle="display:none; visibility:hidden;" filterBy="#{item.insumo.valorFormatado}"
+									filterMatchMode="contains" sortBy="#{item.insumo.valorFormatado}" style="width:15%">
+									<h:outputLabel value="#{item.insumo.valorFormatado}" />
+								</p:column>
+								
+								<p:column headerText="Total" filterStyle="display:none; visibility:hidden;" filterBy="#{item.custoTotal}"
+									filterMatchMode="contains" sortBy="#{item.custoTotal}" style="width:15%">
+									<h:outputLabel value="#{fichaTecnicaPreparoController.formataValor(item.custoTotal)}" />
+								</p:column>
+								
+								
+								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:6%" >
+									 <p:commandButton process="Stable" update=":form:Stable,pvr,pvp,pcr,pcp" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
 									 	 actionListener="#{fichaTecnicaPreparoController.excluirItensSelecionadas( item )}"/>
 								</p:column>
 								
@@ -108,6 +173,21 @@
 							</p:dataTable>
 						
 						</p:panelGrid>
+						
+						<p:panelGrid id="capaPanel2" columns="1" layout="grid"  >
+	                    		
+		                    		<p:outputLabel for="modoPreparo" value="Modo Preparo"/>
+		           					<p:inputTextarea id="modoPreparo" value="#{fichaTecnicaPreparoController.entity.modoPreparo}" rows="5" cols="30" maxlength="450" counter="display" counterTemplate="Faltam {0} characteres" autoResize="false" />
+		  							<h:outputText id="display" />
+		  							
+		  							<p:outputLabel for="observacao" value="Observação"/>
+		           					<p:inputTextarea id="observacao" value="#{fichaTecnicaPreparoController.entity.obervacao}" rows="5" cols="30"  maxlength="450"  counter="displayobs" counterTemplate="Faltam {0} characteres" autoResize="false" />
+		  							<h:outputText id="displayobs" />
+	                    		
+	                    		
+	                    	
+						</p:panelGrid>
+						
 							
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						

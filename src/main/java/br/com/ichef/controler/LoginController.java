@@ -14,8 +14,10 @@ import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
 import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Usuario;
+import br.com.ichef.service.ConfiguracaoService;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.UsuarioService;
 import br.com.ichef.util.JSFUtil;
@@ -32,6 +34,9 @@ public class LoginController extends BaseController {
 
 	@Inject
 	private EmpresaService empresaService;
+	
+	@Inject
+	private ConfiguracaoService configuracaoService;
 
 	private Usuario usuario = new Usuario();
 
@@ -98,12 +103,14 @@ public class LoginController extends BaseController {
 				return null;
 
 			} else {
+				Configuracao  config = configuracaoService.getById(1);
 				usuario.setEmpresaLogada(empresa);
 				JSFUtil.setSessionMapValue("loggedUser", usuario.getLogin());
 				JSFUtil.setSessionMapValue("usuario", usuario);
 				JSFUtil.setSessionMapValue("loggedUserPassword", usuario.getSenha());
 				// JsfUtil.setSessionMapValue("perfisUsuario",usuario.getPapel());
 				JSFUtil.setSessionMapValue("loggedMatricula", usuario.getLogin());
+				JSFUtil.setSessionMapValue("configuracao", config);
 				return "/index.xhtml?faces-redirect=true";
 			}
 		} else {
