@@ -40,7 +40,7 @@ public class ClienteController extends BaseController {
 
 	@Inject
 	private ClienteEnderecoService clienteEnderecoService;
-	
+
 	@Inject
 	private ClienteTelefoneService clienteTelefoneService;
 
@@ -77,8 +77,6 @@ public class ClienteController extends BaseController {
 			}
 		}
 	}
-
- 
 
 	@PostConstruct
 	public void init() {
@@ -132,7 +130,7 @@ public class ClienteController extends BaseController {
 		}
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
-	
+
 	public void excluirTelefonesSelecionados(ClienteTelefone obj) {
 		List<ClienteTelefone> temp = new ArrayList<>();
 		temp.addAll(entity.getTelefones());
@@ -145,7 +143,7 @@ public class ClienteController extends BaseController {
 		updateComponentes("dttel");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
-	
+
 	public void excluirLocalidadesSelecionadas(ClienteEndereco obj) {
 		List<ClienteEndereco> temp = new ArrayList<>();
 		temp.addAll(entity.getEnderecos());
@@ -158,8 +156,6 @@ public class ClienteController extends BaseController {
 		updateComponentes("dtendereco");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
-	
-	
 
 	public String Salvar() throws Exception {
 
@@ -181,27 +177,29 @@ public class ClienteController extends BaseController {
 	}
 
 	public void adicionarTelefone() {
-		if (!existeTelefonePrincipal(null)) {
-			ClienteTelefone telefone = new ClienteTelefone();
-			telefone.setDataCadastro(new Date());
-			if (stsTelefonePrincipal)
-				telefone.setPrincipal("S");
-			else
-				telefone.setPrincipal("N");
-			telefone.setTelefone(getTelefone().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""));
-			telefone.setUsuarioCadastro(getUserLogado());
-			telefone.setCliente(getEntity());
-			telefone.setUsuarioCadastro(getUserLogado());
-			telefone.setDataCadastro(new Date());
+		if (!getTelefone().equals("5571 ")) {
+			if (!existeTelefonePrincipal(null)) {
+				ClienteTelefone telefone = new ClienteTelefone();
+				telefone.setDataCadastro(new Date());
+				if (stsTelefonePrincipal)
+					telefone.setPrincipal("S");
+				else
+					telefone.setPrincipal("N");
+				telefone.setTelefone(getTelefone().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""));
+				telefone.setUsuarioCadastro(getUserLogado());
+				telefone.setCliente(getEntity());
+				telefone.setUsuarioCadastro(getUserLogado());
+				telefone.setDataCadastro(new Date());
 
-			if (getEntity().getTelefones() == null)
-				getEntity().setTelefones(new ArrayList<ClienteTelefone>());
-			getEntity().getTelefones().add(telefone);
+				if (getEntity().getTelefones() == null)
+					getEntity().setTelefones(new ArrayList<ClienteTelefone>());
+				getEntity().getTelefones().add(telefone);
 
-			setStsTelefonePrincipal(false);
-			setTelefone(null);
-		} else {
-			FacesUtil.addErroMessage("Já existe um telefone principal para esse cliente");
+				setStsTelefonePrincipal(false);
+				setTelefone(null);
+			} else {
+				FacesUtil.addErroMessage("Já existe um telefone principal para esse cliente");
+			}
 		}
 	}
 
@@ -274,18 +272,19 @@ public class ClienteController extends BaseController {
 		}
 
 	}
-	
-	public void editarLinhaEndereco(RowEditEvent event)  throws Exception {
+
+	public void editarLinhaEndereco(RowEditEvent event) throws Exception {
 		ClienteEndereco itemEditado = (ClienteEndereco) event.getObject();
-	//	if (itemEditado.isTelefonePrincipal()) {
-		//	if (!existeTelefonePrincipal(telefoneEditado)) {
-				itemEditado.setUsuarioAlteracao(getUserLogado());
-				itemEditado.setDataAlteracao(new Date());
-				clienteEnderecoService.saveOrUpdade(itemEditado);
-		//	} else {
-		//		FacesUtil.addErroMessage("Já existe um telefone principal para esse cliente");
-		//	}
-		//}
+		// if (itemEditado.isTelefonePrincipal()) {
+		// if (!existeTelefonePrincipal(telefoneEditado)) {
+		itemEditado.setUsuarioAlteracao(getUserLogado());
+		itemEditado.setDataAlteracao(new Date());
+		clienteEnderecoService.saveOrUpdade(itemEditado);
+		// } else {
+		// FacesUtil.addErroMessage("Já existe um telefone principal para esse
+		// cliente");
+		// }
+		// }
 	}
 
 	public ClienteService getService() {

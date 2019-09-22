@@ -141,7 +141,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 			;
 			fichaInsumo.setAtivo("S");
 			fichaInsumo.setQuantidadeBruta(
-					(qtdLiquida.divide(new BigDecimal(aproveitamento / 100))).setScale(2, RoundingMode.CEILING));
+					(qtdLiquida.divide(new BigDecimal(aproveitamento).divide(new BigDecimal(100)), BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING));
 			fichaInsumo.setCustoBruto(new BigDecimal(getInsumo().getValor()));
 			fichaInsumo
 					.setCustoTotal((fichaInsumo.getQuantidadeBruta().multiply(new BigDecimal(getInsumo().getValor())))
@@ -229,6 +229,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 		service.calcularPercos(entity, getConfiguracao());
 
 		service.saveOrUpdade(entity);
+		
 		return "lista-ficha-tecnica-preparo.xhtml?faces-redirect=true";
 
 	}

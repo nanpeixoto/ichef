@@ -80,11 +80,25 @@ public class ClienteEndereco extends BaseEntity {
 	}
 
 	public String getEndereco() {
+		try {
+			return endereco.toUpperCase();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return endereco;
 	}
 
 	public void setEndereco(String endereco) {
-		this.endereco = endereco;
+		try {
+
+			if (endereco != null)
+				this.endereco = endereco.toUpperCase();
+			else
+				this.endereco=endereco;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public String getPrincipal() {

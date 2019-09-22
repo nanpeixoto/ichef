@@ -5,7 +5,7 @@
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">
-        Cadastro Ficha Tecnica de Preparo
+        Cadastro Ficha Técnica de Preparo
     </ui:define>
 
     <ui:define name="body">
@@ -17,7 +17,7 @@
         <adm:breadcrumb title="Cadastro Preparo #{fichaTecnicaPreparoController.entity.id}" link="cadastro-ficha-tecnica-prepato.xhtml?id=#{fichaTecnicaPreparoController.entity.id}"/>
         <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
         <h:form id="form" prependId="false">
-            <p:focus/>
+            <p:focus context="capaPanel"/>
 
 			
             <div class="box box-primary">
@@ -65,8 +65,10 @@
 					        </p:selectOneMenu>		
 					        
 					        <p:outputLabel value="Tamanho da Receita" for="tamanhoreceita"/>
-                    		<p:inputMask  value="#{fichaTecnicaPreparoController.entity.tamanho}" id="tamanhoreceita" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{fichaTecnicaPreparoController.getRequiredMessage('Tamanho da Receita')}" mask="9?999"/>
+                    		<!-- <p:inputMask  value="#{fichaTecnicaPreparoController.entity.tamanho}" id="tamanhoreceita" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{fichaTecnicaPreparoController.getRequiredMessage('Tamanho da Receita')}" mask="9?999"/> -->
+                    		<p:inputNumber   value="#{fichaTecnicaPreparoController.entity.tamanho}"  id="tamanhoreceita" symbol="" decimalSeparator="," thousandSeparator="." 
+                    		 decimalPlaces="0" required="true" requiredMessage="#{fichaTecnicaPreparoController.getRequiredMessage('Tamanho da Receita')}"/>
                     			
                     		<p:outputLabel value="Ativo" for="ativo"/>
 						       <p:selectBooleanButton id="ativo" value="#{fichaTecnicaPreparoController.entity.ativo}" 
@@ -109,7 +111,7 @@
                     	 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
                     	 	 id="btnSurname" process="@this,Insumo,qtdl,aproveitamento,tamanhoreceita" update="growl,Stable,Insumo,qtdl,aproveitamento,pvr,pvp,pcr,pcp"
-                    	 	 	 actionListener="#{fichaTecnicaPreparoController.adicionarInsumo()}" 
+                    	 	 	 actionListener="#{fichaTecnicaPreparoController.adicionarInsumo()}"  
                     	 	 styleClass="btn-primary" 
                     	 	/>
                     	 	
