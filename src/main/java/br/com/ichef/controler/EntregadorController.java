@@ -159,19 +159,19 @@ public class EntregadorController extends BaseController {
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
-	public void excluirAreasSelecionadas(EntregadorLocalidade local) {
+	public void excluirItensSelecionadas(EntregadorLocalidade local) {
 		
-		/*List<EntregadorArea> temp = new ArrayList<>();
-		temp.addAll(entity.getAreas());
-		for (EntregadorArea arealoc : entity.getAreas()) {
-			if (local.getArea().getId().equals(arealoc.getArea().getId()))
+		List<EntregadorLocalidade> temp = new ArrayList<>();
+		temp.addAll(entity.getLocalidades());
+		for (EntregadorLocalidade arealoc : entity.getLocalidades()) {
+			if (local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()))
 				temp.remove(arealoc);
 		}
-		entity.getAreas().clear();
-		entity.getAreas().addAll(temp);
+		entity.getLocalidades().clear();
+		entity.getLocalidades().addAll(temp);
 		updateComponentes("Stable");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
-		*/
+		
 	}
 
 	public String Salvar() throws Exception {
