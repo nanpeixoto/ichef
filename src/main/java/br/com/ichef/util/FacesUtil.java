@@ -10,6 +10,8 @@ public class FacesUtil {
 				new FacesMessage(FacesMessage.SEVERITY_INFO, null, mensagem));
 
 	}
+	
+	
 
 	public static void addErroMessage(String mensagem) {
 		FacesContext.getCurrentInstance().addMessage(null,

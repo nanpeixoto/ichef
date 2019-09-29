@@ -10,7 +10,7 @@ import org.hibernate.criterion.Subqueries;
 
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.model.Area;
-import br.com.ichef.model.EntregadorArea;
+import br.com.ichef.model.EntregadorLocalidade;
 
 
 public class AreaVisitor extends FilterVisitor {
@@ -28,8 +28,8 @@ public class AreaVisitor extends FilterVisitor {
 
 		}
 		if (listaDesvinculados) {
-			DetachedCriteria areaArea = DetachedCriteria.forClass(EntregadorArea.class, "rc")
-					.setProjection(Projections.projectionList().add(Projections.groupProperty("rc.area.id")));
+			DetachedCriteria areaArea = DetachedCriteria.forClass(EntregadorLocalidade.class, "rc")
+					.setProjection(Projections.projectionList().add(Projections.groupProperty("rc.localidade.id")));
 
 			criteria.add(Subqueries.propertiesNotIn(new String[] { "id" }, areaArea));
 

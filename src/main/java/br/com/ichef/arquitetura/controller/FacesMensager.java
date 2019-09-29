@@ -82,6 +82,18 @@ public class FacesMensager implements Serializable{
 	 * @param String
 	 *            - Mensagem a ser exibida.
 	 */
+	public void aviso(String message) {
+		FacesContext.getCurrentInstance().addMessage(message, new FacesMessage(
+				FacesMessage.SEVERITY_WARN, message, null));
+	}
+	
+	
+	/**
+	 * Gera Mensagem de erro para o usuario.
+	 * 
+	 * @param String
+	 *            - Mensagem a ser exibida.
+	 */
 	public void error(String Titulo,String message) {
 		FacesContext.getCurrentInstance().addMessage(Titulo, new FacesMessage(
 				FacesMessage.SEVERITY_ERROR, message, null));

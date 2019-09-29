@@ -14,14 +14,16 @@ import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Area;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Entregador;
-import br.com.ichef.model.EntregadorArea;
+import br.com.ichef.model.EntregadorLocalidade;
+import br.com.ichef.model.Localidade;
 import br.com.ichef.service.AreaService;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.EntregadorService;
+import br.com.ichef.service.LocalidadeService;
 import br.com.ichef.util.FacesUtil;
-import br.com.ichef.visitor.AreaVisitor;
+import br.com.ichef.visitor.LocalidadeVisitor;
 
-@Named	
+@Named
 @ViewScoped
 public class EntregadorController extends BaseController {
 
@@ -29,7 +31,8 @@ public class EntregadorController extends BaseController {
 
 	@Inject
 	private EntregadorService service;
-
+	@Inject
+	private LocalidadeService localidadeService;
 	@Inject
 	private AreaService areaService;
 
@@ -45,7 +48,7 @@ public class EntregadorController extends BaseController {
 	private List<Area> listaAreaSelecionadas = new ArrayList<Area>();
 	private List<Area> localidades = new ArrayList<Area>();
 	private Area localidade;
-	
+
 	@Inject
 	private EmpresaService empresaService;
 	private List<Empresa> empresas = new ArrayList<Empresa>();
@@ -73,15 +76,16 @@ public class EntregadorController extends BaseController {
 	}
 
 	private void obterListas() {
-		
+
 		Area filter = new Area();
 		filter.setEmpresa(getUserLogado().getEmpresaLogada());
+
+		/*AreaVisitor visitor = new AreaVisitor();
+		visitor.setListaDesvinculados(true);*/
 		
-		AreaVisitor visitor = new AreaVisitor();
-		visitor.setListaDesvinculados(true);
 		empresas = empresaService.listAll(true);
 		try {
-			localidades = areaService.findByParameters(filter, visitor);
+			localidades = areaService.findByParameters(filter);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,43 +94,60 @@ public class EntregadorController extends BaseController {
 
 	public void adicionarArea() {
 		boolean existe = false;
-		ArrayList<Area> listaLocal = new ArrayList<>();
+		boolean itemAdicionado = false;
+		
+		// OBTER AS LOCALIDADES QUE NAO POSSUEM ENTREGADOR
+		LocalidadeVisitor visitor = new LocalidadeVisitor();
+		visitor.setArea(getArea());
+		visitor.setListaDesvinculadosDosEntregadores(true);
+		visitor.setListaDesvinculadosDasAreas(false);
+		List<Localidade> localidades;
+		try {
+			localidades = localidadeService.findByParameters(new Localidade(), visitor);
 
-		if(getEntity().getAreas()!=null )
-			for (EntregadorArea areaArea : getEntity().getAreas()) {
-				if( areaArea.getArea().getId().equals( getArea().getId() ))
-					existe = true;
+			existe = false;
+
+			for (Localidade localidade : localidades) {
+				if (getEntity().getLocalidades() != null && getEntity().getLocalidades().size() > 0) {
+					for (EntregadorLocalidade entregadorLocalidade : (getEntity().getLocalidades())) {
+						if (localidade.getId().equals(entregadorLocalidade.getLocalidade().getId())) {
+							existe = true;
+						}
+					}
+				}
+
+				if (!existe) {
+					
+					if (getEntity().getLocalidades() == null)
+						getEntity().setLocalidades(new ArrayList<EntregadorLocalidade>());
+					
+					EntregadorLocalidade obj = new EntregadorLocalidade();
+					obj.setUsuarioCadastro(getUserLogado());
+					obj.setDataCadastro(new Date());
+					obj.setAtivo("S");
+					obj.setLocalidade(localidade);
+					obj.setEntregador(getEntity());
+					obj.setOrdem( (long) ( getEntity().getLocalidades().size()+1 ) );
+					
+					itemAdicionado = true;
+
+					getEntity().getLocalidades().add(obj);
+
+				}
+			}
+			
+			if(!itemAdicionado) {
+				facesMessager.error("Localidade(s) não vinculada(s) verifique duplicidade(s)");
 			}
 
-		if (!existe) {
+			setArea(null);
 
-			EntregadorArea obj = new EntregadorArea();
+			updateComponentes("selectArea");
 
-			obj.setUsuarioCadastro(getUserLogado());
-			obj.setDataCadastro(new Date());
-			obj.setAtivo("S");
-
-			obj.setArea(getArea());
-			obj.setEntregador(getEntity());
-
-			if (getEntity().getAreas() == null)
-				getEntity().setAreas(new ArrayList<EntregadorArea>());
-			getEntity().getAreas().add(obj);
-
-		}
-
-		AreaVisitor visitor = new AreaVisitor();
-		visitor.setListaDesvinculados(true);
-		visitor.setListaNotIn(listaLocal);
-		try {
-			localidades = areaService.findByParameters(new Area(), visitor);
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		setArea(null);
-
-		updateComponentes("selectArea");
 
 	}
 
@@ -138,17 +159,19 @@ public class EntregadorController extends BaseController {
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
-	public void excluirAreasSelecionadas(EntregadorArea local) {
-		List<EntregadorArea> temp = new ArrayList<>();
+	public void excluirAreasSelecionadas(EntregadorLocalidade local) {
+		
+		/*List<EntregadorArea> temp = new ArrayList<>();
 		temp.addAll(entity.getAreas());
 		for (EntregadorArea arealoc : entity.getAreas()) {
-			if( local.getArea().getId().equals(arealoc.getArea().getId()) )
+			if (local.getArea().getId().equals(arealoc.getArea().getId()))
 				temp.remove(arealoc);
 		}
 		entity.getAreas().clear();
 		entity.getAreas().addAll(temp);
 		updateComponentes("Stable");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		*/
 	}
 
 	public String Salvar() throws Exception {
@@ -160,7 +183,13 @@ public class EntregadorController extends BaseController {
 			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
 		}
-		service.saveOrUpdade(entity);
+		List<String> mensagem = service.validaRegras(getEntity());
+		if (mensagem == null  ) {
+			service.saveOrUpdade(entity);
+		} else {
+			FacesUtil.addErroMessage(mensagem.get(0));
+			return "";
+		}
 		return "lista-entregador.xhtml?faces-redirect=true";
 
 	}
@@ -249,7 +278,5 @@ public class EntregadorController extends BaseController {
 	public void setEmpresas(List<Empresa> empresas) {
 		this.empresas = empresas;
 	}
-	
-	
 
 }

@@ -16,10 +16,12 @@ import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.FichaTecnicaPreparo;
 import br.com.ichef.model.FichaTecnicaPreparoInsumo;
 import br.com.ichef.model.Insumo;
+import br.com.ichef.model.TipoInsumo;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.FichaTecnicaPreparoService;
 import br.com.ichef.service.InsumoService;
 import br.com.ichef.util.FacesUtil;
+import br.com.ichef.visitor.FIchaTecnicaPreparoVisitor;
 
 @Named
 @ViewScoped
@@ -87,7 +89,9 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 	private void obterListas() {
 		try {
-			insumos = insumoService.listAll(true);
+			FIchaTecnicaPreparoVisitor visitor = new FIchaTecnicaPreparoVisitor();
+			visitor.setCodigoTipoMaterialExcluido(TipoInsumo.COD_INSUMO_MATERIAL);
+			insumos = insumoService.findByParameters(new Insumo(), visitor);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,6 +111,43 @@ public class FichaTecnicaPreparoController extends BaseController {
 		service.calcularPercos(entity, configuracao);
 		updateComponentes("Stable");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+	}
+
+	public String copiar(FichaTecnicaPreparo perparo) {
+		try {
+			FichaTecnicaPreparo clone = new FichaTecnicaPreparo();
+
+			clone = perparo.clone();
+			clone.setId(null);
+			setEntity(clone);
+			//Integer qtd = obetrQuantidadeFichaByNome();
+			clone.setDescricao(perparo.getDescricao() );
+
+			List<FichaTecnicaPreparoInsumo> novaListaFichaInsumo = new ArrayList<>();
+
+			for (FichaTecnicaPreparoInsumo fichaInsumoOld : perparo.getInsumos()) {
+				FichaTecnicaPreparoInsumo fichaInsumo = new FichaTecnicaPreparoInsumo();
+				fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
+				fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
+				fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
+				fichaInsumo.setInsumo(fichaInsumoOld.getInsumo());
+				fichaInsumo.setQuantidadeBruta(fichaInsumoOld.getQuantidadeBruta());
+				fichaInsumo.setQuantidadeLiquida(fichaInsumoOld.getQuantidadeLiquida());
+				fichaInsumo.setAproveitamento(fichaInsumoOld.getAproveitamento());
+				fichaInsumo.setFichaTecnicaPreparo(clone);
+				novaListaFichaInsumo.add(fichaInsumo);
+			}
+
+			clone.setInsumos(novaListaFichaInsumo);
+
+			Salvar(false);
+			return "cadastro-ficha-tecnica-preparo.xhtml?faces-redirect=true&id=" + getEntity().getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "";
+
 	}
 
 	public void adicionarInsumo() {
@@ -141,7 +182,8 @@ public class FichaTecnicaPreparoController extends BaseController {
 			;
 			fichaInsumo.setAtivo("S");
 			fichaInsumo.setQuantidadeBruta(
-					(qtdLiquida.divide(new BigDecimal(aproveitamento).divide(new BigDecimal(100)), BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING));
+					(qtdLiquida.divide(new BigDecimal(aproveitamento).divide(new BigDecimal(100)), BigDecimal.ROUND_UP))
+							.setScale(2, RoundingMode.CEILING));
 			fichaInsumo.setCustoBruto(new BigDecimal(getInsumo().getValor()));
 			fichaInsumo
 					.setCustoTotal((fichaInsumo.getQuantidadeBruta().multiply(new BigDecimal(getInsumo().getValor())))
@@ -164,38 +206,6 @@ public class FichaTecnicaPreparoController extends BaseController {
 			facesMessager.error("Insumo já cadastrado");
 		}
 
-		/*
-		 * if (getEntity().getLocalidades() != null) for (FichaTecnicaPreparoLocalidade
-		 * areaLocalidade : getEntity().getLocalidades()) { if
-		 * (areaLocalidade.getLocalidade().getId().equals(getLocalidade().getId()))
-		 * existe = true; }
-		 * 
-		 * if (!existe) {
-		 * 
-		 * FichaTecnicaPreparoLocalidade obj = new FichaTecnicaPreparoLocalidade();
-		 * 
-		 * obj.setUsuarioCadastro(getUserLogado()); obj.setDataCadastro(new Date());
-		 * obj.setAtivo("S");
-		 * 
-		 * obj.setLocalidade(getLocalidade()); obj.setFichaTecnicaPreparo(getEntity());
-		 * 
-		 * if (getEntity().getLocalidades() == null) getEntity().setLocalidades(new
-		 * ArrayList<FichaTecnicaPreparoLocalidade>());
-		 * getEntity().getLocalidades().add(obj);
-		 * 
-		 * }
-		 * 
-		 * LocalidadeVisitor visitor = new LocalidadeVisitor();
-		 * visitor.setListaDesvinculadosDasFichaTecnicaPreparos(true);
-		 * visitor.setLocalidadesNotIn(listaLocal); try { localidades =
-		 * localidadeService.findByParameters(new Localidade(), visitor); } catch
-		 * (Exception e) { e.printStackTrace(); }
-		 * 
-		 * setLocalidade(null);
-		 * 
-		 * updateComponentes("selectLocalidade");
-		 */
-
 	}
 
 	public void excluirSelecionados() {
@@ -217,21 +227,47 @@ public class FichaTecnicaPreparoController extends BaseController {
 	 * FacesUtil.addInfoMessage("Itens excluídos com sucesso"); }
 	 */
 
-	public String Salvar() throws Exception {
+	public String Salvar(boolean validarNome) throws Exception {
+		Integer qtdFichaMesmoNome = 0;
+		qtdFichaMesmoNome = obetrQuantidadeFichaByNome();
 
 		if (entity.isEdicao()) {
 			entity.setUsuarioAlteracao(getUserLogado());
 			entity.setDataAlteracao(new Date());
+			if (validarNome) {
+				if (qtdFichaMesmoNome > 1) {
+					FacesUtil.addErroMessage("Já existe um item com esse nome");
+					return "";
+				}
+			}
 		} else {
 			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
+			if (validarNome) {
+				if (qtdFichaMesmoNome > 0) {
+					FacesUtil.addErroMessage("Já existe um item com esse nome");
+					return "";
+				}
+			}
 		}
 		service.calcularPercos(entity, getConfiguracao());
 
 		service.saveOrUpdade(entity);
-		
+
 		return "lista-ficha-tecnica-preparo.xhtml?faces-redirect=true";
 
+	}
+
+	public String Salvar() throws Exception {
+		return Salvar(true);
+
+	}
+
+	private Integer obetrQuantidadeFichaByNome() throws Exception {
+		FIchaTecnicaPreparoVisitor visitor = new FIchaTecnicaPreparoVisitor();
+		visitor.setNomeInsumo(entity.getDescricao());
+		Integer qtdFichaMesmoNome = (service.findByParameters(new FichaTecnicaPreparo(), visitor)).size();
+		return qtdFichaMesmoNome;
 	}
 
 	public String excluir() {

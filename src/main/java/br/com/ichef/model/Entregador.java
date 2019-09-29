@@ -55,7 +55,7 @@ public class Entregador extends BaseEntity {
 	private boolean isAtivo;
 
 	@OneToMany(mappedBy = "entregador", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<EntregadorArea> areas;
+	private List<EntregadorLocalidade> localidades;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_EMPRESA")
@@ -204,12 +204,12 @@ public class Entregador extends BaseEntity {
 		this.nome = nome.toUpperCase();
 	}
 
-	public List<EntregadorArea> getAreas() {
-		return areas;
+	public List<EntregadorLocalidade> getLocalidades() {
+		return localidades;
 	}
 
-	public void setAreas(List<EntregadorArea> areas) {
-		this.areas = areas;
+	public void setLocalidades(List<EntregadorLocalidade> localidades) {
+		this.localidades = localidades;
 	}
 
 	public Empresa getEmpresa() {

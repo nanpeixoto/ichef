@@ -15,7 +15,9 @@
         </f:metadata>
 
         <adm:breadcrumb title="Cadastro Entregador #{entregadorController.entity.id}" link="cadastro-entregador.xhtml?id=#{entregadorController.entity.id}"/>
+        <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
         <h:form id="form" prependId="false">
+         
             <p:focus context="capaPanel"/>
 
 			
@@ -82,7 +84,7 @@
 					        </p:selectOneMenu>
 						 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
-                    	 	 id="btnSurname" process="@this,selectArea" update="Stable,selectArea" actionListener="#{entregadorController.adicionarArea()}" 
+                    	 	 id="btnSurname" process="@this,selectArea" update="growl,Stable,selectArea" actionListener="#{entregadorController.adicionarArea()}" 
                     	 	 styleClass="btn-primary" 
                     	 	/>
                     	</p:panelGrid>
@@ -90,19 +92,29 @@
 						<p:panelGrid  columns="1"  layout="grid"> 	
 						
 							<p:dataTable id="Stable" widgetVar="itens" rows="10"
-							paginator="true" value="#{entregadorController.entity.areas}" var="item"
+							paginator="true" value="#{entregadorController.entity.localidades}" var="item"
 							rowKey="#{item.id}" reflow="true"
-							paginatorPosition="bottom"
+							paginatorPosition="bottom" editable="true" editMode="cell"
 							mptyMessage="Nenhum item encontrado" 
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
-							 sortBy="#{item.area.descricao}">
+							 sortBy="#{item.localidade.descricao}">
 						 
 						 		  
-								<p:column headerText="Área" filterStyle="display:none; visibility:hidden;" filterBy="#{item.area.descricao}"
-									filterMatchMode="contains" sortBy="#{item.area.descricao}" style="width:95%">
-									<h:outputLabel value="#{item.area.descricao}" />
+								<p:column headerText="Localidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.descricao}"
+									filterMatchMode="contains" sortBy="#{item.localidade.descricao}" style="width:85%">
+									<h:outputLabel value="#{item.localidade.descricao}" />
 								</p:column>
+								
+								<p:column headerText="Ordem" filterStyle="display:none; visibility:hidden;" filterBy="#{item.ordem}"
+									filterMatchMode="contains" sortBy="#{item.ordem}" style="width:10%">
+									<p:cellEditor>
+						                <f:facet name="output"><h:outputLabel value="#{item.ordem}" /></f:facet>
+						                <f:facet name="input">
+						                		<p:inputNumber   value="#{item.ordem}"  id="ordem" symbol="" decimalSeparator="," thousandSeparator="." decimalPlaces="0" />
+						                </f:facet>
+						             </p:cellEditor>
+						     	</p:column>
 								
 								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
 									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 

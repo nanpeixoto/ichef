@@ -19,6 +19,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 public class TipoInsumo extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
+	public static final long COD_INSUMO_MATERIAL = 3L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

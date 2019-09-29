@@ -24,6 +24,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.ichef.arquitetura.BaseEntity;
+import br.com.ichef.arquitetura.controller.FacesMensager;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.excepticon.NegocioExcepticon;
 
@@ -31,6 +32,8 @@ import br.com.ichef.excepticon.NegocioExcepticon;
 public class GenericDAO<T extends BaseEntity> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	protected FacesMensager facesMessager = new FacesMensager();;
 
 	@Inject
 	private EntityManager manager;

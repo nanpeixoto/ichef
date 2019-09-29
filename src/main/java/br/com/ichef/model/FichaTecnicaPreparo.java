@@ -24,7 +24,7 @@ import br.com.ichef.arquitetura.BaseEntity;
  */
 @Entity
 @Table(name = "ficha_tecnica_preparo")
-public class FichaTecnicaPreparo extends BaseEntity {
+public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -273,6 +273,10 @@ public class FichaTecnicaPreparo extends BaseEntity {
 		this.dataAlteracao = dataAlteracao;
 	}
 	
+	@Override
+    public FichaTecnicaPreparo clone() throws CloneNotSupportedException {
+        return (FichaTecnicaPreparo) super.clone();
+    }
 	
 
 

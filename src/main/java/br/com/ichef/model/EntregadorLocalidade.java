@@ -19,17 +19,20 @@ import br.com.ichef.arquitetura.BaseEntity;
  * 
  */
 @Entity
-@Table(name = "entregador_area")
-public class EntregadorArea extends BaseEntity {
+@Table(name = "entregador_localidade")
+public class EntregadorLocalidade extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CD_ENTREGADOR_AREA")
+	@Column(name = "CD_ENTREGADOR_LOCALIDADE")
 	private Long id;
 
 	@Column(name = "SN_ATIVO")
 	private String ativo;
+
+	@Column(name = "NR_ORDEM")
+	private Long ordem;
 
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastro;
@@ -46,8 +49,8 @@ public class EntregadorArea extends BaseEntity {
 	private Usuario usuarioAlteracao;
 
 	@ManyToOne
-	@JoinColumn(name = "CD_AREA")
-	private Area area;
+	@JoinColumn(name = "CD_LOCALIDADE")
+	private Localidade localidade;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_ENTREGADOR")
@@ -97,7 +100,7 @@ public class EntregadorArea extends BaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EntregadorArea other = (EntregadorArea) obj;
+		EntregadorLocalidade other = (EntregadorLocalidade) obj;
 		if (id == null) {
 			if (other.getId() != null)
 				return false;
@@ -180,12 +183,12 @@ public class EntregadorArea extends BaseEntity {
 		return "Inativo".toUpperCase();
 	}
 
-	public Area getArea() {
-		return area;
+	public Localidade getLocalidade() {
+		return localidade;
 	}
 
-	public void setArea(Area area) {
-		this.area = area;
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
 	}
 
 	public Entregador getEntregador() {
@@ -194,6 +197,14 @@ public class EntregadorArea extends BaseEntity {
 
 	public void setEntregador(Entregador entregador) {
 		this.entregador = entregador;
+	}
+
+	public Long getOrdem() {
+		return ordem;
+	}
+
+	public void setOrdem(Long ordem) {
+		this.ordem = ordem;
 	}
 
 }
