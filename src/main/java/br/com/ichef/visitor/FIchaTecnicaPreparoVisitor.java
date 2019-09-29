@@ -14,7 +14,7 @@ public class FIchaTecnicaPreparoVisitor extends FilterVisitor {
 	@Override
 	public void visitCriteria(Criteria criteria) {
 		if (codigoTipoMaterialExcluido != null) {
-			criteria.add(Restrictions.ne("id", codigoTipoMaterialExcluido));
+			criteria.add(Restrictions.ne("tipoInsumo.id", codigoTipoMaterialExcluido));
 
 		}
 		
