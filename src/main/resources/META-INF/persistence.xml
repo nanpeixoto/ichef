@@ -24,12 +24,12 @@
 
 			<property name="connection_provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
 			<property name="c3p0.minPoolSize" value="5"/>
-			<property name="c3p0.maxPoolSize" value="220"/>
+			<property name="c3p0.maxPoolSize" value="250"/>
 			<property name="c3p0.acquireIncrement" value="10"/> 
 			<property name="c3p0.maxStatements" value="200"/>
-			<property name="c3p0.timeout" value="120"/>
+			<property name="c3p0.timeout" value="100"/>
 
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
 
