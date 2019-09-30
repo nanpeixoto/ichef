@@ -15,6 +15,8 @@
         </f:metadata>
 
         <adm:breadcrumb title="Cadastro Cliente #{tipoPratoController.entity.id}" link="cadastro-tipo-prato.xhtml?id=#{tipoPratoController.entity.id}"/>
+        <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
+        
         <h:form id="form" prependId="false">
            <p:focus context="capaPanel"/>
 
@@ -96,6 +98,78 @@
 									<h:outputLabel value="#{item.dataVigenciaFormatada}" />
 								</p:column>
 		
+							</p:dataTable>
+						
+						</p:panelGrid>
+						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						
+						<p:panelGrid  columns="7" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
+						
+							<p:outputLabel value="Insumo" for="Insumo"/>
+                    		<p:selectOneMenu id="Insumo" value="#{tipoPratoController.insumo}" filter="true"  filterMatchMode="contains" 
+                    			converter= "omnifaces.SelectItemsConverter">
+                    			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{tipoPratoController.insumos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+						
+						
+							<p:outputLabel value="Qtd." for="qtd"/>
+							<p:inputNumber   value="#{tipoPratoController.quantidade}"  id="qtd" symbol="" decimalSeparator="," thousandSeparator="." 
+                    		 decimalPlaces="0" />
+                    		
+						 	<p:commandButton  value="Plus" icon="fa fa-plus" 
+                    	 	 id="btnInsumo" process="@this,Insumo,qtd" update="growl,Stable,Insumo,qtd"
+                    	 	 	 actionListener="#{tipoPratoController.adicionarInsumo()}"  
+                    	 	 styleClass="btn-primary" 
+                    	 	/>
+ 						</p:panelGrid>
+ 						
+ 						<p:panelGrid  columns="1"  layout="grid"> 	
+						
+							<p:dataTable id="Stable" widgetVar="itens" rows="10"
+							paginator="true" value="#{tipoPratoController.entity.insumos}" var="item"
+							rowKey="#{item.id}" reflow="true"
+							paginatorPosition="bottom"
+							mptyMessage="Nenhum item encontrado" 
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
+							 sortBy="#{item.insumo.descricao}">
+						 	   
+								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.insumo.descricao}"
+									filterMatchMode="contains" sortBy="#{item.insumo.descricao}" >
+									<h:outputLabel value="#{item.insumo.descricao}" />
+								</p:column>
+								
+								<p:column headerText="Qtd." filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidade}"
+									filterMatchMode="contains" sortBy="#{item.quantidade}" style="width:10%; text-align: right;">
+									<h:outputLabel value="#{item.quantidade}" />
+								</p:column>
+								
+								<p:column headerText="Total" filterStyle="display:none; visibility:hidden;" filterBy="#{item.custoTotal}"
+									filterMatchMode="contains" sortBy="#{item.custoTotal}"  style="width:10%; text-align: right;"  >
+									<h:outputLabel value="#{tipoPratoController.formataValor(item.custoTotal)}" />
+								</p:column>
+								
+								
+								<p:columnGroup type="footer">
+            						<p:row>
+						                <p:column colspan="1" style="text-align:right" footerText="Totais:" />
+						                <p:column  style="width:10%; text-align: right;" footerText="#{tipoPratoController.entity.quantidadeTotal}" />
+						                <p:column  style="width:10%; text-align: right;" footerText="#{tipoPratoController.formataValor(tipoPratoController.entity.custoTotal)}" />
+						            </p:row>
+						        </p:columnGroup>
+								
+								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:10%;    text-align: center;" >
+									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value="" 
+									 	style="width:40%; " styleClass="btn btn-danger" 
+									 	 actionListener="#{tipoPratoController.excluirInsumoSelecionado( item )}"
+									 	   />
+								</p:column>
+								
+								
+								
 							</p:dataTable>
 						
 						</p:panelGrid>

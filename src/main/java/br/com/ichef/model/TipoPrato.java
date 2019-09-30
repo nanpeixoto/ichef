@@ -1,5 +1,6 @@
 package br.com.ichef.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -59,8 +60,11 @@ public class TipoPrato extends BaseEntity {
 	private boolean isAtivo;
 
 	// bi-directional many-to-one association to TipPratoPreco
-	@OneToMany(mappedBy = "tipoPrato",       cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TipoPratoPreco> precos;
+
+	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TipoPratoInsumo> insumos;
 
 	@Override
 	public Object getId() {
@@ -112,7 +116,7 @@ public class TipoPrato extends BaseEntity {
 	}
 
 	public String getDescricao() {
-		return descricao ==null? descricao: descricao.toUpperCase();
+		return descricao == null ? descricao : descricao.toUpperCase();
 	}
 
 	public void setDescricao(String descricao) {
@@ -168,11 +172,38 @@ public class TipoPrato extends BaseEntity {
 	public void setAtivo(String ativo) {
 		this.ativo = ativo;
 	}
-	
+
 	public String getSituacao() {
 		if (getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
 	}
+
+	public List<TipoPratoInsumo> getInsumos() {
+		return insumos;
+	}
+
+	public void setInsumos(List<TipoPratoInsumo> insumos) {
+		this.insumos = insumos;
+	}
+
+	public Long getQuantidadeTotal() {
+		Long quantidadeTotal = 0l;
+		if (insumos != null)
+			for (TipoPratoInsumo tipoPratoInsumo : insumos) {
+				quantidadeTotal += tipoPratoInsumo.getQuantidade();
+			}
+		return quantidadeTotal;
+	}
+	
+	public BigDecimal getCustoTotal() {
+		BigDecimal custoTotal  = new BigDecimal("0");
+		if (insumos != null)
+			for (TipoPratoInsumo tipoPratoInsumo : insumos) {
+				custoTotal = custoTotal.add( tipoPratoInsumo.getCustoTotal() );
+			}
+		return custoTotal;
+	}
+
 
 }
