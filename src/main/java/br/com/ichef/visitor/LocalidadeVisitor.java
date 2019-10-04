@@ -53,7 +53,7 @@ public class LocalidadeVisitor extends FilterVisitor {
 		if (area!=null ) {
 			DetachedCriteria areaLocalidade = DetachedCriteria.forClass(AreaLocalidade.class, "al")
 					.setProjection(Projections.projectionList().add(Projections.groupProperty("al.localidade.id"))) 
-					.add(Restrictions.ne("al.id", area.getId()));
+					.add(Restrictions.eq("al.area.id", area.getId()));
 
 			criteria.add(Subqueries.propertiesIn(new String[] { "id" }, areaLocalidade));
 

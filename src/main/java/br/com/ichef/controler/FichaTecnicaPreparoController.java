@@ -58,6 +58,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 	private BigDecimal qtdLiquida;
 	private Long aproveitamento;
 	private BigDecimal qtdBruta;
+	private Long copia;
 
 	public void inicializar() {
 		if (id != null) {
@@ -68,12 +69,13 @@ public class FichaTecnicaPreparoController extends BaseController {
 	}
 
 	@PostConstruct
-	public void init() {
+	public void init()  {
 		if (id != null) {
 			setEntity(service.getById(id));
-		} else {
+		}  else {
 			setEntity(new FichaTecnicaPreparo());
 			getEntity().setAtivo("S");
+			getEntity().setCopia("N");
 			setAproveitamento(100l);
 			/*
 			 * getEntity().setPrecoCustoPorcao(new BigDecimal(0));
@@ -115,39 +117,42 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 	public String copiar(FichaTecnicaPreparo perparo) {
 		try {
-			FichaTecnicaPreparo clone = new FichaTecnicaPreparo();
-
-			clone = perparo.clone();
-			clone.setId(null);
-			setEntity(clone);
-			//Integer qtd = obetrQuantidadeFichaByNome();
-			clone.setDescricao(perparo.getDescricao() );
-
-			List<FichaTecnicaPreparoInsumo> novaListaFichaInsumo = new ArrayList<>();
-
-			for (FichaTecnicaPreparoInsumo fichaInsumoOld : perparo.getInsumos()) {
-				FichaTecnicaPreparoInsumo fichaInsumo = new FichaTecnicaPreparoInsumo();
-				fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
-				fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
-				fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
-				fichaInsumo.setInsumo(fichaInsumoOld.getInsumo());
-				fichaInsumo.setQuantidadeBruta(fichaInsumoOld.getQuantidadeBruta());
-				fichaInsumo.setQuantidadeLiquida(fichaInsumoOld.getQuantidadeLiquida());
-				fichaInsumo.setAproveitamento(fichaInsumoOld.getAproveitamento());
-				fichaInsumo.setFichaTecnicaPreparo(clone);
-				novaListaFichaInsumo.add(fichaInsumo);
-			}
-
-			clone.setInsumos(novaListaFichaInsumo);
-
-			Salvar(false);
-			return "cadastro-ficha-tecnica-preparo.xhtml?faces-redirect=true&id=" + getEntity().getId();
+			
+			//Salvar(false);
+			return "cadastro-ficha-tecnica-preparo.xhtml?faces-redirect=true&copia=1&id=" + perparo.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return "";
 
+	}
+
+	private void criarClone(FichaTecnicaPreparo perparo) throws CloneNotSupportedException {
+		FichaTecnicaPreparo clone = new FichaTecnicaPreparo();
+		clone = perparo.clone();
+		clone.setId(null);
+		//Integer qtd = obetrQuantidadeFichaByNome();
+		clone.setDescricao(perparo.getDescricao() );
+		clone.setCopia("S");
+
+		List<FichaTecnicaPreparoInsumo> novaListaFichaInsumo = new ArrayList<>();
+
+		for (FichaTecnicaPreparoInsumo fichaInsumoOld : perparo.getInsumos()) {
+			FichaTecnicaPreparoInsumo fichaInsumo = new FichaTecnicaPreparoInsumo();
+			fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
+			fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
+			fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
+			fichaInsumo.setInsumo(fichaInsumoOld.getInsumo());
+			fichaInsumo.setQuantidadeBruta(fichaInsumoOld.getQuantidadeBruta());
+			fichaInsumo.setQuantidadeLiquida(fichaInsumoOld.getQuantidadeLiquida());
+			fichaInsumo.setAproveitamento(fichaInsumoOld.getAproveitamento());
+			fichaInsumo.setFichaTecnicaPreparo(clone);
+			novaListaFichaInsumo.add(fichaInsumo);
+		}
+		setEntity(null);
+		clone.setInsumos(novaListaFichaInsumo);
+		setEntity( clone);
 	}
 
 	public void adicionarInsumo() {
@@ -228,6 +233,11 @@ public class FichaTecnicaPreparoController extends BaseController {
 	 */
 
 	public String Salvar(boolean validarNome) throws Exception {
+		
+		if(copia !=null ) {
+			 criarClone(getEntity());
+		}
+		
 		Integer qtdFichaMesmoNome = 0;
 		qtdFichaMesmoNome = obetrQuantidadeFichaByNome();
 
@@ -381,6 +391,14 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 	public void setQtdLiquida(BigDecimal qtdLiquida) {
 		this.qtdLiquida = qtdLiquida;
+	}
+
+	public Long getCopia() {
+		return copia;
+	}
+
+	public void setCopia(Long copia) {
+		this.copia = copia;
 	}
 
 }

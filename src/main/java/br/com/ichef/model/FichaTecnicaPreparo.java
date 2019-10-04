@@ -43,6 +43,9 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	@Column(name = "DS_DESCRICAO")
 	private String descricao;
 
+	@Column(name = "SN_COPIA")
+	private String copia;
+
 	@Column(name = "DS_MODO_PREPARO")
 	private String modoPreparo;
 
@@ -79,7 +82,7 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	@Column(name = "TP_CLASSIFICACAO")
 	private String classificacao;
 
-	@OneToMany(mappedBy = "fichaTecnicaPreparo",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "fichaTecnicaPreparo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FichaTecnicaPreparoInsumo> insumos;
 
 	@Transient
@@ -272,12 +275,18 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	public void setDataAlteracao(Date dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
 	}
-	
-	@Override
-    public FichaTecnicaPreparo clone() throws CloneNotSupportedException {
-        return (FichaTecnicaPreparo) super.clone();
-    }
-	
 
+	@Override
+	public FichaTecnicaPreparo clone() throws CloneNotSupportedException {
+		return (FichaTecnicaPreparo) super.clone();
+	}
+
+	public String getCopia() {
+		return copia;
+	}
+
+	public void setCopia(String copia) {
+		this.copia = copia;
+	}
 
 }

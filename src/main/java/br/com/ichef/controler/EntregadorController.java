@@ -71,7 +71,14 @@ public class EntregadorController extends BaseController {
 			getEntity().setEmpresa(userLogado.getEmpresaLogada());
 		}
 		localidade = null;
-		lista = service.listAll();
+		try {
+			Entregador filter = new Entregador();
+			filter.setEmpresa(getUserLogado().getEmpresaLogada());
+			lista = service.findByParameters(filter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		obterListas();
 	}
 

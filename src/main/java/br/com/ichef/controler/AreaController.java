@@ -69,7 +69,14 @@ public class AreaController extends BaseController {
 			getEntity().setEmpresa(userLogado.getEmpresaLogada());
 		}
 		localidade = null;
-		lista = service.listAll();
+		Area filter = new Area();
+		filter.setEmpresa(getUserLogado().getEmpresaLogada());
+		try {
+			lista = service.findByParameters(filter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		obterListas();
 	}
 
@@ -117,6 +124,8 @@ public class AreaController extends BaseController {
 				getEntity().setLocalidades(new ArrayList<AreaLocalidade>());
 			getEntity().getLocalidades().add(obj);
 
+		} else {
+			facesMessager.error("Insumo já cadastrado");
 		}
 
 		LocalidadeVisitor visitor = new LocalidadeVisitor();

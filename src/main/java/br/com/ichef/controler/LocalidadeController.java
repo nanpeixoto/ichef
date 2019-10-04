@@ -85,7 +85,14 @@ public class LocalidadeController extends BaseController {
 
 	@PostConstruct
 	public void init() {
-		lista = service.listAll();
+		try {
+			Localidade filter = new Localidade();
+			filter.setEmpresa(getUserLogado().getEmpresaLogada());
+			lista = service.findByParameters(filter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void excluirSelecionados() {

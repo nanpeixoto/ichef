@@ -128,7 +128,7 @@ public class Entregador extends BaseEntity {
 
 	@Override
 	public String getColumnOrderBy() {
-		return "descricao";
+		return "nome";
 	}
 
 	@Override

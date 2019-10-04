@@ -11,6 +11,7 @@
     <ui:define name="body">
         <f:metadata>
         	<f:viewParam name="id" value="#{fichaTecnicaPreparoController.id}" converter="javax.faces.Long"/>
+        	<f:viewParam name="copia" value="#{fichaTecnicaPreparoController.copia}" converter="javax.faces.Long"/>
         	<f:event listener="#{fichaTecnicaPreparoController.inicializar()}" type="preRenderView"></f:event>
         </f:metadata>
 
