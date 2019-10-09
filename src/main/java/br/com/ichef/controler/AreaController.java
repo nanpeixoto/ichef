@@ -85,6 +85,7 @@ public class AreaController extends BaseController {
 		Localidade filter = new Localidade();
 		filter.setEmpresa(getUserLogado().getEmpresaLogada());
 		
+		filter.setAtivo(true);
 		
 		LocalidadeVisitor visitor = new LocalidadeVisitor();
 		visitor.setListaDesvinculadosDasAreas(true);

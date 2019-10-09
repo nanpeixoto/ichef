@@ -27,12 +27,13 @@ import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.FacesMensager;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.excepticon.NegocioExcepticon;
+import br.com.ichef.util.EntityManagerProducer;
 
 @SuppressWarnings("unchecked")
 public class GenericDAO<T extends BaseEntity> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	protected FacesMensager facesMessager = new FacesMensager();;
 
 	@Inject
@@ -67,10 +68,14 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 			manager.merge(entity);
 			manager.flush();
 			manager.getTransaction().commit();
+			
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			e.printStackTrace();
+		} finally {
+			manager.close();
 		}
 
 		return entity;
@@ -81,22 +86,45 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 			manager.getTransaction().begin();
 			manager.persist(entity);
 			manager.getTransaction().commit();
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			manager.close();
 		}
 
 		return entity;
 	}
 
+	/*public GenericDAO() {
+		manager = getEntityManager();
+	}
+
+	private EntityManager getEntityManager() {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
+		if (manager == null) {
+			manager = factory.createEntityManager();
+		}
+
+		return manager;
+	}*/
+
 	public void excluir(BaseEntity entity) {
 		try {
-			entity = getById(entity.getId());
+			if( !manager.isOpen() ) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				manager  = producer.createEntityManager();
+			}
 			manager.getTransaction().begin();
+			entity = getById(entity.getId());
 			manager.remove(entity);
 			manager.flush();
 			manager.getTransaction().commit();
+			
 		} catch (Exception e) {
 			throw new NegocioExcepticon("Item não pode ser excluído.");
+		} finally {
+			manager.close();
 		}
 	}
 
@@ -136,7 +164,7 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 			return null;
 	}
 
-	protected Criteria createCriteria(T object, FilterVisitor visitor) throws Exception  {
+	protected Criteria createCriteria(T object, FilterVisitor visitor) throws Exception {
 		return createCriteria(object, visitor, null);
 	}
 

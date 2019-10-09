@@ -97,6 +97,7 @@ public class ClienteController extends BaseController {
 	private void newInstance() {
 		setEntity(new Cliente());
 		setStsTelefonePrincipal(true);
+		setStsEnderecoPrincipal(true);
 		getEntity().setAtivo(true);
 		getEntity().setCidade(obterCidadeSalvador());
 		getEntity().setRecebeMaladireta(true);
@@ -140,7 +141,7 @@ public class ClienteController extends BaseController {
 		}
 		entity.getTelefones().clear();
 		entity.getTelefones().addAll(temp);
-		updateComponentes("dttel");
+		updateComponentes(":form:tabs:dttel");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
@@ -153,7 +154,7 @@ public class ClienteController extends BaseController {
 		}
 		entity.getEnderecos().clear();
 		entity.getEnderecos().addAll(temp);
-		updateComponentes("dtendereco");
+		updateComponentes(":form:tabs:dtendereco");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
@@ -178,57 +179,86 @@ public class ClienteController extends BaseController {
 
 	public void adicionarTelefone() {
 		if (!getTelefone().equals("5571 ")) {
-			if (!existeTelefonePrincipal(null)) {
-				ClienteTelefone telefone = new ClienteTelefone();
-				telefone.setDataCadastro(new Date());
-				if (stsTelefonePrincipal)
-					telefone.setPrincipal("S");
-				else
-					telefone.setPrincipal("N");
-				telefone.setTelefone(getTelefone().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""));
-				telefone.setUsuarioCadastro(getUserLogado());
-				telefone.setCliente(getEntity());
-				telefone.setUsuarioCadastro(getUserLogado());
-				telefone.setDataCadastro(new Date());
+			if (existeTelefone(getTelefone())) {
+				if (!existeTelefonePrincipal(null)) {
+					ClienteTelefone telefone = new ClienteTelefone();
+					telefone.setDataCadastro(new Date());
+					if (stsTelefonePrincipal)
+						telefone.setPrincipal("S");
+					else
+						telefone.setPrincipal("N");
+					telefone.setTelefone(
+							getTelefone().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""));
+					telefone.setUsuarioCadastro(getUserLogado());
+					telefone.setCliente(getEntity());
+					telefone.setUsuarioCadastro(getUserLogado());
+					telefone.setDataCadastro(new Date());
 
-				if (getEntity().getTelefones() == null)
-					getEntity().setTelefones(new ArrayList<ClienteTelefone>());
-				getEntity().getTelefones().add(telefone);
+					if (getEntity().getTelefones() == null)
+						getEntity().setTelefones(new ArrayList<ClienteTelefone>());
+					getEntity().getTelefones().add(telefone);
 
-				setStsTelefonePrincipal(false);
-				setTelefone(null);
+					setStsTelefonePrincipal(false);
+					setTelefone(null);
+				} else {
+					facesMessager.error("Já existe um telefone principal para esse cliente");
+				}
 			} else {
-				FacesUtil.addErroMessage("Já existe um telefone principal para esse cliente");
+				facesMessager.error("Telefone já adicionado para essa cliente");
 			}
 		}
+	}
+
+	private boolean existeTelefone(String telefone2) {
+		for (ClienteTelefone tel : getEntity().getTelefones()) {
+			if (tel.getTelefone().equals(telefone2))
+				return true;
+		}
+
+		return false;
+	}
+
+	private boolean existeLocalidade(Localidade localidade) {
+		for (ClienteEndereco end : getEntity().getEnderecos()) {
+			if (end.getLocalidade().getId().equals(localidade))
+				return true;
+		}
+
+		return false;
 	}
 
 	public void adicionarEndereco() {
 		// if (!existeTelefonePrincipal(null)) {
 		ClienteEndereco endereco = new ClienteEndereco();
-		endereco.setDataCadastro(new Date());
-		if (stsEnderecoPrincipal)
-			endereco.setPrincipal("S");
-		else
-			endereco.setPrincipal("N");
-		endereco.setEndereco(getEndereco());
-		endereco.setLocalidade(getLocalidade());
-		endereco.setUsuarioCadastro(getUserLogado());
-		endereco.setCliente(getEntity());
-		endereco.setUsuarioCadastro(getUserLogado());
-		endereco.setDataCadastro(new Date());
+		if (existeLocalidade(getLocalidade())) {
+			if (!existeEnderecoPrincipal(null)) {
+				endereco.setDataCadastro(new Date());
 
-		if (getEntity().getEnderecos() == null)
-			getEntity().setEnderecos(new ArrayList<ClienteEndereco>());
-		getEntity().getEnderecos().add(endereco);
+				if (stsEnderecoPrincipal)
+					endereco.setPrincipal("S");
+				else
+					endereco.setPrincipal("N");
+				endereco.setEndereco(getEndereco());
+				endereco.setLocalidade(getLocalidade());
+				endereco.setUsuarioCadastro(getUserLogado());
+				endereco.setCliente(getEntity());
+				endereco.setUsuarioCadastro(getUserLogado());
+				endereco.setDataCadastro(new Date());
 
-		setStsEnderecoPrincipal(false);
-		setEndereco(null);
-		setLocalidade(null);
-		// } else {
-		// FacesUtil.addErroMessage("Já existe um telefone principal para esse
-		// cliente");
-		// }
+				if (getEntity().getEnderecos() == null)
+					getEntity().setEnderecos(new ArrayList<ClienteEndereco>());
+				getEntity().getEnderecos().add(endereco);
+
+				setStsEnderecoPrincipal(false);
+				setEndereco(null);
+				setLocalidade(null);
+			} else {
+				facesMessager.error("Já existe um endereco principal para esse cliente");
+			}
+		} else {
+			facesMessager.error("Endereco já adicionado para essa cliente");
+		}
+
 	}
 
 	public String validarCliente() throws Exception {
@@ -252,6 +282,20 @@ public class ClienteController extends BaseController {
 					if (telefoneEditado != null && telefone.getId().equals(telefoneEditado.getId()))
 						return false;
 					else if (telefoneEditado == null)
+						return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean existeEnderecoPrincipal(ClienteEndereco endrecoEditador) {
+		if (stsEnderecoPrincipal && entity.getEnderecos() != null) {
+			for (ClienteEndereco item : entity.getEnderecos()) {
+				if (item.isEndPrincipal())
+					if (endrecoEditador != null && item.getId().equals(endrecoEditador.getId()))
+						return false;
+					else if (endrecoEditador == null)
 						return true;
 			}
 		}

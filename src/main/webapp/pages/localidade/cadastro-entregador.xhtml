@@ -57,7 +57,8 @@
                     			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Descrição')}"/>
                     			
                     			<p:outputLabel for="dtInicio" value="Data de Início" />
-       						 	<p:calendar id="dtInicio" value="#{entregadorController.entity.dataInicio}" pattern="dd/MM/yyyy" mask="true" />
+       						 	<p:calendar id="dtInicio" value="#{entregadorController.entity.dataInicio}" pattern="dd/MM/yyyy" mask="true" 
+       						 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Data de Início')}"/>
        						 	
        						 	<p:outputLabel value="Empresa" for="empresa"/>
                     		 <p:selectOneMenu id="empresa" value="#{entregadorController.entity.empresa}"  converter= "omnifaces.SelectItemsConverter"
@@ -98,7 +99,7 @@
 							mptyMessage="Nenhum item encontrado" 
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
-							 sortBy="#{item.localidade.descricao}">
+							 sortBy="#{item.ordem}" >
 						 
 						 		  
 								<p:column headerText="Localidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.descricao}"
@@ -111,7 +112,10 @@
 									<p:cellEditor>
 						                <f:facet name="output"><h:outputLabel value="#{item.ordem}" /></f:facet>
 						                <f:facet name="input">
-						                		<p:inputNumber   value="#{item.ordem}"  id="ordem" symbol="" decimalSeparator="," thousandSeparator="." decimalPlaces="0" />
+						                		<p:inputNumber   value="#{item.ordem}" 
+						                			 id="ordem" symbol="" decimalSeparator="," thousandSeparator="." decimalPlaces="0" >
+						                			<p:ajax event="change" update="Stable"></p:ajax>
+						                		</p:inputNumber>
 						                </f:facet>
 						             </p:cellEditor>
 						     	</p:column>

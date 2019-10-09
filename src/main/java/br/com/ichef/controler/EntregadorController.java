@@ -86,6 +86,7 @@ public class EntregadorController extends BaseController {
 
 		Area filter = new Area();
 		filter.setEmpresa(getUserLogado().getEmpresaLogada());
+		filter.setAtivo(true);
 
 		/*AreaVisitor visitor = new AreaVisitor();
 		visitor.setListaDesvinculados(true);*/
@@ -141,6 +142,11 @@ public class EntregadorController extends BaseController {
 					getEntity().getLocalidades().add(obj);
 
 				}
+			}
+			
+			if ( localidades==null || localidades.size() ==0 ) {
+				facesMessager.error("Nenhuma localidade encontrada, verifique se a área informada não está vinculada a outro entregador e/ou se área possui localidades vinculadas");
+				return ;
 			}
 			
 			if(!itemAdicionado) {

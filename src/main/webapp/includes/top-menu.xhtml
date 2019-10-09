@@ -28,7 +28,7 @@
                 <li class="user-footer">
                     <h:form prependId="false">
                         <div class="pull-left">
-                            <p:commandLink  styleClass="btn btn-danger"  value="Change password"/>
+                            <p:commandButton  styleClass="btn btn-danger"  value="Trocar Senha" onclick="PF('trocarSenha').show()"  />
                         </div>
                         <div class="pull-right">
                             <p:commandLink id="logout" action="#{loginController.logout()}"  title="Logoff">
@@ -40,6 +40,25 @@
             </ul>
         </li>
     </ul>
+    
+    <p:dialog header="Trocar Senha" widgetVar="trocarSenha" height="120" minWidth="200" width="220" responsive="true"
+    	 styleClass="box-success" modal="true" resizable="false">
+		<h:form>
+			Senha Atual:
+			<p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
+                                     placeholder="Senha Atual" required="true" autocomplete="off" id="password"
+                                     requiredMessage="Password is required."/>
+            Senha Nova:
+            <p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
+                                     placeholder="Senha Nova" required="true" autocomplete="off" id="passwordnew"
+                                     requiredMessage="Password is required."/>
+			Confirme Senha:
+			<p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
+                                     placeholder="Confirme Senha" required="true" autocomplete="off" id="passwordconfirme"
+                                     requiredMessage="Password is required."/>
+	  	</h:form>
+	</p:dialog>
+    
 
 
 </ui:composition>

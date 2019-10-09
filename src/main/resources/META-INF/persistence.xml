@@ -3,33 +3,37 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-	<persistence-unit name="PU"
-		transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="PU">
 
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
 
 		<properties>
-			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/ichef" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ichef?useSSL=true" />
 			<property name="javax.persistence.jdbc.user" value="ichef" />
-			<property name="javax.persistence.jdbc.password"
-				value="ichef" />
-			<property name="javax.persistence.jdbc.driver"
-				value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.password" value="ichef" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 
 			<!-- <property name="javax.persistence.schema-generation.database.action" 
 				value="update" /> <property name="javax.persistence.schema-generation.create-source" 
 				value="metadata" /> -->
 
-			<property name="connection_provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
-			<property name="c3p0.minPoolSize" value="5"/>
-			<property name="c3p0.maxPoolSize" value="250"/>
-			<property name="c3p0.acquireIncrement" value="10"/> 
-			<property name="c3p0.maxStatements" value="200"/>
-			<property name="c3p0.timeout" value="100"/>
+			<!-- <property name="connection_provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/> -->
+			<property name="hibernate.connection.provider_class" value ="org.hibernate.c3p0.internal.C3P0ConnectionProvider"/>
+        
+         	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+         
+			<property name="hibernate.c3p0.minPoolSize" value="3"/>
+			<property name="hibernate.c3p0.maxPoolSize" value="250"/>
+			<property name="hibernate.c3p0.acquireIncrement" value="10"/> 
+			<property name="hibernate.c3p0.maxStatements" value="200"/>
+			<property name="hibernate.c3p0.timeout" value="2000" />
+			<property name="hibernate.c3p0.max_size" value="200" />
 
-			<property name="hibernate.show_sql" value="false" />
+
+			<property name="hibernate.c3p0.idle_test_period" value="3000" />
+
+			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
 

@@ -17,236 +17,242 @@
         </f:metadata>
 
         <adm:breadcrumb title="Cadastro Cliente #{clienteController.entity.id}" link="cadastro-cliente.xhtml?id=#{clienteController.entity.id}"/>
+        <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
         <h:form id="form" prependId="false">
-            <p:focus context="capaPanel"/>
-
-			
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <div id="main-buttons" class="hidden-sm hidden-xs">
-                        <p:commandButton value="Salvar" update="@form"
-                                         icon="fa fa-check" styleClass="btn-primary" action="#{clienteController.Salvar()}"/>
-                        <p:spacer width="5"/>
-
-                       <!-- <p:commandButton value="Excluir" process="@this"
-                                         icon="fa fa-trash"
-                                         styleClass="btn-danger" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}">
-                        </p:commandButton> --> 
-                        <p:spacer width="5"/>
-                        <p:commandButton value="Voltar" immediate="true"
-                                         action="lista-cliente?faces-redirect=true"
-                                         process="@this"
-                                         icon="fa fa-close"/>
-                                         
-                    </div>
-                    
-                    <p:splitButton value="Salvar" update="@form"
-                                   icon="fa fa-check"
-                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{clienteController.Salvar()}">
-                        <p:menuitem value="Excluir"
-                                    process="@this"
-                                    icon="fa fa-trash" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}"/>
-                        <p:separator/>
-                        <p:menuitem value="Voltar" action="lista-cliente?faces-redirect=true" process="@this"
-                                    icon="fa fa-close"/>
-                    </p:splitButton>
-
-
-                    <p:separator/>
-
-                    <div class="ui-fluid"  >
-                    	<p:panelGrid id="capaPanel" columnClasses="ui-g-12 ui-md-1,  ui-g-12 ui-md-3, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"    columns="6" layout="grid">
-                    		<p:outputLabel value="Cidade" for="cidade"/>
-                    		 <p:selectOneMenu id="cidade" value="#{clienteController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
-                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
-                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
-					            <f:selectItems value="#{clienteController.cidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
-					        </p:selectOneMenu>
-					        <p:selectBooleanButton id="bloqueado" value="#{clienteController.entity.estaBloqueado}" 
-					        	onLabel="Bloqueado" offLabel="Desbloqueado" onIcon="fa fa-lock" offIcon="fa fa-unlock"/>
-							  <p:selectBooleanButton id="maladireta" value="#{clienteController.entity.recebeMaladireta}" 
-					        	onLabel="Com Mala Direta" offLabel="Sem Mala Direta" onIcon="fa fa-envelope-o" offIcon="fa fa-envelope"/>
-					          <p:selectBooleanButton id="sms" value="#{clienteController.entity.recebeSMS}" 
-					        	onLabel="Com SMS" offLabel="Sem SMS" onIcon="fa fa-commenting-o" offIcon="fa fa-commenting"/>
-					          <p:selectBooleanButton id="carteira" value="#{clienteController.entity.pagaEmCarteira}" 
-					        	onLabel="Com Carteira" offLabel="Sem Carteira" onIcon="fa fa-shopping-basket" offIcon="fa fa-money"/>
-					        
-						</p:panelGrid>
-						<p:panelGrid  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-6,ui-g-12 ui-md-1,ui-g-12 ui-md-4"    columns="4" layout="grid">
-					           
-					        <p:outputLabel value="Cliente" for="nome"/>
-                    		<p:inputText value="#{clienteController.entity.nome}" id="nome" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Nome')}"/>
-                    			
-                    		<p:outputLabel value="Apelido" for="apelido"/>
-                    		<p:inputText value="#{clienteController.entity.apelido}" id="apelido" styleClass="letras-maiusculas"
-                    			  requiredMessage="#{configuracaoController.getRequiredMessage('Nome')}"/>
-                    			
-                    		<p:outputLabel value="E-mail" for="email"/>
-                    		<p:inputText value="#{clienteController.entity.email}" id="email" styleClass="letras-maiusculas"
-                    			required="false" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
-					   </p:panelGrid>
-					   <p:panelGrid columnClasses="ui-g-12 ui-md-6 ui-lg-12"  columns="1" layout="grid">
-                    	  
-					        	
-							
-					        <p:selectBooleanButton id="ativo" value="#{clienteController.entity.ativo}" 
-					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
-						
-						</p:panelGrid>
-						
-						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
-						
-						<p:panelGrid  columns="5" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-1"  layout="grid">
-						
-							<p:outputLabel value="Principal" for="telprincipal"/>
-						 	<p:selectBooleanButton id="telprincipal"  value="#{clienteController.stsTelefonePrincipal}" onLabel="Sim" offLabel="Não" 
-						  		onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
-						 	
-						 	<p:outputLabel value="Número" for="numero"/>
-                    		<p:inputMask value="#{clienteController.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
-                    	 	
-                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtn" 
-                    	 	process="@this,numero,telprincipal" 
-                    	 	styleClass="btn-primary" update="dttel, telprincipal, numero" action="#{clienteController.adicionarTelefone}"/>
-                    	</p:panelGrid>
-                    	<p:panelGrid  columns="1"  layout="grid"> 	
-                    	 	<p:dataTable id="dttel" widgetVar="itens" rows="10" 
-								paginator="false" value="#{clienteController.entity.telefones}" var="item"
-								rowKey="#{item.id}" reflow="true"
-								paginatorPosition="bottom" editable="true"
-								mptyMessage="Nenhum item encontrado" 
-								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
-								
-								 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaTelefone}" update="dttel" />
-       							 <p:ajax event="rowEditCancel"  update="dttel" />
- 
-								<p:column headerText="Principal" width="10%" >
-									<p:cellEditor>
-										<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
-										<f:facet name="input">
-											<p:selectBooleanButton id="telprincipal"  value="#{item.telefonePrincipal}" onLabel="Sim" offLabel="Não" 
-						  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
-						  				</f:facet>
-          							</p:cellEditor>
-								</p:column>
-								
-								<p:column headerText="Telefone" width="50%" >
-								 	<p:cellEditor>
-										<f:facet name="output"><h:outputLabel value="#{item.telefone}" /></f:facet>
-										<f:facet name="input">
-											<p:inputMask value="#{item.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
-						  				</f:facet>
-          							</p:cellEditor>
+        	<p:tabView id="tabs">
+        		 <p:tab title="Cadastro" id="tabCadastro">
+		            <p:focus context="capaPanel"/>
+		
+					
+		            <div class="box box-primary">
+		                <div class="box-header with-border">
+		                    <div id="main-buttons" class="hidden-sm hidden-xs">
+		                        <p:commandButton value="Salvar" update="@form"
+		                                         icon="fa fa-check" styleClass="btn-primary" action="#{clienteController.Salvar()}"/>
+		                        <p:spacer width="5"/>
+		
+		                       <!-- <p:commandButton value="Excluir" process="@this"
+		                                         icon="fa fa-trash"
+		                                         styleClass="btn-danger" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}">
+		                        </p:commandButton> --> 
+		                        <p:spacer width="5"/>
+		                        <p:commandButton value="Voltar" immediate="true"
+		                                         action="lista-cliente?faces-redirect=true"
+		                                         process="@this"
+		                                         icon="fa fa-close"/>
+		                                         
+		                    </div>
+		                    
+		                    <p:splitButton value="Salvar" update="@form"
+		                                   icon="fa fa-check"
+		                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{clienteController.Salvar()}">
+		                        <p:menuitem value="Excluir"
+		                                    process="@this"
+		                                    icon="fa fa-trash" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}"/>
+		                        <p:separator/>
+		                        <p:menuitem value="Voltar" action="lista-cliente?faces-redirect=true" process="@this"
+		                                    icon="fa fa-close"/>
+		                    </p:splitButton>
+		
+		
+		                    <p:separator/>
+		
+		                    <div class="ui-fluid"  >
+		                    	<p:panelGrid id="capaPanel" columnClasses="ui-g-12 ui-md-1,  ui-g-12 ui-md-3, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"    columns="6" layout="grid">
+		                    		<p:outputLabel value="Cidade" for="cidade"/>
+		                    		 <p:selectOneMenu id="cidade" value="#{clienteController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
+		                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
+		                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							            <f:selectItems value="#{clienteController.cidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+							        </p:selectOneMenu>
+							        <p:selectBooleanButton id="bloqueado" value="#{clienteController.entity.estaBloqueado}" 
+							        	onLabel="Bloqueado" offLabel="Desbloqueado" onIcon="fa fa-lock" offIcon="fa fa-unlock"/>
+									  <p:selectBooleanButton id="maladireta" value="#{clienteController.entity.recebeMaladireta}" 
+							        	onLabel="Com Mala Direta" offLabel="Sem Mala Direta" onIcon="fa fa-envelope-o" offIcon="fa fa-envelope"/>
+							          <p:selectBooleanButton id="sms" value="#{clienteController.entity.recebeSMS}" 
+							        	onLabel="Com SMS" offLabel="Sem SMS" onIcon="fa fa-commenting-o" offIcon="fa fa-commenting"/>
+							          <p:selectBooleanButton id="carteira" value="#{clienteController.entity.pagaEmCarteira}" 
+							        	onLabel="Com Carteira" offLabel="Sem Carteira" onIcon="fa fa-shopping-basket" offIcon="fa fa-money"/>
+							        
+								</p:panelGrid>
+								<p:panelGrid  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-6,ui-g-12 ui-md-1,ui-g-12 ui-md-4"    columns="4" layout="grid">
+							           
+							        <p:outputLabel value="Cliente" for="nome"/>
+		                    		<p:inputText value="#{clienteController.entity.nome}" id="nome" styleClass="letras-maiusculas"
+		                    			required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Nome')}"/>
+		                    			
+		                    		<p:outputLabel value="Apelido" for="apelido"/>
+		                    		<p:inputText value="#{clienteController.entity.apelido}" id="apelido" styleClass="letras-maiusculas"
+		                    			  requiredMessage="#{configuracaoController.getRequiredMessage('Nome')}"/>
+		                    			
+		                    		<p:outputLabel value="E-mail" for="email"/>
+		                    		<p:inputText value="#{clienteController.entity.email}" id="email" styleClass="letras-maiusculas"
+		                    			required="false" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
+							   </p:panelGrid>
+							   <p:panelGrid columnClasses="ui-g-12 ui-md-6 ui-lg-12"  columns="1" layout="grid">
+		                    	  
+							        	
 									
-								</p:column>
+							        <p:selectBooleanButton id="ativo" value="#{clienteController.entity.ativo}" 
+							        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
 								
+								</p:panelGrid>
 								
+								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 								
-								<p:column style="width:35px">
-						            <p:rowEditor />
-						        </p:column>
-						        
-						        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:4%" >
-									 <p:commandButton process="dttel" update=":form:dttel" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
-									 	 actionListener="#{clienteController.excluirTelefonesSelecionados( item )}"
-									 	 style="    width: 32px;"/>
-								</p:column>
-							</p:dataTable>						
-						</p:panelGrid>
-						
-						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
-						
-						<p:panelGrid  columns="4" columnClasses="ui-g-12 ui-md-6 ui-lg-1, ui-g-12 ui-lg-9,  ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-lg-9"  layout="grid">
-						
-							<p:outputLabel value="Principal" for="enderecoPrincipal"/>
-						 	<p:selectBooleanButton id="enderecoPrincipal"  value="#{clienteController.stsEnderecoPrincipal}" onLabel="Sim" offLabel="Não" 
-						  		onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
-						 	
-						 	<p:outputLabel value="Endereço" for="endereco"/>
-                    		<p:inputText value="#{clienteController.endereco}" id="endereco" styleClass="letras-maiusculas" />
-                    		
-                    		<p:outputLabel value="Localidade" for="localidade"/>
-                    		<p:selectOneMenu id="localidade" value="#{clienteController.localidade}" filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
-                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
-					            <f:selectItems value="#{clienteController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
-					        </p:selectOneMenu>
-                    	 	
-                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
-                    	 	process="@this,enderecoPrincipal,endereco,localidade" 
-                    	 	styleClass="btn-primary" update="dtendereco,enderecoPrincipal,endereco,localidade" action="#{clienteController.adicionarEndereco}"/>
-                    	</p:panelGrid>
-                    	
-                    	<p:panelGrid  columns="1"  layout="grid"> 	
-                    	 	<p:dataTable id="dtendereco" widgetVar="itens" rows="10" 
-								paginator="false" value="#{clienteController.entity.enderecos}" var="item"
-								rowKey="#{item.id}" reflow="true"
-								paginatorPosition="bottom" editable="true"
-								mptyMessage="Nenhum item encontrado" 
-								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+								<p:panelGrid  columns="5" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-1"  layout="grid">
 								
-								 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaEndereco}" update="dtendereco" />
-       							 <p:ajax event="rowEditCancel"  update="dtendereco" />
- 
-								<p:column headerText="Principal" width="6%" >
-									<p:cellEditor>
-										<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
-										<f:facet name="input">
-											<p:selectBooleanButton id="dtendprincipal"  value="#{item.endPrincipal}" onLabel="Sim" offLabel="Não" 
-						  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
-						  				</f:facet>
-          							</p:cellEditor>
-								</p:column>
+									<p:outputLabel value="Principal" for="telprincipal"/>
+								 	<p:selectBooleanButton id="telprincipal"  value="#{clienteController.stsTelefonePrincipal}" onLabel="Sim" offLabel="Não" 
+								  		onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+								 	
+								 	<p:outputLabel value="Número" for="numero"/>
+		                    		<p:inputMask value="#{clienteController.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
+		                    	 	
+		                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtn" 
+		                    	 	process="@this,numero,telprincipal" 
+		                    	 	styleClass="btn-primary" update="growl, dttel, telprincipal, numero" action="#{clienteController.adicionarTelefone}"/>
+		                    	</p:panelGrid>
+		                    	<p:panelGrid  columns="1"  layout="grid"> 	
+		                    	 	<p:dataTable id="dttel" widgetVar="itens" rows="10" 
+										paginator="false" value="#{clienteController.entity.telefones}" var="item"
+										rowKey="#{item.id}" reflow="true"
+										paginatorPosition="bottom" editable="true"
+										mptyMessage="Nenhum item encontrado" 
+										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+										
+										 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaTelefone}" update="dttel" />
+		       							 <p:ajax event="rowEditCancel"  update="dttel" />
+		 
+										<p:column headerText="Principal" width="10%" >
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
+												<f:facet name="input">
+													<p:selectBooleanButton id="telprincipal"  value="#{item.telefonePrincipal}" onLabel="Sim" offLabel="Não" 
+								  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+								  				</f:facet>
+		          							</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Telefone" width="50%" >
+										 	<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{item.telefone}" /></f:facet>
+												<f:facet name="input">
+													<p:inputMask value="#{item.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
+								  				</f:facet>
+		          							</p:cellEditor>
+											
+										</p:column>
+										
+										
+										
+										<p:column style="width:35px">
+								            <p:rowEditor />
+								        </p:column>
+								        
+								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:4%" >
+											 <p:commandButton process="dttel" update="dttel" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
+											 	 actionListener="#{clienteController.excluirTelefonesSelecionados( item )}"
+											 	 style="    width: 32px;"/>
+										</p:column>
+									</p:dataTable>						
+								</p:panelGrid>
 								
-								<p:column headerText="Endereço" width="30%" >
-								 	<p:cellEditor>
-										<f:facet name="output"><h:outputLabel value="#{item.endereco}" /></f:facet>
-										<f:facet name="input">
-											<p:inputText value="#{item.endereco}" id="dtendereco" styleClass="letras-maiusculas" />
-						  				</f:facet>
-          							</p:cellEditor>
+								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+								
+								<p:panelGrid  columns="4" columnClasses="ui-g-12 ui-md-6 ui-lg-1, ui-g-12 ui-lg-9,  ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-lg-9"  layout="grid">
+								
+									<p:outputLabel value="Principal" for="enderecoPrincipal"/>
+								 	<p:selectBooleanButton id="enderecoPrincipal"  value="#{clienteController.stsEnderecoPrincipal}" onLabel="Sim" offLabel="Não" 
+								  		onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+								 	
+								 	<p:outputLabel value="Endereço" for="endereco"/>
+		                    		<p:inputText value="#{clienteController.endereco}" id="endereco" styleClass="letras-maiusculas" />
+		                    		
+		                    		<p:outputLabel value="Localidade" for="localidade"/>
+		                    		<p:selectOneMenu id="localidade" value="#{clienteController.localidade}" filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
+		                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							            <f:selectItems value="#{clienteController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+							        </p:selectOneMenu>
+		                    	 	
+		                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
+		                    	 	process="@this,enderecoPrincipal,endereco,localidade" 
+		                    	 	styleClass="btn-primary" update="growl,dtendereco,enderecoPrincipal,endereco,localidade" action="#{clienteController.adicionarEndereco}"/>
+		                    	</p:panelGrid>
+		                    	
+		                    	<p:panelGrid  columns="1"  layout="grid"> 	
+		                    	 	<p:dataTable id="dtendereco" widgetVar="itens" rows="10" 
+										paginator="false" value="#{clienteController.entity.enderecos}" var="item"
+										rowKey="#{item.id}" reflow="true"
+										paginatorPosition="bottom" editable="true"
+										mptyMessage="Nenhum item encontrado" 
+										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+										
+										 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaEndereco}" update="dtendereco" />
+		       							 <p:ajax event="rowEditCancel"  update="dtendereco" />
+		 
+										<p:column headerText="Principal" width="6%" >
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
+												<f:facet name="input">
+													<p:selectBooleanButton id="dtendprincipal"  value="#{item.endPrincipal}" onLabel="Sim" offLabel="Não" 
+								  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
+								  				</f:facet>
+		          							</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Endereço" width="30%" >
+										 	<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{item.endereco}" /></f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{item.endereco}" id="dtendereco" styleClass="letras-maiusculas" />
+								  				</f:facet>
+		          							</p:cellEditor>
+											
+										</p:column>
+										
+										<p:column headerText="Localidade" width="30%" >
+										 	<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{item.localidade.descricao}" /></f:facet>
+												<f:facet name="input">
+													<p:selectOneMenu id="localidade" value="#{item.localidade}"  filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
+						                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+											            <f:selectItems value="#{clienteController.localidades}" var="loc" itemLabel="#{loc.descricao}" itemValue="#{loc}" />
+											        </p:selectOneMenu>
+								  				</f:facet>
+		          							</p:cellEditor>
+											
+										</p:column>
+										
+										<p:column style="width:5px">
+								            <p:rowEditor />
+								        </p:column>
+								        
+								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:4%" >
+											 <p:commandButton process="dtendereco" update="dtendereco" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
+											 	 actionListener="#{clienteController.excluirLocalidadesSelecionadas( item )}"
+											 	 style="    width: 32px;"/>
+										</p:column>
+									</p:dataTable>						
+								</p:panelGrid>
 									
-								</p:column>
+								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 								
-								<p:column headerText="Localidade" width="30%" >
-								 	<p:cellEditor>
-										<f:facet name="output"><h:outputLabel value="#{item.localidade.descricao}" /></f:facet>
-										<f:facet name="input">
-											<p:selectOneMenu id="localidade" value="#{item.localidade}"  filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
-				                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
-									            <f:selectItems value="#{clienteController.localidades}" var="loc" itemLabel="#{loc.descricao}" itemValue="#{loc}" />
-									        </p:selectOneMenu>
-						  				</f:facet>
-          							</p:cellEditor>
-									
-								</p:column>
-								
-								<p:column style="width:5px">
-						            <p:rowEditor />
-						        </p:column>
-						        
-						        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:4%" >
-									 <p:commandButton process="dtendereco" update=":form:dtendereco" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
-									 	 actionListener="#{clienteController.excluirLocalidadesSelecionadas( item )}"
-									 	 style="    width: 32px;"/>
-								</p:column>
-							</p:dataTable>						
-						</p:panelGrid>
-							
-						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
-						
-						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
-							<p:outputLabel value="Criação" for="criacao" rendered="#{clienteController.entity.dataCadastro != null}"/>
-	                    	<p:inputText id="criacao" value="#{clienteController.getUsuarioCadastro(clienteController.entity)}" disabled="true" rendered="#{clienteController.entity.dataCadastro != null}"/>
-	                    		
-	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{clienteController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{clienteController.getUsuarioAlteracao(clienteController.entity)}" disabled="true" rendered="#{clienteController.entity.dataAlteracao != null}"/>
-	                    </p:panelGrid>	
-                    </div>
-                </div>
-            </div>
+								<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
+									<p:outputLabel value="Criação" for="criacao" rendered="#{clienteController.entity.dataCadastro != null}"/>
+			                    	<p:inputText id="criacao" value="#{clienteController.getUsuarioCadastro(clienteController.entity)}" disabled="true" rendered="#{clienteController.entity.dataCadastro != null}"/>
+			                    		
+			                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{clienteController.entity.dataAlteracao != null}"/>
+			                    	<p:inputText id="alteracao" value="#{clienteController.getUsuarioAlteracao(clienteController.entity)}" disabled="true" rendered="#{clienteController.entity.dataAlteracao != null}"/>
+			                    </p:panelGrid>	
+		                    </div>
+		                </div>
+		            </div>
+		    	</p:tab>
+		    	 <p:tab title="Carteira"></p:tab>
+	    	</p:tabView>
         </h:form>
 
     </ui:define>
