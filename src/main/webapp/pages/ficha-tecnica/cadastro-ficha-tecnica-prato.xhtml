@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Cadastro Ficha Técnica de Prato
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+        	<f:viewParam name="id" value="#{fichaTecnicaPratoController.id}" converter="javax.faces.Long"/>
+        	<f:viewParam name="copia" value="#{fichaTecnicaPratoController.copia}" converter="javax.faces.Long"/>
+        	<f:event listener="#{fichaTecnicaPratoController.inicializar()}" type="preRenderView"></f:event>
+        </f:metadata>
+
+        <adm:breadcrumb title="Cadastro Preparo #{fichaTecnicaPratoController.entity.id}" link="cadastro-ficha-tecnica-prato.xhtml?id=#{fichaTecnicaPratoController.entity.id}"/>
+        <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
+        <h:form id="form" prependId="false">
+        
+            <p:focus context="capaPanel"/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Salvar" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary" action="#{fichaTecnicaPratoController.Salvar()}"/>
+                        <p:spacer width="5"/>
+
+                      
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voltar" immediate="true"
+                                          action="lista-ficha-tecnica-prato?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                                         
+                    </div>
+                    
+                    <p:splitButton value="Salvar" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{fichaTecnicaPratoController.Salvar()}">
+                        
+                        <p:separator/>
+                        <p:menuitem value="Voltar" action="lista-ficha-tecnica-pratofaces-redirect=true" process="@this"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+
+                    <p:separator/>
+
+                    <div class="ui-fluid">
+                    
+                    	<p:panelGrid id="capaPanel" columns="4" layout="grid"  >
+                    	
+                    	    <p:outputLabel value="Descrição" for="descricao"/>
+                    		<p:inputText value="#{fichaTecnicaPratoController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
+                    			required="true" requiredMessage="#{fichaTecnicaPratoController.getRequiredMessage('Descrição')}"/>
+                    			 
+                    		<p:outputLabel value="Tipo de Prato" for="tipoPrato"/>
+                    		<p:selectCheckboxMenu id="tipoPrato" value="#{fichaTecnicaPratoController.listaTiposSelecionados}" label="listaTipoPrato"
+                    			 panelStyle="width:250px" multiple="true"  updateLabel="true"  filter="true" filterMatchMode="startsWith" > 
+                    			 <p:ajax update="growl" process="@this" />
+					            <f:selectItems value="#{fichaTecnicaPratoController.listaTipoPrato}"  var="item" itemLabel="#{item.descricao}" itemValue="#{item.id}" />
+					        </p:selectCheckboxMenu>
+					        
+                 			<p:outputLabel value="Ativo" for="ativo"/>
+						       <p:selectBooleanButton id="ativo" value="#{fichaTecnicaPratoController.entity.ativo}" 
+						        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+                    	
+                    	</p:panelGrid>		
+                    	<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+                    	<p:panelGrid id="capaPanelpreco" columns="4" layout="grid"  >
+                    		<p:outputLabel value="Preço de Venda Receita" id="pvr2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoVendaReceita)}" id="pvr"  />
+                    		 
+                    		 <p:outputLabel value="Preço de Custo Receita" id="pcr2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoCustoReceita)}"  id="pcr"/>
+                    		 
+                    		 <p:outputLabel value="Preço de Venda Porção" id="pvc2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoVendaPorcao)}" id="pvp" />
+                    		 
+                    		 <p:outputLabel value="Preço de Custo Poção" id="pcp2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoCustoPorcao)}"  id="pcp" />
+                    	</p:panelGrid>	
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						 <p:panelGrid  columns="7" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
+						
+							<p:outputLabel value="Preparo" for="fichapreparo"/>
+                    		<p:selectOneMenu id="fichapreparo" value="#{fichaTecnicaPratoController.fichaTecnicaPreparo}" filter="true"  filterMatchMode="contains" 
+                    			converter= "omnifaces.SelectItemsConverter">
+                    			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{fichaTecnicaPratoController.preparos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+						
+						
+							<!-- 
+							<p:outputLabel value="Qtd. Liquida" for="qtdl"/>
+							<p:inputNumber   id="qtdl" value="#{fichaTecnicaPratoController.qtdLiquida}" symbol="" decimalSeparator="," thousandSeparator="." />
+                    		
+						 	
+						 	<p:outputLabel value="Aproveitamento" for="aproveitamento"/>
+							<p:inputNumber   id="aproveitamento" value="#{fichaTecnicaPratoController.aproveitamento}" symbol=" %"  emptyValue="zero" symbolPosition="s" decimalSeparator="," thousandSeparator="." /> 
+						 	 -->
+                    	 	
+                    	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
+                    	 	 id="btnSurname" process="@this,fichapreparo" update="growl,Stable,fichapreparo,pvr,pvp,pcr,pcp"
+                    	 	 	 actionListener="#{fichaTecnicaPratoController.adicionarPreparo()}"  
+                    	 	 styleClass="btn-primary" 
+                    	 	/>
+                    	 	
+                    	 	
+                    	</p:panelGrid>
+						
+						<p:panelGrid  columns="1"  layout="grid"> 	
+						
+							<p:dataTable id="Stable" widgetVar="itens" rows="10"
+							paginator="true" value="#{fichaTecnicaPratoController.entity.fichaTecnicaPratoPreparos}" var="item"
+							rowKey="#{item.id}" reflow="true"
+							paginatorPosition="bottom"
+							mptyMessage="Nenhum item encontrado" 
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
+							 sortBy="#{item.fichaTecnicaPreparo.descricao}">
+						 	   
+								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.fichaTecnicaPreparo.descricao}"
+									filterMatchMode="contains" sortBy="#{item.fichaTecnicaPreparo.descricao}" style="width:25%">
+									<h:outputLabel value="#{item.fichaTecnicaPreparo.descricao}" />
+								</p:column>
+								
+								<p:column headerText="Qtd. Bruta" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeBruta}"
+									filterMatchMode="contains" sortBy="#{item.quantidadeBruta}" style="width:15%">
+									<h:outputLabel value="#{item.quantidadeBruta}" />
+								</p:column>
+								
+								<p:column headerText="Total" filterStyle="display:none; visibility:hidden;" filterBy="#{item.custoTotal}"
+									filterMatchMode="contains" sortBy="#{item.custoTotal}" style="width:15%">
+									<h:outputLabel value="#{fichaTecnicaPratoController.formataValor(item.custoTotal)}" />
+								</p:column>
+								
+								
+								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:6%" >
+									 <p:commandButton process="Stable" update=":form:Stable,pvr,pvp,pcr,pcp" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
+									 	 actionListener="#{fichaTecnicaPratoController.excluirItensSelecionadas( item )}"
+									 	   />
+								</p:column>
+							</p:dataTable>
+						
+						</p:panelGrid>
+						
+						<p:panelGrid id="capaPanel2" columns="1" layout="grid"  >
+	                    		
+		              		<p:outputLabel for="modoPreparo" value="Modo Preparo"/>
+		           			<p:inputTextarea id="modoPreparo" value="#{fichaTecnicaPratoController.entity.modoPreparo}" rows="5" cols="30" maxlength="450" counter="display" counterTemplate="Faltam {0} characteres" autoResize="false" />
+		  					<h:outputText id="display" />
+		  							
+		  					<p:outputLabel for="observacao" value="Observação"/>
+		           			<p:inputTextarea id="observacao" value="#{fichaTecnicaPratoController.entity.obervacao}" rows="5" cols="30"  maxlength="450"  counter="displayobs" counterTemplate="Faltam {0} characteres" autoResize="false" />
+		  					<h:outputText id="displayobs" />
+	                    </p:panelGrid>
+						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
+							<p:outputLabel value="Criação" for="criacao" rendered="#{fichaTecnicaPratoController.entity.dataCadastro != null}"/>
+	                    	<p:inputText id="criacao" value="#{fichaTecnicaPratoController.getUsuarioCadastro(fichaTecnicaPratoController.entity)}" disabled="true" rendered="#{fichaTecnicaPratoController.entity.dataCadastro != null}"/>
+	                    		
+	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{fichaTecnicaPratoController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracao" value="#{fichaTecnicaPratoController.getUsuarioAlteracao(fichaTecnicaPratoController.entity)}" disabled="true" rendered="#{fichaTecnicaPratoController.entity.dataAlteracao != null}"/>
+	                    </p:panelGrid>	
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   

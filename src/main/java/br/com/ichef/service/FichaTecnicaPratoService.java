@@ -1,0 +1,85 @@
+package br.com.ichef.service;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+
+import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.model.Configuracao;
+import br.com.ichef.model.FichaTecnicaPrato;
+import br.com.ichef.model.FichaTecnicaPratoPreparo;
+
+public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public FichaTecnicaPrato saveOrUpdade(FichaTecnicaPrato entity) throws Exception {
+		if (validaRegras(entity)) {
+			return super.saveOrUpdade(entity);
+		}
+		return entity;
+
+	}
+
+	public void calcularPercos(FichaTecnicaPrato entity, Configuracao configuracao) {
+		try {
+
+			if (entity.getFichaTecnicaPratoPreparos() != null  ) {
+				BigDecimal precoVendaReceita = new BigDecimal(0), custoTotal = new BigDecimal(0),
+						tamanho = new BigDecimal(1);
+				
+				for (FichaTecnicaPratoPreparo item : entity.getFichaTecnicaPratoPreparos()) {
+					if (item.getAtivo().equalsIgnoreCase("S"))
+						custoTotal = custoTotal.add(item.getCustoTotal() == null ? new BigDecimal(0) : item.getCustoTotal());
+
+				}
+				precoVendaReceita = (custoTotal.doubleValue() > 0d ? custoTotal
+						.divide(new BigDecimal(configuracao.getCustoMercadoriaVendida()).divide(new BigDecimal(100)))
+						.setScale(2, RoundingMode.CEILING) : custoTotal);
+				
+				entity.setPrecoVendaReceita(precoVendaReceita);
+				
+				entity.setPrecoVendaPorcao((precoVendaReceita.doubleValue() > 0d
+						? (precoVendaReceita.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
+						: precoVendaReceita));
+
+				entity.setPrecoCustoPorcao((custoTotal.doubleValue() > 0d
+						? (custoTotal.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
+						: custoTotal));
+
+				entity.setPrecoCustoReceita(custoTotal);
+
+			} else {
+				entity.setPrecoVendaReceita(new BigDecimal(0));
+				entity.setPrecoVendaPorcao(new BigDecimal(0));
+
+				entity.setPrecoCustoPorcao(new BigDecimal(0));
+
+				entity.setPrecoCustoReceita(new BigDecimal(0));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private boolean validaRegras(FichaTecnicaPrato entity) {
+		return true;
+	}
+
+	public List<FichaTecnicaPrato> listAll(Boolean ativo) {
+		FichaTecnicaPrato filter = new FichaTecnicaPrato();
+		filter.setAtivo("S");
+		try {
+			if (ativo)
+				return super.findByParameters(filter);
+			else
+				return super.listAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

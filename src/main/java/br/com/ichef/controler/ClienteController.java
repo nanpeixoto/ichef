@@ -179,7 +179,7 @@ public class ClienteController extends BaseController {
 
 	public void adicionarTelefone() {
 		if (!getTelefone().equals("5571 ")) {
-			if (existeTelefone(getTelefone())) {
+			//if (existeTelefone(getTelefone())) {
 				if (!existeTelefonePrincipal(null)) {
 					ClienteTelefone telefone = new ClienteTelefone();
 					telefone.setDataCadastro(new Date());
@@ -203,16 +203,18 @@ public class ClienteController extends BaseController {
 				} else {
 					facesMessager.error("Já existe um telefone principal para esse cliente");
 				}
-			} else {
-				facesMessager.error("Telefone já adicionado para essa cliente");
-			}
+			//} else {
+			//	facesMessager.error("Telefone já adicionado para essa cliente");
+			//}
 		}
 	}
 
 	private boolean existeTelefone(String telefone2) {
-		for (ClienteTelefone tel : getEntity().getTelefones()) {
-			if (tel.getTelefone().equals(telefone2))
-				return true;
+		if(getEntity().getTelefones()!=null ) {
+			for (ClienteTelefone tel : getEntity().getTelefones()) {
+				if (tel.getTelefone().equals(telefone2))
+					return true;
+			}
 		}
 
 		return false;

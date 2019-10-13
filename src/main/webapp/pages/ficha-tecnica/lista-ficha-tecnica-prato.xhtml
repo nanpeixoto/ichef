@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<style type="text/css">
+.ui-grid-row .ui-grid-col-2, .ui-grid-row .ui-grid-col-10 {
+	padding: 0.5em 0;
+	margin-left: 10px;
+}
+
+.ui-orderlist .ui-orderlist-list {
+	height: auto;
+}
+
+.ui-orderlist .ui-grid-row .ui-grid-col-2, .ui-orderlist .ui-grid-row .ui-grid-col-10
+	{
+	padding: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">
+        Pesquisa Ficha Técnica de Prato
+    </ui:define>
+
+	<ui:define name="description">
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb title="Pesquisa" />
+
+		<h:form>
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					 <p:commandButton action="cadastro-ficha-tecnica-prato?faces-redirect=true"
+						ajax="false" icon="fa fa-plus" value="Novo"
+						styleClass="btn-primary" />
+					
+					<p:spacer width="5" />
+					<p:commandButton value="Excluir Selecionado(s)" icon="fa fa-trash"
+						styleClass="btn-danger" process="@form" update="@form"
+						action="#{fichaTecnicaPratoController.excluirSelecionados()}" />
+					<p:spacer width="5" />
+					
+					<!--<p:commandButton value="Olhar Selecionado(s)"
+						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
+						styleClass="btn-info" icon="fa fa-search" /> 
+						
+					 <p:commandButton value="Olhar Selecionado(s)"
+						oncomplete="PF('ItensSelecionados').show()" update="@(.ui-dialog)"
+						styleClass="btn-info" icon="fa fa-search" /> --> 
+					<p:separator />
+
+
+					<p:dataTable id="TarefaTable" widgetVar="itens" rows="10"
+						paginator="true" value="#{fichaTecnicaPratoController.lista}" var="item"
+						rowKey="#{item.id}" reflow="true"
+						selection="#{fichaTecnicaPratoController.listaSelecionadas}"
+						paginatorPosition="bottom"
+						mptyMessage="Nenhum item encontrado" 
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
+						 sortBy="#{item.descricao}">
+
+						<f:facet name="header">
+							<p:outputPanel style="text-align:right; margin-right:-10px"
+								styleClass="ui-widget-auxiliar">
+
+								<h:outputText value="Pesquisar " escape="false" />
+
+								<p:inputText id="globalFilter" onkeyup="PF('itens').filter(); hideBar();"
+									style="width:150px;" maxlength="255" 
+									styleClass="letras-maiusculas semClear">
+								</p:inputText>
+								
+								<h:commandLink>
+			                    	<h:graphicImage value="#{resource['images/excel_icon.png']}" style="WIDTH: 29px;" /> 
+			                    	<p:dataExporter type="xls" target="TarefaTable" fileName="iChef - Lista Ficha de Prato" />
+			               		</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column selectionMode="multiple" width="5%" styleClass="align-center" />
+						
+						<p:column headerText="Cód." filterBy="#{item.id}" width="8%"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.id}">
+							<h:link value="#{item.id}"
+								outcome="cadastro-ficha-tecnica-prato.xhtml">
+								<f:param name="id" value="#{item.id}" />
+							</h:link>
+						</p:column>
+						
+						
+						<p:column headerText="Descricao" filterBy="#{item.descricao}"  width="30%"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricao}">
+							<h:link value="#{item.descricao}"
+								outcome="cadastro-ficha-tecnica-prato.xhtml">
+								<f:param name="id" value="#{item.id}" />
+							</h:link>
+						</p:column>
+						
+						<p:column headerText="Custo Receita" filterStyle="display:none; visibility:hidden;" filterBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoReceita)}"
+							filterMatchMode="contains" sortBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoReceita)}">
+							<h:outputLabel value="#{fichaTecnicaPratoController.formataValor(item.precoCustoReceita)}" />
+						</p:column>
+					
+						<p:column headerText="Custo Porção" filterStyle="display:none; visibility:hidden;" filterBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoPorcao)}"
+							filterMatchMode="contains" sortBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoPorcao)}">
+							<h:outputLabel value="#{fichaTecnicaPratoController.formataValor(item.precoCustoPorcao)}" />
+						</p:column>
+						
+						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;"  width="10%"  filterBy="#{item.situacao}"
+							filterMatchMode="contains" sortBy="#{item.situacao}">
+							<h:outputLabel value="#{item.situacao}" />
+						</p:column>
+						
+						 
+						<p:column headerText="" filterStyle="display:none; visibility:hidden;"   >
+							<p:commandButton process="TarefaTable"  icon="fa fa-files-o" value=" "  styleClass="btn btn-info"  style="    width: 33px;" action="#{fichaTecnicaPratoController.copiar(item)}"	 />
+						</p:column> 
+
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

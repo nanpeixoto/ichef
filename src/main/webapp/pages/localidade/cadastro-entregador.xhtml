@@ -100,12 +100,36 @@
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
 							 sortBy="#{item.ordem}" >
+							 
+							 	<f:facet name="header">
+							<p:outputPanel style="text-align:right; margin-right:-10px"
+								styleClass="ui-widget-auxiliar">
+
+								<h:outputText value="Pesquisar " escape="false" />
+
+								<p:inputText id="globalFilter" onkeyup="PF('itens').filter(); hideBar();"
+									style="width:150px;" maxlength="255" 
+									styleClass="letras-maiusculas semClear">
+								</p:inputText>
+								
+								<h:commandLink>
+			                    	<h:graphicImage value="#{resource['images/excel_icon.png']}" style="WIDTH: 29px;" /> 
+			                    	<p:dataExporter type="xls" target="Stable" fileName="iChef - Lista Entregador x Localidade #{entregadorController.entity.nome}" />
+			               		</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
 						 
 						 		  
 								<p:column headerText="Localidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.descricao}"
 									filterMatchMode="contains" sortBy="#{item.localidade.descricao}" style="width:85%">
 									<h:outputLabel value="#{item.localidade.descricao}" />
 								</p:column>
+								
+								<p:column headerText="Area" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.descricao}"
+									filterMatchMode="contains" sortBy="#{item.localidade.descricao}" style="width:85%">
+									<h:outputLabel value="#{item.localidade.descricao}" />
+								</p:column>
+								
 								
 								<p:column headerText="Ordem" filterStyle="display:none; visibility:hidden;" filterBy="#{item.ordem}"
 									filterMatchMode="contains" sortBy="#{item.ordem}" style="width:10%">
@@ -120,7 +144,7 @@
 						             </p:cellEditor>
 						     	</p:column>
 								
-								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
+								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%"  exportable="false">
 									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
 									 	 actionListener="#{entregadorController.excluirItensSelecionadas( item )}"/>
 								</p:column>
