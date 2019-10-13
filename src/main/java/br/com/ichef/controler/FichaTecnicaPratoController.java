@@ -47,9 +47,9 @@ public class FichaTecnicaPratoController extends BaseController {
 	private List<FichaTecnicaPrato> listaFiltro = new ArrayList<FichaTecnicaPrato>();
 
 	private List<FichaTecnicaPrato> listaSelecionadas = new ArrayList<FichaTecnicaPrato>();
-	
+
 	private List<FichaTecnicaPreparo> preparos = new ArrayList<FichaTecnicaPreparo>();
-	
+
 	private List<TipoPrato> listaTipoPrato = new ArrayList<TipoPrato>();
 	private Long[] listaTiposSelecionados;
 
@@ -169,7 +169,7 @@ public class FichaTecnicaPratoController extends BaseController {
 		for (FichaTecnicaPratoPreparo fichaInsumoOld : perparo.getFichaTecnicaPratoPreparos()) {
 			FichaTecnicaPratoPreparo fichaInsumo = new FichaTecnicaPratoPreparo();
 			fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
-			//fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
+			// fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
 			fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
 			fichaInsumo.setFichaTecnicaPreparo(fichaInsumoOld.getFichaTecnicaPreparo());
 			fichaInsumo.setQuantidadeBruta(fichaInsumoOld.getQuantidadeBruta());
@@ -178,21 +178,27 @@ public class FichaTecnicaPratoController extends BaseController {
 			fichaInsumo.setFichaTecnicaPrato(clone);
 			novaListaFicha.add(fichaInsumo);
 		}
-		
+
 		List<FichaTecnicaPratoTipo> novosTipos = new ArrayList<>();
 
-		for (FichaTecnicaPratoTipo tipoOld : perparo.getFichaTecnicaPratoTipos() ) {
+		for (FichaTecnicaPratoTipo tipoOld : perparo.getFichaTecnicaPratoTipos()) {
 			FichaTecnicaPratoTipo pratoTipo = new FichaTecnicaPratoTipo();
-			pratoTipo.setFichaTecnicaPrato(clone );
+			pratoTipo.setFichaTecnicaPrato(clone);
 			pratoTipo.setTipoPrato(tipoOld.getTipoPrato());
 			novosTipos.add(pratoTipo);
 		}
 		
-		setEntity(null);
 		
+
+		setEntity(null);
+
 		clone.setFichaTecnicaPratoTipos(novosTipos);
 		clone.setFichaTecnicaPratoPreparos(novaListaFicha);
+		
+		
 		setEntity(clone);
+		
+		inicializarlistaTiposSelecionados(getEntity());
 	}
 
 	public void adicionarPreparo() {
@@ -227,9 +233,10 @@ public class FichaTecnicaPratoController extends BaseController {
 			fichaInsumo.setAproveitamento(aproveitamento);
 			fichaInsumo.setAtivo(true);
 			fichaInsumo.setAtivo("S");
-			fichaInsumo.setQuantidadeBruta( new BigDecimal(1) );
-			//fichaInsumo.setCustoBruto(   getFichaTecnicaPreparo().getPrecoCustoReceita()  ) ;
-			fichaInsumo.setCustoTotal(  getFichaTecnicaPreparo().getPrecoCustoPorcao() );
+			fichaInsumo.setQuantidadeBruta(new BigDecimal(1));
+			// fichaInsumo.setCustoBruto( getFichaTecnicaPreparo().getPrecoCustoReceita() )
+			// ;
+			fichaInsumo.setCustoTotal(getFichaTecnicaPreparo().getPrecoCustoPorcao());
 			fichaInsumo.setFichaTecnicaPrato(getEntity());
 			fichaInsumo.setFichaTecnicaPreparo(getFichaTecnicaPreparo());
 			fichaInsumo.setQuantidadeLiquida(qtdLiquida);
@@ -275,17 +282,22 @@ public class FichaTecnicaPratoController extends BaseController {
 			criarClone(getEntity());
 		}
 
-		if (getListaTiposSelecionados() == null) {
+		if (getListaTiposSelecionados() == null || getListaTiposSelecionados().length == 0 ) {
 			FacesUtil.addErroMessage("Selecione o(s) tipo(s) de prato(s)");
 			return "";
 		} else {
-			getEntity().getFichaTecnicaPratoTipos().clear();
+			if (getEntity().getFichaTecnicaPratoTipos() != null) {
+				getEntity().getFichaTecnicaPratoTipos().clear();
+			}
 			for (Long idTipoPrato : getListaTiposSelecionados()) {
 
 				FichaTecnicaPratoTipo tipo = new FichaTecnicaPratoTipo();
 				tipo.setTipoPrato(tipoPratoService.getById(idTipoPrato));
 				tipo.setFichaTecnicaPrato(getEntity());
 
+				if(getEntity().getFichaTecnicaPratoTipos()==null ) {
+					getEntity().setFichaTecnicaPratoTipos( new ArrayList<>() );
+				}
 				getEntity().getFichaTecnicaPratoTipos().add(tipo);
 
 			}
@@ -313,7 +325,7 @@ public class FichaTecnicaPratoController extends BaseController {
 				}
 			}
 		}
-		
+
 		service.calcularPercos(entity, getConfiguracao());
 
 		service.saveOrUpdade(entity);
