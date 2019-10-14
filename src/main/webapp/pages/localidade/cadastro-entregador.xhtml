@@ -121,13 +121,13 @@
 						 
 						 		  
 								<p:column headerText="Localidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.descricao}"
-									filterMatchMode="contains" sortBy="#{item.localidade.descricao}" style="width:85%">
+									filterMatchMode="contains" sortBy="#{item.localidade.descricao}" style="width:40%">
 									<h:outputLabel value="#{item.localidade.descricao}" />
 								</p:column>
 								
-								<p:column headerText="Area" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.descricao}"
-									filterMatchMode="contains" sortBy="#{item.localidade.descricao}" style="width:85%">
-									<h:outputLabel value="#{item.localidade.descricao}" />
+								<p:column headerText="Area" filterStyle="display:none; visibility:hidden;" filterBy="#{item.localidade.areas}"
+									filterMatchMode="contains" sortBy="#{item.localidade.areas}" style="width:25%">
+									<h:outputLabel value="#{item.localidade.areas}" />
 								</p:column>
 								
 								

@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,16 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.primefaces.model.SelectableDataModel;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "localidade")
-public class Localidade extends BaseEntity  {
+public class Localidade extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,6 +58,10 @@ public class Localidade extends BaseEntity  {
 	@ManyToOne
 	@JoinColumn(name = "CD_EMPRESA")
 	private Empresa empresa;
+
+	// bi-directional many-to-one association to AreaLocalidade
+	@OneToMany(mappedBy = "localidade")
+	private List<AreaLocalidade> areaLocalidades;
 
 	@Transient
 	private boolean isAtivo;
@@ -219,6 +223,24 @@ public class Localidade extends BaseEntity  {
 		this.empresa = empresa;
 	}
 
+	public List<AreaLocalidade> getAreaLocalidades() {
+		return areaLocalidades;
+	}
 
+	public void setAreaLocalidades(List<AreaLocalidade> areaLocalidades) {
+		this.areaLocalidades = areaLocalidades;
+	}
+
+	public String getAreas() {
+		String areas = "";
+		for (AreaLocalidade areaLocalidade : areaLocalidades) {
+			if (areas != "")
+				areas += ",";
+			areas += areaLocalidade.getArea().getDescricao();
+		}
+		if(areas.equals("")) 
+			areas =  "Sem Área";
+		return areas.toUpperCase();
+	}
 
 }

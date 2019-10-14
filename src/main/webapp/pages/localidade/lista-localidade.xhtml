@@ -116,6 +116,10 @@
 							<h:outputLabel value="#{item.empresa.nomeFantasia}" />
 						</p:column>
 						
+						<p:column headerText="Área" filterStyle="display:none; visibility:hidden;" filterBy="#{item.areas}"
+							filterMatchMode="contains" sortBy="#{item.areas}"   >
+							<h:outputLabel value="#{item.areas}" />
+						</p:column>
 						
 						<p:column headerText="Cidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.cidade.descricao}"
 							filterMatchMode="contains" sortBy="#{item.cidade.descricao}"  width="15%">
