@@ -96,23 +96,20 @@
 						</p:column>
 						
 						
-						<p:column headerText="Descricao" filterBy="#{item.descricao}"  width="30%"
+						<p:column headerText="Descricao" filterBy="#{item.descricaoComPreparo}"  width="30%"
 							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricao}">
-							<h:link value="#{item.descricao}"
-								outcome="cadastro-ficha-tecnica-prato.xhtml">
+							<h:link value="#{item.descricao}" outcome="cadastro-ficha-tecnica-prato.xhtml" >
 								<f:param name="id" value="#{item.id}" />
 							</h:link>
+							<br/>
+							<h:outputLabel value="#{item.descricaoPreparo}" escape="false" />
 						</p:column>
 						
-						<p:column headerText="Custo Receita" filterStyle="display:none; visibility:hidden;" filterBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoReceita)}"
-							filterMatchMode="contains" sortBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoReceita)}">
-							<h:outputLabel value="#{fichaTecnicaPratoController.formataValor(item.precoCustoReceita)}" />
+						<p:column headerText="Custos" filterStyle="display:none; visibility:hidden;" filterBy="#{item.percoPorTipoPrato}"
+							filterMatchMode="contains" sortBy="#{item.percoPorTipoPrato}">
+							<h:outputLabel value="#{item.percoPorTipoPrato}" escape="false"/>
 						</p:column>
 					
-						<p:column headerText="Custo Porção" filterStyle="display:none; visibility:hidden;" filterBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoPorcao)}"
-							filterMatchMode="contains" sortBy="#{fichaTecnicaPratoController.formataValor(item.precoCustoPorcao)}">
-							<h:outputLabel value="#{fichaTecnicaPratoController.formataValor(item.precoCustoPorcao)}" />
-						</p:column>
 						
 						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;"  width="10%"  filterBy="#{item.situacao}"
 							filterMatchMode="contains" sortBy="#{item.situacao}">

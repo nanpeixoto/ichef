@@ -290,7 +290,7 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	}
 	
 	public String getDescricaoComInsumos() {
-		return descricao.toUpperCase()+"<br/>("+getDescricaoInsumo()+")";
+		return getDescricao()+"<br/>("+getDescricaoInsumo()+")";
 	}
 	
 	public String getDescricaoInsumo() {

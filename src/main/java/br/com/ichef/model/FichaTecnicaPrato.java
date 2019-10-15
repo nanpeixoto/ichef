@@ -265,6 +265,19 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 		return (FichaTecnicaPrato) super.clone();
 	}
 	
+	public String getDescricaoComPreparo() {
+		return getDescricao()+"\r("+getDescricaoPreparo()+")";
+	}
+	
+	public String getDescricaoPreparo() {
+		String insumos = "";
+		for (FichaTecnicaPratoPreparo preparo : getFichaTecnicaPratoPreparos()) {
+			if(insumos != "")
+				insumos +="/ "; 
+			insumos += preparo.getFichaTecnicaPreparo().getDescricao();
+		}
+		return insumos;
+	}
 
 	public String getPercoPorTipoPrato () {
 		String valoresPorTipo = "";
