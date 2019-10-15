@@ -167,6 +167,7 @@ public class ClienteController extends BaseController {
 			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
 		}
+		entity.setDescricaoTelefone(entity.getAllTelefones());
 		service.saveOrUpdade(entity);
 		return "lista-cliente.xhtml?faces-redirect=true";
 

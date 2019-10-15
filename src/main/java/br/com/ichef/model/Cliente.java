@@ -75,6 +75,9 @@ public class Cliente extends BaseEntity {
 
 	@Column(name = "DS_APELIDO")
 	private String apelido;
+	
+	@Column(name = "DS_TELEFONE")
+	private String descricaoTelefone;
 
 	@Transient
 	private boolean isAtivo;
@@ -391,5 +394,15 @@ public class Cliente extends BaseEntity {
 		
 		return listaTelefones;
 	}
+
+	public String getDescricaoTelefone() {
+		return descricaoTelefone;
+	}
+
+	public void setDescricaoTelefone(String descricaoTelefone) {
+		this.descricaoTelefone = descricaoTelefone;
+	}
+	
+	
 
 }

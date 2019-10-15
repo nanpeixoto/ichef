@@ -101,12 +101,9 @@
 							</h:link>
 						</p:column>
 						
-						<p:column headerText="Tel(s)" filterBy="#{item.allTelefones}"  width="25%"
-							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.allTelefones}">
-							<h:link value="#{item.allTelefones}"
-								outcome="cadastro-cliente.xhtml">
-								<f:param name="id" value="#{item.id}" />
-							</h:link>
+						<p:column headerText="Tel(s)" filterBy="#{item.descricaoTelefone}"  width="25%"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricaoTelefone}">
+							 <h:outputLabel value="#{item.descricaoTelefone}" />
 						</p:column>
 						
 						

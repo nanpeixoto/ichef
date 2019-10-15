@@ -126,7 +126,7 @@ public class AreaController extends BaseController {
 			getEntity().getLocalidades().add(obj);
 
 		} else {
-			facesMessager.error("Insumo já cadastrado");
+			facesMessager.error("Item já cadastrado");
 		}
 
 		LocalidadeVisitor visitor = new LocalidadeVisitor();

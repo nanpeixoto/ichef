@@ -205,5 +205,26 @@ public class TipoPrato extends BaseEntity {
 		return custoTotal;
 	}
 
+	public String getDescricaoComValorInsumo() {
+		return getDescricao()+" "+formataValor(getCustoTotal());
+	}
+	
+	public Object formataValor(Object valor) {
+		try {
+
+			if (valor != null) {
+				return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			return valor.toString();
+		} catch (Exception e) {
+			return valor;
+		}
+
+	}
 
 }

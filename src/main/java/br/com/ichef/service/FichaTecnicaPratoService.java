@@ -8,6 +8,7 @@ import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.model.FichaTecnicaPratoPreparo;
+import br.com.ichef.model.FichaTecnicaPratoTipo;
 
 public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 	private static final long serialVersionUID = 1L;
@@ -48,6 +49,10 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 						: custoTotal));
 
 				entity.setPrecoCustoReceita(custoTotal);
+				
+				for (FichaTecnicaPratoTipo fichaTipo :entity.getFichaTecnicaPratoTipos()) {
+					fichaTipo.setCustoTotal(custoTotal.add(fichaTipo.getTipoPrato().getCustoTotal() ));
+				}
 
 			} else {
 				entity.setPrecoVendaReceita(new BigDecimal(0));

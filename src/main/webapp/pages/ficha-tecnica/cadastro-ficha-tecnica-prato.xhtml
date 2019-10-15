@@ -62,7 +62,7 @@
                     		<p:selectCheckboxMenu id="tipoPrato" value="#{fichaTecnicaPratoController.listaTiposSelecionados}" label="listaTipoPrato"
                     			 panelStyle="width:250px" multiple="true"  updateLabel="true"  filter="true" filterMatchMode="startsWith" > 
                     			 <p:ajax update="growl" process="@this" />
-					            <f:selectItems value="#{fichaTecnicaPratoController.listaTipoPrato}"  var="item" itemLabel="#{item.descricao}" itemValue="#{item.id}" />
+					            <f:selectItems value="#{fichaTecnicaPratoController.listaTipoPrato}"  var="item" itemLabel="#{item.descricaoComValorInsumo}" itemValue="#{item.id}" />
 					        </p:selectCheckboxMenu>
 					        
                  			<p:outputLabel value="Ativo" for="ativo"/>
@@ -75,14 +75,14 @@
                     		<p:outputLabel value="Preço de Venda Receita" id="pvr2"  />
                     		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoVendaReceita)}" id="pvr"  />
                     		 
-                    		 <p:outputLabel value="Preço de Custo Receita" id="pcr2"  />
-                    		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoCustoReceita)}"  id="pcr"/>
-                    		 
-                    		 <p:outputLabel value="Preço de Venda Porção" id="pvc2"  />
-                    		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoVendaPorcao)}" id="pvp" />
-                    		 
-                    		 <p:outputLabel value="Preço de Custo Poção" id="pcp2"  />
+                    		<p:outputLabel value="Preço de Custo Poção" id="pcp2"  />
                     		 <p:outputLabel value="#{fichaTecnicaPratoController.formataValor(fichaTecnicaPratoController.entity.precoCustoPorcao)}"  id="pcp" />
+                    		 
+                    		 <p:outputLabel value=" "  />
+                    		 <p:outputLabel value=" "    />
+                    		 
+                    		 <p:outputLabel value="Por Tipo de Prato" id="pcpt2"  />
+                    		 <p:outputLabel value="#{fichaTecnicaPratoController.entity.percoPorTipoPrato}"  id="pcpt"  escape="false" />
                     	</p:panelGrid>	
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
@@ -94,19 +94,9 @@
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{fichaTecnicaPratoController.preparos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>
-						
-						
-							<!-- 
-							<p:outputLabel value="Qtd. Liquida" for="qtdl"/>
-							<p:inputNumber   id="qtdl" value="#{fichaTecnicaPratoController.qtdLiquida}" symbol="" decimalSeparator="," thousandSeparator="." />
-                    		
-						 	
-						 	<p:outputLabel value="Aproveitamento" for="aproveitamento"/>
-							<p:inputNumber   id="aproveitamento" value="#{fichaTecnicaPratoController.aproveitamento}" symbol=" %"  emptyValue="zero" symbolPosition="s" decimalSeparator="," thousandSeparator="." /> 
-						 	 -->
                     	 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
-                    	 	 id="btnSurname" process="@this,fichapreparo" update="growl,Stable,fichapreparo,pvr,pvp,pcr,pcp"
+                    	 	 id="btnSurname" process="@this,fichapreparo" update="growl,Stable,fichapreparo,pvr,pcp,pcpt"
                     	 	 	 actionListener="#{fichaTecnicaPratoController.adicionarPreparo()}"  
                     	 	 styleClass="btn-primary" 
                     	 	/>
@@ -125,9 +115,9 @@
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
 							 sortBy="#{item.fichaTecnicaPreparo.descricao}">
 						 	   
-								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.fichaTecnicaPreparo.descricao}"
-									filterMatchMode="contains" sortBy="#{item.fichaTecnicaPreparo.descricao}" style="width:25%">
-									<h:outputLabel value="#{item.fichaTecnicaPreparo.descricao}" />
+								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.fichaTecnicaPreparo.descricaoComInsumos}"
+									filterMatchMode="contains" sortBy="#{item.fichaTecnicaPreparo.descricaoComInsumos}" style="width:25%">
+									<h:outputLabel value="#{item.fichaTecnicaPreparo.descricaoComInsumos}" escape="false" />
 								</p:column>
 								
 								<p:column headerText="Qtd. Bruta" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeBruta}"
@@ -142,7 +132,7 @@
 								
 								
 								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:6%" >
-									 <p:commandButton process="Stable" update=":form:Stable,pvr,pvp,pcr,pcp" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
+									 <p:commandButton process="Stable" update=":form:Stable,pvr,pcp,pcpt" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
 									 	 actionListener="#{fichaTecnicaPratoController.excluirItensSelecionadas( item )}"
 									 	   />
 								</p:column>

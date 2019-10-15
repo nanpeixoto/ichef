@@ -264,5 +264,33 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	public FichaTecnicaPrato clone() throws CloneNotSupportedException {
 		return (FichaTecnicaPrato) super.clone();
 	}
+	
 
+	public String getPercoPorTipoPrato () {
+		String valoresPorTipo = "";
+		for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
+			if(valoresPorTipo!="")
+				valoresPorTipo += "<br>";
+			valoresPorTipo += fichaTipo.getTipoPrato().getDescricao()+" " +formataValor(fichaTipo.getCustoTotal());
+		}
+		return valoresPorTipo;
+	}
+	
+	public Object formataValor(Object valor) {
+		try {
+
+			if (valor != null) {
+				return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			return valor.toString();
+		} catch (Exception e) {
+			return valor;
+		}
+
+	}
 }
