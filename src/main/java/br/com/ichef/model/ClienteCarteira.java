@@ -36,12 +36,10 @@ public class ClienteCarteira extends BaseEntity {
 	@Column(name = "DATA")
 	private Date data;
 
-	@NotEmpty
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastrado;
 
 	@ManyToOne
-	@NotEmpty
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
@@ -52,6 +50,10 @@ public class ClienteCarteira extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_TIP_PRATO")
 	private TipoPrato tipoPrato;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_EMPRESA")
+	private Empresa empresa;
 
 	@Column(name = "DS_CARTEIRA")
 	private String descricao;
@@ -111,6 +113,18 @@ public class ClienteCarteira extends BaseEntity {
 	@Override
 	public Usuario getUsuarioCadastro() {
 		return usuarioCadastro;
+	}
+
+	public Date getDataCadastrado() {
+		return dataCadastrado;
+	}
+
+	public void setDataCadastrado(Date dataCadastrado) {
+		this.dataCadastrado = dataCadastrado;
+	}
+
+	public void setUsuarioCadastro(Usuario usuarioCadastro) {
+		this.usuarioCadastro = usuarioCadastro;
 	}
 
 	@Override
@@ -206,7 +220,8 @@ public class ClienteCarteira extends BaseEntity {
 		if (getDescricao() != null)
 			return getDescricao();
 		else
-			return getFichaTecnicaPrato().getDescricao() +"<br>"+getTipoPrato().getDescricao()+"<br>"+getDerivacao().getDescricao();
+			return getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "<br>"
+					+ getDerivacao().getDescricao();
 	}
 
 	public Derivacao getDerivacao() {
@@ -223,6 +238,14 @@ public class ClienteCarteira extends BaseEntity {
 
 	public void setTipoPrato(TipoPrato tipoPrato) {
 		this.tipoPrato = tipoPrato;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 }

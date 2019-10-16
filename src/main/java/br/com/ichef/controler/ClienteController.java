@@ -306,45 +306,77 @@ public class ClienteController extends BaseController {
 
 	public void adicionarCarteira() {
 
-		if (getTipoCarteira() == null)// TIPO DE PAGAMENTO PRECISA ESTAR PREENCHIDO
+		if ( getTipoCarteira() == null || getTipoCarteira().equals("") ) {// TIPO DE PAGAMENTO PRECISA ESTAR PREENCHIDO
 			facesMessager.error(getRequiredMessage("Tipo"));
+			return;
+		}
 
 		if (getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO FOR CREDITO
-			if (getDescricao() == null || getDescricao().equals(""))// descricao precisa estar preenhida
+			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Descrição"));
-			if (getData() == null)// data precisa estar preenhida
+				return;
+			}
+			if (getData() == null) {// data precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Data"));
-			if (getValorPago() == null)// valor pago precisa estar preenhida
+				return;
+			}
+			if (getValorPago() == null) {// valor pago precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Valor Pago"));
-			if (getFormaPagamento() == null)// forma de pagamento pago precisa estar preenhida
+				return;
+			}
+			if (getFormaPagamento() == null) {// forma de pagamento pago precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
+				return;
+			}
 		}
 
 		if (getTipoCarteira().equalsIgnoreCase("P")) { // SE O SELECIONADO FOR CREDITO
-			if (getPrato() == null)// descricao precisa estar preenhida
+			if (getPrato() == null) {// descricao precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Prato"));
-			if (getTipoPrato() == null)// descricao precisa estar preenhida
+				return;
+			}
+			if (getTipoPrato() == null) {// descricao precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Tipo de Prato"));
-			if (getDerivacao() == null)// descricao precisa estar preenhida
+				return;
+			}
+			if (getDerivacao() == null) {// descricao precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Derivação"));
-			if (getData() == null)// data precisa estar preenhida
+				return;
+			}
+			if (getData() == null) {// data precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Data"));
-			if (getValorDevido() == null)// valor pago precisa estar preenhida
+				return;
+			}
+			if (getValorDevido() == null) {// valor pago precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Valor Devido"));
+				return;
+			}
 		}
 
 		if (getTipoCarteira().equalsIgnoreCase("D")) { // SE O SELECIONADO FOR CREDITO
-			if (getDescricao() == null || getDescricao().equals(""))// descricao precisa estar preenhida
+			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Descrição"));
-			if (getData() == null)// data precisa estar preenhida
+				return;
+			}
+
+			if (getData() == null) {// data precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Data"));
-			if (getValorDevido() == null)// valor pago precisa estar preenhida
+				return;
+
+			}
+			if (getValorDevido() == null) {// valor pago precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Valor Devido"));
+				return;
+			}
+
 		}
 
 		if (getValorPago() != null) {// SE O VALOR PAGO FOR INFORMADO PRECISA INFORMAR A FORMA DE PAGAMENTO
-			if (getFormaPagamento() == null)// forma de pagamento pago precisa estar preenhida
+			if (getFormaPagamento() == null) {// forma de pagamento pago precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
+				return;
+			}
+
 		}
 
 		ClienteCarteira carteira = new ClienteCarteira();
@@ -355,6 +387,9 @@ public class ClienteController extends BaseController {
 		carteira.setFormaPagamento(getFormaPagamento());
 		carteira.setDerivacao(getDerivacao());
 		carteira.setTipoPrato(getTipoPrato());
+		carteira.setUsuarioCadastro(getUserLogado());
+		carteira.setDataCadastrado(new Date());
+		carteira.setEmpresa(getEmpresa());
 		carteira.setTipoCarteira(getTipoCarteira());
 		if (getValorDevido() != null)
 			carteira.setValorDevido(new BigDecimal(getValorDevido().toString()));
