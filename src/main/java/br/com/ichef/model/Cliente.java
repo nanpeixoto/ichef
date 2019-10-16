@@ -73,9 +73,12 @@ public class Cliente extends BaseEntity {
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ClienteEndereco> enderecos;
 
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ClienteCarteira> carteiras;
+
 	@Column(name = "DS_APELIDO")
 	private String apelido;
-	
+
 	@Column(name = "DS_TELEFONE")
 	private String descricaoTelefone;
 
@@ -383,15 +386,16 @@ public class Cliente extends BaseEntity {
 	public void setEnderecos(List<ClienteEndereco> enderecos) {
 		this.enderecos = enderecos;
 	}
-	
+
 	public String getAllTelefones() {
 		String listaTelefones = "";
 		for (ClienteTelefone tel : telefones) {
-			if(listaTelefones != null && !listaTelefones.equalsIgnoreCase(""))
-				listaTelefones = listaTelefones+" / ";
-			listaTelefones = listaTelefones + tel.getTelefone().replace("-", "").replace("(", "").replace(")", "").replace("+", "").replace(" ", "").trim();
+			if (listaTelefones != null && !listaTelefones.equalsIgnoreCase(""))
+				listaTelefones = listaTelefones + " / ";
+			listaTelefones = listaTelefones + tel.getTelefone().replace("-", "").replace("(", "").replace(")", "")
+					.replace("+", "").replace(" ", "").trim();
 		}
-		
+
 		return listaTelefones;
 	}
 
@@ -402,7 +406,13 @@ public class Cliente extends BaseEntity {
 	public void setDescricaoTelefone(String descricaoTelefone) {
 		this.descricaoTelefone = descricaoTelefone;
 	}
-	
-	
+
+	public List<ClienteCarteira> getCarteiras() {
+		return carteiras;
+	}
+
+	public void setCarteiras(List<ClienteCarteira> carteiras) {
+		this.carteiras = carteiras;
+	}
 
 }

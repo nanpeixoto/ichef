@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -195,20 +196,20 @@ public class TipoPrato extends BaseEntity {
 			}
 		return quantidadeTotal;
 	}
-	
+
 	public BigDecimal getCustoTotal() {
-		BigDecimal custoTotal  = new BigDecimal("0");
+		BigDecimal custoTotal = new BigDecimal("0");
 		if (insumos != null)
 			for (TipoPratoInsumo tipoPratoInsumo : insumos) {
-				custoTotal = custoTotal.add( tipoPratoInsumo.getCustoTotal() );
+				custoTotal = custoTotal.add(tipoPratoInsumo.getCustoTotal());
 			}
 		return custoTotal;
 	}
 
 	public String getDescricaoComValorInsumo() {
-		return getDescricao()+" "+formataValor(getCustoTotal());
+		return getDescricao() + " " + formataValor(getCustoTotal());
 	}
-	
+
 	public Object formataValor(Object valor) {
 		try {
 
@@ -225,6 +226,18 @@ public class TipoPrato extends BaseEntity {
 			return valor;
 		}
 
+	}
+
+	public TipoPratoPreco getPrecoAtual() {
+		TipoPratoPreco preco =  null;
+		if(getPrecos()!=null && getPrecos().size() >0 ) {
+			preco =  new TipoPratoPreco();
+			
+			Collections.sort( getPrecos() );
+			preco = getPrecos().get(0);
+			
+		}
+		return preco;
 	}
 
 }

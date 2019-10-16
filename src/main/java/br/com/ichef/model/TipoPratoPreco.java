@@ -14,13 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.regexp.recompile;
-
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "tip_prato_preco")
-public class TipoPratoPreco extends BaseEntity {
+public class TipoPratoPreco extends BaseEntity implements Comparable<TipoPratoPreco>{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -159,6 +157,11 @@ public class TipoPratoPreco extends BaseEntity {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public int compareTo(TipoPratoPreco o) {
+		return this.getDataVigencia().compareTo(o.getDataVigencia());
 	}
 
 }

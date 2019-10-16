@@ -1,5 +1,6 @@
 package br.com.ichef.controler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,22 +9,35 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.swing.text.Caret;
 
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.chart.CartesianChartModel;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Cidade;
 import br.com.ichef.model.Cliente;
+import br.com.ichef.model.ClienteCarteira;
 import br.com.ichef.model.ClienteEndereco;
 import br.com.ichef.model.ClienteTelefone;
+import br.com.ichef.model.Derivacao;
 import br.com.ichef.model.Empresa;
+import br.com.ichef.model.FichaTecnicaPrato;
+import br.com.ichef.model.FichaTecnicaPratoTipo;
+import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Localidade;
+import br.com.ichef.model.TipoPrato;
 import br.com.ichef.service.CidadeService;
 import br.com.ichef.service.ClienteEnderecoService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.ClienteTelefoneService;
+import br.com.ichef.service.DerivacaoService;
+import br.com.ichef.service.EmpresaService;
+import br.com.ichef.service.FichaTecnicaPratoService;
+import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.LocalidadeService;
+import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
@@ -39,6 +53,9 @@ public class ClienteController extends BaseController {
 	private CidadeService cidadeService;
 
 	@Inject
+	private FormaPagamentoService formaPagamentoService;
+
+	@Inject
 	private ClienteEnderecoService clienteEnderecoService;
 
 	@Inject
@@ -46,6 +63,18 @@ public class ClienteController extends BaseController {
 
 	@Inject
 	private LocalidadeService localidadeService;
+
+	@Inject
+	private FichaTecnicaPratoService fichaTecnicaPratoService;
+
+	@Inject
+	private EmpresaService empresaService;
+
+	@Inject
+	private DerivacaoService derivacaoService;
+
+	@Inject
+	private TipoPratoService tipoPratoService;
 
 	private Cliente entity;
 
@@ -65,6 +94,28 @@ public class ClienteController extends BaseController {
 	private Localidade localidade;
 	private String endereco;
 	private String telefone;
+
+	// carteira
+	private String tipoCarteira;
+	private Date data;
+	private Double valorDevido;
+	private Double valorPago;
+	private String descricao;
+
+	private List<FormaPagamento> listaFormasPagamento = new ArrayList<>();
+	private FormaPagamento formaPagamento;
+
+	private List<FichaTecnicaPrato> listaPratos = new ArrayList<>();
+	private FichaTecnicaPrato prato;
+
+	private List<Derivacao> listaDerivacoes = new ArrayList<>();
+	private Derivacao derivacao;
+
+	private List<TipoPrato> listaTiposPrato = new ArrayList<>();
+	private TipoPrato tipoPrato;
+
+	private List<Empresa> listaEmpresas = new ArrayList<>();
+	private Empresa empresa;
 
 	public void inicializar() {
 		if (id != null) {
@@ -119,9 +170,26 @@ public class ClienteController extends BaseController {
 		return null;
 	}
 
+	public void obterTiposPrato() {
+		listaTiposPrato = new ArrayList<>();
+		if (getPrato().getFichaTecnicaPratoTipos() != null) {
+			for (FichaTecnicaPratoTipo fichaTecnicaPratoTipo : getPrato().getFichaTecnicaPratoTipos()) {
+				listaTiposPrato.add(fichaTecnicaPratoTipo.getTipoPrato());
+			}
+		}
+		setTipoPrato(null);
+		setValorDevido(null);
+	}
+
 	private void obterListas() {
 		cidades = cidadeService.listAll(true);
 		localidades = localidadeService.listAll(true);
+		listaFormasPagamento = formaPagamentoService.listAll(true);
+		listaPratos = fichaTecnicaPratoService.listAll(true);
+		listaEmpresas = empresaService.listAll(true);
+		listaDerivacoes = derivacaoService.listAll(true);
+		setEmpresa(userLogado.getEmpresaLogada());
+		// listaTiposPrato = tipoPratoService.listAll(true);
 	}
 
 	public void excluirSelecionados() {
@@ -173,6 +241,13 @@ public class ClienteController extends BaseController {
 
 	}
 
+	public void obterValorPrato() {
+		if (getTipoPrato() != null)
+			setValorDevido(getTipoPrato().getPrecoAtual().getPreco());
+		else
+			setValorDevido(null);
+	}
+
 	public String excluir() {
 		service.excluir(entity);
 		return "lista-cliente.xhtml?faces-redirect=true";
@@ -180,38 +255,37 @@ public class ClienteController extends BaseController {
 
 	public void adicionarTelefone() {
 		if (!getTelefone().equals("5571 ")) {
-			//if (existeTelefone(getTelefone())) {
-				if (!existeTelefonePrincipal(null)) {
-					ClienteTelefone telefone = new ClienteTelefone();
-					telefone.setDataCadastro(new Date());
-					if (stsTelefonePrincipal)
-						telefone.setPrincipal("S");
-					else
-						telefone.setPrincipal("N");
-					telefone.setTelefone(
-							getTelefone().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""));
-					telefone.setUsuarioCadastro(getUserLogado());
-					telefone.setCliente(getEntity());
-					telefone.setUsuarioCadastro(getUserLogado());
-					telefone.setDataCadastro(new Date());
+			// if (existeTelefone(getTelefone())) {
+			if (!existeTelefonePrincipal(null)) {
+				ClienteTelefone telefone = new ClienteTelefone();
+				telefone.setDataCadastro(new Date());
+				if (stsTelefonePrincipal)
+					telefone.setPrincipal("S");
+				else
+					telefone.setPrincipal("N");
+				telefone.setTelefone(getTelefone().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""));
+				telefone.setUsuarioCadastro(getUserLogado());
+				telefone.setCliente(getEntity());
+				telefone.setUsuarioCadastro(getUserLogado());
+				telefone.setDataCadastro(new Date());
 
-					if (getEntity().getTelefones() == null)
-						getEntity().setTelefones(new ArrayList<ClienteTelefone>());
-					getEntity().getTelefones().add(telefone);
+				if (getEntity().getTelefones() == null)
+					getEntity().setTelefones(new ArrayList<ClienteTelefone>());
+				getEntity().getTelefones().add(telefone);
 
-					setStsTelefonePrincipal(false);
-					setTelefone(null);
-				} else {
-					facesMessager.error("Já existe um telefone principal para esse cliente");
-				}
-			//} else {
-			//	facesMessager.error("Telefone já adicionado para essa cliente");
-			//}
+				setStsTelefonePrincipal(false);
+				setTelefone(null);
+			} else {
+				facesMessager.error("Já existe um telefone principal para esse cliente");
+			}
+			// } else {
+			// facesMessager.error("Telefone já adicionado para essa cliente");
+			// }
 		}
 	}
 
 	private boolean existeTelefone(String telefone2) {
-		if(getEntity().getTelefones()!=null ) {
+		if (getEntity().getTelefones() != null) {
 			for (ClienteTelefone tel : getEntity().getTelefones()) {
 				if (tel.getTelefone().equals(telefone2))
 					return true;
@@ -228,6 +302,114 @@ public class ClienteController extends BaseController {
 		}
 
 		return false;
+	}
+
+	public void adicionarCarteira() {
+
+		if (getTipoCarteira() == null)// TIPO DE PAGAMENTO PRECISA ESTAR PREENCHIDO
+			facesMessager.error(getRequiredMessage("Tipo"));
+
+		if (getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO FOR CREDITO
+			if (getDescricao() == null || getDescricao().equals(""))// descricao precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Descrição"));
+			if (getData() == null)// data precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Data"));
+			if (getValorPago() == null)// valor pago precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Valor Pago"));
+			if (getFormaPagamento() == null)// forma de pagamento pago precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
+		}
+
+		if (getTipoCarteira().equalsIgnoreCase("P")) { // SE O SELECIONADO FOR CREDITO
+			if (getPrato() == null)// descricao precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Prato"));
+			if (getTipoPrato() == null)// descricao precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Tipo de Prato"));
+			if (getDerivacao() == null)// descricao precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Derivação"));
+			if (getData() == null)// data precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Data"));
+			if (getValorDevido() == null)// valor pago precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Valor Devido"));
+		}
+
+		if (getTipoCarteira().equalsIgnoreCase("D")) { // SE O SELECIONADO FOR CREDITO
+			if (getDescricao() == null || getDescricao().equals(""))// descricao precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Descrição"));
+			if (getData() == null)// data precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Data"));
+			if (getValorDevido() == null)// valor pago precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Valor Devido"));
+		}
+
+		if (getValorPago() != null) {// SE O VALOR PAGO FOR INFORMADO PRECISA INFORMAR A FORMA DE PAGAMENTO
+			if (getFormaPagamento() == null)// forma de pagamento pago precisa estar preenhida
+				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
+		}
+
+		ClienteCarteira carteira = new ClienteCarteira();
+		carteira.setCliente(getEntity());
+		carteira.setData(getData());
+		carteira.setDescricao(getDescricao());
+		carteira.setFichaTecnicaPrato(getPrato());
+		carteira.setFormaPagamento(getFormaPagamento());
+		carteira.setDerivacao(getDerivacao());
+		carteira.setTipoPrato(getTipoPrato());
+		carteira.setTipoCarteira(getTipoCarteira());
+		if (getValorDevido() != null)
+			carteira.setValorDevido(new BigDecimal(getValorDevido().toString()));
+		if (getValorPago() != null)
+			carteira.setValorPago(new BigDecimal(getValorPago().toString()));
+
+		if (getEntity().getCarteiras() == null) {
+			getEntity().setCarteiras(new ArrayList<>());
+		}
+		getEntity().getCarteiras().add(carteira);
+
+		limparCarteira();
+
+	}
+
+	public void limparCarteira() {
+		setData(null);
+		setDescricao(null);
+		setPrato(null);
+		setFormaPagamento(null);
+		setTipoCarteira(null);
+		setValorDevido(null);
+		setValorPago(null);
+		setDerivacao(null);
+		setTipoPrato(null);
+	}
+
+	public boolean getExibirValorCredito() {
+		if (getTipoCarteira() == null)
+			return false;
+		if (getTipoCarteira().equalsIgnoreCase("C") || getTipoCarteira().equalsIgnoreCase("P"))
+			return true;
+		if (getTipoCarteira().equalsIgnoreCase("D"))
+			return false;
+		else
+			return false;
+	}
+
+	public boolean getExibirFormaPagamento() {
+		if (getValorPago() == null)
+			return false;
+		if (getValorPago() != null)
+			return true;
+
+		return false;
+	}
+
+	public Boolean getExibirPrato() {
+		if (getTipoCarteira() == null)
+			return false;
+		if (getTipoCarteira().equalsIgnoreCase("P"))
+			return true;
+		else
+			return false;
+
 	}
 
 	public void adicionarEndereco() {
@@ -444,6 +626,126 @@ public class ClienteController extends BaseController {
 
 	public void setLocalidade(Localidade localidade) {
 		this.localidade = localidade;
+	}
+
+	public String getTipoCarteira() {
+		return tipoCarteira;
+	}
+
+	public void setTipoCarteira(String tipoCarteira) {
+		this.tipoCarteira = tipoCarteira;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Double getValorDevido() {
+		return valorDevido;
+	}
+
+	public void setValorDevido(Double valorDevido) {
+		this.valorDevido = valorDevido;
+	}
+
+	public Double getValorPago() {
+		return valorPago;
+	}
+
+	public void setValorPago(Double valorPago) {
+		this.valorPago = valorPago;
+	}
+
+	public FormaPagamento getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	public void setFormaPagamento(FormaPagamento formaPagamento) {
+		this.formaPagamento = formaPagamento;
+	}
+
+	public List<FormaPagamento> getListaFormasPagamento() {
+		return listaFormasPagamento;
+	}
+
+	public void setListaFormasPagamento(List<FormaPagamento> listaFormasPagamento) {
+		this.listaFormasPagamento = listaFormasPagamento;
+	}
+
+	public FichaTecnicaPrato getPrato() {
+		return prato;
+	}
+
+	public void setPrato(FichaTecnicaPrato prato) {
+		this.prato = prato;
+	}
+
+	public List<FichaTecnicaPrato> getListaPratos() {
+		return listaPratos;
+	}
+
+	public void setListaPratos(List<FichaTecnicaPrato> listaPratos) {
+		this.listaPratos = listaPratos;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public List<Derivacao> getListaDerivacoes() {
+		return listaDerivacoes;
+	}
+
+	public void setListaDerivacoes(List<Derivacao> listaDerivacoes) {
+		this.listaDerivacoes = listaDerivacoes;
+	}
+
+	public Derivacao getDerivacao() {
+		return derivacao;
+	}
+
+	public void setDerivacao(Derivacao derivacao) {
+		this.derivacao = derivacao;
+	}
+
+	public List<TipoPrato> getListaTiposPrato() {
+		return listaTiposPrato;
+	}
+
+	public void setListaTiposPrato(List<TipoPrato> listaTiposPrato) {
+		this.listaTiposPrato = listaTiposPrato;
+	}
+
+	public TipoPrato getTipoPrato() {
+		return tipoPrato;
+	}
+
+	public void setTipoPrato(TipoPrato tipoPrato) {
+		this.tipoPrato = tipoPrato;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public List<Empresa> getListaEmpresas() {
+		return listaEmpresas;
+	}
+
+	public void setListaEmpresas(List<Empresa> listaEmpresas) {
+		this.listaEmpresas = listaEmpresas;
 	}
 
 }

@@ -251,7 +251,166 @@
 		                </div>
 		            </div>
 		    	</p:tab>
-		    	 <p:tab title="Carteira"></p:tab>
+		    	 <p:tab title="Carteira" id="tabCarteira">
+		    	    <p:focus context="capaCarteira"/>
+		
+					
+		            <div class="box box-primary">
+		                <div class="box-header with-border">
+		                    <div id="main-buttons" class="hidden-sm hidden-xs">
+		                        <p:commandButton value="Salvar" update="@form"
+		                                         icon="fa fa-check" styleClass="btn-primary" action="#{clienteController.Salvar()}"/>
+		                        <p:spacer width="5"/>
+		
+		                       <!-- <p:commandButton value="Excluir" process="@this"
+		                                         icon="fa fa-trash"
+		                                         styleClass="btn-danger" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}">
+		                        </p:commandButton> --> 
+		                        <p:spacer width="5"/>
+		                        <p:commandButton value="Voltar" immediate="true"
+		                                         action="lista-cliente?faces-redirect=true"
+		                                         process="@this"
+		                                         icon="fa fa-close"/>
+		                                         
+		                    </div>
+		                    
+		                    <p:splitButton value="Salvar" update="@form"
+		                                   icon="fa fa-check"
+		                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{clienteController.Salvar()}">
+		                        <p:menuitem value="Excluir"
+		                                    process="@this"
+		                                    icon="fa fa-trash" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}"/>
+		                        <p:separator/>
+		                        <p:menuitem value="Voltar" action="lista-cliente?faces-redirect=true" process="@this"
+		                                    icon="fa fa-close"/>
+		                    </p:splitButton>
+		
+		
+		                    <p:separator/>
+		
+		                    <div class="ui-fluid"  >
+		                    	<p:panelGrid id="capaCarteira" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
+		                    		<p:outputLabel value="Empresa" for="empresa"/>
+		                    		 <p:selectOneMenu id="empresa" value="#{clienteController.empresa}"  converter= "omnifaces.SelectItemsConverter" disabled="true">
+							            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							            <f:selectItems value="#{clienteController.listaEmpresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
+							        </p:selectOneMenu>
+					        
+									<p:outputLabel value="Tipo" for="selectTipo"/>
+									<p:selectOneMenu id="selectTipo" value="#{clienteController.tipoCarteira}" style="width:487px;">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+								        <f:selectItem itemLabel="Crédito" itemValue="C" />
+								        <f:selectItem itemLabel="Débito" itemValue="D" />
+								        <f:selectItem itemLabel="Pedido" itemValue="P" />
+								        <p:ajax event="change" update="selectPrato, descricao,valorDevido,valorPago,selectderivacao,selectTipoPrato" />
+								   	</p:selectOneMenu>	
+								</p:panelGrid>
+								<p:panelGrid id="capaCarteira2" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
+									<p:outputLabel value="Prato" for="selectPrato" id="outselectPrato"  />
+	                    			<p:selectOneMenu id="selectPrato" value="#{clienteController.prato}" filter="true"  filterMatchMode="contains" 
+	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  
+	                    				disabled="#{!clienteController.exibirPrato}">
+	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+						            	<f:selectItems value="#{clienteController.listaPratos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+						            	<p:ajax event="change" update="selectTipoPrato"  listener="#{clienteController.obterTiposPrato}"/>
+						       		</p:selectOneMenu>
+						       		
+						       		<p:outputLabel value="Tipo de Prato" for="selectTipoPrato"  />
+	                    			<p:selectOneMenu id="selectTipoPrato" value="#{clienteController.tipoPrato}" filter="true"  filterMatchMode="contains" 
+	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  
+	                    				disabled="#{!clienteController.exibirPrato}">
+	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+						            	<f:selectItems value="#{clienteController.listaTiposPrato}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+						            	<p:ajax event="change" update="valorDevido"  listener="#{clienteController.obterValorPrato}"/>
+						       		</p:selectOneMenu>
+						       		
+						       		<p:outputLabel value="Derivação" for="selectderivacao"  />
+	                    			<p:selectOneMenu id="selectderivacao" value="#{clienteController.derivacao}" filter="true"  filterMatchMode="contains" 
+	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  
+	                    				disabled="#{!clienteController.exibirPrato}">
+	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+						            	<f:selectItems value="#{clienteController.listaDerivacoes}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+						       		</p:selectOneMenu>
+								
+								   	<p:outputLabel value="Descrição"  for="descricao" id="outdescricao"   />
+			                    	<p:inputText value="#{clienteController.descricao}" id="descricao" styleClass="letras-maiusculas"  
+			                    		 disabled="#{clienteController.exibirPrato}"/>
+								</p:panelGrid>	
+								<p:panelGrid id="capaCarteira3" columns="4" layout="grid" columnClasses="ui-g-6 ui-md-1">
+									<p:outputLabel value="Data" for="data"/>
+						 			<p:calendar id="data" value="#{clienteController.data}"  pattern="dd/MM/yyyy" size="10" ></p:calendar>
+						 			
+						 			<p:outputLabel value="Valor Devido" for="valorDevido"/>
+									<p:inputNumber   id="valorDevido" value="#{clienteController.valorDevido}" symbol="R$ " decimalSeparator="," thousandSeparator="."
+									 	 disabled="#{clienteController.exibirValorCredito}"/> 
+									
+									<p:outputLabel value="Valor Pago" for="valorPago"/>
+									<p:inputNumber   id="valorPago" value="#{clienteController.valorPago}" symbol="R$ " decimalSeparator="," thousandSeparator="." 
+										disabled="#{!clienteController.exibirValorCredito}">
+										<p:ajax event="blur" update="selectFormaPagamento" />
+									</p:inputNumber>
+									
+									<p:outputLabel value="Forma de Pagamento" for="selectFormaPagamento"/>
+                    					<p:selectOneMenu id="selectFormaPagamento" value="#{clienteController.formaPagamento}" filter="true"  filterMatchMode="contains" 
+                    					converter= "omnifaces.SelectItemsConverter" disabled="#{!clienteController.exibirFormaPagamento}">
+                    					<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            		<f:selectItems value="#{clienteController.listaFormasPagamento}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					       			</p:selectOneMenu>
+								</p:panelGrid>	
+								<div align="right">
+									<p:panelGrid >
+										<p:commandButton  value="Adicionar" icon="fa fa-plus" id="btnAdicioanr" styleClass="btn-primary" style="width: 150px;"
+											process="@this,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,selectderivacao,selectTipoPrato" 
+											update="selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,growl,selectderivacao,tableCarteira,selectTipoPrato"
+										 	action="#{clienteController.adicionarCarteira}"/>
+						       			<!-- <p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
+			                    	 	process="@this,enderecoPrincipal,endereco,localidade" 
+			                    	 	styleClass="btn-primary" update="growl,dtendereco,enderecoPrincipal,endereco,localidade"
+			                    	 	 action="#{clienteController.adicionarEndereco}"/>
+			            				-->
+									</p:panelGrid>
+								</div>
+								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+								<p:panelGrid  columns="1"  layout="grid"> 	
+									<p:dataTable id="tableCarteira" widgetVar="itens" rows="10" 
+											paginator="false" value="#{clienteController.entity.carteiras}" var="item"
+											rowKey="#{item.id}" reflow="true"
+											paginatorPosition="bottom" editable="true"
+											mptyMessage="Nenhum item encontrado" 
+											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+										
+										<p:column headerText="Item" filterBy="#{item.descricaoOuPrato}" 
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricaoOuPrato}">
+							 				<h:outputLabel value="#{item.descricaoOuPrato}" escape="false" />
+										</p:column>
+										
+										<p:column headerText="Data" filterBy="#{clienteController.formataData(item.data)}"  
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{clienteController.formataData(item.data)}">
+							 				<h:outputLabel value="#{clienteController.formataData(item.data)}" />
+										</p:column>
+										
+										<p:column headerText="Vlr Devido" filterBy="#{item.valorDevido}"  
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.valorDevido}">
+							 				<h:outputLabel value="#{clienteController.formataValor(item.valorDevido)}" />
+										</p:column>
+										
+										<p:column headerText="Vlr Pago" filterBy="#{item.valorPago}"  
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.valorPago}">
+							 				<h:outputLabel value="#{clienteController.formataValor(item.valorPago)}" />
+										</p:column>
+										
+										<p:column headerText="Forma Pag." filterBy="#{item.formaPagamento.descricao}" 
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.formaPagamento.descricao}">
+							 				<h:outputLabel value="#{item.formaPagamento.descricao}" />
+										</p:column>
+																	
+									</p:dataTable>
+								</p:panelGrid>
+							</div>
+						</div>
+					</div>
+		    	 </p:tab>
 	    	</p:tabView>
         </h:form>
 

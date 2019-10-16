@@ -32,8 +32,10 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	protected Usuario userLogado = (Usuario) JSFUtil.getSessionMapValue("usuario");
 
 	protected Configuracao configuracao = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
-	
+
 	SimpleDateFormat formatarDataHora = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+	SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
 
 	public String getMaskCpf(String cpf) {
 		cpf = cpf.replace(".", "");
@@ -100,7 +102,7 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	}
 
 	public String getRequiredMessage(String label) {
-		return "O campo " + label + " é de preenchimento obrigatório.";
+		return "O campo " + label + " é obrigatório.";
 	}
 
 	public String getImagem(String imagem) {
@@ -133,6 +135,18 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	}
 
+	public Object formataData(Object valor) {
+		try {
+
+			return formatarData.format(valor);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+
+	}
+
 	protected HttpServletResponse getResponse() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		facesContext.responseComplete();
@@ -154,23 +168,25 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	public void reset() {
 		RequestContext.getCurrentInstance().reset(DIALOG_CADASTRAR);
 	}
-	
-	public String getUsuarioCadastro (BaseEntity entity) {
-		
-		if(entity!=null && entity.getUsuarioCadastro()!=null && entity.getDataCadastro()!= null) {
-			return "por "+ entity.getUsuarioCadastro().getNomeAbreviado() + " em: "+formatarDataHora.format(entity.getDataCadastro());
+
+	public String getUsuarioCadastro(BaseEntity entity) {
+
+		if (entity != null && entity.getUsuarioCadastro() != null && entity.getDataCadastro() != null) {
+			return "por " + entity.getUsuarioCadastro().getNomeAbreviado() + " em: "
+					+ formatarDataHora.format(entity.getDataCadastro());
 		}
-		
-		return"";
+
+		return "";
 	}
-	
-	public String getUsuarioAlteracao (BaseEntity entity) {
-		
-		if(entity!=null && entity.getUsuarioAlteracao()!=null && entity.getDataAlteracao()!= null) {
-			return "por "+ entity.getUsuarioAlteracao().getNomeAbreviado() + " em: "+formatarDataHora.format(entity.getDataAlteracao());
+
+	public String getUsuarioAlteracao(BaseEntity entity) {
+
+		if (entity != null && entity.getUsuarioAlteracao() != null && entity.getDataAlteracao() != null) {
+			return "por " + entity.getUsuarioAlteracao().getNomeAbreviado() + " em: "
+					+ formatarDataHora.format(entity.getDataAlteracao());
 		}
-		
-		return"";
+
+		return "";
 	}
 
 	public Configuracao getConfiguracao() {

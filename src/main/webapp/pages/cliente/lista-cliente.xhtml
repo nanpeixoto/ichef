@@ -75,17 +75,25 @@
 								<h:outputText value="Pesquisar: " escape="false" />
 
 								<p:inputText id="globalFilter" onkeyup="PF('itens').filter(); hideBar();"
-									style="width:150px;" maxlength="255" 
-									styleClass="letras-maiusculas semClear">
-
+									style="width:150px;"  >
+									
 								</p:inputText>
+								
 							</p:outputPanel>
 						</f:facet>
 
 						<p:column selectionMode="multiple" width="5%" styleClass="align-center" />
 						
 						<p:column headerText="Cód." filterBy="#{item.id}" width="8%"
-							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.id}">
+							filterMatchMode="exact" filterStyle="display:none; visibility:hidden;" sortBy="#{item.id}">
+							<f:facet name="filter">
+								<p:inputText id="globalFilter1" onkeyup="PF('itens').filter(); hideBar();"
+									style="width:65px;" maxlength="255" 
+									styleClass="letras-maiusculas semClear">
+									<p:tooltip id="toolTipFade" for="globalFilter1" value="Digite o Código do Cliente para pesquisar" position="top"/>
+								</p:inputText>
+								
+				            </f:facet>
 							<h:link value="#{item.id}"
 								outcome="cadastro-cliente.xhtml">
 								<f:param name="id" value="#{item.id}" />

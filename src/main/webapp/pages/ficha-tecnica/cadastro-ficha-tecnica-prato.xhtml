@@ -115,9 +115,9 @@
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
 							 sortBy="#{item.fichaTecnicaPreparo.descricao}">
 						 	   
-								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.fichaTecnicaPreparo.descricaoComInsumos}"
-									filterMatchMode="contains" sortBy="#{item.fichaTecnicaPreparo.descricaoComInsumos}" style="width:25%">
-									<h:outputLabel value="#{item.fichaTecnicaPreparo.descricaoComInsumos}" escape="false" />
+								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.fichaTecnicaPreparo.descricao}"
+									filterMatchMode="contains" sortBy="#{item.fichaTecnicaPreparo.descricao}" style="width:25%">
+									<h:outputLabel value="#{item.fichaTecnicaPreparo.descricao}" escape="false" />
 								</p:column>
 								
 								<p:column headerText="Qtd. Bruta" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeBruta}"

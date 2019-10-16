@@ -162,13 +162,14 @@ public class Localidade extends BaseEntity {
 	}
 
 	public String getDescricao() {
-		return descricao;
+		if (descricao == null)
+			return descricao;
+		return descricao.toUpperCase();
 	}
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao.toUpperCase();
 	}
-
 	public String getAtivo() {
 		return ativo;
 	}

@@ -107,7 +107,11 @@
 							<p:ajax event="blur"
 								      listener="#{loginController.buscarEmpresa()}"
 								      process="@this" partialSubmit="true"
-								      update="empresa" />                               
+								      update="empresa" />
+								      <p:ajax event="change"
+								      listener="#{loginController.buscarEmpresa()}"
+								      process="@this" partialSubmit="true"
+								      update="empresa" />                                 
 						</p:inputText>
                         <i class="fa fa-user form-control-feedback"></i>
                     </div>
