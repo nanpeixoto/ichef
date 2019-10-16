@@ -264,31 +264,34 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	public FichaTecnicaPrato clone() throws CloneNotSupportedException {
 		return (FichaTecnicaPrato) super.clone();
 	}
-	
+
 	public String getDescricaoComPreparo() {
-		return getDescricao()+"\r("+getDescricaoPreparo()+")";
+		return getDescricao() + "\r(" + getDescricaoPreparo() + ")";
 	}
-	
+
 	public String getDescricaoPreparo() {
 		String insumos = "";
 		for (FichaTecnicaPratoPreparo preparo : getFichaTecnicaPratoPreparos()) {
-			if(insumos != "")
-				insumos +="/ "; 
+			if (insumos != "")
+				insumos += "/ ";
 			insumos += preparo.getFichaTecnicaPreparo().getDescricao();
 		}
 		return insumos;
 	}
 
-	public String getPercoPorTipoPrato () {
+	public String getPercoPorTipoPrato() {
 		String valoresPorTipo = "";
-		for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
-			if(valoresPorTipo!="")
-				valoresPorTipo += "<br>";
-			valoresPorTipo += fichaTipo.getTipoPrato().getDescricao()+" " +formataValor(fichaTipo.getCustoTotal());
+		if (fichaTecnicaPratoTipos != null) {
+			for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
+				if (valoresPorTipo != "")
+					valoresPorTipo += "<br>";
+				valoresPorTipo += fichaTipo.getTipoPrato().getDescricao() + " "
+						+ formataValor(fichaTipo.getCustoTotal());
+			}
 		}
 		return valoresPorTipo;
 	}
-	
+
 	public Object formataValor(Object valor) {
 		try {
 

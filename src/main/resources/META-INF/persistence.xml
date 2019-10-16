@@ -9,7 +9,7 @@
 
 
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ichef_prd?useSSL=true" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ichef?useSSL=true" />
 			<property name="javax.persistence.jdbc.user" value="ichef" />
 			<property name="javax.persistence.jdbc.password" value="ichef" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
