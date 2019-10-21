@@ -414,5 +414,9 @@ public class Cliente extends BaseEntity {
 	public void setCarteiras(List<ClienteCarteira> carteiras) {
 		this.carteiras = carteiras;
 	}
+	
+	public String getNomeCompleto() {
+		return "C"+getId()+ " - "+getNome()+ " - "+ getDescricaoTelefone(); 
+	}
 
 }

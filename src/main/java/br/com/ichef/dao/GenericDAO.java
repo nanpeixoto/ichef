@@ -64,6 +64,11 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	protected T updateImpl(T entity) throws Exception {
 
 		try {
+			
+			if( !manager.isOpen() ) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				manager  = producer.createEntityManager();
+			}
 			manager.getTransaction().begin();
 			manager.merge(entity);
 			manager.flush();

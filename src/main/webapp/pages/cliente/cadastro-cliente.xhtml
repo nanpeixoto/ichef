@@ -113,51 +113,53 @@
 		                    	 	process="@this,numero,telprincipal" 
 		                    	 	styleClass="btn-primary" update="growl, dttel, telprincipal, numero" action="#{clienteController.adicionarTelefone}"/>
 		                    	</p:panelGrid>
-		                    	<p:panelGrid  columns="1"  layout="grid"> 	
-		                    	 	<p:dataTable id="dttel" widgetVar="itens" rows="10" 
-										paginator="false" value="#{clienteController.entity.telefones}" var="item"
-										rowKey="#{item.id}" reflow="true"
+		                    	<p:panel > 	
+		                    	 	<p:dataTable id="dttel" widgetVar="itensTelefone" rows="10" 
+										paginator="false" value="#{clienteController.entity.telefones}" var="itemTelefone"
+										rowKey="#{itemTelefone.id}" reflow="true"  
 										paginatorPosition="bottom" editable="true"
 										mptyMessage="Nenhum item encontrado" 
 										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 										currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
 										
-										 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaTelefone}" update="dttel" />
-		       							 <p:ajax event="rowEditCancel"  update="dttel" />
-		 
-										<p:column headerText="Principal" width="10%" >
+										<p:ajax event="rowEdit" listener="#{clienteController.editarLinhaTelefone}"  />
+        								<p:ajax event="rowEditCancel"  />
+										
+										<p:column headerText="Principal"  style="width:10%">
 											<p:cellEditor>
-												<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
+												<f:facet name="output"><h:outputLabel value="#{itemTelefone.principal}" /></f:facet>
 												<f:facet name="input">
-													<p:selectBooleanButton id="telprincipal"  value="#{item.telefonePrincipal}" onLabel="Sim" offLabel="Não" 
+													<p:selectBooleanButton id="telprincipal"  value="#{itemTelefone.telefonePrincipal}" onLabel="Sim" offLabel="Não" 
 								  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
 								  				</f:facet>
 		          							</p:cellEditor>
 										</p:column>
 										
-										<p:column headerText="Telefone" width="50%" >
+										<p:column headerText="Telefone" style="width:50%">
 										 	<p:cellEditor>
-												<f:facet name="output"><h:outputLabel value="#{item.telefone}" /></f:facet>
+												<f:facet name="output"><h:outputLabel value="#{itemTelefone.telefone}" /></f:facet>
 												<f:facet name="input">
-													<p:inputMask value="#{item.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
+													<p:inputMask value="#{itemTelefone.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"/>
 								  				</f:facet>
 		          							</p:cellEditor>
 											
 										</p:column>
 										
-										
-										
-										<p:column style="width:35px">
+										<p:column style="width:10px">
 								            <p:rowEditor />
 								        </p:column>
-								        
-								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:4%" >
-											 <p:commandButton process="dttel" update="dttel" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
-											 	 actionListener="#{clienteController.excluirTelefonesSelecionados( item )}"
-											 	 style="    width: 32px;"/>
+								
+										
+								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:10%" >
+											 <div align="center">
+												 <p:commandButton process="dttel" update="dttel" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
+												 	 actionListener="#{clienteController.excluirTelefonesSelecionados( itemTelefone )}"
+												 	 style="    width: 32px;"/>
+											</div>
 										</p:column>
+										
 									</p:dataTable>						
-								</p:panelGrid>
+								</p:panel>
 								
 								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 								
@@ -181,23 +183,23 @@
 		                    	 	styleClass="btn-primary" update="growl,dtendereco,enderecoPrincipal,endereco,localidade" action="#{clienteController.adicionarEndereco}"/>
 		                    	</p:panelGrid>
 		                    	
-		                    	<p:panelGrid  columns="1"  layout="grid"> 	
+		                    	<p:panel > 	
 		                    	 	<p:dataTable id="dtendereco" widgetVar="itens" rows="10" 
-										paginator="false" value="#{clienteController.entity.enderecos}" var="item"
-										rowKey="#{item.id}" reflow="true"
+										paginator="false" value="#{clienteController.entity.enderecos}" var="itemEndreco"
+										rowKey="#{itemEndreco.id}" reflow="true"
 										paginatorPosition="bottom" editable="true"
 										mptyMessage="Nenhum item encontrado" 
 										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 										currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
-										
-										 <p:ajax event="rowEdit" listener="#{clienteController.editarLinhaEndereco}" update="dtendereco" />
-		       							 <p:ajax event="rowEditCancel"  update="dtendereco" />
+		       							 
+		       							<p:ajax event="rowEdit" listener="#{clienteController.editarLinhaEndereco}"  />
+        								<p:ajax event="rowEditCancel"  />
 		 
 										<p:column headerText="Principal" width="6%" >
 											<p:cellEditor>
-												<f:facet name="output"><h:outputLabel value="#{item.principal}" /></f:facet>
+												<f:facet name="output"><h:outputLabel value="#{itemEndreco.principal}" /></f:facet>
 												<f:facet name="input">
-													<p:selectBooleanButton id="dtendprincipal"  value="#{item.endPrincipal}" onLabel="Sim" offLabel="Não" 
+													<p:selectBooleanButton id="dtendprincipal"  value="#{itemEndreco.endPrincipal}" onLabel="Sim" offLabel="Não" 
 								  						onIcon="fa fa-check" offIcon="fa fa-times" style="width:100%" />
 								  				</f:facet>
 		          							</p:cellEditor>
@@ -205,9 +207,9 @@
 										
 										<p:column headerText="Endereço" width="30%" >
 										 	<p:cellEditor>
-												<f:facet name="output"><h:outputLabel value="#{item.endereco}" /></f:facet>
+												<f:facet name="output"><h:outputLabel value="#{itemEndreco.endereco}" /></f:facet>
 												<f:facet name="input">
-													<p:inputText value="#{item.endereco}" id="dtendereco" styleClass="letras-maiusculas" />
+													<p:inputText value="#{itemEndreco.endereco}" id="dtendereco" styleClass="letras-maiusculas" />
 								  				</f:facet>
 		          							</p:cellEditor>
 											
@@ -215,9 +217,9 @@
 										
 										<p:column headerText="Localidade" width="30%" >
 										 	<p:cellEditor>
-												<f:facet name="output"><h:outputLabel value="#{item.localidade.descricao}" /></f:facet>
+												<f:facet name="output"><h:outputLabel value="#{itemEndreco.localidade.descricao}" /></f:facet>
 												<f:facet name="input">
-													<p:selectOneMenu id="localidade" value="#{item.localidade}"  filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
+													<p:selectOneMenu id="localidade" value="#{itemEndreco.localidade}"  filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
 						                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 											            <f:selectItems value="#{clienteController.localidades}" var="loc" itemLabel="#{loc.descricao}" itemValue="#{loc}" />
 											        </p:selectOneMenu>
@@ -232,11 +234,11 @@
 								        
 								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:4%" >
 											 <p:commandButton process="dtendereco" update="dtendereco" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
-											 	 actionListener="#{clienteController.excluirLocalidadesSelecionadas( item )}"
+											 	 actionListener="#{clienteController.excluirLocalidadesSelecionadas( itemEndreco )}"
 											 	 style="    width: 32px;"/>
 										</p:column>
 									</p:dataTable>						
-								</p:panelGrid>
+								</p:panel>
 									
 								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 								
@@ -363,7 +365,8 @@
 											process="@this,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,selectderivacao,selectTipoPrato" 
 											update="selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,growl,selectderivacao,tableCarteira,selectTipoPrato"
 										 	action="#{clienteController.adicionarCarteira}"/>
-						       			<!-- <p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
+						       			<!-- 
+						       			<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
 			                    	 	process="@this,enderecoPrincipal,endereco,localidade" 
 			                    	 	styleClass="btn-primary" update="growl,dtendereco,enderecoPrincipal,endereco,localidade"
 			                    	 	 action="#{clienteController.adicionarEndereco}"/>
@@ -371,42 +374,57 @@
 									</p:panelGrid>
 								</div>
 								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
-								<p:panelGrid  columns="1"  layout="grid"> 	
-									<p:dataTable id="tableCarteira" widgetVar="itens" rows="10" 
-											paginator="false" value="#{clienteController.entity.carteiras}" var="item"
-											rowKey="#{item.id}" reflow="true"
+								<p:panel > 	
+								<p:dataTable id="tableCarteira" widgetVar="itensCarteira" rows="10" 
+											paginator="false" value="#{clienteController.entity.carteiras}" var="itemCarteira"
+											rowKey="#{itemCarteira.id}" reflow="true"
 											paginatorPosition="bottom" editable="true"
 											mptyMessage="Nenhum item encontrado" 
 											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
 										
-										<p:column headerText="Item" filterBy="#{item.descricaoOuPrato}" 
-											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricaoOuPrato}">
-							 				<h:outputLabel value="#{item.descricaoOuPrato}" escape="false" />
+										<p:column headerText="Item" filterBy="#{itemCarteira.descricaoOuPrato}"   style="width:20%"
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.descricaoOuPrato}">
+							 				<h:outputLabel value="#{itemCarteira.descricaoOuPrato}" escape="false" />
 										</p:column>
 										
-										<p:column headerText="Data" filterBy="#{clienteController.formataData(item.data)}"  
-											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{clienteController.formataData(item.data)}">
-							 				<h:outputLabel value="#{clienteController.formataData(item.data)}" />
+										<p:column headerText="Data" filterBy="#{clienteController.formataData(itemCarteira.data)}"   style="width:10%" 
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{clienteController.formataData(itemCarteira.data)}">
+							 				<h:outputLabel value="#{clienteController.formataData(itemCarteira.data)}" />
 										</p:column>
 										
-										<p:column headerText="Vlr Devido" filterBy="#{item.valorDevido}"  
-											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.valorDevido}">
-							 				<h:outputLabel value="#{clienteController.formataValor(item.valorDevido)}" />
+										<p:column headerText="Vlr Devido" filterBy="#{itemCarteira.valorDevido}"    style="width:10%"
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorDevido}">
+							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorDevido)}" />
 										</p:column>
 										
-										<p:column headerText="Vlr Pago" filterBy="#{item.valorPago}"  
-											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.valorPago}">
-							 				<h:outputLabel value="#{clienteController.formataValor(item.valorPago)}" />
+										<p:column headerText="Vlr Pago" filterBy="#{itemCarteira.valorPago}"    style="width:10%"
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorPago}">
+							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorPago)}" />
 										</p:column>
 										
-										<p:column headerText="Forma Pag." filterBy="#{item.formaPagamento.descricao}" 
-											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.formaPagamento.descricao}">
-							 				<h:outputLabel value="#{item.formaPagamento.descricao}" />
+										<p:column headerText="Forma Pag." filterBy="#{itemCarteira.formaPagamento.descricao}"   style="width:10%"
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.formaPagamento.descricao}">
+							 				<h:outputLabel value="#{itemCarteira.formaPagamento.descricao}" />
+										</p:column>
+										
+										<!-- 
+										<p:column style="width:25px">
+								            <p:rowEditor />
+								        </p:column>
+								         -->
+								
+										
+								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:5%" >
+											 <div align="center">
+												 <p:commandButton process="tableCarteira" update="tableCarteira" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
+												 	 actionListener="#{clienteController.excluirCarteira( itemCarteira )}"
+												 	 style="    width: 32px;"/>
+											</div>
 										</p:column>
 																	
 									</p:dataTable>
-								</p:panelGrid>
+								</p:panel>
 							</div>
 						</div>
 					</div>

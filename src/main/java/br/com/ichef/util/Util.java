@@ -22,7 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 /**
- * Classse utilizadas para colocar o objeto na sessÃ£o e ser utilizado.
+ * Classse utilizadas para colocar o objeto na sessÃƒÂ£o e ser utilizado.
  * 
  * @author esouzaa
  * @author jteixeira
@@ -45,7 +45,7 @@ public class Util extends ReportUtils {
 
 	public static final String RELATORIO = "resources.properties";
 
-	public static final String LETRAS_COM_ACENTUACAO = "Ã�Ã€ÃƒÃ‚Ã„Ã‰ÃˆÃŠÃ‹Ã�ÃŒÃ�ÃŽÃ“Ã’Ã•Ã”Ã–ÃšÃ™Ã›ÃœÃ‡Ã‘Ã�Å¸Ã¡Ã Ã£Ã¢Ã¤Ã©Ã¨ÃªÃ«Ã­Ã¬Ã¯Ã®Ã³Ã²ÃµÃ´Ã¶ÃºÃ¹Ã»Ã¼Ã§Ã±Ã½Ã¿";
+	public static final String LETRAS_COM_ACENTUACAO = "Ãƒï¿½Ãƒâ‚¬ÃƒÆ’Ãƒâ€šÃƒâ€žÃƒâ€°ÃƒË†ÃƒÅ Ãƒâ€¹Ãƒï¿½ÃƒÅ’Ãƒï¿½ÃƒÅ½Ãƒâ€œÃƒâ€™Ãƒâ€¢Ãƒâ€�Ãƒâ€“ÃƒÅ¡Ãƒâ„¢Ãƒâ€ºÃƒÅ“Ãƒâ€¡Ãƒâ€˜Ãƒï¿½Ã…Â¸ÃƒÂ¡ÃƒÂ ÃƒÂ£ÃƒÂ¢ÃƒÂ¤ÃƒÂ©ÃƒÂ¨ÃƒÂªÃƒÂ«ÃƒÂ­ÃƒÂ¬ÃƒÂ¯ÃƒÂ®ÃƒÂ³ÃƒÂ²ÃƒÂµÃƒÂ´ÃƒÂ¶ÃƒÂºÃƒÂ¹ÃƒÂ»ÃƒÂ¼ÃƒÂ§ÃƒÂ±ÃƒÂ½ÃƒÂ¿";
 	public static final String LETRAS_SEM_ACENTUACAO = "AAAAAEEEEIIIIOOOOOUUUUCNYYaaaaaeeeeiiiiooooouuuucnyy";
 
 	public static String calculaIdadeCompletaPaciente(Date dataNasc) {
@@ -87,7 +87,7 @@ public class Util extends ReportUtils {
 
 	public static Date getUltimoDiaDoMes(Date date) {
 		Calendar calendar = toCalendar(date);
-		// muda a data da variÃ¡vel para o Ãºltimo dia do mÃªs
+		// muda a data da variÃƒÂ¡vel para o ÃƒÂºltimo dia do mÃƒÂªs
 		calendar.add(Calendar.MONTH, 1);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.add(Calendar.DATE, -1);
@@ -109,11 +109,11 @@ public class Util extends ReportUtils {
 	}
 
 	public static Date getUltimoDiaUtilDoMesMesmoMenosFeriadoOuFimDeSemana(Calendar calendar) {
-		// muda a data da variÃ¡vel para o Ãºltimo dia do mÃªs
+		// muda a data da variÃƒÂ¡vel para o ÃƒÂºltimo dia do mÃƒÂªs
 		calendar.add(Calendar.MONTH, 1);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.add(Calendar.DATE, -1);
-		// enquanto for sÃ¡bado, domingo ou feriado
+		// enquanto for sÃƒÂ¡bado, domingo ou feriado
 		while (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || ehFeriado(calendar)) {
 			// decrementa a data em um dia
 			calendar.add(Calendar.DATE, -1);
@@ -133,7 +133,7 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * MÃ©todo para verificar se um objeto do tipo Boolean Ã© nulo ;
+	 * MÃƒÂ©todo para verificar se um objeto do tipo Boolean ÃƒÂ© nulo ;
 	 * 
 	 * 
 	 */
@@ -143,7 +143,7 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * MÃ©todo para verificar se um objeto do tipo String Ã© nulo;
+	 * MÃƒÂ©todo para verificar se um objeto do tipo String ÃƒÂ© nulo;
 	 * 
 	 * 
 	 */
@@ -153,7 +153,7 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * MÃ©todo para verificar se um objeto Ã© nulo ou vazio;
+	 * MÃƒÂ©todo para verificar se um objeto ÃƒÂ© nulo ou vazio;
 	 * 
 	 * 
 	 */
@@ -221,7 +221,7 @@ public class Util extends ReportUtils {
 		return sdate.format(data);
 	}
 
-	/* MÃ‰TODO PARA INSERIR ZEROS A ESQUERDA */
+	/* MÃƒâ€°TODO PARA INSERIR ZEROS A ESQUERDA */
 
 	public static String lpad(String input, char padding, int length) {
 
@@ -258,7 +258,7 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * MÃ©todo para formataÃ§Ã£o de CPF;
+	 * MÃƒÂ©todo para formataÃƒÂ§ÃƒÂ£o de CPF;
 	 * 
 	 * 
 	 */
@@ -278,7 +278,7 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * MÃ©todo para formataÃ§Ã£o de cnpj
+	 * MÃƒÂ©todo para formataÃƒÂ§ÃƒÂ£o de cnpj
 	 * 
 	 * @param pCnpj
 	 * @return String
@@ -328,10 +328,10 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * Valida CNPJ do usuÃ¡rio.
+	 * Valida CNPJ do usuÃƒÂ¡rio.
 	 * 
 	 * @param cnpj
-	 *            String valor com 14 dÃ­gitos
+	 *            String valor com 14 dÃƒÂ­gitos
 	 */
 	public static Boolean validaCNPJ(String cnpj) {
 
@@ -341,7 +341,7 @@ public class Util extends ReportUtils {
 
 		try {
 			Long.parseLong(cnpj);
-		} catch (NumberFormatException e) { // CNPJ nÃ£o possui somente nÃºmeros
+		} catch (NumberFormatException e) { // CNPJ nÃƒÂ£o possui somente nÃƒÂºmeros
 			return false;
 		}
 
@@ -374,7 +374,7 @@ public class Util extends ReportUtils {
 		cnpj_calc = (new StringBuilder(String.valueOf(cnpj_calc))).append(dig != 10 && dig != 11 ? Integer.toString(dig) : "0").toString();
 
 		if (!cnpj.equals(cnpj_calc) || cnpj.equals("00000000000000")) {
-			// JsfUtil.addErrorMessage("CNPJ InvÃ¡lido!");
+			// JsfUtil.addErrorMessage("CNPJ InvÃƒÂ¡lido!");
 			return false;
 		}
 
@@ -421,9 +421,9 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * MÃ©todo responsÃ¡vel por formatar a mensagem para ser exibida no p:message
-	 * do JSF o metÃ³do vai criar um paragrafo para cada "/n" encontrado no
-	 * parÃ¢metro informado.
+	 * MÃƒÂ©todo responsÃƒÂ¡vel por formatar a mensagem para ser exibida no p:message
+	 * do JSF o metÃƒÂ³do vai criar um paragrafo para cada "/n" encontrado no
+	 * parÃƒÂ¢metro informado.
 	 * 
 	 * @param textoASerExibido
 	 */
@@ -458,11 +458,11 @@ public class Util extends ReportUtils {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(file);
-			// lÃª os dados que estÃ£o no arquivo
+			// lÃƒÂª os dados que estÃƒÂ£o no arquivo
 			props.load(fis);
 			fis.close();
 		} catch (IOException ex) {
-			throw new Exception("NÃ£o foi possivel ler o Properties");
+			throw new Exception("NÃƒÂ£o foi possivel ler o Properties");
 		}
 		return props;
 	}
@@ -502,6 +502,15 @@ public class Util extends ReportUtils {
 	
 	public static String getRequiredTextMessage(String text) {
 		return MensagemUtil.obterMensagem("geral.required.field", text);
+	}
+	
+	public static String dateToString(Date valor) {
+		if (valor != null) {
+			return new SimpleDateFormat("dd/MM/yyyy").format(valor);
+		} else {
+			//log.info("A Data passada para ser convertida para STRING veio nula.");
+			return null;
+		}
 	}
 
 }

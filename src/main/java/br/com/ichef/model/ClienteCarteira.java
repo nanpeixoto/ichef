@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import br.com.ichef.arquitetura.BaseEntity;
 
 /**
@@ -79,6 +77,13 @@ public class ClienteCarteira extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
 	private FormaPagamento formaPagamento;
+
+	@Column(name = "DT_ALTERACAO")
+	private Date dataAlteracao;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
+	private Usuario usuarioAlteracao;
 
 	@Override
 	public Object getId() {
@@ -246,6 +251,14 @@ public class ClienteCarteira extends BaseEntity {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public void setDataAlteracao(Date dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
+	}
+
+	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
+		this.usuarioAlteracao = usuarioAlteracao;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import javax.faces.context.FacesContext;
@@ -120,8 +121,10 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	public Object formataValor(Object valor) {
 		try {
 
+			
 			if (valor != null) {
-				return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+				return  NumberFormat.getCurrencyInstance().format(valor);
+				//return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
 			}
 
 		} catch (Exception e) {

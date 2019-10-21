@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
-import org.primefaces.context.RequestContext;
+import org.jboss.weld.context.RequestContext;
 
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.util.ReportUtils;

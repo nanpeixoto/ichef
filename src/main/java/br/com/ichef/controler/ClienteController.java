@@ -29,6 +29,7 @@ import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Localidade;
 import br.com.ichef.model.TipoPrato;
 import br.com.ichef.service.CidadeService;
+import br.com.ichef.service.ClienteCarteiraService;
 import br.com.ichef.service.ClienteEnderecoService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.ClienteTelefoneService;
@@ -76,6 +77,9 @@ public class ClienteController extends BaseController {
 	@Inject
 	private TipoPratoService tipoPratoService;
 
+	@Inject
+	private ClienteCarteiraService clienteCarteiraService;
+
 	private Cliente entity;
 
 	private Long id;
@@ -121,10 +125,12 @@ public class ClienteController extends BaseController {
 		if (id != null) {
 			setEntity(service.getById(id));
 			telefone = "5571 ";
+			setData(new Date());
 		} else {
 			if (telefone != null) {
 				adicionarTelefone();
 				telefone = "5571 ";
+				setData(new Date());
 			}
 		}
 	}
@@ -296,17 +302,20 @@ public class ClienteController extends BaseController {
 	}
 
 	private boolean existeLocalidade(Localidade localidade) {
-		for (ClienteEndereco end : getEntity().getEnderecos()) {
-			if (end.getLocalidade().getId().equals(localidade))
-				return true;
-		}
+		if (getEntity().getEnderecos() != null) {
+			for (ClienteEndereco end : getEntity().getEnderecos()) {
+				if (end.getLocalidade().getId().equals(localidade.getId()))
+					return true;
+			}
 
-		return false;
+			return false;
+		}
+		return true;
 	}
 
 	public void adicionarCarteira() {
 
-		if ( getTipoCarteira() == null || getTipoCarteira().equals("") ) {// TIPO DE PAGAMENTO PRECISA ESTAR PREENCHIDO
+		if (getTipoCarteira() == null || getTipoCarteira().equals("")) {// TIPO DE PAGAMENTO PRECISA ESTAR PREENCHIDO
 			facesMessager.error(getRequiredMessage("Tipo"));
 			return;
 		}
@@ -339,10 +348,10 @@ public class ClienteController extends BaseController {
 				facesMessager.error(getRequiredMessage("Tipo de Prato"));
 				return;
 			}
-			if (getDerivacao() == null) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Derivação"));
-				return;
-			}
+			// if (getDerivacao() == null) {// descricao precisa estar preenhida
+			// facesMessager.error(getRequiredMessage("Derivação"));
+			// return;
+			// }
 			if (getData() == null) {// data precisa estar preenhida
 				facesMessager.error(getRequiredMessage("Data"));
 				return;
@@ -391,6 +400,8 @@ public class ClienteController extends BaseController {
 		carteira.setDataCadastrado(new Date());
 		carteira.setEmpresa(getEmpresa());
 		carteira.setTipoCarteira(getTipoCarteira());
+		carteira.setUsuarioCadastro(getUserLogado());
+		carteira.setDataCadastrado(new Date());
 		if (getValorDevido() != null)
 			carteira.setValorDevido(new BigDecimal(getValorDevido().toString()));
 		if (getValorPago() != null)
@@ -399,6 +410,14 @@ public class ClienteController extends BaseController {
 		if (getEntity().getCarteiras() == null) {
 			getEntity().setCarteiras(new ArrayList<>());
 		}
+
+		try {
+			if (getEntity().getId() != null)
+				clienteCarteiraService.saveOrUpdade(carteira);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		getEntity().getCarteiras().add(carteira);
 
 		limparCarteira();
@@ -415,6 +434,7 @@ public class ClienteController extends BaseController {
 		setValorPago(null);
 		setDerivacao(null);
 		setTipoPrato(null);
+		setData(new Date());
 	}
 
 	public boolean getExibirValorCredito() {
@@ -450,7 +470,7 @@ public class ClienteController extends BaseController {
 	public void adicionarEndereco() {
 		// if (!existeTelefonePrincipal(null)) {
 		ClienteEndereco endereco = new ClienteEndereco();
-		if (existeLocalidade(getLocalidade())) {
+		if (!existeLocalidade(getLocalidade())) {
 			if (!existeEnderecoPrincipal(null)) {
 				endereco.setDataCadastro(new Date());
 
@@ -537,18 +557,35 @@ public class ClienteController extends BaseController {
 
 	}
 
+	public void excluirCarteira(ClienteCarteira obj) {
+		List<ClienteCarteira> temp = new ArrayList<>();
+		temp.addAll(entity.getCarteiras());
+		for (ClienteCarteira item : entity.getCarteiras()) {
+			if (obj.equals(item))
+				temp.remove(item);
+		}
+		entity.getCarteiras().clear();
+		entity.getCarteiras().addAll(temp);
+		// updateComponentes(":form:tabCarteira:tableCarteira");
+		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+	}
+
 	public void editarLinhaEndereco(RowEditEvent event) throws Exception {
 		ClienteEndereco itemEditado = (ClienteEndereco) event.getObject();
-		// if (itemEditado.isTelefonePrincipal()) {
-		// if (!existeTelefonePrincipal(telefoneEditado)) {
+
 		itemEditado.setUsuarioAlteracao(getUserLogado());
 		itemEditado.setDataAlteracao(new Date());
 		clienteEnderecoService.saveOrUpdade(itemEditado);
-		// } else {
-		// FacesUtil.addErroMessage("Já existe um telefone principal para esse
-		// cliente");
-		// }
-		// }
+
+	}
+
+	public void editarLinhaCarteira(RowEditEvent event) throws Exception {
+		ClienteCarteira itemEditado = (ClienteCarteira) event.getObject();
+
+		itemEditado.setUsuarioAlteracao(getUserLogado());
+		itemEditado.setDataAlteracao(new Date());
+		clienteCarteiraService.saveOrUpdade(itemEditado);
+
 	}
 
 	public ClienteService getService() {
