@@ -1,1 +1,7 @@
 .letras-maiusculas{	text-transform: uppercase;}
+
+.outraEmpresa {
+        background-color:#FFF8DC !important;
+        background-image: none !important;
+        color: #000000 !important;
+    }

@@ -1,6 +1,10 @@
 package br.com.ichef.model;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,11 +52,46 @@ public class FormaPagamento extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
+	@Column(name = "TAXA")
+	private Double taxa;
+
+	@Column(name = "SN_PERCENTUAL")
+	private String percentual;
+
 	@Transient
 	private boolean isAtivo;
 
 	@Transient
 	private boolean isCarteira;
+
+	@Transient
+	private boolean isPercentual;
+
+	public boolean isPercentual() {
+		if (percentual != null) {
+			if (percentual.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isPercentual;
+	}
+
+	public void setPercentual(boolean isAtivo) {
+		this.isPercentual = isAtivo;
+		if (isPercentual == Boolean.TRUE) {
+			setPercentual("S");
+		} else
+			setPercentual("N");
+	}
+
+	public String getPercentual() {
+		return percentual;
+	}
+
+	public void setPercentual(String percentual) {
+		this.percentual = percentual;
+	}
 
 	public boolean isAtivo() {
 		if (ativo != null) {
@@ -207,6 +246,15 @@ public class FormaPagamento extends BaseEntity {
 		return "Inativo".toUpperCase();
 	}
 
+	public String getDescricaoTipoTaxa() {
+		if (getTaxa() != null) {
+			if (getPercentual().equals("N"))
+				return "Taxa de ".toUpperCase() + formataValor(getTaxa());
+			return "Percentual de ".toUpperCase() + formataDecimal(getTaxa()) + "%";
+		}
+		return "";
+	}
+
 	public String geteCarteira() {
 		if (getCarteira().equals("S"))
 			return "Sim".toUpperCase();
@@ -219,6 +267,55 @@ public class FormaPagamento extends BaseEntity {
 
 	public void setCarteira(String carteira) {
 		this.carteira = carteira;
+	}
+
+	public Double getTaxa() {
+		return taxa;
+	}
+
+	public void setTaxa(Double taxa) {
+		this.taxa = taxa;
+	}
+
+	public Object formataDecimal(Object valor) {
+		try {
+			NumberFormat nf = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(new Locale("pt", "BR")));
+
+			if (valor != null) {
+				return nf.format(valor);
+				// return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			return valor.toString();
+		} catch (Exception e) {
+			return valor;
+		}
+
+	}
+
+	public Object formataValor(Object valor) {
+		try {
+			Locale meuLocal = new Locale("pt", "BR");
+			NumberFormat real = NumberFormat.getCurrencyInstance(meuLocal);
+
+			if (valor != null) {
+				return real.format(valor);
+				// return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			return valor.toString();
+		} catch (Exception e) {
+			return valor;
+		}
+
 	}
 
 }

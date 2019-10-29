@@ -1,5 +1,6 @@
 package br.com.ichef.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -414,9 +415,49 @@ public class Cliente extends BaseEntity {
 	public void setCarteiras(List<ClienteCarteira> carteiras) {
 		this.carteiras = carteiras;
 	}
-	
+
 	public String getNomeCompleto() {
-		return "C"+getId()+ " - "+getNome()+ " - "+ getDescricaoTelefone(); 
+		return "C" + getId() + " - " + getNome() + " - " + getDescricaoTelefone();
+	}
+
+	public BigDecimal getTotalDevido() {
+		BigDecimal valorDevido = new BigDecimal(0);
+		try {
+			if (carteiras != null) {
+				for (ClienteCarteira clienteCarteira : carteiras) {
+					if (clienteCarteira.getValorDevido() != null)
+						valorDevido = valorDevido.add(clienteCarteira.getValorDevido());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return valorDevido;
+	}
+
+	public BigDecimal getTotalPago() {
+		BigDecimal valor = new BigDecimal(0);
+		try {
+			if (carteiras != null) {
+				for (ClienteCarteira clienteCarteira : carteiras) {
+					if (clienteCarteira.getValorPago() != null)
+						valor = valor.add(clienteCarteira.getValorPago());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return valor;
+	}
+
+	public BigDecimal getTotal() {
+		BigDecimal valor = new BigDecimal(0);
+		try {
+			valor = getTotalPago().subtract(getTotalDevido());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return valor;
 	}
 
 }

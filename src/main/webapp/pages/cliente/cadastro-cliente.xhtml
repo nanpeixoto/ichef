@@ -42,6 +42,9 @@
 		                                         icon="fa fa-close"/>
 		                                         
 		                    </div>
+		                    <div>
+		                    	
+		                    </div>
 		                    
 		                    <p:splitButton value="Salvar" update="@form"
 		                                   icon="fa fa-check"
@@ -253,7 +256,7 @@
 		                </div>
 		            </div>
 		    	</p:tab>
-		    	 <p:tab title="Carteira" id="tabCarteira">
+		    	 <p:tab title="Carteira" id="tabCarteira" >
 		    	    <p:focus context="capaCarteira"/>
 		
 					
@@ -264,17 +267,22 @@
 		                                         icon="fa fa-check" styleClass="btn-primary" action="#{clienteController.Salvar()}"/>
 		                        <p:spacer width="5"/>
 		
-		                       <!-- <p:commandButton value="Excluir" process="@this"
+		                       <!-- 
+		                       		<p:commandButton value="Excluir" process="@this"
 		                                         icon="fa fa-trash"
 		                                         styleClass="btn-danger" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}">
-		                        </p:commandButton> --> 
+		                        	</p:commandButton> 
+		                        --> 
 		                        <p:spacer width="5"/>
 		                        <p:commandButton value="Voltar" immediate="true"
 		                                         action="lista-cliente?faces-redirect=true"
 		                                         process="@this"
 		                                         icon="fa fa-close"/>
 		                                         
+		                   
 		                    </div>
+		                    
+		                  
 		                    
 		                    <p:splitButton value="Salvar" update="@form"
 		                                   icon="fa fa-check"
@@ -291,26 +299,33 @@
 		                    <p:separator/>
 		
 		                    <div class="ui-fluid"  >
+		                    	<p:panelGrid id="capaCarteira1" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-2">
+									<p:outputLabel value="Saldo Total:" for="saldoTotal"/>
+									<p:outputLabel id="saldoTotal"  value="#{clienteController.formataValor(clienteController.entity.total)}"  style="color:#{clienteController.obterCor(clienteController.entity.total)}"/>
+										<p:outputLabel value="Saldo Empresa Atual:" for="saldoEmpresa"/>
+									<p:outputLabel id="saldoEmpresa" value="#{clienteController.formataValor(clienteController.saldoEmpresaAtual)}" style="color:#{clienteController.obterCor(clienteController.saldoEmpresaAtual)}"/>
+								</p:panelGrid>								
+								
 		                    	<p:panelGrid id="capaCarteira" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
 		                    		<p:outputLabel value="Empresa" for="empresa"/>
-		                    		 <p:selectOneMenu id="empresa" value="#{clienteController.empresa}"  converter= "omnifaces.SelectItemsConverter" disabled="true">
+		                    		 <p:selectOneMenu id="empresa" value="#{clienteController.empresa}"  converter= "omnifaces.SelectItemsConverter" >
 							            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 							            <f:selectItems value="#{clienteController.listaEmpresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
 							        </p:selectOneMenu>
 					        
 									<p:outputLabel value="Tipo" for="selectTipo"/>
-									<p:selectOneMenu id="selectTipo" value="#{clienteController.tipoCarteira}" style="width:487px;">
+									<p:selectOneMenu id="selectTipo" value="#{clienteController.tipoCarteira}"  >
 										<f:selectItem itemLabel="Selecione" itemValue="" />
 								        <f:selectItem itemLabel="Crédito" itemValue="C" />
 								        <f:selectItem itemLabel="Débito" itemValue="D" />
 								        <f:selectItem itemLabel="Pedido" itemValue="P" />
-								        <p:ajax event="change" update="selectPrato, descricao,valorDevido,valorPago,selectderivacao,selectTipoPrato" />
+								        <p:ajax event="change" update="selectPrato, descricao,valorDevido,valorPago,selectderivacao,selectTipoPrato,selectFormaPagamento" />
 								   	</p:selectOneMenu>	
 								</p:panelGrid>
 								<p:panelGrid id="capaCarteira2" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
 									<p:outputLabel value="Prato" for="selectPrato" id="outselectPrato"  />
 	                    			<p:selectOneMenu id="selectPrato" value="#{clienteController.prato}" filter="true"  filterMatchMode="contains" 
-	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  
+	                    				converter= "omnifaces.SelectItemsConverter"  
 	                    				disabled="#{!clienteController.exibirPrato}">
 	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 						            	<f:selectItems value="#{clienteController.listaPratos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
@@ -319,7 +334,7 @@
 						       		
 						       		<p:outputLabel value="Tipo de Prato" for="selectTipoPrato"  />
 	                    			<p:selectOneMenu id="selectTipoPrato" value="#{clienteController.tipoPrato}" filter="true"  filterMatchMode="contains" 
-	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  
+	                    				converter= "omnifaces.SelectItemsConverter"   
 	                    				disabled="#{!clienteController.exibirPrato}">
 	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 						            	<f:selectItems value="#{clienteController.listaTiposPrato}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
@@ -328,7 +343,7 @@
 						       		
 						       		<p:outputLabel value="Derivação" for="selectderivacao"  />
 	                    			<p:selectOneMenu id="selectderivacao" value="#{clienteController.derivacao}" filter="true"  filterMatchMode="contains" 
-	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  
+	                    				converter= "omnifaces.SelectItemsConverter"   
 	                    				disabled="#{!clienteController.exibirPrato}">
 	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 						            	<f:selectItems value="#{clienteController.listaDerivacoes}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
@@ -349,7 +364,6 @@
 									<p:outputLabel value="Valor Pago" for="valorPago"/>
 									<p:inputNumber   id="valorPago" value="#{clienteController.valorPago}" symbol="R$ " decimalSeparator="," thousandSeparator="." 
 										disabled="#{!clienteController.exibirValorCredito}">
-										<p:ajax event="blur" update="selectFormaPagamento" />
 									</p:inputNumber>
 									
 									<p:outputLabel value="Forma de Pagamento" for="selectFormaPagamento"/>
@@ -361,9 +375,9 @@
 								</p:panelGrid>	
 								<div align="right">
 									<p:panelGrid >
-										<p:commandButton  value="Adicionar" icon="fa fa-plus" id="btnAdicioanr" styleClass="btn-primary" style="width: 150px;"
-											process="@this,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,selectderivacao,selectTipoPrato" 
-											update="selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,growl,selectderivacao,tableCarteira,selectTipoPrato"
+										<p:commandButton  value="Plus" icon="fa fa-plus" id="btnAdicioanr" styleClass="btn-primary" style="width: 150px;"
+											process="@this,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,selectderivacao,selectTipoPrato,empresa" 
+											update="saldoEmpresa,saldoTotal,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,growl,selectderivacao,tableCarteira,selectTipoPrato"
 										 	action="#{clienteController.adicionarCarteira}"/>
 						       			<!-- 
 						       			<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
@@ -379,34 +393,61 @@
 											paginator="false" value="#{clienteController.entity.carteiras}" var="itemCarteira"
 											rowKey="#{itemCarteira.id}" reflow="true"
 											paginatorPosition="bottom" editable="true"
-											mptyMessage="Nenhum item encontrado" 
+											emptyMessage="Nenhum item encontrado" sortBy="#{clienteController.formataData(itemCarteira.data)}"   sortOrder="DESCENDING"
 											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
+											rowStyleClass="#{itemCarteira.empresa.id ne itemCarteira.empresaLogada.id ? 'outraEmpresa' : null}">
+											
+									<f:facet name="header">
+										<p:outputPanel style="text-align:right; margin-right:-10px"
+											styleClass="ui-widget-auxiliar">
+			
+											<h:outputText value="Pesquisar " escape="false" />
+			
+											<p:inputText id="globalFilter" onkeyup="PF('itensCarteira').filter(); hideBar();"
+												style="width:150px;" maxlength="255" 
+												styleClass="letras-maiusculas semClear">
+											</p:inputText>
+											
+											<h:commandLink>
+						                    	<h:graphicImage value="#{resource['images/excel_icon.png']}" style="WIDTH: 29px;" /> 
+						                    	<p:dataExporter type="xls" target="tableCarteira" fileName="iChef - Lançamentos Cliente - #{clienteController.entity.nome}" />
+						               		</h:commandLink>
+										</p:outputPanel>
+									</f:facet>
 										
-										<p:column headerText="Item" filterBy="#{itemCarteira.descricaoOuPrato}"   style="width:20%"
+										<p:column headerText="Empresa" filterBy="#{itemCarteira.empresa.nomeFantasia}"   style="width:15%"
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.empresa.nomeFantasia}">
+							 				<h:outputLabel value="#{itemCarteira.empresa.nomeFantasia}" escape="false" />
+										</p:column>
+										
+										
+										<p:column headerText="Item" filterBy="#{itemCarteira.descricaoOuPrato}"   style="width:17%"
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.descricaoOuPrato}">
 							 				<h:outputLabel value="#{itemCarteira.descricaoOuPrato}" escape="false" />
 										</p:column>
 										
-										<p:column headerText="Data" filterBy="#{clienteController.formataData(itemCarteira.data)}"   style="width:10%" 
+										<p:column headerText="Data" filterBy="#{clienteController.formataData(itemCarteira.data)}"   style="width:7%" 
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{clienteController.formataData(itemCarteira.data)}">
 							 				<h:outputLabel value="#{clienteController.formataData(itemCarteira.data)}" />
-										</p:column>
-										
-										<p:column headerText="Vlr Devido" filterBy="#{itemCarteira.valorDevido}"    style="width:10%"
-											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorDevido}">
-							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorDevido)}" />
-										</p:column>
-										
-										<p:column headerText="Vlr Pago" filterBy="#{itemCarteira.valorPago}"    style="width:10%"
-											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorPago}">
-							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorPago)}" />
 										</p:column>
 										
 										<p:column headerText="Forma Pag." filterBy="#{itemCarteira.formaPagamento.descricao}"   style="width:10%"
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.formaPagamento.descricao}">
 							 				<h:outputLabel value="#{itemCarteira.formaPagamento.descricao}" />
 										</p:column>
+										
+										
+										<p:column headerText="Devido" filterBy="#{itemCarteira.valorDevido}"    style="width:6%"
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorDevido}">
+							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorDevido)}" />
+										</p:column>
+										
+										<p:column headerText="Pago" filterBy="#{itemCarteira.valorPago}"    style="width:5%"
+											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorPago}">
+							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorPago)}" />
+										</p:column>
+										
 										
 										<!-- 
 										<p:column style="width:25px">
@@ -415,13 +456,33 @@
 								         -->
 								
 										
-								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:5%" >
+								        <p:column headerText="" filterStyle="display:none; visibility:hidden;" style="width:7%"  exportable="false">
 											 <div align="center">
 												 <p:commandButton process="tableCarteira" update="tableCarteira" icon="fa fa-trash-o" value=""  styleClass="btn btn-danger" 
 												 	 actionListener="#{clienteController.excluirCarteira( itemCarteira )}"
 												 	 style="    width: 32px;"/>
-											</div>
+												 	 
+												 	  <!--  <p:column style="width:32px;text-align: center">
+												             <p:commandButton   oncomplete="PF('ItensSelecionados').show()" title="View"
+												             	styleClass="btn-info" icon="fa fa-search"  >
+												                <f:setPropertyActionListener value="#{itemCarteira}"
+												                	 target="#{clienteController.carteiraSelecionada}" />
+												            </p:commandButton>
+												        </p:column>
+												        
+												       <p:commandButton update="carDetail" oncomplete="PF('ItensSelecionados').show()" icon="pi pi-search" title="View">
+													                <f:setPropertyActionListener value="#{itemCarteira}" target="#{clienteController.carteiraSelecionada}" />
+													            </p:commandButton>-->
+											</div>	
 										</p:column>
+										
+										<p:columnGroup type="footer">
+		            						<p:row>
+								                <p:column colspan="4" style="text-align:right" footerText="Total:" />
+								                <p:column  style="width:10%; text-align: right;" footerText="#{clienteController.formataValor(clienteController.entity.totalDevido)}" />
+								                <p:column  style="width:10%; text-align: right;" footerText="#{clienteController.formataValor(clienteController.entity.totalPago)}" />
+								            </p:row>
+								        </p:columnGroup>
 																	
 									</p:dataTable>
 								</p:panel>
@@ -430,7 +491,30 @@
 					</div>
 		    	 </p:tab>
 	    	</p:tabView>
+	    	
+	    	
+	    	
         </h:form>
+        
+        <p:dialog header="Tarefas Selecionadas" widgetVar="ItensSelecionados" height="250"
+                  	  width="400" responsive="true" styleClass="box-success">
+	              <p:outputPanel id="carDetail" style="text-align:center;">
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               <h:outputText value="Id:" />
+		                <h:outputText value="#{carteiraSelecionada.id}" />
+		 
+		                <h:outputText value="Year" />
+		                <h:outputText value="#{carteiraSelecionada.year}" />
+		 
+		                <h:outputText value="Color:" />
+		                <h:outputText value="#{carteiraSelecionada.color}"  />
+		             
+		                <h:outputText value="Price" />
+		                <h:outputText value="$#{carteiraSelecionada.price}" />
+		            </p:panelGrid>
+		        </p:outputPanel>
+			</p:dialog>
+        
 
     </ui:define>
 

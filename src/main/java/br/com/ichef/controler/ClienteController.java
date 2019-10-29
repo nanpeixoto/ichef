@@ -6,13 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.swing.text.Caret;
 
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.model.chart.CartesianChartModel;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
@@ -120,6 +119,8 @@ public class ClienteController extends BaseController {
 
 	private List<Empresa> listaEmpresas = new ArrayList<>();
 	private Empresa empresa;
+
+	private ClienteCarteira carteiraSelecionada;
 
 	public void inicializar() {
 		if (id != null) {
@@ -240,9 +241,14 @@ public class ClienteController extends BaseController {
 		} else {
 			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
+			
+			FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+			FacesUtil.addInfoMessage("Novo cliente criado código: " + getEntity().getId());
 		}
+		
 		entity.setDescricaoTelefone(entity.getAllTelefones());
 		service.saveOrUpdade(entity);
+
 		return "lista-cliente.xhtml?faces-redirect=true";
 
 	}
@@ -304,13 +310,23 @@ public class ClienteController extends BaseController {
 	private boolean existeLocalidade(Localidade localidade) {
 		if (getEntity().getEnderecos() != null) {
 			for (ClienteEndereco end : getEntity().getEnderecos()) {
-				if (end.getLocalidade().getId().equals(localidade.getId()))
-					return true;
+				if (end != null && end.getLocalidade() != null && localidade != null && localidade.getId() != null)
+					if (end.getLocalidade().getId().equals(localidade.getId()))
+						return true;
 			}
 
 			return false;
+		} else {
+			return false;
 		}
-		return true;
+	}
+
+	public String obterCor(BigDecimal valor) {
+		if (valor.compareTo(new BigDecimal(0)) > 0)
+			return "green";
+		if (valor.compareTo(new BigDecimal(0)) == -1)
+			return "red";
+		return "black";
 	}
 
 	public void adicionarCarteira() {
@@ -391,6 +407,7 @@ public class ClienteController extends BaseController {
 		ClienteCarteira carteira = new ClienteCarteira();
 		carteira.setCliente(getEntity());
 		carteira.setData(getData());
+		carteira.setEmpresaLogada(userLogado.getEmpresaLogada());
 		carteira.setDescricao(getDescricao());
 		carteira.setFichaTecnicaPrato(getPrato());
 		carteira.setFormaPagamento(getFormaPagamento());
@@ -449,9 +466,8 @@ public class ClienteController extends BaseController {
 	}
 
 	public boolean getExibirFormaPagamento() {
-		if (getValorPago() == null)
-			return false;
-		if (getValorPago() != null)
+		if (getTipoCarteira() != null
+				&& (getTipoCarteira().equalsIgnoreCase("C") || getTipoCarteira().equalsIgnoreCase("P")))
 			return true;
 
 		return false;
@@ -465,6 +481,20 @@ public class ClienteController extends BaseController {
 		else
 			return false;
 
+	}
+
+	public BigDecimal getSaldoEmpresaAtual() {
+		BigDecimal saldoCliente = new BigDecimal(0);
+		if (getEntity().getCarteiras() != null)
+			for (ClienteCarteira carteira : getEntity().getCarteiras()) {
+				if (carteira.getEmpresa().getId().equals(userLogado.getEmpresaLogada().getId())) {
+					if (carteira.getValorDevido() != null)
+						saldoCliente = saldoCliente.subtract(carteira.getValorDevido());
+					if (carteira.getValorPago() != null)
+						saldoCliente = saldoCliente.add(carteira.getValorPago());
+				}
+			}
+		return saldoCliente;
 	}
 
 	public void adicionarEndereco() {
@@ -818,6 +848,14 @@ public class ClienteController extends BaseController {
 
 	public void setListaEmpresas(List<Empresa> listaEmpresas) {
 		this.listaEmpresas = listaEmpresas;
+	}
+
+	public ClienteCarteira getCarteiraSelecionada() {
+		return carteiraSelecionada;
+	}
+
+	public void setCarteiraSelecionada(ClienteCarteira carteiraSelecionada) {
+		this.carteiraSelecionada = carteiraSelecionada;
 	}
 
 }

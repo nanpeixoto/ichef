@@ -22,7 +22,6 @@ import br.com.ichef.service.FichaTecnicaPreparoService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.FIchaTecnicaPratoVisitor;
-import br.com.ichef.visitor.FIchaTecnicaPreparoVisitor;
 
 @Named
 @ViewScoped
@@ -99,10 +98,10 @@ public class FichaTecnicaPratoController extends BaseController {
 			FichaTecnicaPreparo filter = new FichaTecnicaPreparo();
 			filter.setAtivo("S");
 
-			FIchaTecnicaPreparoVisitor visitor = new FIchaTecnicaPreparoVisitor();
-			visitor.setObterPreparoDesvinculadoPrato(true);
+			//FIchaTecnicaPreparoVisitor visitor = new FIchaTecnicaPreparoVisitor();
+			//visitor.setObterPreparoDesvinculadoPrato(true);
 
-			setPreparos(fichaTecnicaPreparoService.findByParameters(filter, visitor));
+			setPreparos(fichaTecnicaPreparoService.findByParameters(filter));//, visitor));
 
 			TipoPrato filterTipoPrato = new TipoPrato();
 			filterTipoPrato.setAtivo("S");

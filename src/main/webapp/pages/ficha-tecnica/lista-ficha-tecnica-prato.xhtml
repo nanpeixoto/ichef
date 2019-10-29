@@ -96,7 +96,7 @@
 						</p:column>
 						
 						
-						<p:column headerText="Descricao" filterBy="#{item.descricaoComPreparo}"  width="30%"
+						<p:column headerText="Descricao" filterBy="#{item.descricaoComPreparo}"  width="42%"
 							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricao}">
 							<h:link value="#{item.descricao}" outcome="cadastro-ficha-tecnica-prato.xhtml" >
 								<f:param name="id" value="#{item.id}" />
@@ -106,7 +106,7 @@
 						</p:column>
 						
 						<p:column headerText="Custos" filterStyle="display:none; visibility:hidden;" filterBy="#{item.percoPorTipoPrato}"
-							filterMatchMode="contains" sortBy="#{item.percoPorTipoPrato}">
+							filterMatchMode="contains" sortBy="#{item.percoPorTipoPrato}" width="20%">
 							<h:outputLabel value="#{item.percoPorTipoPrato}" escape="false"/>
 						</p:column>
 					
@@ -117,7 +117,7 @@
 						</p:column>
 						
 						 
-						<p:column headerText="" filterStyle="display:none; visibility:hidden;"   >
+						<p:column headerText="" filterStyle="display:none; visibility:hidden;"    width="8%" >
 							<p:commandButton process="TarefaTable"  icon="fa fa-files-o" value=" "  styleClass="btn btn-info"  style="    width: 33px;" action="#{fichaTecnicaPratoController.copiar(item)}"	 />
 						</p:column> 
 

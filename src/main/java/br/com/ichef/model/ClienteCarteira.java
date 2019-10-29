@@ -53,6 +53,10 @@ public class ClienteCarteira extends BaseEntity {
 	@JoinColumn(name = "CD_EMPRESA")
 	private Empresa empresa;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_EMPRESA_LOGADA")
+	private Empresa empresaLogada;
+
 	@Column(name = "DS_CARTEIRA")
 	private String descricao;
 
@@ -259,6 +263,14 @@ public class ClienteCarteira extends BaseEntity {
 
 	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
 		this.usuarioAlteracao = usuarioAlteracao;
+	}
+
+	public Empresa getEmpresaLogada() {
+		return empresaLogada;
+	}
+
+	public void setEmpresaLogada(Empresa empresaLogada) {
+		this.empresaLogada = empresaLogada;
 	}
 
 }

@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -120,11 +121,12 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	public Object formataValor(Object valor) {
 		try {
+			Locale meuLocal = new Locale("pt", "BR");
+			NumberFormat real = NumberFormat.getCurrencyInstance(meuLocal);
 
-			
 			if (valor != null) {
-				return  NumberFormat.getCurrencyInstance().format(valor);
-				//return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+				return real.format(valor);
+				// return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
 			}
 
 		} catch (Exception e) {
@@ -140,8 +142,8 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	public Object formataData(Object valor) {
 		try {
-
-			return formatarData.format(valor);
+			if (valor != null)
+				return formatarData.format(valor);
 
 		} catch (Exception e) {
 			e.printStackTrace();

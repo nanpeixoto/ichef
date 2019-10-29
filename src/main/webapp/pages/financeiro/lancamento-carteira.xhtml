@@ -17,13 +17,13 @@
 					<div class="box-header with-border">
 		            	<!--<div id="main-buttons" class="hidden-sm hidden-xs">
 		                	 <p:commandButton value="Salvar" update="@form" icon="fa fa-check" styleClass="btn-primary" action="#{lancamentoCarteiraController.Salvar()}"/> 
-		               	</div>-->
+		               	</div>
 		               	<p:splitButton value="Salvar" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"  action="#{lancamentoCarteiraController.Salvar()}"/>
-		             	<p:separator/>
+		             	<p:separator/>-->
 						<div class="ui-fluid"  >
 		               		<p:panelGrid id="capaCarteira" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
 		                    	<p:outputLabel value="Empresa" for="empresa"/>
-		                    		<p:selectOneMenu id="empresa" value="#{lancamentoCarteiraController.empresa}"  converter= "omnifaces.SelectItemsConverter" disabled="true">
+		                    		<p:selectOneMenu id="empresa" value="#{lancamentoCarteiraController.empresa}"  converter= "omnifaces.SelectItemsConverter" >
 							            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 							            <f:selectItems value="#{lancamentoCarteiraController.listaEmpresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
 							        </p:selectOneMenu>
@@ -40,7 +40,7 @@
 								        <f:selectItem itemLabel="Crédito" itemValue="C" />
 								        <f:selectItem itemLabel="Débito" itemValue="D" />
 								        <f:selectItem itemLabel="Pedido" itemValue="P" />
-								        <p:ajax event="change" update="selectPrato, descricao,valorDevido,valorPago,selectderivacao,selectTipoPrato" />
+								        <p:ajax event="change" update="selectPrato, descricao,valorDevido,valorPago,selectderivacao,selectTipoPrato,selectFormaPagamento" />
 								   	</p:selectOneMenu>	
 								</p:panelGrid>
 								<p:panelGrid id="capaCarteira2" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
@@ -98,7 +98,7 @@
 								<div align="right">
 									<p:panelGrid >
 										<p:commandButton  value="Adicionar" icon="fa fa-plus" id="btnAdicioanr" styleClass="btn-primary" style="width: 150px;"
-											process="@this,cliente,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,selectderivacao,selectTipoPrato" 
+											process="@this,cliente,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,selectderivacao,selectTipoPrato,empresa" 
 											update="cliente,selectFormaPagamento,valorPago,valorDevido,data,descricao,selectPrato,selectTipo,growl,selectderivacao,tableCarteira,selectTipoPrato"
 										 	action="#{lancamentoCarteiraController.adicionarCarteira}"/>
 						       			<!-- 
@@ -116,9 +116,10 @@
 											paginator="false" value="#{lancamentoCarteiraController.lista}" var="itemCarteira"
 											rowKey="#{itemCarteira.id}" reflow="true"
 											paginatorPosition="bottom" editable="false"
-											mptyMessage="Nenhum item encontrado" 
+											mptyMessage="Nenhum item encontrado" sortBy="#{lancamentoCarteiraController.formataData(itemCarteira.data)}"   sortOrder="DESCENDING"
 											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
+											rowStyleClass="#{itemCarteira.empresa.id ne itemCarteira.empresaLogada.id ? 'outraEmpresa' : null}">
 											
 										<p:column headerText="Cliente" filterBy="#{itemCarteira.cliente.nome}"   style="width:10%"
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.cliente.nome}">

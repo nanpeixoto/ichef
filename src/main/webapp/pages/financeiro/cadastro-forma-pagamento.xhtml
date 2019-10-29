@@ -62,10 +62,26 @@
                     		<p:outputLabel value="Carteira" for="carteira"/>
 					        <p:selectBooleanButton id="carteira" value="#{formaPagamentoController.entity.carteira}" 
 					        	onLabel="Sim" offLabel="Não" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
-					        
+					      </p:panelGrid>
+					      <p:panelGrid id="capaPanel1" columns="4" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2, ui-g-12 ui-md-6 ui-lg-2, ui-g-12 ui-md-6 ui-lg-1">
+					        	
+					        	<p:outputLabel value="Tipo Taxa" for="tipotaxa"/>
+					        <p:selectBooleanButton id="tipotaxa" value="#{formaPagamentoController.entity.percentual}" 
+					        	onLabel="Percentual" offLabel="Valor" onIcon="fa fa-percent" offIcon="fa fa-money"/>
+					        	
+					        <p:outputLabel value="Taxa" for="taxa"/>
+								<p:inputNumber   id="taxa" value="#{formaPagamentoController.entity.taxa}" decimalSeparator="," 
+								thousandSeparator=".">
+							</p:inputNumber>
+							
+							
+					         </p:panelGrid>
+					        <p:panelGrid id="capaPanel2" columns="2" layout="grid" columnClasses="ui-g-12 ui-md-2">
 					        <p:outputLabel value="Ativo" for="ativo"/>
 					        <p:selectBooleanButton id="ativo" value="#{formaPagamentoController.entity.ativo}" 
 					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+					        	
+					        
 						
 						</p:panelGrid>
 							

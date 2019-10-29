@@ -90,6 +90,14 @@
 							filterMatchMode="contains" sortBy="#{item.eCarteira}">
 							<h:outputLabel value="#{item.eCarteira}" />
 						</p:column>
+						
+						<p:column headerText="Taxa" filterStyle="display:none; visibility:hidden;" filterBy="#{item.descricaoTipoTaxa}"
+							filterMatchMode="contains" sortBy="#{item.descricaoTipoTaxa}">
+							<h:outputLabel value="#{item.descricaoTipoTaxa}" />
+						</p:column>
+						
+						
+						
 
 						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" filterBy="#{item.situacao}"
 							filterMatchMode="contains" sortBy="#{item.situacao}">

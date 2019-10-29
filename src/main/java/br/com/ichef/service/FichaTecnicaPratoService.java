@@ -25,21 +25,22 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 	public void calcularPercos(FichaTecnicaPrato entity, Configuracao configuracao) {
 		try {
 
-			if (entity.getFichaTecnicaPratoPreparos() != null  ) {
+			if (entity.getFichaTecnicaPratoPreparos() != null) {
 				BigDecimal precoVendaReceita = new BigDecimal(0), custoTotal = new BigDecimal(0),
 						tamanho = new BigDecimal(1);
-				
+
 				for (FichaTecnicaPratoPreparo item : entity.getFichaTecnicaPratoPreparos()) {
 					if (item.getAtivo().equalsIgnoreCase("S"))
-						custoTotal = custoTotal.add(item.getCustoTotal() == null ? new BigDecimal(0) : item.getCustoTotal());
+						custoTotal = custoTotal
+								.add(item.getCustoTotal() == null ? new BigDecimal(0) : item.getCustoTotal());
 
 				}
 				precoVendaReceita = (custoTotal.doubleValue() > 0d ? custoTotal
 						.divide(new BigDecimal(configuracao.getCustoMercadoriaVendida()).divide(new BigDecimal(100)))
 						.setScale(2, RoundingMode.CEILING) : custoTotal);
-				
+
 				entity.setPrecoVendaReceita(precoVendaReceita);
-				
+
 				entity.setPrecoVendaPorcao((precoVendaReceita.doubleValue() > 0d
 						? (precoVendaReceita.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
 						: precoVendaReceita));
@@ -49,9 +50,11 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 						: custoTotal));
 
 				entity.setPrecoCustoReceita(custoTotal);
-				
-				for (FichaTecnicaPratoTipo fichaTipo :entity.getFichaTecnicaPratoTipos()) {
-					fichaTipo.setCustoTotal(custoTotal.add(fichaTipo.getTipoPrato().getCustoTotal() ));
+
+				if (entity.getFichaTecnicaPratoTipos() != null) {
+					for (FichaTecnicaPratoTipo fichaTipo : entity.getFichaTecnicaPratoTipos()) {
+						fichaTipo.setCustoTotal(custoTotal.add(fichaTipo.getTipoPrato().getCustoTotal()));
+					}
 				}
 
 			} else {

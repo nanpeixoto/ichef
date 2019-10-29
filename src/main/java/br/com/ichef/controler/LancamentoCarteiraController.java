@@ -205,6 +205,7 @@ public class LancamentoCarteiraController extends BaseController {
 		ClienteCarteira carteira = new ClienteCarteira();
 		carteira.setCliente(service.getById(getCliente().getId()));
 		carteira.setData(getData());
+		carteira.setEmpresaLogada(userLogado.getEmpresaLogada());
 		carteira.setDescricao(getDescricao());
 		carteira.setFichaTecnicaPrato(getPrato());
 		carteira.setFormaPagamento(getFormaPagamento());
@@ -259,9 +260,7 @@ public class LancamentoCarteiraController extends BaseController {
 	}
 
 	public boolean getExibirFormaPagamento() {
-		if (getValorPago() == null)
-			return false;
-		if (getValorPago() != null)
+		if ( getTipoCarteira() !=null  && (getTipoCarteira().equalsIgnoreCase("C") || getTipoCarteira().equalsIgnoreCase("P") ) )
 			return true;
 
 		return false;
