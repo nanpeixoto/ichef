@@ -96,7 +96,7 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 
 	public Integer findQuantidadeFichaByPreparacao(String listaPreparacoes) {
 		StringBuilder sb =  new StringBuilder();
-		sb.append("select sum(qtd) from ( SELECT count(*) qtd " +
+		sb.append("select sum(qtd) from ( SELECT count(distinct this_.CD_FICHA_TECNICA_PRATO) qtd " +
 				"    FROM ficha_tecnica_prato this_ INNER JOIN ficha_tecnica_prato_preparo pe1_ " + 
 				"         ON this_.cd_ficha_tecnica_prato = pe1_.cd_ficha_tecnica_prato " + 
 				"   group by this_.CD_FICHA_TECNICA_PRATO " + 
