@@ -55,6 +55,11 @@ public class Cliente extends BaseEntity {
 
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
+	
+	@Column(name = "SN_EXIBIR_SALDO")
+	private String exibirSaldo;
+	
+	
 
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -88,6 +93,9 @@ public class Cliente extends BaseEntity {
 
 	@Transient
 	private boolean recebeSMS;
+	
+	@Transient
+	private boolean exibeSaldo;
 
 	@Transient
 	private boolean estaBloqueado;
@@ -97,6 +105,24 @@ public class Cliente extends BaseEntity {
 
 	@Transient
 	private boolean pagaEmCarteira;
+	
+	public boolean isExibeSaldo() {
+		if (exibirSaldo != null) {
+			if (exibirSaldo.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isAtivo;
+	}
+
+	public void setExibeSaldo(boolean exibeSaldo) {
+		this.exibeSaldo = exibeSaldo;
+		if (exibeSaldo == Boolean.TRUE) {
+			setExibirSaldo("S");
+		} else
+			setExibirSaldo("N");
+	}
 
 	public boolean isAtivo() {
 		if (ativo != null) {
@@ -453,11 +479,21 @@ public class Cliente extends BaseEntity {
 	public BigDecimal getTotal() {
 		BigDecimal valor = new BigDecimal(0);
 		try {
-			valor = getTotalPago().subtract(getTotalDevido());
+			valor = getTotalDevido().subtract(getTotalPago());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return valor;
 	}
+
+	public String getExibirSaldo() {
+		return exibirSaldo;
+	}
+
+	public void setExibirSaldo(String exibirSaldo) {
+		this.exibirSaldo = exibirSaldo;
+	}
+	
+	
 
 }

@@ -157,6 +157,7 @@ public class ClienteController extends BaseController {
 		setStsTelefonePrincipal(true);
 		setStsEnderecoPrincipal(true);
 		getEntity().setAtivo(true);
+		getEntity().setExibeSaldo(true);
 		getEntity().setCidade(obterCidadeSalvador());
 		getEntity().setRecebeMaladireta(true);
 		getEntity().setRecebeSMS(true);
@@ -323,9 +324,9 @@ public class ClienteController extends BaseController {
 
 	public String obterCor(BigDecimal valor) {
 		if (valor.compareTo(new BigDecimal(0)) > 0)
-			return "green";
-		if (valor.compareTo(new BigDecimal(0)) == -1)
 			return "red";
+		if (valor.compareTo(new BigDecimal(0)) == -1)
+			return "green";
 		return "black";
 	}
 
@@ -489,9 +490,9 @@ public class ClienteController extends BaseController {
 			for (ClienteCarteira carteira : getEntity().getCarteiras()) {
 				if (carteira.getEmpresa().getId().equals(userLogado.getEmpresaLogada().getId())) {
 					if (carteira.getValorDevido() != null)
-						saldoCliente = saldoCliente.subtract(carteira.getValorDevido());
+						saldoCliente = saldoCliente.add(carteira.getValorDevido());
 					if (carteira.getValorPago() != null)
-						saldoCliente = saldoCliente.add(carteira.getValorPago());
+						saldoCliente = saldoCliente.subtract(carteira.getValorPago());
 				}
 			}
 		return saldoCliente;

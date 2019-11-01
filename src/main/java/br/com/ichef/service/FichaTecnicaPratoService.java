@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import javax.persistence.Query;
+
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.FichaTecnicaPrato;
@@ -21,6 +23,8 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 		return entity;
 
 	}
+	
+	
 
 	public void calcularPercos(FichaTecnicaPrato entity, Configuracao configuracao) {
 		try {
@@ -88,6 +92,20 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public Integer findQuantidadeFichaByPreparacao(String listaPreparacoes) {
+		StringBuilder sb =  new StringBuilder();
+		sb.append("select sum(qtd) from ( SELECT count(*) qtd " +
+				"    FROM ficha_tecnica_prato this_ INNER JOIN ficha_tecnica_prato_preparo pe1_ " + 
+				"         ON this_.cd_ficha_tecnica_prato = pe1_.cd_ficha_tecnica_prato " + 
+				"   group by this_.CD_FICHA_TECNICA_PRATO " + 
+				"   having GROUP_CONCAT(pe1_.cd_ficha_tecnica_preparo)   = '"+ listaPreparacoes+"')tab"
+		);
+		
+		Query query = getManager().createNativeQuery(sb.toString());
+		int count =  query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
+		return count;
 	}
 
 }

@@ -61,7 +61,7 @@
 		                    <p:separator/>
 		
 		                    <div class="ui-fluid"  >
-		                    	<p:panelGrid id="capaPanel" columnClasses="ui-g-12 ui-md-1,  ui-g-12 ui-md-3, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"    columns="6" layout="grid">
+		                    	<p:panelGrid id="capaPanel" columnClasses="ui-g-12 ui-md-1,  ui-g-12 ui-md-3, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"    columns="7" layout="grid">
 		                    		<p:outputLabel value="Cidade" for="cidade"/>
 		                    		 <p:selectOneMenu id="cidade" value="#{clienteController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
 		                    		 	required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Cidade')}">
@@ -71,11 +71,13 @@
 							        <p:selectBooleanButton id="bloqueado" value="#{clienteController.entity.estaBloqueado}" 
 							        	onLabel="Bloqueado" offLabel="Desbloqueado" onIcon="fa fa-lock" offIcon="fa fa-unlock"/>
 									  <p:selectBooleanButton id="maladireta" value="#{clienteController.entity.recebeMaladireta}" 
-							        	onLabel="Com Mala Direta" offLabel="Sem Mala Direta" onIcon="fa fa-envelope-o" offIcon="fa fa-envelope"/>
+							        	onLabel="Mala Direta" offLabel="Sem Mala" onIcon="fa fa-envelope-o" offIcon="fa fa-envelope"/>
 							          <p:selectBooleanButton id="sms" value="#{clienteController.entity.recebeSMS}" 
 							        	onLabel="Com SMS" offLabel="Sem SMS" onIcon="fa fa-commenting-o" offIcon="fa fa-commenting"/>
 							          <p:selectBooleanButton id="carteira" value="#{clienteController.entity.pagaEmCarteira}" 
 							        	onLabel="Com Carteira" offLabel="Sem Carteira" onIcon="fa fa-shopping-basket" offIcon="fa fa-money"/>
+							          <p:selectBooleanButton id="exibirSaldo" value="#{clienteController.entity.exibeSaldo}" 
+							        	onLabel="Com Saldo" offLabel="Sem Saldo" onIcon="fa fa-money" offIcon="fa fa-tag"/>
 							        
 								</p:panelGrid>
 								<p:panelGrid  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-6,ui-g-12 ui-md-1,ui-g-12 ui-md-4"    columns="4" layout="grid">
@@ -391,9 +393,10 @@
 								<p:panel > 	
 								<p:dataTable id="tableCarteira" widgetVar="itensCarteira" rows="10" 
 											paginator="false" value="#{clienteController.entity.carteiras}" var="itemCarteira"
-											rowKey="#{itemCarteira.id}" reflow="true"
+											rowKey="#{itemCarteira.id}" reflow="true" 
 											paginatorPosition="bottom" editable="true"
-											emptyMessage="Nenhum item encontrado" sortBy="#{clienteController.formataData(itemCarteira.data)}"   sortOrder="DESCENDING"
+											emptyMessage="Nenhum item encontrado" sortBy="#{itemCarteira.id}"  
+											sortOrder="DESCENDING"
 											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
 											rowStyleClass="#{itemCarteira.empresa.id ne itemCarteira.empresaLogada.id ? 'outraEmpresa' : null}">
@@ -418,13 +421,14 @@
 										
 										<p:column headerText="Empresa" filterBy="#{itemCarteira.empresa.nomeFantasia}"   style="width:15%"
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.empresa.nomeFantasia}">
-							 				<h:outputLabel value="#{itemCarteira.empresa.nomeFantasia}" escape="false" />
+							 				<h:outputLabel value="#{itemCarteira.empresa.nomeFantasia}" escape="false"  id="nomeFantasica" />
+							 				<p:tooltip for="nomeFantasica"  value="#{clienteController.getUsuarioCadastro(itemCarteira)}"  /> 
 										</p:column>
 										
 										
 										<p:column headerText="Item" filterBy="#{itemCarteira.descricaoOuPrato}"   style="width:17%"
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.descricaoOuPrato}">
-							 				<h:outputLabel value="#{itemCarteira.descricaoOuPrato}" escape="false" />
+							 				<h:outputLabel value="#{itemCarteira.descricaoOuPrato}" escape="false" id="descricao" />
 										</p:column>
 										
 										<p:column headerText="Data" filterBy="#{clienteController.formataData(itemCarteira.data)}"   style="width:7%" 
@@ -440,12 +444,14 @@
 										
 										<p:column headerText="Devido" filterBy="#{itemCarteira.valorDevido}"    style="width:6%"
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorDevido}">
-							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorDevido)}" />
+							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorDevido)}" id="valorDevido" />
+							 				<p:tooltip for="valorDevido"  value="#{clienteController.getUsuarioCadastro(itemCarteira)}"  /> 
 										</p:column>
 										
 										<p:column headerText="Pago" filterBy="#{itemCarteira.valorPago}"    style="width:5%"
 											filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{itemCarteira.valorPago}">
-							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorPago)}" />
+							 				<h:outputLabel value="#{clienteController.formataValor(itemCarteira.valorPago)}" id="valorPago" />
+							 				<p:tooltip for="valorPago"  value="#{clienteController.getUsuarioCadastro(itemCarteira)}"  /> 
 										</p:column>
 										
 										
@@ -462,17 +468,10 @@
 												 	 actionListener="#{clienteController.excluirCarteira( itemCarteira )}"
 												 	 style="    width: 32px;"/>
 												 	 
-												 	  <!--  <p:column style="width:32px;text-align: center">
-												             <p:commandButton   oncomplete="PF('ItensSelecionados').show()" title="View"
-												             	styleClass="btn-info" icon="fa fa-search"  >
-												                <f:setPropertyActionListener value="#{itemCarteira}"
-												                	 target="#{clienteController.carteiraSelecionada}" />
-												            </p:commandButton>
-												        </p:column>
+												 <!-- <p:commandButton   oncomplete="PF('ItensSelecionados').show()" title="View"   	styleClass="btn-info" icon="fa fa-search"  >
+												   	<f:setPropertyActionListener value="#{itemCarteira}"    	 target="#{clienteController.carteiraSelecionada}" />
+												</p:commandButton> -->
 												        
-												       <p:commandButton update="carDetail" oncomplete="PF('ItensSelecionados').show()" icon="pi pi-search" title="View">
-													                <f:setPropertyActionListener value="#{itemCarteira}" target="#{clienteController.carteiraSelecionada}" />
-													            </p:commandButton>-->
 											</div>	
 										</p:column>
 										
@@ -494,12 +493,18 @@
 	    	
 	    	
 	    	
-        </h:form>
+       
         
-        <p:dialog header="Tarefas Selecionadas" widgetVar="ItensSelecionados" height="250"
+        
+        
+ </h:form>
+ 
+ <h:form>
+ 
+ <p:dialog header="Tarefas Selecionadas" widgetVar="ItensSelecionados" height="250"
                   	  width="400" responsive="true" styleClass="box-success">
 	              <p:outputPanel id="carDetail" style="text-align:center;">
-		            <p:panelGrid  columns="2" columnClasses="label,value">
+		            <p:panelGrid  columns="2">
 		               <h:outputText value="Id:" />
 		                <h:outputText value="#{carteiraSelecionada.id}" />
 		 
@@ -510,12 +515,12 @@
 		                <h:outputText value="#{carteiraSelecionada.color}"  />
 		             
 		                <h:outputText value="Price" />
-		                <h:outputText value="$#{carteiraSelecionada.price}" />
+		                <h:outputText value="#{carteiraSelecionada.price}" />
 		            </p:panelGrid>
 		        </p:outputPanel>
 			</p:dialog>
-        
-
+ </h:form>
+ 
     </ui:define>
 
 </ui:composition>   

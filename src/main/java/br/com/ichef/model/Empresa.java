@@ -34,6 +34,12 @@ public class Empresa extends BaseEntity {
 	@Column(name = "NR_CNPJ")
 	private String CNPJ;
 
+	@Column(name = "DS_EMAIL")
+	private String email;
+
+	@Column(name = "NR_TELEFONE")
+	private String telefone;
+
 	@Column(name = "VL_CUSTO_MAXIMO")
 	private BigDecimal valorCustoMaximo;
 
@@ -76,8 +82,6 @@ public class Empresa extends BaseEntity {
 
 	@Transient
 	private boolean isAtivo;
-
-	
 
 	@Column(name = "SN_ATIVO")
 	private String ativo;
@@ -289,6 +293,22 @@ public class Empresa extends BaseEntity {
 
 	public void setLocalidade(Localidade localidade) {
 		this.localidade = localidade;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
 }

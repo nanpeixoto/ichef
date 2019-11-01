@@ -304,11 +304,18 @@ public class FichaTecnicaPratoController extends BaseController {
 
 		Integer qtdFichaMesmoNome = 0;
 		qtdFichaMesmoNome = obetrQuantidadeFichaByNome();
+		Integer qtdPreparos = 0;
+		qtdPreparos = obterQuantidadeFichaByPreparacao();
 
 		if (entity.isEdicao()) {
 			entity.setUsuarioAlteracao(getUserLogado());
 			entity.setDataAlteracao(new Date());
 			if (validarNome) {
+
+				if (qtdPreparos > 1) {
+					FacesUtil.addErroMessage("Já existe um prato com estas mesmas preparações");
+					return "";
+				}
 				if (qtdFichaMesmoNome > 1) {
 					FacesUtil.addErroMessage("Já existe um item com esse nome");
 					return "";
@@ -318,6 +325,11 @@ public class FichaTecnicaPratoController extends BaseController {
 			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
 			if (validarNome) {
+				if (qtdPreparos > 0) {
+					FacesUtil.addErroMessage("Já existe um prato com estas mesmas preparações");
+					return "";
+				}
+				
 				if (qtdFichaMesmoNome > 0) {
 					FacesUtil.addErroMessage("Já existe um item com esse nome");
 					return "";
@@ -343,6 +355,21 @@ public class FichaTecnicaPratoController extends BaseController {
 		visitor.setDescricao(entity.getDescricao());
 		Integer qtdFichaMesmoNome = (service.findByParameters(new FichaTecnicaPrato(), visitor)).size();
 		return qtdFichaMesmoNome;
+	}
+	
+	private Integer obterQuantidadeFichaByPreparacao() throws Exception {
+		String listaPreparacoes = "";
+		if( getEntity().getFichaTecnicaPratoPreparos()!=null ) {
+			for (FichaTecnicaPratoPreparo preparo : getEntity().getFichaTecnicaPratoPreparos()) {
+				if(!listaPreparacoes.equalsIgnoreCase("")) {
+					listaPreparacoes =listaPreparacoes+",";
+				}
+				listaPreparacoes =listaPreparacoes+ preparo.getFichaTecnicaPreparo().getId().toString();
+			}
+		}
+			
+		Integer qtd = service.findQuantidadeFichaByPreparacao(listaPreparacoes) ;
+		return qtd;
 	}
 
 	public String excluir() {

@@ -77,6 +77,15 @@
 					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{empresaController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>
+					        
+					       <p:outputLabel value="Telefone" for="numero"/>
+		                   <p:inputMask value="#{empresaController.entity.telefone}" id="numero" styleClass="letras-maiusculas" mask="+9?9 (99) 99999-99999999"
+		                   required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Telefone')}"/>
+		                   
+		                   <p:outputLabel value="Email" for="email"/>
+		                   <p:inputText value="#{empresaController.entity.email}" id="email"   styleClass="letras-maiusculas"
+                    		required="true" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
+		                    	 	
                     		
                     		<p:outputLabel value="Cidade" for="cidade"/>
                     		 <p:selectOneMenu id="cidade" value="#{empresaController.entity.cidade}"  converter= "omnifaces.SelectItemsConverter"
