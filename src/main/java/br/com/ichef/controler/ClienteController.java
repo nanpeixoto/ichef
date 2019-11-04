@@ -435,6 +435,7 @@ public class ClienteController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 
 		getEntity().getCarteiras().add(carteira);
 

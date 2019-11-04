@@ -156,6 +156,11 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	public List<T> findByParameters(T object) throws Exception {
+		if( !manager.isOpen() ) {
+			EntityManagerProducer producer = new EntityManagerProducer();
+			manager  = producer.createEntityManager();
+		}
+		
 		Criteria criteria = createCriteria(object);
 
 		return criteria.list();
