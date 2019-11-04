@@ -8,6 +8,10 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>br.com.ichef.model.ClienteCarteira</class>
 		<class>br.com.ichef.model.Email</class>
+		<class>br.com.ichef.model.Cardapio</class>
+		<class>br.com.ichef.model.CardapioFichaPrato</class>
+		<class>model.VwDashboard</class>
+		<class>model.VwUltimosCliente</class>
 
 
 		<properties>

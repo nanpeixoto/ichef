@@ -129,6 +129,13 @@ public class LancamentoCarteiraController extends BaseController {
 
 	public void adicionarCarteira() {
 
+		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO FOR PARA OUTRA EMPRESA
+			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO NÃO FOR CREDITO
+				facesMessager.error("O tipo de Lançamento para outra empresa só pode ser Crédito");
+				return;
+			}
+		}
+
 		if (getTipoCarteira() == null || getTipoCarteira().equals("")) {// TIPO DE PAGAMENTO PRECISA ESTAR PREENCHIDO
 			facesMessager.error(getRequiredMessage("Tipo"));
 			return;
@@ -227,7 +234,7 @@ public class LancamentoCarteiraController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		lista.add(carteira);
 
 		limparCarteira();
@@ -260,7 +267,8 @@ public class LancamentoCarteiraController extends BaseController {
 	}
 
 	public boolean getExibirFormaPagamento() {
-		if ( getTipoCarteira() !=null  && (getTipoCarteira().equalsIgnoreCase("C") || getTipoCarteira().equalsIgnoreCase("P") ) )
+		if (getTipoCarteira() != null
+				&& (getTipoCarteira().equalsIgnoreCase("C") || getTipoCarteira().equalsIgnoreCase("P")))
 			return true;
 
 		return false;
@@ -284,7 +292,7 @@ public class LancamentoCarteiraController extends BaseController {
 				temp.remove(item);
 				clienteCarteiraService.excluir(item);
 			}
-			
+
 		}
 		lista.clear();
 		lista.addAll(temp);

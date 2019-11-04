@@ -242,13 +242,15 @@ public class ClienteController extends BaseController {
 		} else {
 			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
-			
+
 			FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-			FacesUtil.addInfoMessage("Novo cliente criado código: " + getEntity().getId());
+			
 		}
-		
+
 		entity.setDescricaoTelefone(entity.getAllTelefones());
 		service.saveOrUpdade(entity);
+		
+		FacesUtil.addInfoMessage("Novo cliente criado código: " + getEntity().getId());
 
 		return "lista-cliente.xhtml?faces-redirect=true";
 
@@ -331,6 +333,13 @@ public class ClienteController extends BaseController {
 	}
 
 	public void adicionarCarteira() {
+
+		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO FOR PARA OUTRA EMPRESA
+			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO NÃO FOR CREDITO
+				facesMessager.error("O tipo de Lançamento para outra empresa só pode ser Crédito");
+				return;
+			}
+		}
 
 		if (getTipoCarteira() == null || getTipoCarteira().equals("")) {// TIPO DE PAGAMENTO PRECISA ESTAR PREENCHIDO
 			facesMessager.error(getRequiredMessage("Tipo"));
@@ -435,7 +444,6 @@ public class ClienteController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 
 		getEntity().getCarteiras().add(carteira);
 

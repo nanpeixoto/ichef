@@ -30,31 +30,33 @@
                 	<div class="info-box bg-aqua">
                     	<span class="info-box-icon"><i class="fa fa-list"></i></span>
                     	<div class="info-box-content">
-                        	<span class="info-box-text">Pedidos</span>
-                        	<span class="info-box-number">350</span>
+                        	<span class="info-box-text">Fichas Técnicas de Prato</span>
+                        	<span class="info-box-number">#{dashboardController.entity.quantidadeFichaPratos}</span>
                         	<div class="progress">
-                            	<div class="progress-bar" style="width: 70%"></div>
+                            	<div class="progress-bar" style="width: 100%"></div>
                         	</div>
-                        	<span class="progress-description">70% dos pratos diponíveis </span>
+                        	 <span class="progress-description">Total pratos diponíveis </span> 
                     	</div><!-- /.info-box-content -->
                 	</div><!-- /.info-box -->
             	</div>
             	
             	<div class="col-sm-6 col-xs-12">
                 	<div class="info-box bg-green">
-                    	<span class="info-box-icon"><i class="fa fa-money"></i></span>
+                    	<span class="info-box-icon"><i class="fa fa-user"></i></span>
                     	<div class="info-box-content">
-                        	<span class="info-box-text">Pagamentos em Dinheiro</span>
-                        	<span class="info-box-number">10</span>
+                        	<span class="info-box-text">Clientes</span>
+                        	<span class="info-box-number">#{dashboardController.entity.quantidadeClientes}</span>
                         	<div class="progress">
-                            	<div class="progress-bar" style="width: 2%"></div>
+                            	<div class="progress-bar" style="width: 100%"></div>
                         	</div>
-                        	<span class="progress-description">2% dos pedidos  </span>
+                        	<span class="progress-description">Total de Clientes disponíveis  </span> 
 		               	</div><!-- /.info-box-content -->
 					</div><!-- /.info-box -->
 				</div>
+				
+				
             
-	            <div class="col-sm-6 col-xs-12">
+	             <!-- <div class="col-sm-6 col-xs-12">
 	                <div class="info-box bg-yellow">
 	                    <span class="info-box-icon"><i class="fa fa-credit-card"></i></span>
 	                    <div class="info-box-content">
@@ -64,8 +66,8 @@
 	                            <div class="progress-bar" style="width: 14%"></div>
 	                        </div>
 	                        <span class="progress-description">14% dos pedidos</span>
-	                    </div><!-- /.info-box-content -->
-	                </div><!-- /.info-box -->
+	                    </div>
+	                </div>
 	            </div>
 	            
 	            <div class="col-sm-6 col-xs-12">
@@ -78,73 +80,38 @@
 	                            <div class="progress-bar" style="width: 82%"></div>
 	                        </div>
 	                        <span class="progress-description">82% dos pedidos</span>
-	                    </div><!-- /.info-box-content -->
-	                </div><!-- /.info-box -->
-	            </div>
+	                    </div>
+	                </div>
+	            </div>-->
 	            
-	             <div class="col-sm-12 col-xs-12">
-              <!-- USERS LIST -->
+	          <div class="col-sm-12 col-xs-12">
+              
               <div class="box box-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Última Hora</h3>
+                  <h3 class="box-title"></h3>
 
                   <div class="box-tools pull-right">
-                    <span class="label label-danger">10 novos pedidos</span>
+                    <span class="label label-danger">10 novos clientes</span>
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
                     </button>
                   </div>
                 </div>
-                <!-- /.box-header -->
+                
                 <div class="box-body no-padding">
-                  <ul class="users-list clearfix">
-                    <li>
-                      <img src="resources/images/prato1.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">Alexander Pierce</a>
-                      <span class="users-list-date">28/05</span>
-                    </li>
-                    <li>
-                      <img src="resources/images/prato2.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">Norman</a>
-                      <span class="users-list-date">28/05</span>
-                    </li>
-                    <li>
-                      <img src="resources/images/prato3.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">Jane</a>
-                      <span class="users-list-date">28/05</span>
-                    </li>
-                    <li>
-                      <img src="resources/images/prato4.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">John</a>
-                      <span class="users-list-date">28/05</span>
-                    </li>
-                    <li>
-                      <img src="resources/images/prato5.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">Alexander</a>
-                      <span class="users-list-date">27/05</span>
-                    </li>
-                    <li>
-                      <img src="resources/images/prato6.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">Sarah</a>
-                      <span class="users-list-date">27/05</span>
-                    </li>
-                    <li>
-                      <img src="resources/images/prato7.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">Nora</a>
-                      <span class="users-list-date">27/05</span>
-                    </li>
-                    <li>
-                      <img src="resources/images/prato8.jpg" alt="User Image" style="width: 105px;"/>
-                      <a class="users-list-name" href="#">Nadia</a>
-                      <span class="users-list-date">27/05</span>
-                    </li>
-                  </ul>
+                	<p:carousel numVisible="5"  value="#{dashboardController.clientes}" headerText="Últimos Clientes" var="car" itemStyle="text-align:center" responsive="true" >
+                	    <p:panelGrid columns="1" style="width:100%;margin:10px 0px" columnClasses="users-list-name,users-list-date" layout="grid" styleClass="ui-panelgrid-blank">
+        					<a class="users-list-name" href="#">#{car.nmCliente}</a>
+                      		<span class="users-list-date">#{car.id}</span>
+                      		<span class="users-list-date">#{car.dsTelefone}</span>
+						</p:panelGrid>
+                   </p:carousel>
                   <!-- /.users-list -->
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                  <a href="javascript:void(0)" class="uppercase">Ver todos os Pedidos</a>
+                  <a  href="/iChef/pages/cliente/lista-cliente.xhtml" class="uppercase">Ver todos os clientes</a>
                 </div>
                 <!-- /.box-footer -->
               </div>
