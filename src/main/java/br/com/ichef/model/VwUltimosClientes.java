@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -85,21 +83,7 @@ public class VwUltimosClientes extends BaseEntity {
 		this.dsTelefone = dsTelefone;
 	}
 
-	public Date getDtAlteracao() {
-		return dtAlteracao;
-	}
-
-	public void setDtAlteracao(Date dtAlteracao) {
-		this.dtAlteracao = dtAlteracao;
-	}
-
-	public Date getDtCadastro() {
-		return dtCadastro;
-	}
-
-	public void setDtCadastro(Date dtCadastro) {
-		this.dtCadastro = dtCadastro;
-	}
+	
 
 	public String getNmCliente() {
 		return nmCliente;

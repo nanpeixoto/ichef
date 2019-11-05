@@ -6,8 +6,6 @@
 	<persistence-unit name="PU">
 
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		
-
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ichef?useSSL=true" />
 			<property name="javax.persistence.jdbc.user" value="ichef" />
