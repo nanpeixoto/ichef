@@ -12,9 +12,11 @@ import br.com.ichef.model.FichaTecnicaPratoPreparo;
 public class FIchaTecnicaPreparoVisitor extends FilterVisitor {
 
 	private Long codigoTipoMaterialExcluido;
-	
+
+	private Long codigoDiferenteDe;
+
 	private String nomeInsumo;
-	
+
 	private Boolean obterPreparoDesvinculadoPrato;
 
 	@Override
@@ -23,15 +25,21 @@ public class FIchaTecnicaPreparoVisitor extends FilterVisitor {
 			criteria.add(Restrictions.ne("tipoInsumo.id", codigoTipoMaterialExcluido));
 
 		}
-		
+
 		if (nomeInsumo != null) {
 			criteria.add(Restrictions.eq("descricao", nomeInsumo));
 
 		}
-		
-		if (obterPreparoDesvinculadoPrato!=null && obterPreparoDesvinculadoPrato) {
+
+		if (codigoDiferenteDe != null) {
+			criteria.add(Restrictions.ne("id", codigoDiferenteDe));
+
+		}
+
+		if (obterPreparoDesvinculadoPrato != null && obterPreparoDesvinculadoPrato) {
 			DetachedCriteria fichapratoPreparo = DetachedCriteria.forClass(FichaTecnicaPratoPreparo.class, "rc")
-					.setProjection(Projections.projectionList().add(Projections.groupProperty("rc.fichaTecnicaPreparo.id")));
+					.setProjection(
+							Projections.projectionList().add(Projections.groupProperty("rc.fichaTecnicaPreparo.id")));
 
 			criteria.add(Subqueries.propertiesNotIn(new String[] { "id" }, fichapratoPreparo));
 
@@ -62,7 +70,13 @@ public class FIchaTecnicaPreparoVisitor extends FilterVisitor {
 	public void setObterPreparoDesvinculadoPrato(Boolean obterPreparoDesvinculadoPrato) {
 		this.obterPreparoDesvinculadoPrato = obterPreparoDesvinculadoPrato;
 	}
-	
-	
+
+	public Long getCodigoDiferenteDe() {
+		return codigoDiferenteDe;
+	}
+
+	public void setCodigoDiferenteDe(Long codigoDiferenteDe) {
+		this.codigoDiferenteDe = codigoDiferenteDe;
+	}
 
 }

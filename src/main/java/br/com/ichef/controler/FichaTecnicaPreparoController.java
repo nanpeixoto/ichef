@@ -54,32 +54,40 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 	private List<Insumo> insumos = new ArrayList<Insumo>();
 
+	private List<FichaTecnicaPreparo> preparos = new ArrayList<FichaTecnicaPreparo>();
+	private FichaTecnicaPreparo preparo;
+
 	private Insumo insumo;
 	private BigDecimal qtdLiquida;
 	private Long aproveitamento;
 	private BigDecimal qtdBruta;
 	private Long copia;
 
+	private boolean mostraPreparo;
+
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
 
 		}
-		
+
 		if (copia != null) {
-			criarClone( copia );
+			criarClone(copia);
 
 		}
 		obterListas();
+		mostraPreparo = false;
 	}
 
-	
+	public void atualizarListaInsumos() {
+		obterListas();
+	}
 
 	@PostConstruct
-	public void init()  {
+	public void init() {
 		if (id != null) {
 			setEntity(service.getById(id));
-		}  else {
+		} else {
 			setEntity(new FichaTecnicaPreparo());
 			getEntity().setAtivo("S");
 			getEntity().setCopia("N");
@@ -100,7 +108,16 @@ public class FichaTecnicaPreparoController extends BaseController {
 		try {
 			FIchaTecnicaPreparoVisitor visitor = new FIchaTecnicaPreparoVisitor();
 			visitor.setCodigoTipoMaterialExcluido(TipoInsumo.COD_INSUMO_MATERIAL);
-			insumos = insumoService.findByParameters(new Insumo(), visitor);
+			Insumo filtroInsumo = new Insumo();
+			filtroInsumo.setAtivo("S");
+			insumos = insumoService.findByParameters(filtroInsumo, visitor);
+
+			visitor = new FIchaTecnicaPreparoVisitor();
+			if (getEntity().getId() != null)
+				visitor.setCodigoDiferenteDe((Long) getEntity().getId());
+			FichaTecnicaPreparo filtroPreparo = new FichaTecnicaPreparo();
+			filtroPreparo.setAtivo("S");
+			preparos = service.findByParameters(filtroPreparo, visitor);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,9 +141,9 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 	public String copiar(FichaTecnicaPreparo perparo) {
 		try {
-			
-			//Salvar(false);
-			return "cadastro-ficha-tecnica-preparo.xhtml?faces-redirect=true&copia="+perparo.getId();
+
+			// Salvar(false);
+			return "cadastro-ficha-tecnica-preparo.xhtml?faces-redirect=true&copia=" + perparo.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -134,7 +151,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 		return "";
 
 	}
-	
+
 	private void criarClone(Long idCopia) {
 		try {
 			criarClone(service.getById(idCopia));
@@ -142,19 +159,19 @@ public class FichaTecnicaPreparoController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void criarClone(FichaTecnicaPreparo perparo) throws CloneNotSupportedException {
 		FichaTecnicaPreparo clone = new FichaTecnicaPreparo();
-		//clone = perparo.clone();
+		// clone = perparo.clone();
 		clone.setId(null);
 		clone.setAtivo("S");
 		clone.setCopia("S");
 		clone.setTamanho(10l);
 		clone.setClassificacao("A");
-		//Integer qtd = obetrQuantidadeFichaByNome();
-		clone.setDescricao(perparo.getDescricao() );
+		// Integer qtd = obetrQuantidadeFichaByNome();
+		clone.setDescricao(perparo.getDescricao());
 		clone.setCopia("S");
 		clone.setInsumos(new ArrayList<>());
 
@@ -174,7 +191,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 		}
 		setEntity(null);
 		clone.setInsumos(novaListaFichaInsumo);
-		setEntity( clone);
+		setEntity(clone);
 	}
 
 	public void adicionarInsumo() {
@@ -255,11 +272,11 @@ public class FichaTecnicaPreparoController extends BaseController {
 	 */
 
 	public String Salvar(boolean validarNome) throws Exception {
-		
-		if(copia !=null ) {
-			 criarClone(getEntity());
+
+		if (copia != null) {
+			criarClone(getEntity());
 		}
-		
+
 		Integer qtdFichaMesmoNome = 0;
 		qtdFichaMesmoNome = obetrQuantidadeFichaByNome();
 
@@ -305,6 +322,10 @@ public class FichaTecnicaPreparoController extends BaseController {
 	public String excluir() {
 		service.excluir(entity);
 		return "lista-ficha-tecnica-preparo.xhtml?faces-redirect=true";
+	}
+
+	public void alterarValor() {
+		mostraPreparo = !mostraPreparo;
 	}
 
 	public FichaTecnicaPreparoService getService() {
@@ -421,6 +442,31 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 	public void setCopia(Long copia) {
 		this.copia = copia;
+	}
+
+	public List<FichaTecnicaPreparo> getPreparos() {
+		return preparos;
+	}
+
+	public void setPreparos(List<FichaTecnicaPreparo> preparos) {
+		this.preparos = preparos;
+	}
+
+	public FichaTecnicaPreparo getPreparo() {
+		return preparo;
+	}
+
+	public void setPreparo(FichaTecnicaPreparo preparo) {
+		this.preparo = preparo;
+	}
+
+	public boolean isMostraPreparo() {
+		System.out.println(mostraPreparo);
+		return mostraPreparo;
+	}
+
+	public void setMostraPreparo(boolean mostraPreparo) {
+		this.mostraPreparo = mostraPreparo;
 	}
 
 }

@@ -26,7 +26,7 @@ public class CronSchedulerEmail {
 	public CronSchedulerEmail( EmailService service, ServletContextEvent sce ) throws Exception {
 		setSce( sce );
 		setService( service );
-		criarScheduler("Email", "EmailServiceJob", EmailServiceJob.class,"0 0/2 * * * ?");
+		criarScheduler("Email", "EmailServiceJob", EmailServiceJob.class,"0 0/60 * * * ?");
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

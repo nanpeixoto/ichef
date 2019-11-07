@@ -64,6 +64,7 @@
 					            <f:selectItem itemLabel="Selecione" itemValue="" />
 					            <f:selectItem itemLabel="Acompanhamento" itemValue="A" />
 					            <f:selectItem itemLabel="Prato Principal" itemValue="P" />
+					            <f:selectItem itemLabel="Pré Preparo" itemValue="E" />
 					        </p:selectOneMenu>		
 					        
 					        <p:outputLabel value="Tamanho da Receita" for="tamanhoreceita"/>
@@ -76,7 +77,11 @@
 						       <p:selectBooleanButton id="ativo" value="#{fichaTecnicaPreparoController.entity.ativo}" 
 						        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
                     	
-                    	</p:panelGrid>		
+                    	</p:panelGrid>	
+                    	
+                    
+						
+						        		
                     	<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
                     	<p:panelGrid id="capaPanelpreco" columns="4" layout="grid"  >
                     		<p:outputLabel value="Preço de Venda Receita" id="pvr2"  />
@@ -93,15 +98,64 @@
                     	</p:panelGrid>	
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
-						<p:panelGrid  columns="7" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
+							<p:panelGrid  columns="8" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid" id="painelPreparo" 
+								rendered="#{fichaTecnicaPreparoController.mostraPreparo}">
+						
+							<p:outputLabel value="Preparo" for="Preparo"/>
+                    		<p:selectOneMenu id="Preparo" value="#{fichaTecnicaPreparoController.preparo}" filter="true"  filterMatchMode="contains" 
+                    			converter= "omnifaces.SelectItemsConverter">
+                    			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            <f:selectItems value="#{fichaTecnicaPreparoController.preparos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					        </p:selectOneMenu>
+						
+						<p:commandButton    icon="fa fa-refresh" 
+                    	 	 id="btnAtualizarListaInsumo2"  update="Insumo"
+                    	 	 	 actionListener="#{fichaTecnicaPreparoController.atualizarListaInsumos()}"  
+                    	 	 styleClass="btn btn-light" 
+                    	 	/>
+						
+							<p:outputLabel value="Qtd. Liquida" for="qtdl2"/>
+							<p:inputNumber   id="qtdl2" value="#{fichaTecnicaPreparoController.qtdLiquida}" symbol="" decimalSeparator="," thousandSeparator="." />
+                    		
+						 	
+						 	<p:outputLabel value="Aproveitamento" for="aproveitamento2"/>
+							<p:inputNumber   id="aproveitamento2" value="#{fichaTecnicaPreparoController.aproveitamento}" symbol=" %"  emptyValue="zero" symbolPosition="s" decimalSeparator="," thousandSeparator="." /> 
+						 	
+                    	 	
+                    	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
+                    	 	 id="btnSurname2" process="@this,Preparo,qtdl2,aproveitamento2,tamanhoreceita" update="growl,Stable,Preparo,qtdl2,aproveitamento2,pvr,pvp,pcr,pcp"
+                    	 	 	 actionListener="#{fichaTecnicaPreparoController.adicionarInsumo()}"  
+                    	 	 styleClass="btn-primary" 
+                    	 	/>
+                    	 	
+                    	 	
+                    	 	
+                    	 	
+                    	</p:panelGrid>
+						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+							<p:selectBooleanButton id="mostrarPreparo" value="#{fichaTecnicaPreparoController.mostraPreparo}" 
+						        	onLabel="Prepro" offLabel="Insumo" onIcon="fa fa-apple" offIcon="fa fa-cutlery"  immediate="true">
+						        	<p:ajax update="Insumo,painelPreparo,painelInsumos,growl" listener="#{fichaTecnicaPreparoController.alterarValor()}"></p:ajax>
+						</p:selectBooleanButton>
+						
+						
+						<p:panelGrid  columns="8" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid" id="painelInsumos"
+						rendered="#{!fichaTecnicaPreparoController.mostraPreparo}">
 						
 							<p:outputLabel value="Insumo" for="Insumo"/>
                     		<p:selectOneMenu id="Insumo" value="#{fichaTecnicaPreparoController.insumo}" filter="true"  filterMatchMode="contains" 
-                    			converter= "omnifaces.SelectItemsConverter">
+                    			converter= "omnifaces.SelectItemsConverter" disabled="#{!fichaTecnicaPreparoController.mostraPreparo}">
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{fichaTecnicaPreparoController.insumos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>
 						
+						<p:commandButton    icon="fa fa-refresh" 
+                    	 	 id="btnAtualizarListaInsumo"  update="Insumo"
+                    	 	 	 actionListener="#{fichaTecnicaPreparoController.atualizarListaInsumos()}"  
+                    	 	 styleClass="btn btn-light" 
+                    	 	/>
 						
 							<p:outputLabel value="Qtd. Liquida" for="qtdl"/>
 							<p:inputNumber   id="qtdl" value="#{fichaTecnicaPreparoController.qtdLiquida}" symbol="" decimalSeparator="," thousandSeparator="." />
@@ -116,6 +170,8 @@
                     	 	 	 actionListener="#{fichaTecnicaPreparoController.adicionarInsumo()}"  
                     	 	 styleClass="btn-primary" 
                     	 	/>
+                    	 	
+                    	 	
                     	 	
                     	 	
                     	</p:panelGrid>

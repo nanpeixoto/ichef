@@ -23,7 +23,6 @@ public class CronWebListener implements ServletContextListener {
 
 			System.out.println("Iniciando Listener JOB: emailService");
 			new CronSchedulerEmail(emailService, sce);
-			System.out.println("Parando Listener JOB: emailService");
 
 
 		} catch (Exception e) {
