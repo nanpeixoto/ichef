@@ -157,9 +157,12 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 
 	public List<T> findByParameters(T object) throws Exception {
 		if( !manager.isOpen() ) {
+			System.out.println("conecao fechada");
 			EntityManagerProducer producer = new EntityManagerProducer();
 			manager  = producer.createEntityManager();
 		}
+		
+		System.out.println("conecao");
 		
 		Criteria criteria = createCriteria(object);
 

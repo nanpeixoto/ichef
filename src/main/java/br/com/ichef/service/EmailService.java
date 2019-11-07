@@ -1,9 +1,11 @@
 package br.com.ichef.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.faces.bean.SessionScoped;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -17,6 +19,7 @@ import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.dto.EmailDTO;
 import br.com.ichef.model.Email;
 
+@SessionScoped
 public class EmailService extends GenericDAO<Email> {
 
 	/**
@@ -84,8 +87,9 @@ public class EmailService extends GenericDAO<Email> {
 		Email email = new Email();
 		email.setEmailEnviao("N");
 		try {
-
-			List<Email> emails = findByParameters(email);
+			List<Email> emails = new ArrayList<Email>();
+			emails = findByParameters(email);
+			System.out.println("Emails Encontratos:" +emails.size());
 			for (Email emailParaEnviar : emails) {
 				try {
 					EmailDTO dto = new EmailDTO();
