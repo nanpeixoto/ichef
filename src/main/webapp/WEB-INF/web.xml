@@ -29,9 +29,9 @@
 	<listener>
 		<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
 	</listener>
-	<listener>
+	<!-- <listener>
 		<listener-class>br.com.ichef.listener.CronWebListener</listener-class>
-	</listener> 
+	</listener>  -->
 	<resource-env-ref>
 		<resource-env-ref-name>BeanManager</resource-env-ref-name>
 		<resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>

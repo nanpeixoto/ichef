@@ -1,23 +1,8 @@
 package br.com.ichef.scheduler;
 
-import javax.servlet.ServletContextEvent;
-
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
-
-import br.com.ichef.job.EmailServiceJob;
-import br.com.ichef.service.EmailService;
-
 public class CronSchedulerEmail {
 
-	private static SchedulerFactory sf = new StdSchedulerFactory();
+	/*private static SchedulerFactory sf = new StdSchedulerFactory();
 
 	private static EmailService service;
 	
@@ -26,7 +11,7 @@ public class CronSchedulerEmail {
 	public CronSchedulerEmail( EmailService service, ServletContextEvent sce ) throws Exception {
 		setSce( sce );
 		setService( service );
-		criarScheduler("Email", "EmailServiceJob", EmailServiceJob.class,"0 0/60 * * * ?");
+		criarScheduler("Email", "EmailServiceJob", EmailServiceJob.class,"0 0/2 * * * ?");
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -72,5 +57,5 @@ public class CronSchedulerEmail {
 
 	public static void setSce(ServletContextEvent sce) {
 		CronSchedulerEmail.sce = sce;
-	}
+	}*/
 }

@@ -11,6 +11,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.component.selectbooleanbutton.SelectBooleanButton;
+import org.primefaces.component.selectoneradio.SelectOneRadio;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.FichaTecnicaPreparo;
@@ -63,7 +66,11 @@ public class FichaTecnicaPreparoController extends BaseController {
 	private BigDecimal qtdBruta;
 	private Long copia;
 
-	private boolean mostraPreparo;
+	private SelectBooleanButton selectButtonMonstraPreparo;
+
+	private String tipoItem;
+
+	private SelectOneRadio selectOneRadioMonstraPreparo;
 
 	public void inicializar() {
 		if (id != null) {
@@ -76,7 +83,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 		}
 		obterListas();
-		mostraPreparo = false;
+
 	}
 
 	public void atualizarListaInsumos() {
@@ -87,10 +94,12 @@ public class FichaTecnicaPreparoController extends BaseController {
 	public void init() {
 		if (id != null) {
 			setEntity(service.getById(id));
+			getEntity().setMostraPreparo(true);
 		} else {
 			setEntity(new FichaTecnicaPreparo());
 			getEntity().setAtivo("S");
 			getEntity().setCopia("N");
+			getEntity().setMostraPreparo(true);
 			setAproveitamento(100l);
 			/*
 			 * getEntity().setPrecoCustoPorcao(new BigDecimal(0));
@@ -194,27 +203,53 @@ public class FichaTecnicaPreparoController extends BaseController {
 		setEntity(clone);
 	}
 
-	public void adicionarInsumo() {
-		boolean existe = false;
-
-		if (getInsumo() == null) {
+	public void adicionarItem() {
+		if (getInsumo() == null && getPreparo() == null) {
 			facesMessager.error(getRequiredMessage("Insumo"));
 			return;
 		}
 
+		if (getInsumo() != null && getPreparo() == null) {
+			Boolean erro =  adicionarInsumo(getInsumo(), true);
+			if(erro)
+				return;
+		}
+		if (getPreparo() != null) {
+			for (FichaTecnicaPreparoInsumo fichaTecnicaPreparoInsumo : getPreparo().getInsumos()) {
+				Boolean erro = adicionarInsumo(fichaTecnicaPreparoInsumo.getInsumo(), false);
+				if(erro)
+					return;
+				
+			}
+		}
+
+		setInsumo(null);
+		aproveitamento = 100l;
+		qtdLiquida = null;
+
+	}
+
+	public Boolean adicionarInsumo(Insumo insumoParaAdicionar, Boolean adicionardoPorInsumo) {
+		boolean existe = false;
+
+		if (insumoParaAdicionar == null) {
+			facesMessager.error(getRequiredMessage("Insumo"));
+			return true;
+		}
+
 		if (getQtdLiquida() == null) {
 			facesMessager.error(getRequiredMessage("Qtd Liquida"));
-			return;
+			return true;
 		}
 
 		if (getAproveitamento() == null) {
 			facesMessager.error(getRequiredMessage("Aproveitamento"));
-			return;
+			return true;
 		}
 
 		if (getEntity().getInsumos() != null) {
 			for (FichaTecnicaPreparoInsumo fichaInsumo : getEntity().getInsumos()) {
-				if (insumo.getId().equals(fichaInsumo.getInsumo().getId()))
+				if (insumoParaAdicionar.getId().equals(fichaInsumo.getInsumo().getId()))
 					existe = true;
 			}
 		}
@@ -228,12 +263,12 @@ public class FichaTecnicaPreparoController extends BaseController {
 			fichaInsumo.setQuantidadeBruta(
 					(qtdLiquida.divide(new BigDecimal(aproveitamento).divide(new BigDecimal(100)), BigDecimal.ROUND_UP))
 							.setScale(2, RoundingMode.CEILING));
-			fichaInsumo.setCustoBruto(new BigDecimal(getInsumo().getValor()));
-			fichaInsumo
-					.setCustoTotal((fichaInsumo.getQuantidadeBruta().multiply(new BigDecimal(getInsumo().getValor())))
+			fichaInsumo.setCustoBruto(new BigDecimal(insumoParaAdicionar.getValor()));
+			fichaInsumo.setCustoTotal(
+					(fichaInsumo.getQuantidadeBruta().multiply(new BigDecimal(insumoParaAdicionar.getValor())))
 							.setScale(2, RoundingMode.CEILING));
 			fichaInsumo.setFichaTecnicaPreparo(getEntity());
-			fichaInsumo.setInsumo(insumo);
+			fichaInsumo.setInsumo(insumoParaAdicionar);
 			fichaInsumo.setQuantidadeLiquida(qtdLiquida);
 
 			if (getEntity().getInsumos() == null) {
@@ -242,14 +277,12 @@ public class FichaTecnicaPreparoController extends BaseController {
 			getEntity().getInsumos().add(fichaInsumo);
 
 			service.calcularPercos(entity, configuracao);
-			insumo = null;
-			aproveitamento = 100l;
-			qtdLiquida = null;
 
 		} else {
-			facesMessager.error("Insumo já cadastrado");
+			if (adicionardoPorInsumo)
+				facesMessager.error("Insumo já cadastrado");
 		}
-
+		return false;
 	}
 
 	public void excluirSelecionados() {
@@ -322,10 +355,6 @@ public class FichaTecnicaPreparoController extends BaseController {
 	public String excluir() {
 		service.excluir(entity);
 		return "lista-ficha-tecnica-preparo.xhtml?faces-redirect=true";
-	}
-
-	public void alterarValor() {
-		mostraPreparo = !mostraPreparo;
 	}
 
 	public FichaTecnicaPreparoService getService() {
@@ -460,13 +489,28 @@ public class FichaTecnicaPreparoController extends BaseController {
 		this.preparo = preparo;
 	}
 
-	public boolean isMostraPreparo() {
-		System.out.println(mostraPreparo);
-		return mostraPreparo;
+	public SelectBooleanButton getSelectButtonMonstraPreparo() {
+		return selectButtonMonstraPreparo;
 	}
 
-	public void setMostraPreparo(boolean mostraPreparo) {
-		this.mostraPreparo = mostraPreparo;
+	public void setSelectButtonMonstraPreparo(SelectBooleanButton selectButtonMonstraPreparo) {
+		this.selectButtonMonstraPreparo = selectButtonMonstraPreparo;
+	}
+
+	public String getTipoItem() {
+		return tipoItem;
+	}
+
+	public void setTipoItem(String tipoItem) {
+		this.tipoItem = tipoItem;
+	}
+
+	public SelectOneRadio getSelectOneRadioMonstraPreparo() {
+		return selectOneRadioMonstraPreparo;
+	}
+
+	public void setSelectOneRadioMonstraPreparo(SelectOneRadio selectOneRadioMonstraPreparo) {
+		this.selectOneRadioMonstraPreparo = selectOneRadioMonstraPreparo;
 	}
 
 }

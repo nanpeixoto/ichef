@@ -1,16 +1,9 @@
 package br.com.ichef.job;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.SchedulerContext;
-import org.quartz.SchedulerException;
+public class EmailServiceJob //implements Job 
+{
 
-import br.com.ichef.service.EmailService;
-
-public class EmailServiceJob implements Job {
-
-	@Override
+	/*@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
 		SchedulerContext schedulerContext = null;
@@ -26,6 +19,6 @@ public class EmailServiceJob implements Job {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }

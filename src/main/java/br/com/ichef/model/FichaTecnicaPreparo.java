@@ -88,6 +88,9 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	@Transient
 	private boolean isAtivo;
 
+	@Transient
+	private boolean mostraPreparo;
+
 	public boolean isAtivo() {
 		if (ativo != null) {
 			if (ativo.equalsIgnoreCase("S"))
@@ -288,19 +291,27 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	public void setCopia(String copia) {
 		this.copia = copia;
 	}
-	
+
 	public String getDescricaoComInsumos() {
-		return getDescricao()+"<br/>("+getDescricaoInsumo()+")";
+		return getDescricao() + "<br/>(" + getDescricaoInsumo() + ")";
 	}
-	
+
 	public String getDescricaoInsumo() {
 		String insumos = "";
 		for (FichaTecnicaPreparoInsumo insumo : getInsumos()) {
-			if(insumos != "")
-				insumos +="/ "; 
+			if (insumos != "")
+				insumos += "/ ";
 			insumos += insumo.getInsumo().getDescricao();
 		}
 		return insumos;
+	}
+
+	public boolean isMostraPreparo() {
+		return mostraPreparo;
+	}
+
+	public void setMostraPreparo(boolean mostraPreparo) {
+		this.mostraPreparo = mostraPreparo;
 	}
 
 }

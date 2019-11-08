@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Usuario;
+import br.com.ichef.util.EntityManagerProducer;
 
 @SuppressWarnings("unchecked")
 public class UsuarioService extends GenericDAO<Usuario> {
@@ -11,6 +12,10 @@ public class UsuarioService extends GenericDAO<Usuario> {
 
 	
 	public List<Usuario> findByLogin(String login) {
+		if( !getManager().isOpen() ) {
+			EntityManagerProducer producer = new EntityManagerProducer();
+			setManager( producer.createEntityManager());
+		}
 		return getManager().createQuery(
 					"FROM Usuario WHERE login = :LoginUsuario" )
 					.setParameter("LoginUsuario", login)

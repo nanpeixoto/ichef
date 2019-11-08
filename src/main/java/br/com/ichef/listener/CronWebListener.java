@@ -9,10 +9,11 @@ import br.com.ichef.scheduler.CronSchedulerEmail;
 import br.com.ichef.service.EmailService;
 
 
-@WebListener
-public class CronWebListener implements ServletContextListener {
+//@WebListener
+public class CronWebListener //implements ServletContextListener 
+{
 
-	@Inject
+	/*@Inject
 	private EmailService emailService;
 	
 
@@ -33,6 +34,6 @@ public class CronWebListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		System.out.println("Parando Listener JOB");
-	}
+	}*/
 
 }
