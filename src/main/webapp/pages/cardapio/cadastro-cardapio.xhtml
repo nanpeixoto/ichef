@@ -15,10 +15,10 @@
         </f:metadata>
 
         <adm:breadcrumb title="Cadastro Preparo #{cardapioController.entity.id}" link="cadastro-cardapio.xhtml?id=#{cardapioController.entity.id}"/>
-        <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
-        <h:form id="form" prependId="false">
+        <p:growl id="mensagemCardapio" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
+        <h:form id="formCardapio" prependId="false">
         
-            <p:focus context="capaPanel"/>
+            <p:focus context="capaPanelCadapio"/>
 
 			
             <div class="box box-primary">
@@ -53,17 +53,17 @@
 
                     <div class="ui-fluid">
                     
-                    	<p:panelGrid id="capaPanel" columns="4" layout="grid"  >
+                    	<p:panelGrid id="capaPanelCadapio" columns="4" layout="grid"  >
                     	
                     	 	<p:outputLabel value="Data" for="data"/>
 						 	<p:calendar id="data" value="#{cardapioController.entity.data}"  pattern="dd/MM/yyyy" size="10" ></p:calendar>
                     	    
-                    	    <p:outputLabel value="Descrição" for="descricao"/>
-                    		<p:inputText value="#{cardapioController.entity.descricao}" id="descricao" styleClass="letras-maiusculas"
+                    	    <p:outputLabel value="Descrição" for="descricaoCardapio"/>
+                    		<p:inputText value="#{cardapioController.entity.descricao}" id="descricaoCardapio" styleClass="letras-maiusculas"
                     			required="true" requiredMessage="#{cardapioController.getRequiredMessage('Descrição')}"/>
                     		
-                 			<p:outputLabel value="Ativo" for="ativo"/>
-						       <p:selectBooleanButton id="ativo" value="#{cardapioController.entity.ativo}" 
+                 			<p:outputLabel value="Ativo" for="ativoCardapio"/>
+						       <p:selectBooleanButton id="ativoCardapio" value="#{cardapioController.entity.ativo}" 
 						        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
                     	
                     	</p:panelGrid>		
@@ -71,8 +71,8 @@
                     	
                     	<p:panelGrid  columns="7" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
 						
-							<p:outputLabel value="Prato" for="fichapreparo"/>
-                    		<p:selectOneMenu id="fichapreparo" value="#{cardapioController.prato}" filter="true"  filterMatchMode="contains" 
+							<p:outputLabel value="Prato" for="fichapreparoCardapio"/>
+                    		<p:selectOneMenu id="fichapreparoCardapio" value="#{cardapioController.prato}" filter="true"  filterMatchMode="contains" 
                     			converter= "omnifaces.SelectItemsConverter" var="t">
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{cardapioController.pratos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
@@ -91,19 +91,26 @@
 						 	
                     	 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
-                    	 	 id="btnSurname" process="@this,fichapreparo,qtdl" update="growl,Stable,fichapreparo,qtdl"
+                    	 	 id="btnAdicionar" process="@this,fichapreparoCardapio,qtdl" update="mensagemCardapio,StableCardapio,fichapreparoCardapio,qtdl"
                     	 	 	 actionListener="#{cardapioController.adicionarPrato()}"  
                     	 	 styleClass="btn-primary" 
                     	 	/>
                     	 	
                     	 	
                     	 	
+                    	 	<!-- 	<p:commandButton value="Olhar Selecionado(s)"
+						oncomplete="PF('dialogWidget').show()" update="@(.ui-dialog)"
+						styleClass="btn-info" icon="fa fa-search" /> 
+                    	 	
+                    	 	
+                    	 	<li><p:link href="/pages/ficha-tecnica/cadastro-ficha-tecnica-prato.xhtml" target="_blank"><i class="fa fa-circle-o"></i>Prato</p:link></li>
+                    	 	 -->
                     	 	
                     	</p:panelGrid>
 						
 						<p:panelGrid  columns="1"  layout="grid"> 	
 						
-							<p:dataTable id="Stable" widgetVar="itens" rows="10"
+							<p:dataTable id="StableCardapio" widgetVar="itens" rows="10"
 							paginator="true" value="#{cardapioController.entity.pratos}" var="item"
 							rowKey="#{item.id}" reflow="true"
 							paginatorPosition="bottom"
@@ -126,7 +133,7 @@
 								
 								
 								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
-									 <p:commandButton process="Stable" update=":form:Stable" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
+									 <p:commandButton process="StableCardapio" update=":formCardapio:StableCardapio" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
 									 	 actionListener="#{cardapioController.excluirItensSelecionadas( item )}"
 									 	   />
 								</p:column>
@@ -139,24 +146,24 @@
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
 						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
-							<p:outputLabel value="Criação" for="criacao" rendered="#{cardapioController.entity.dataCadastro != null}"/>
-	                    	<p:inputText id="criacao" value="#{cardapioController.getUsuarioCadastro(cardapioController.entity)}" disabled="true" rendered="#{cardapioController.entity.dataCadastro != null}"/>
+							<p:outputLabel value="Criação" for="criacaoCardapio" rendered="#{cardapioController.entity.dataCadastro != null}"/>
+	                    	<p:inputText id="criacaoCardapio" value="#{cardapioController.getUsuarioCadastro(cardapioController.entity)}" disabled="true" rendered="#{cardapioController.entity.dataCadastro != null}"/>
 	                    		
-	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{cardapioController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{cardapioController.getUsuarioAlteracao(cardapioController.entity)}" disabled="true" rendered="#{cardapioController.entity.dataAlteracao != null}"/>
+	                    	<p:outputLabel value="Alteração" for="alteracaoCardapio" rendered="#{cardapioController.entity.dataAlteracao != null}"/>
+	                    	<p:inputText id="alteracaoCardapio" value="#{cardapioController.getUsuarioAlteracao(cardapioController.entity)}" disabled="true" rendered="#{cardapioController.entity.dataAlteracao != null}"/>
 	                    </p:panelGrid>	
                     </div>
                 </div>
             </div>
         </h:form>
         
-        <!--   
+          
         
         <p:dialog id="dialog" widgetVar="dialogWidget">
-		    <ui:include src="/pages/ficha-tecnica/cadastro-ficha-tecnica-prato.xhtml" />
+		    <ui:include src="/pages/ficha-tecnica/cadastro-folha-ficha-tecnica-prato.xhtml" />
 		</p:dialog>
 		
-		 -->
+		 
 
     </ui:define>
 

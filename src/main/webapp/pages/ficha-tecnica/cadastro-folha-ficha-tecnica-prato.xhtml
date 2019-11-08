@@ -2,13 +2,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
-                template="/WEB-INF/templates/template.xhtml">
+               >
 
-    <ui:define name="title">
-        Cadastro Ficha Técnica de Prato
-    </ui:define>
-
-    <ui:define name="body">
         <f:metadata>
         	<f:viewParam name="id" value="#{fichaTecnicaPratoController.id}" converter="javax.faces.Long"/>
         	<f:viewParam name="copia" value="#{fichaTecnicaPratoController.copia}" converter="javax.faces.Long"/>
@@ -140,31 +135,15 @@
 						
 						</p:panelGrid>
 						
-						<p:panelGrid id="capaPanel2" columns="1" layout="grid"  >
-	                    		
-		              		<p:outputLabel for="modoPreparo" value="Modo Preparo"/>
-		           			<p:inputTextarea id="modoPreparo" value="#{fichaTecnicaPratoController.entity.modoPreparo}" rows="5" cols="30" maxlength="450" counter="display" counterTemplate="Faltam {0} characteres" autoResize="false" />
-		  					<h:outputText id="display" />
-		  							
-		  					<p:outputLabel for="observacao" value="Observação"/>
-		           			<p:inputTextarea id="observacao" value="#{fichaTecnicaPratoController.entity.obervacao}" rows="5" cols="30"  maxlength="450"  counter="displayobs" counterTemplate="Faltam {0} characteres" autoResize="false" />
-		  					<h:outputText id="displayobs" />
-	                    </p:panelGrid>
 						
-						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 						
-						<p:panelGrid  columns="4" layout="grid"  columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-4" >
-							<p:outputLabel value="Criação" for="criacao" rendered="#{fichaTecnicaPratoController.entity.dataCadastro != null}"/>
-	                    	<p:inputText id="criacao" value="#{fichaTecnicaPratoController.getUsuarioCadastro(fichaTecnicaPratoController.entity)}" disabled="true" rendered="#{fichaTecnicaPratoController.entity.dataCadastro != null}"/>
-	                    		
-	                    	<p:outputLabel value="Alteração" for="alteracao" rendered="#{fichaTecnicaPratoController.entity.dataAlteracao != null}"/>
-	                    	<p:inputText id="alteracao" value="#{fichaTecnicaPratoController.getUsuarioAlteracao(fichaTecnicaPratoController.entity)}" disabled="true" rendered="#{fichaTecnicaPratoController.entity.dataAlteracao != null}"/>
-	                    </p:panelGrid>	
+						
                     </div>
                 </div>
             </div>
         </h:form>
+        
+        
+      
 
-    </ui:define>
-
-</ui:composition>   
+   </ui:composition>

@@ -244,12 +244,12 @@ public class ClienteController extends BaseController {
 			entity.setDataCadastro(new Date());
 
 			FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-			
+
 		}
 
 		entity.setDescricaoTelefone(entity.getAllTelefones());
 		service.saveOrUpdade(entity);
-		
+
 		FacesUtil.addInfoMessage("Novo cliente criado código: " + getEntity().getId());
 
 		return "lista-cliente.xhtml?faces-redirect=true";
@@ -334,7 +334,9 @@ public class ClienteController extends BaseController {
 
 	public void adicionarCarteira() {
 
-		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO FOR PARA OUTRA EMPRESA
+		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO
+																										// FOR PARA
+																										// OUTRA EMPRESA
 			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO NÃO FOR CREDITO
 				facesMessager.error("O tipo de Lançamento para outra empresa só pode ser Crédito");
 				return;
@@ -543,6 +545,11 @@ public class ClienteController extends BaseController {
 
 	public String validarCliente() throws Exception {
 		System.out.println(telefone);
+
+		if (telefone.length() < 8) {
+			FacesUtil.addErroMessage("Informe um telefone válido para continuar");
+			return "";
+		}
 
 		ClienteTelefone filter = new ClienteTelefone();
 		filter.setTelefone(telefone);
