@@ -152,6 +152,10 @@ public class CardapioController extends BaseController {
 		}
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
+	
+	public void atualizarListaPreparo() {
+		obterListas();
+	}
 
 	/*
 	 * public void excluirLocalidadesSelecionadas(CardapioLocalidade local) {

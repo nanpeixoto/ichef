@@ -69,7 +69,7 @@
                     	</p:panelGrid>		
                     	<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
                     	
-                    	<p:panelGrid  columns="7" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
+                    	<p:panelGrid  columns="8" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
 						
 							<p:outputLabel value="Prato" for="fichapreparoCardapio"/>
                     		<p:selectOneMenu id="fichapreparoCardapio" value="#{cardapioController.prato}" filter="true"  filterMatchMode="contains" 
@@ -82,7 +82,16 @@
 					            <p:column>
 					                <h:outputText value="#{t.descricaoPreparo}" />
 					            </p:column>
+					            <p:column headerText="" filterStyle="display:none; visibility:hidden;"    width="8%" >
+							 <p:link href="/pages/ficha-tecnica/cadastro-ficha-tecnica-prato.xhtml?copia=#{t.id}" target="_blank"><i class="fa fa-files-o"></i></p:link>
+						</p:column> 
 					        </p:selectOneMenu>
+					        
+					        <p:commandButton    icon="fa fa-refresh"   
+                    	 	 id="btnAtualizarListaInsumo"  update="fichapreparoCardapio"
+                    	 	 	 actionListener="#{cardapioController.atualizarListaPreparo()}"  
+                    	 	 styleClass="btn btn-light" 
+                    	 	/>
 					        
 					       <p:outputLabel value="Qtd" for="qtdl"/>
 							<p:inputNumber   id="qtdl" value="#{cardapioController.quantidade}" symbol="" 
@@ -159,9 +168,9 @@
         
           
         
-        <p:dialog id="dialog" widgetVar="dialogWidget">
+       <!--  <p:dialog id="dialog" widgetVar="dialogWidget">
 		    <ui:include src="/pages/ficha-tecnica/cadastro-folha-ficha-tecnica-prato.xhtml" />
-		</p:dialog>
+		</p:dialog> -->
 		
 		 
 
