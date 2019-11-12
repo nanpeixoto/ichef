@@ -62,10 +62,10 @@
 						rowKey="#{item.id}" reflow="true"
 						selection="#{cardapioController.listaSelecionadas}"
 						paginatorPosition="bottom"
-						mptyMessage="Nenhum item encontrado" 
+						emptyMessage="Nenhum item encontrado" sortOrder="descending"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
-						 sortBy="#{item.descricao}">
+						sortBy="#{item.data}">
 
 						<f:facet name="header">
 							<p:outputPanel style="text-align:right; margin-right:-10px"
@@ -95,13 +95,29 @@
 							</h:link>
 						</p:column>
 						
-						<p:column headerText="Cód." filterBy="#{item.descricao}" width="8%"
+						<p:column headerText="Data" filterBy="#{item.id}" width="8%"
+							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.dataFormatada}">
+							<h:link value="#{item.dataFormatada}"
+								outcome="cadastro-cardapio.xhtml">
+								<f:param name="id" value="#{item.id}" />
+							</h:link>
+						</p:column>
+						
+						
+						
+						<!-- <p:column headerText="Descrição" filterBy="#{item.descricao}" width="8%"
 							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.id}">
 							<h:link value="#{item.descricao}"
 								outcome="cadastro-cardapio.xhtml">
 								<f:param name="id" value="#{item.id}" />
 							</h:link>
+						</p:column> -->
+						
+						<p:column headerText="Dia" filterStyle="display:none; visibility:hidden;"  width="10%"  filterBy="#{item.situacao}"
+							filterMatchMode="contains" sortBy="#{cardapioController.obterDiaSemana(item.data)}">
+							<h:outputLabel value="#{cardapioController.obterDiaSemana(item.data)}" />
 						</p:column>
+						
 						
 						
 						

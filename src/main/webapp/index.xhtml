@@ -100,7 +100,7 @@
                 </div>
                 
                 <div class="box-body no-padding">
-                	<p:carousel numVisible="5"  value="#{dashboardController.clientes}" headerText="Últimos Clientes" var="car" itemStyle="text-align:center" responsive="true" >
+                	<p:carousel numVisible="5"  circular="true" 	 value="#{dashboardController.clientes}" headerText="Últimos Clientes" var="car" itemStyle="text-align:center" responsive="true" >
                 	    <p:panelGrid columns="1" style="width:100%;margin:10px 0px" columnClasses="users-list-name,users-list-date" layout="grid" styleClass="ui-panelgrid-blank">
         					<a class="users-list-name" href="#">#{car.nmCliente}</a>
                       		<span class="users-list-date">#{car.id}</span>

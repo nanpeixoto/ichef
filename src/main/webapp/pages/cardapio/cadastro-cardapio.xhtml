@@ -58,9 +58,9 @@
                     	 	<p:outputLabel value="Data" for="data"/>
 						 	<p:calendar id="data" value="#{cardapioController.entity.data}"  pattern="dd/MM/yyyy" size="10" ></p:calendar>
                     	    
-                    	    <p:outputLabel value="Descrição" for="descricaoCardapio"/>
+                    	  <!-- <p:outputLabel value="Descrição" for="descricaoCardapio"/>
                     		<p:inputText value="#{cardapioController.entity.descricao}" id="descricaoCardapio" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{cardapioController.getRequiredMessage('Descrição')}"/>
+                    			required="true" requiredMessage="#{cardapioController.getRequiredMessage('Descrição')}"/> --> 
                     		
                  			<p:outputLabel value="Ativo" for="ativoCardapio"/>
 						       <p:selectBooleanButton id="ativoCardapio" value="#{cardapioController.entity.ativo}" 
@@ -69,24 +69,31 @@
                     	</p:panelGrid>		
                     	<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
                     	
-                    	<p:panelGrid  columns="8" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
-						
-							<p:outputLabel value="Prato" for="fichapreparoCardapio"/>
+                    	<p:panelGrid  columns="3" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
+                    		<p:outputLabel value="Descrição" for="descricaoPrato"/>
+                    		<p:inputText value="#{cardapioController.descricaoCardapioFicha}" id="descricaoPrato" maxlength="350" styleClass="letras-maiusculas"/>  
+						       <p:selectBooleanButton id="venderCardapio" title="Indique se o prato pode ser vendido acima do limite" value="#{cardapioController.podeVenderAcimaDoLimite}" 
+						        	onLabel="Acima do Limite" offLabel="Limitar" onIcon="fa fa-arrow-up" offIcon="fa fa-arrow-down"/>
+                    		
+                    	</p:panelGrid>
+                    	
+                    	<p:panelGrid  columns="6" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid">
+                    		<p:outputLabel value="Prato" for="fichapreparoCardapio"/>
                     		<p:selectOneMenu id="fichapreparoCardapio" value="#{cardapioController.prato}" filter="true"  filterMatchMode="contains" 
                     			converter= "omnifaces.SelectItemsConverter" var="t">
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{cardapioController.pratos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					            <p:column>
-					                <h:outputText value="#{t.descricao}" />
-					            </p:column>
-					            <p:column>
-					                <h:outputText value="#{t.descricaoPreparo}" />
+					               <b> <h:outputText value="#{t.descricao}" /></b>
+					            	<br/>
+					             	<i><h:outputText value="#{t.descricaoPreparo}" /></i>
 					            </p:column>
 					            <p:column headerText="" filterStyle="display:none; visibility:hidden;"    width="8%" >
-							 <p:link href="/pages/ficha-tecnica/cadastro-ficha-tecnica-prato.xhtml?copia=#{t.id}" target="_blank"><i class="fa fa-files-o"></i></p:link>
+							 <p:link href="/pages/ficha-tecnica/cadastro-ficha-tecnica-prato.xhtml?copia=#{t.id}" target="_blank" title="Clique para efetuar a cópia do item"><i class="fa fa-files-o"></i></p:link>
 						</p:column> 
 					        </p:selectOneMenu>
 					        
+                    		
 					        <p:commandButton    icon="fa fa-refresh"   
                     	 	 id="btnAtualizarListaInsumo"  update="fichapreparoCardapio"
                     	 	 	 actionListener="#{cardapioController.atualizarListaPreparo()}"  
@@ -100,7 +107,8 @@
 						 	
                     	 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
-                    	 	 id="btnAdicionar" process="@this,fichapreparoCardapio,qtdl" update="mensagemCardapio,StableCardapio,fichapreparoCardapio,qtdl"
+                    	 	 id="btnAdicionar" process="@this,fichapreparoCardapio,qtdl,descricaoPrato,venderCardapio" 
+                    	 	 	update="mensagemCardapio,StableCardapio,fichapreparoCardapio,qtdl,descricaoPrato,venderCardapio"
                     	 	 	 actionListener="#{cardapioController.adicionarPrato()}"  
                     	 	 styleClass="btn-primary" 
                     	 	/>
@@ -123,17 +131,27 @@
 							paginator="true" value="#{cardapioController.entity.pratos}" var="item"
 							rowKey="#{item.id}" reflow="true"
 							paginatorPosition="bottom"
-							mptyMessage="Nenhum item encontrado" 
+							emptyMessage="Nenhum item encontrado" 
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
-							 sortBy="#{item.fichaTecnicaPrato.descricao}">
+							 sortBy="#{item.descricao}">
 						 	   
-								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.fichaTecnicaPrato.descricao}"
-									filterMatchMode="contains" sortBy="#{item.fichaTecnicaPrato.descricao}" style="width:80%">
-									<h:outputLabel value="#{item.fichaTecnicaPrato.descricao}" escape="false" />
-									<br/>
-									<h:outputLabel value="#{item.fichaTecnicaPrato.descricaoPreparo}" escape="false" />
+						 	   <p:column headerText="Descrição" filterStyle="display:none; visibility:hidden;" 	filterBy="#{item.descricao}" filterMatchMode="contains" sortBy="#{item.descricao}" style="width:20%">
+									<h:outputLabel value="#{item.descricao}" escape="false"  /> 
 								</p:column>
+								
+								<p:column headerText="Ingredientes" filterStyle="display:none; visibility:hidden;" filterBy="#{item.fichaTecnicaPrato.descricao}"
+									filterMatchMode="contains" sortBy="#{item.fichaTecnicaPrato.descricao}" style="width:45%">
+									<h:outputLabel value="#{item.fichaTecnicaPrato.descricao}" escape="false"  style="font-weight: bold;"/> 
+									<br/>
+									<i><h:outputLabel value="#{item.fichaTecnicaPrato.descricaoPreparo}" escape="false" /></i>
+								</p:column>
+								
+									<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" filterBy="#{item.situacao}"
+									filterMatchMode="contains" sortBy="#{item.situacao}" style="width:15%">
+									<h:outputLabel value="#{item.situacao}" escape="false" />
+								</p:column>
+								
 								
 								<p:column headerText="Quantidade" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidade}"
 									filterMatchMode="contains" sortBy="#{item.quantidade}" style="width:15%">

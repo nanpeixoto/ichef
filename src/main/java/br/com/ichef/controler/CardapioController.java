@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
@@ -18,6 +19,8 @@ import br.com.ichef.service.CardapioFichaPratoService;
 import br.com.ichef.service.CardapioService;
 import br.com.ichef.service.FichaTecnicaPratoService;
 import br.com.ichef.util.FacesUtil;
+import br.com.ichef.util.Util;
+import br.com.ichef.visitor.CardapioVisitor;
 
 @Named
 @ViewScoped
@@ -47,6 +50,8 @@ public class CardapioController extends BaseController {
 
 	private FichaTecnicaPrato prato;
 	private Integer quantidade;
+	private String descricaoCardapioFicha;
+	private boolean podeVenderAcimaDoLimite;
 
 	public void inicializar() {
 		if (id != null) {
@@ -64,10 +69,15 @@ public class CardapioController extends BaseController {
 			setEntity(new Cardapio());
 			getEntity().setAtivo("S");
 			getEntity().setData(new Date());
-			setQuantidade(1);
+			setQuantidade(100);
+			setPodeVenderAcimaDoLimite(true);
+			setDescricaoCardapioFicha(null);
+
 		}
 		lista = service.listAll();
 		obterListas();
+		setQuantidade(100);
+		setPodeVenderAcimaDoLimite(true);
 	}
 
 	private void obterListas() {
@@ -79,6 +89,17 @@ public class CardapioController extends BaseController {
 			e.printStackTrace();
 		}
 
+	}
+
+	public String obterDiaSemana(Date diaSemana) {
+		try {
+
+			return Util.getDiaSemana(diaSemana).toUpperCase();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return "";
 	}
 
 	public void excluirItensSelecionadas(CardapioFichaPrato insumo) {
@@ -96,7 +117,11 @@ public class CardapioController extends BaseController {
 	}
 
 	public void adicionarPrato() {
-		boolean existe = false;
+
+		if (!isNotEmptyOrNull(getDescricaoCardapioFicha())  || getDescricaoCardapioFicha() == null) {
+			facesMessager.error(getRequiredMessage("Descrição da Ficha"));
+			return;
+		}
 
 		if (getPrato() == null) {
 			facesMessager.error(getRequiredMessage("Prato"));
@@ -108,6 +133,8 @@ public class CardapioController extends BaseController {
 			return;
 		}
 
+		boolean existe = false;
+
 		if (getEntity().getPratos() != null) {
 			for (CardapioFichaPrato ficha : getEntity().getPratos()) {
 				if (getPrato().getId().equals(ficha.getFichaTecnicaPrato().getId()))
@@ -118,7 +145,9 @@ public class CardapioController extends BaseController {
 		if (!existe) {
 			CardapioFichaPrato ficha = new CardapioFichaPrato();
 			ficha.setCardapio(entity);
+			ficha.setDescricao(getDescricaoCardapioFicha());
 			ficha.setQuantidade(getQuantidade());
+			ficha.setPodeVenderAcimaDoLimite(isPodeVenderAcimaDoLimite());
 			ficha.setDataCadastro(new Date());
 			ficha.setFichaTecnicaPrato(getPrato());
 			ficha.setUsuarioCadastro(userLogado);
@@ -137,7 +166,9 @@ public class CardapioController extends BaseController {
 			}
 
 			setPrato(null);
-			quantidade = 1;
+			quantidade = 100;
+			setPodeVenderAcimaDoLimite(true);
+			setDescricaoCardapioFicha(null);
 
 		} else {
 			facesMessager.error("Prato já cadastrado");
@@ -152,7 +183,7 @@ public class CardapioController extends BaseController {
 		}
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
-	
+
 	public void atualizarListaPreparo() {
 		obterListas();
 	}
@@ -170,6 +201,16 @@ public class CardapioController extends BaseController {
 
 	public String Salvar() throws Exception {
 
+		if (getEntity().getPratos() == null || getEntity().getPratos().size() == 0) {
+			FacesUtil.addErroMessage("Não é possível adicionar um cardápio sem prato");
+			return "";
+		}
+
+		if (existeCardapio()) {
+			FacesUtil.addErroMessage("Já existe um cardápio cadastrado nesse dia");
+			return "";
+		}
+
 		if (entity.isEdicao()) {
 			entity.setUsuarioAlteracao(getUserLogado());
 			entity.setDataAlteracao(new Date());
@@ -184,6 +225,26 @@ public class CardapioController extends BaseController {
 
 		return "lista-cardapio.xhtml?faces-redirect=true";
 
+	}
+
+	private boolean existeCardapio() {
+		CardapioVisitor visitor = new CardapioVisitor();
+		if (getEntity().getId() != null) {
+			visitor.setIdDiferenteDe((Long) getEntity().getId());
+		}
+		visitor.setDataCardapio(getEntity().getData());
+
+		List<Cardapio> listaCardapio = new ArrayList<>();
+
+		try {
+			listaCardapio = service.findByParameters(new Cardapio(), visitor);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (listaCardapio.size() > 0)
+			return true;
+		return false;
 	}
 
 	public String excluir() {
@@ -265,6 +326,22 @@ public class CardapioController extends BaseController {
 
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
+	}
+
+	public String getDescricaoCardapioFicha() {
+		return descricaoCardapioFicha;
+	}
+
+	public void setDescricaoCardapioFicha(String descricaoCardapioFicha) {
+		this.descricaoCardapioFicha = descricaoCardapioFicha;
+	}
+
+	public boolean isPodeVenderAcimaDoLimite() {
+		return podeVenderAcimaDoLimite;
+	}
+
+	public void setPodeVenderAcimaDoLimite(boolean podeVenderAcimaDoLimite) {
+		this.podeVenderAcimaDoLimite = podeVenderAcimaDoLimite;
 	}
 
 }

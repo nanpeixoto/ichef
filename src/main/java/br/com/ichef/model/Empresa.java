@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,7 +61,7 @@ public class Empresa extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@OneToMany(mappedBy = "empresa")
+	@OneToMany(mappedBy = "empresa",  cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 
 	@ManyToOne

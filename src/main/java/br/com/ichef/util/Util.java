@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormatSymbols;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -114,11 +115,18 @@ public class Util extends ReportUtils {
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.add(Calendar.DATE, -1);
 		// enquanto for sÃƒÂ¡bado, domingo ou feriado
-		while (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || ehFeriado(calendar)) {
+		while (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+				|| calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || ehFeriado(calendar)) {
 			// decrementa a data em um dia
 			calendar.add(Calendar.DATE, -1);
 		}
 		return calendar.getTime();
+	}
+
+	public  static String getDiaSemana(Date diaSemana) {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(diaSemana);
+		return new DateFormatSymbols().getWeekdays()[cal.get(Calendar.DAY_OF_WEEK)];
 	}
 
 	public static boolean ehFeriado(Calendar calendar) {
@@ -201,14 +209,14 @@ public class Util extends ReportUtils {
 		// String nomeModificado = WILDCARD +
 		// translate(nomeParametroPesquisa.trim().toUpperCase()) + WILDCARD;
 		String nomeModificado = WILDCARD + removeAcentos(nomeParametroPesquisa.trim().toUpperCase()) + WILDCARD;
-		hql.append(" AND TRANSLATE(UPPER(" + campoBanco + "), '" + LETRAS_COM_ACENTUACAO + "', '" + LETRAS_SEM_ACENTUACAO + "') like '" + nomeModificado + "'");
+		hql.append(" AND TRANSLATE(UPPER(" + campoBanco + "), '" + LETRAS_COM_ACENTUACAO + "', '"
+				+ LETRAS_SEM_ACENTUACAO + "') like '" + nomeModificado + "'");
 		return hql.toString();
 	}
 
 	/*
-	 * public static String formatData(Date data, String pFormato){
-	 * SimpleDateFormat sdate = new SimpleDateFormat(pFormato); return
-	 * sdate.format(data); }
+	 * public static String formatData(Date data, String pFormato){ SimpleDateFormat
+	 * sdate = new SimpleDateFormat(pFormato); return sdate.format(data); }
 	 */
 
 	public static String formatData(Date data, String pFormato) {
@@ -270,7 +278,8 @@ public class Util extends ReportUtils {
 
 			// cpfString = cpfString.substring(0, 9) + "-" +
 			// cpfString.substring(9, 11);
-			cpfString = cpfString.substring(0, 3) + "." + cpfString.substring(3, 6) + "." + cpfString.substring(6, 9) + "-" + cpfString.substring(9, 11);
+			cpfString = cpfString.substring(0, 3) + "." + cpfString.substring(3, 6) + "." + cpfString.substring(6, 9)
+					+ "-" + cpfString.substring(9, 11);
 
 		}
 
@@ -287,15 +296,17 @@ public class Util extends ReportUtils {
 		String cnpjString = lpad(Long.toString(pCnpj), '0', 14);
 
 		if (!isNullOuVazio(cnpjString)) {
-			cnpjString = cnpjString.substring(0, 2) + "." + cnpjString.substring(2, 5) + "." + cnpjString.substring(5, 8) + "/" + cnpjString.substring(8, 12) + "-" + cnpjString.substring(12, 14);
+			cnpjString = cnpjString.substring(0, 2) + "." + cnpjString.substring(2, 5) + "."
+					+ cnpjString.substring(5, 8) + "/" + cnpjString.substring(8, 12) + "-"
+					+ cnpjString.substring(12, 14);
 		}
 
 		return cnpjString;
 	}
 
 	/**
-	 * Metodo valida se determinado nome esta de acordo com o padrao da
-	 * expressao regular
+	 * Metodo valida se determinado nome esta de acordo com o padrao da expressao
+	 * regular
 	 * 
 	 * @param pExpressaoRegular
 	 * @param pNome
@@ -359,7 +370,8 @@ public class Util extends ReportUtils {
 				soma += (chr_cnpj[i + 4] - 48) * (10 - (i + 1));
 
 		int dig = 11 - soma % 11;
-		cnpj_calc = (new StringBuilder(String.valueOf(cnpj_calc))).append(dig != 10 && dig != 11 ? Integer.toString(dig) : "0").toString();
+		cnpj_calc = (new StringBuilder(String.valueOf(cnpj_calc)))
+				.append(dig != 10 && dig != 11 ? Integer.toString(dig) : "0").toString();
 		soma = 0;
 
 		for (int i = 0; i < 5; i++)
@@ -371,7 +383,8 @@ public class Util extends ReportUtils {
 				soma += (chr_cnpj[i + 5] - 48) * (10 - (i + 1));
 
 		dig = 11 - soma % 11;
-		cnpj_calc = (new StringBuilder(String.valueOf(cnpj_calc))).append(dig != 10 && dig != 11 ? Integer.toString(dig) : "0").toString();
+		cnpj_calc = (new StringBuilder(String.valueOf(cnpj_calc)))
+				.append(dig != 10 && dig != 11 ? Integer.toString(dig) : "0").toString();
 
 		if (!cnpj.equals(cnpj_calc) || cnpj.equals("00000000000000")) {
 			// JsfUtil.addErrorMessage("CNPJ InvÃƒÂ¡lido!");
@@ -421,9 +434,9 @@ public class Util extends ReportUtils {
 	}
 
 	/**
-	 * MÃƒÂ©todo responsÃƒÂ¡vel por formatar a mensagem para ser exibida no p:message
-	 * do JSF o metÃƒÂ³do vai criar um paragrafo para cada "/n" encontrado no
-	 * parÃƒÂ¢metro informado.
+	 * MÃƒÂ©todo responsÃƒÂ¡vel por formatar a mensagem para ser exibida no
+	 * p:message do JSF o metÃƒÂ³do vai criar um paragrafo para cada "/n" encontrado
+	 * no parÃƒÂ¢metro informado.
 	 * 
 	 * @param textoASerExibido
 	 */
@@ -499,16 +512,16 @@ public class Util extends ReportUtils {
 	public static String getRequiredMessage(String label) {
 		return MensagemUtil.obterMensagem("geral.required.field", MensagemUtil.obterMensagem(label));
 	}
-	
+
 	public static String getRequiredTextMessage(String text) {
 		return MensagemUtil.obterMensagem("geral.required.field", text);
 	}
-	
+
 	public static String dateToString(Date valor) {
 		if (valor != null) {
 			return new SimpleDateFormat("dd/MM/yyyy").format(valor);
 		} else {
-			//log.info("A Data passada para ser convertida para STRING veio nula.");
+			// log.info("A Data passada para ser convertida para STRING veio nula.");
 			return null;
 		}
 	}

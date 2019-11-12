@@ -3,6 +3,7 @@ package br.com.ichef.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,7 +61,7 @@ public class Localidade extends BaseEntity {
 	private Empresa empresa;
 
 	// bi-directional many-to-one association to AreaLocalidade
-	@OneToMany(mappedBy = "localidade")
+	@OneToMany(mappedBy = "localidade",  cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AreaLocalidade> areaLocalidades;
 
 	@Transient

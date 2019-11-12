@@ -4,6 +4,7 @@ package br.com.ichef.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,7 +70,7 @@ public class Usuario extends BaseEntity {
 	@Column(name = "DS_SENHA")
 	private String senha;
 
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario",  cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 	
 	@Transient

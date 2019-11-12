@@ -1,8 +1,10 @@
 package br.com.ichef.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,7 +54,7 @@ public class Cardapio extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(mappedBy = "cardapio")
+	@OneToMany(mappedBy = "cardapio",  cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CardapioFichaPrato> pratos;
 
 	public Usuario getUsuarioAlteracao() {
@@ -168,11 +170,26 @@ public class Cardapio extends BaseEntity {
 	}
 
 	public String getDescricao() {
-		return descricao;
+		try {
+			return descricao.toUpperCase();
+		} catch (Exception e) {
+			return descricao;
+		}
+		
 	}
 
 	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+		this.descricao = descricao.toUpperCase();
+	}
+	
+	public String getDataFormatada() {
+		try {
+			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
+			return sdate.format(getData());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

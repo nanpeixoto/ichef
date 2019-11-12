@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -25,6 +26,9 @@ public class CardapioFichaPrato extends BaseEntity {
 
 	@Column(name = "NR_QTD")
 	private Integer quantidade;
+
+	@Column(name = "DS_CARDAPIO_FICHA")
+	private String descricao;
 
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastro;
@@ -42,6 +46,38 @@ public class CardapioFichaPrato extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_FICHA_TECNICA_PRATO")
 	private FichaTecnicaPrato fichaTecnicaPrato;
+
+	@Column(name = "SN_VENDER_ACIMA_LIMITE")
+	private String venderAcimaDoLimite;
+
+	@Transient
+	private boolean podeVenderAcimaDoLimite;
+
+	public boolean isPodeVenderAcimaDoLimite() {
+		if (getVenderAcimaDoLimite() != null) {
+			if (getVenderAcimaDoLimite().equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return podeVenderAcimaDoLimite;
+	}
+
+	public void setPodeVenderAcimaDoLimite(boolean podeVenderAcimaDoLimite) {
+		this.podeVenderAcimaDoLimite = podeVenderAcimaDoLimite;
+		if (podeVenderAcimaDoLimite == Boolean.TRUE) {
+			setVenderAcimaDoLimite("S");
+		} else
+			setVenderAcimaDoLimite("N");
+	}
+
+	public String getVenderAcimaDoLimite() {
+		return venderAcimaDoLimite;
+	}
+
+	public void setVenderAcimaDoLimite(String venderAcimaDoLimite) {
+		this.venderAcimaDoLimite = venderAcimaDoLimite;
+	}
 
 	@Override
 	public Object getId() {
@@ -123,6 +159,24 @@ public class CardapioFichaPrato extends BaseEntity {
 
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
+	}
+
+	public String getDescricao() {
+		try {
+			return descricao.toUpperCase();
+		} catch (Exception e) {
+			return descricao;
+		}
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao.toUpperCase();
+	}
+	
+	public String getSituacao() {
+		if (getVenderAcimaDoLimite().equals("S"))
+			return "Não Limitado".toUpperCase();
+		return "Limitado".toUpperCase();
 	}
 
 }
