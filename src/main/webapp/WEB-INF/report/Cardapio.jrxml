@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Cardapio"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="pLogo" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
+
+	<field name="ativo" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[ativo]]></fieldDescription>
+	</field>
+	<field name="auditoria" class="java.lang.String">
+		<fieldDescription><![CDATA[auditoria]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="columnOrderBy" class="java.lang.String">
+		<fieldDescription><![CDATA[columnOrderBy]]></fieldDescription>
+	</field>
+	<field name="data" class="java.util.Date">
+		<fieldDescription><![CDATA[data]]></fieldDescription>
+	</field>
+	<field name="dataAlteracao" class="java.util.Date">
+		<fieldDescription><![CDATA[dataAlteracao]]></fieldDescription>
+	</field>
+	<field name="dataCadastro" class="java.util.Date">
+		<fieldDescription><![CDATA[dataCadastro]]></fieldDescription>
+	</field>
+	<field name="dataFormatada" class="java.lang.String">
+		<fieldDescription><![CDATA[dataFormatada]]></fieldDescription>
+	</field>
+	<field name="edicao" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[edicao]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Object">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="inclusao" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[inclusao]]></fieldDescription>
+	</field>
+	<field name="observacao" class="java.lang.String">
+		<fieldDescription><![CDATA[observacao]]></fieldDescription>
+	</field>
+	<field name="pratos" class="java.util.List">
+		<fieldDescription><![CDATA[pratos]]></fieldDescription>
+	</field>
+	<field name="situacao" class="java.lang.String">
+		<fieldDescription><![CDATA[situacao]]></fieldDescription>
+	</field>
+	<field name="usuarioAlteracao" class="br.com.ichef.model.Usuario">
+		<fieldDescription><![CDATA[usuarioAlteracao]]></fieldDescription>
+	</field>
+	<field name="usuarioCadastro" class="br.com.ichef.model.Usuario">
+		<fieldDescription><![CDATA[usuarioCadastro]]></fieldDescription>
+	</field>
+
+
+		<group  name="porData" >
+			<groupExpression><![CDATA[$F{dataFormatada}]]></groupExpression>
+			<groupHeader>
+			<band height="120"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="4"
+						y="20"
+						width="56"
+						height="13"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataFormatada}]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="60"
+						y="20"
+						width="472"
+						height="26"
+						key="subreport-1"/>
+					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource( $F{pratos})]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/CardapioPratos.jasper"]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="4"
+						y="33"
+						width="56"
+						height="33"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{observacao}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="52"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="100"
+						y="5"
+						width="332"
+						height="47"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="36" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Cardápio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="432"
+						y="37"
+						width="28"
+						height="15"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Pág.:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="463"
+						y="37"
+						width="25"
+						height="15"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="490"
+						y="37"
+						width="15"
+						height="15"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[de]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="432"
+						y="21"
+						width="28"
+						height="15"
+						key="staticText-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Hora:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="432"
+						y="5"
+						width="28"
+						height="15"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Data:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="463"
+						y="5"
+						width="69"
+						height="15"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="HH:mm" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="463"
+						y="21"
+						width="69"
+						height="15"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="507"
+						y="36"
+						width="25"
+						height="15"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="30"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<lastPageFooter>
+			<band height="50"  isSplitAllowed="true" >
+			</band>
+		</lastPageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -42,8 +42,8 @@ public class Cardapio extends BaseEntity {
 	@Column(name = "SN_ATIVO")
 	private String ativo;
 
-	@Column(name = "DS_CARDAPIO")
-	private String descricao;
+	@Column(name = "DS_OBSERVACAO")
+	private String observacao;
 
 	@Column(name = "DATA_ALTERACAO")
 	private Date dataAlteracao;
@@ -54,7 +54,7 @@ public class Cardapio extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(mappedBy = "cardapio",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CardapioFichaPrato> pratos;
 
 	public Usuario getUsuarioAlteracao() {
@@ -163,25 +163,26 @@ public class Cardapio extends BaseEntity {
 			setAtivo("N");
 	}
 
+	public String getObservacao() {
+		try {
+			return observacao.toUpperCase();
+		} catch (Exception e) {
+			return observacao;
+		}
+
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao.toUpperCase();
+	}
+	
 	public String getSituacao() {
 		if (getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
 	}
 
-	public String getDescricao() {
-		try {
-			return descricao.toUpperCase();
-		} catch (Exception e) {
-			return descricao;
-		}
-		
-	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao.toUpperCase();
-	}
-	
 	public String getDataFormatada() {
 		try {
 			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");

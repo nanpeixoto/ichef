@@ -1,15 +1,22 @@
 package br.com.ichef.arquitetura.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -22,12 +29,16 @@ import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Usuario;
 import br.com.ichef.util.JSFUtil;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class BaseController extends AbstratcBaseController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	protected static String DIALOG_CADASTRAR = "cadastrarForm";
+	
+	public static String LOGO = "logo.jpg";
 
 	protected static String ERRO_GENERICO = "Erro ao gerar relatório, por favor entre em contato com o Administrator do Sistema.";
 
@@ -39,6 +50,16 @@ public class BaseController extends AbstratcBaseController implements Serializab
 
 	SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
 
+	public static final String REPORT_PARAM_SUBREPORT_DIR = "SUBREPORT_DIR";
+
+	public static final String RELATORIO = "resources.properties";
+	
+	public static final String REPORT_PARAM_LOGO ="pLogo";
+
+	public static final String DIR_DEFAULT = "resources/";
+
+	protected Map<String, Object> parametros = new HashMap<String, Object>();
+
 	public String getMaskCpf(String cpf) {
 		cpf = cpf.replace(".", "");
 		cpf = cpf.replace("-", "");
@@ -48,6 +69,59 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		} catch (Exception e) {
 			return cpf;
 		}
+
+	}
+
+	public Properties getProperties() throws Exception {
+
+		File file = new File(getRealPath(DIR_DEFAULT + RELATORIO));
+		Properties props = new Properties();
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+			// lê os dados que estão no arquivo
+			props.load(fis);
+			fis.close();
+		} catch (IOException ex) {
+			throw new Exception("Não foi possivel ler o Properties");
+		}
+		return props;
+	}
+
+	protected static String getRealPath(String pArquivo) {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		facesContext.responseComplete();
+		ServletContext scontext = (ServletContext) facesContext.getExternalContext().getContext();
+
+		return scontext.getRealPath(pArquivo);
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected void escreveRelatorioPDF(String nome, boolean download, Collection colecao) throws Exception {
+
+		byte[] lReportData = null;
+		setParametroReport(REPORT_PARAM_SUBREPORT_DIR, getRealPath(getProperties().getProperty("dir.relatorio")));
+		setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+
+		lReportData = JasperRunManager.runReportToPdf(
+				getInputStream(getProperties().getProperty("dir.relatorio") + nome + ".jasper"), parametros,
+				new JRBeanCollectionDataSource(colecao));
+
+		escreveRelatorio(lReportData, nome, download);
+	}
+
+	public InputStream getInputStream(String arquivo) {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		facesContext.responseComplete();
+		ServletContext scontext = (ServletContext) facesContext.getExternalContext().getContext();
+		return scontext.getResourceAsStream(arquivo);
+	}
+
+	public void setParametroReport(String nome, Object valor) {
+		if (parametros == null) {
+			parametros = new HashMap<String, Object>();
+		}
+		parametros.put(nome, valor);
 
 	}
 
@@ -107,8 +181,8 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		return "O campo " + label + " é obrigatório.";
 	}
 
-	public String getImagem(String imagem) {
-		return getServlet().getRealPath("/img/" + imagem);
+	public String getImagem(String imagem) throws Exception {
+		return getServlet().getRealPath(getProperties().getProperty("dir.imagem") + imagem);
 	}
 
 	public String getSubRelatorio(String imagem) {

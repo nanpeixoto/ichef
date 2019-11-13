@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
@@ -52,6 +51,10 @@ public class CardapioController extends BaseController {
 	private Integer quantidade;
 	private String descricaoCardapioFicha;
 	private boolean podeVenderAcimaDoLimite;
+
+	// relatorio
+	private Date dataInicial;
+	private Date dataFinal;
 
 	public void inicializar() {
 		if (id != null) {
@@ -118,7 +121,7 @@ public class CardapioController extends BaseController {
 
 	public void adicionarPrato() {
 
-		if (!isNotEmptyOrNull(getDescricaoCardapioFicha())  || getDescricaoCardapioFicha() == null) {
+		if (!isNotEmptyOrNull(getDescricaoCardapioFicha()) || getDescricaoCardapioFicha() == null) {
 			facesMessager.error(getRequiredMessage("Descrição da Ficha"));
 			return;
 		}
@@ -247,6 +250,38 @@ public class CardapioController extends BaseController {
 		return false;
 	}
 
+	public void imprimir() {
+		if (getDataInicial() == null || getDataFinal() == null) {
+			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
+			return;
+		} else {
+			CardapioVisitor visitor = new CardapioVisitor();
+			visitor.setDataInicio(getDataInicial());
+			visitor.setDataFim(getDataFinal());
+
+			List<Cardapio> cardapios = new ArrayList<>();
+
+			try {
+				cardapios = service.findByParameters(new Cardapio(), visitor);
+			} catch (Exception e) {
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+			}
+
+			if (cardapios.size() == 0) {
+				FacesUtil.addErroMessage("Nenhum dado encontrado");
+			} else {
+				try {
+					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					escreveRelatorioPDF("Cardapio", true, cardapios);
+				} catch (Exception e) {
+					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+				}
+			}
+
+		}
+
+	}
+
 	public String excluir() {
 		service.excluir(entity);
 		return "lista-cardapio.xhtml?faces-redirect=true";
@@ -342,6 +377,22 @@ public class CardapioController extends BaseController {
 
 	public void setPodeVenderAcimaDoLimite(boolean podeVenderAcimaDoLimite) {
 		this.podeVenderAcimaDoLimite = podeVenderAcimaDoLimite;
+	}
+
+	public Date getDataInicial() {
+		return dataInicial;
+	}
+
+	public void setDataInicial(Date dataInicial) {
+		this.dataInicial = dataInicial;
+	}
+
+	public Date getDataFinal() {
+		return dataFinal;
+	}
+
+	public void setDataFinal(Date dataFinal) {
+		this.dataFinal = dataFinal;
 	}
 
 }
