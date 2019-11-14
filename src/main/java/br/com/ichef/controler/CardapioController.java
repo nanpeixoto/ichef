@@ -94,16 +94,7 @@ public class CardapioController extends BaseController {
 
 	}
 
-	public String obterDiaSemana(Date diaSemana) {
-		try {
-
-			return Util.getDiaSemana(diaSemana).toUpperCase();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		return "";
-	}
+	
 
 	public void excluirItensSelecionadas(CardapioFichaPrato insumo) {
 		List<CardapioFichaPrato> temp = new ArrayList<CardapioFichaPrato>();

@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
+import br.com.ichef.util.Util;
 
 @Entity
 @Table(name = "cardapio")
@@ -191,6 +192,17 @@ public class Cardapio extends BaseEntity {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public String obterDiaSemana() {
+		try {
+
+			return Util.getDiaSemana(getData()).toUpperCase();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return "";
 	}
 
 }
