@@ -77,10 +77,11 @@
 								offLabel="Inativo" onIcon="fa fa-thumbs-o-up"
 								offIcon="fa fa-thumbs-o-down" />
 						</p:panelGrid>
-						<p:panelGrid id="capaPanelCadapio2" columns="4" layout="grid" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12">
+						<p:panelGrid id="capaPanelCadapio2" columns="4" layout="grid"
+							columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12">
 							<p:outputLabel for="observacao" value="Observação" />
-							<p:inputText value="#{cardapioController.entity.observacao}" id="observacao" maxlength="200" styleClass="letras-maiusculas"
-                    			required="true" requiredMessage="#{cardapioController.getRequiredMessage('Descrição')}"/>
+							<p:inputText value="#{cardapioController.entity.observacao}"
+								id="observacao" maxlength="200" styleClass="letras-maiusculas" />
 
 						</p:panelGrid>
 						<p:panelGrid columns="1" layout="grid">
@@ -127,7 +128,6 @@
 								</p:column>
 							</p:selectOneMenu>
 
-
 							<p:commandButton icon="fa fa-refresh"
 								id="btnAtualizarListaInsumo" update="fichapreparoCardapio"
 								actionListener="#{cardapioController.atualizarListaPreparo()}"
@@ -136,24 +136,27 @@
 							<p:outputLabel value="Qtd" for="qtdl" />
 							<p:inputNumber id="qtdl" value="#{cardapioController.quantidade}"
 								symbol="" decimalPlaces="0" />
+						</p:panelGrid>
+						<p:panelGrid columns="3"
+							columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12" layout="grid">
+							<p:outputLabel for="observacaoPrato" value="Observação" />
+							<p:inputText value="#{cardapioController.observacao}"
+								id="observacaoPrato" maxlength="300"
+								styleClass="letras-maiusculas" />
+						</p:panelGrid>
+						<p:panelGrid columns="6"
+							columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12" layout="grid">
 
-
+							<p:outputLabel value="" />
+							<p:outputLabel value="" />
+							<p:outputLabel value="" />
+							<p:outputLabel value="" />
 
 							<p:commandButton value="Plus" icon="fa fa-plus" id="btnAdicionar"
-								process="@this,fichapreparoCardapio,qtdl,descricaoPrato,venderCardapio"
-								update="mensagemCardapio,StableCardapio,fichapreparoCardapio,qtdl,descricaoPrato,venderCardapio"
+								process="@this,fichapreparoCardapio,qtdl,descricaoPrato,venderCardapio,observacaoPrato"
+								update="mensagemCardapio,StableCardapio,observacaoPrato,fichapreparoCardapio,qtdl,descricaoPrato,venderCardapio"
 								actionListener="#{cardapioController.adicionarPrato()}"
 								styleClass="btn-primary" />
-
-
-
-							<!-- 	<p:commandButton value="Olhar Selecionado(s)"
-						oncomplete="PF('dialogWidget').show()" update="@(.ui-dialog)"
-						styleClass="btn-info" icon="fa fa-search" /> 
-                    	 	
-                    	 	
-                    	 	<li><p:link href="/pages/ficha-tecnica/cadastro-ficha-tecnica-prato.xhtml" target="_blank"><i class="fa fa-circle-o"></i>Prato</p:link></li>
-                    	 	 -->
 
 						</p:panelGrid>
 
@@ -161,17 +164,31 @@
 
 							<p:dataTable id="StableCardapio" widgetVar="itens" rows="10"
 								paginator="true" value="#{cardapioController.entity.pratos}"
-								var="item" rowKey="#{item.id}" reflow="true"
+								var="item" rowKey="#{item.id}" reflow="true" 
 								paginatorPosition="bottom" emptyMessage="Nenhum item encontrado"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
 								sortBy="#{item.descricao}">
+
+								<p:column style="width:16px">
+									<p:rowToggler />
+								</p:column>
 
 								<p:column headerText="Descrição"
 									filterStyle="display:none; visibility:hidden;"
 									filterBy="#{item.descricao}" filterMatchMode="contains"
 									sortBy="#{item.descricao}" style="width:20%">
 									<h:outputLabel value="#{item.descricao}" escape="false" />
+									<br />
+									<p:tooltip id="toolTipFade" for="observacaoPratoplance"
+										value="Clique aqui para editar" position="top" />
+									<p:inplace editor="true" label="#{item.observacao}"
+										style=" font-style: italic;" id="observacaoPratoplance">
+										<p:ajax event="save" update="Stable" />
+										<p:inputText value="#{item.observacao}" maxlength="300"
+											style="width: 76%; font-style: italic;" />
+
+									</p:inplace>
 								</p:column>
 
 								<p:column headerText="Prato"
@@ -185,23 +202,49 @@
 									<i><h:outputLabel
 											value="#{item.fichaTecnicaPrato.descricaoPreparo}"
 											escape="false" /></i>
+
 								</p:column>
 
-								<p:column headerText="Situação"
-									filterStyle="display:none; visibility:hidden;"
-									filterBy="#{item.situacao}" filterMatchMode="contains"
-									sortBy="#{item.situacao}" style="width:15%">
-									<h:outputLabel value="#{item.situacao}" escape="false" />
-								</p:column>
+								<p:rowExpansion id="expanded">
 
 
-								<p:column headerText="Quantidade"
-									filterStyle="display:none; visibility:hidden;"
-									filterBy="#{item.quantidade}" filterMatchMode="contains"
-									sortBy="#{item.quantidade}" style="width:15%">
-									<h:outputLabel value="#{item.quantidade}" escape="false" />
-								</p:column>
+									<div style="width: 41%;">
+										<p:dataTable id="Stable" widgetVar="empresaQtds" rows="10"
+											value="#{item.fichaPratoEmpresa}" var="empresaQtd"
+											rowKey="#{empresaQtd.id}" reflow="true" editable="true"
+											editMode="cell" sortBy="#{empresaQtd.id}">
 
+											<p:column headerText="Empresa" style="width:35%">
+												<h:outputLabel
+													value="#{empresaQtd.empresa.nomeFantasiaAbreviado}" />
+											</p:column>
+
+											<p:column headerText="Qtd" style="width:20%">
+												<p:inplace id="ajaxInplace" label="#{empresaQtd.quantidade}"
+													editor="true">
+													<p:ajax event="save" update="Stable" />
+													<p:inputText value="#{empresaQtd.quantidade}" maxlength="3"
+														style="width: 20%;" />
+												</p:inplace>
+											</p:column>
+
+											<p:column headerText="Situação"
+												filterStyle="display:none; visibility:hidden;"
+												style="width:20%">
+												<p:inplace id="ajaxInplace2" label="#{empresaQtd.situacao}">
+													<p:ajax event="save" update="Stable" />
+													<p:selectBooleanButton id="venderCardapio"
+														title="Indique se o prato pode ser vendido acima do limite"
+														value="#{empresaQtd.podeVenderAcimaDoLimite}"
+														onLabel="Acima do Limite" offLabel="Limitar"
+														onIcon="fa fa-arrow-up" offIcon="fa fa-arrow-down">
+														<p:ajax event="change" update="Stable"></p:ajax>
+													</p:selectBooleanButton>
+												</p:inplace>
+											</p:column>
+										</p:dataTable>
+									</div>
+								</p:rowExpansion>
 
 								<p:column headerText=" "
 									filterStyle="display:none; visibility:hidden;" style="width:5%">
@@ -213,8 +256,6 @@
 							</p:dataTable>
 
 						</p:panelGrid>
-
-
 
 						<p:panelGrid columns="1" layout="grid">
 							<p:separator />

@@ -311,5 +311,15 @@ public class Empresa extends BaseEntity {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
+	
+	public String getNomeFantasiaAbreviado() {
+		try {
+			return getNomeFantasia().replace("COZINHA DE CHEF -", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return getNomeFantasia();
+	}
+	
 
 }

@@ -13,12 +13,14 @@ import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
+import br.com.ichef.model.CardapioFichaPratoEmpresa;
+import br.com.ichef.model.Empresa;
 import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.service.CardapioFichaPratoService;
 import br.com.ichef.service.CardapioService;
+import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.FichaTecnicaPratoService;
 import br.com.ichef.util.FacesUtil;
-import br.com.ichef.util.Util;
 import br.com.ichef.visitor.CardapioVisitor;
 
 @Named
@@ -32,6 +34,9 @@ public class CardapioController extends BaseController {
 
 	@Inject
 	private CardapioFichaPratoService cardapioFichaPratoService;
+
+	@Inject
+	private EmpresaService empresaService;
 
 	@Inject
 	private FichaTecnicaPratoService fichaTecnicaPratoService;
@@ -51,6 +56,7 @@ public class CardapioController extends BaseController {
 	private Integer quantidade;
 	private String descricaoCardapioFicha;
 	private boolean podeVenderAcimaDoLimite;
+	private String observacao;
 
 	// relatorio
 	private Date dataInicial;
@@ -94,8 +100,6 @@ public class CardapioController extends BaseController {
 
 	}
 
-	
-
 	public void excluirItensSelecionadas(CardapioFichaPrato insumo) {
 		List<CardapioFichaPrato> temp = new ArrayList<CardapioFichaPrato>();
 		temp.addAll(entity.getPratos());
@@ -106,7 +110,8 @@ public class CardapioController extends BaseController {
 		entity.getPratos().clear();
 		entity.getPratos().addAll(temp);
 
-		updateComponentes("Stable");
+		updateComponentes("StableCardapio");
+
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
@@ -139,6 +144,7 @@ public class CardapioController extends BaseController {
 		if (!existe) {
 			CardapioFichaPrato ficha = new CardapioFichaPrato();
 			ficha.setCardapio(entity);
+			ficha.setObservacao(getObservacao());
 			ficha.setDescricao(getDescricaoCardapioFicha());
 			ficha.setQuantidade(getQuantidade());
 			ficha.setPodeVenderAcimaDoLimite(isPodeVenderAcimaDoLimite());
@@ -150,6 +156,22 @@ public class CardapioController extends BaseController {
 				getEntity().setPratos(new ArrayList<CardapioFichaPrato>());
 			}
 			getEntity().getPratos().add(ficha);
+
+			/* EMPRESAS QUE O USUÁRIO TEM ACESSO */
+			List<Empresa> listaEmpresa = empresaService.listAll(true);
+
+			for (Empresa empresa : listaEmpresa) {
+				CardapioFichaPratoEmpresa pratoEmpresa = new CardapioFichaPratoEmpresa();
+				pratoEmpresa.setCardapioFichaPrato(ficha);
+				pratoEmpresa.setEmpresa(empresa);
+				pratoEmpresa.setPodeVenderAcimaDoLimite(isPodeVenderAcimaDoLimite());
+				pratoEmpresa.setQuantidade(getQuantidade());
+				if (ficha.getFichaPratoEmpresa() == null) {
+					ficha.setFichaPratoEmpresa(new ArrayList<CardapioFichaPratoEmpresa>());
+				}
+				ficha.getFichaPratoEmpresa().add(pratoEmpresa);
+
+			}
 
 			if (getEntity().getId() != null) {
 				try {
@@ -384,6 +406,14 @@ public class CardapioController extends BaseController {
 
 	public void setDataFinal(Date dataFinal) {
 		this.dataFinal = dataFinal;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 }

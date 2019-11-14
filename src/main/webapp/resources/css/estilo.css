@@ -1,7 +1,17 @@
-.letras-maiusculas{	text-transform: uppercase;}
+.letras-maiusculas {
+	text-transform: uppercase;
+}
 
 .outraEmpresa {
-        background-color:#FFF8DC !important;
-        background-image: none !important;
-        color: #000000 !important;
-    }
+	background-color: #FFF8DC !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+
+.ui-inplace-save  {
+	width: 10% !important;
+}
+
+.ui-inplace-cancel  {
+	width: 10% !important;
+}
