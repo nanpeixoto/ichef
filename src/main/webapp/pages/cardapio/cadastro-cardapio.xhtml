@@ -79,7 +79,7 @@
 						</p:panelGrid>
 						<p:panelGrid id="capaPanelCadapio2" columns="4" layout="grid" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12">
 							<p:outputLabel for="observacao" value="Observação" />
-							<p:inputText value="#{cardapioController.entity.observacao}" id="observacao" size="300" styleClass="letras-maiusculas"
+							<p:inputText value="#{cardapioController.entity.observacao}" id="observacao" maxlength="200" styleClass="letras-maiusculas"
                     			required="true" requiredMessage="#{cardapioController.getRequiredMessage('Descrição')}"/>
 
 						</p:panelGrid>

@@ -1,6 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
                 template="WEB-INF/templates/template.xhtml">
 
     <ui:define name="head-end">
@@ -102,7 +104,10 @@
                 <div class="box-body no-padding">
                 	<p:carousel numVisible="5"  circular="true" 	 value="#{dashboardController.clientes}" headerText="Últimos Clientes" var="car" itemStyle="text-align:center" responsive="true" >
                 	    <p:panelGrid columns="1" style="width:100%;margin:10px 0px" columnClasses="users-list-name,users-list-date" layout="grid" styleClass="ui-panelgrid-blank">
-        					<a class="users-list-name" href="#">#{car.nmCliente}</a>
+        					<a class="users-list-name" href="#"><h:link value="#{car.nmCliente}"
+								outcome="pages/cliente/cadastro-cliente.xhtml">
+								<f:param name="id" value="#{car.id}" />
+							</h:link></a>
                       		<span class="users-list-date">#{car.id}</span>
                       		<span class="users-list-date">#{car.dsTelefone}</span>
 						</p:panelGrid>

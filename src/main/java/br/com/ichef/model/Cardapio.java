@@ -194,7 +194,7 @@ public class Cardapio extends BaseEntity {
 		return null;
 	}
 	
-	public String obterDiaSemana() {
+	public String getDiaSemana() {
 		try {
 
 			return Util.getDiaSemana(getData()).toUpperCase();

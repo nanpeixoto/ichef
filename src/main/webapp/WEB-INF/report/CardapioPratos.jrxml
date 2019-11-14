@@ -3,15 +3,15 @@
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
 		 name="CardapioPratos"
-		 columnCount="4"
+		 columnCount="5"
 		 printOrder="Horizontal"
 		 orientation="Portrait"
 		 pageWidth="595"
 		 pageHeight="842"
-		 columnWidth="135"
+		 columnWidth="109"
 		 columnSpacing="9"
-		 leftMargin="13"
-		 rightMargin="13"
+		 leftMargin="5"
+		 rightMargin="5"
 		 topMargin="0"
 		 bottomMargin="0"
 		 whenNoDataType="NoPages"
@@ -98,17 +98,15 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="34"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+			<band height="99"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
 						y="2"
-						width="134"
+						width="105"
 						height="12"
 						key="textField"
-						stretchType="RelativeToTallestObject"
-						positionType="Float"
-						isPrintWhenDetailOverflows="true"/>
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
 						<font pdfFontName="Helvetica" size="8" isBold="false" isItalic="false"/>
@@ -118,18 +116,30 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
-						y="16"
-						width="134"
-						height="18"
+						y="24"
+						width="105"
+						height="70"
 						key="textField"
-						stretchType="RelativeToTallestObject"
-						positionType="Float"
-						isPrintWhenDetailOverflows="true"/>
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Top">
-						<font size="8"/>
+						<font pdfFontName="Helvetica-Oblique" size="7" isItalic="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fichaTecnicaPrato}.getDescricao()+"\n"+$F{fichaTecnicaPrato}.getDescricaoPreparo()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fichaTecnicaPrato}.getDescricaoPreparo()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="14"
+						width="105"
+						height="10"
+						key="textField-1"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Top">
+						<font size="7"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fichaTecnicaPrato}.getDescricao()]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

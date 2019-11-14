@@ -113,9 +113,9 @@
 							</h:link>
 						</p:column> -->
 						
-						<p:column headerText="Dia" filterStyle="display:none; visibility:hidden;"  width="10%"  filterBy="#{item.situacao}"
-							filterMatchMode="contains" sortBy="#{cardapioController.obterDiaSemana(item.data)}">
-							<h:outputLabel value="#{cardapioController.obterDiaSemana(item.data)}" />
+						<p:column headerText="Dia" filterStyle="display:none; visibility:hidden;"  width="10%"  filterBy="#{item.diaSemana}"
+							filterMatchMode="contains" sortBy="#{item.diaSemana}">
+							<h:outputLabel value="#{item.diaSemana}" />
 						</p:column>
 						
 						
