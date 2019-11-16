@@ -3,31 +3,27 @@
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
 		 name="CardapioPratos"
-		 columnCount="5"
-		 printOrder="Horizontal"
+		 columnCount="1"
+		 printOrder="Vertical"
 		 orientation="Portrait"
 		 pageWidth="595"
 		 pageHeight="842"
-		 columnWidth="109"
-		 columnSpacing="9"
-		 leftMargin="5"
-		 rightMargin="5"
+		 columnWidth="565"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="30"
 		 topMargin="0"
 		 bottomMargin="0"
 		 whenNoDataType="NoPages"
 		 isTitleNewPage="false"
 		 isSummaryNewPage="false">
-	<property name="com.jasperassistant.designer.DataSource" value="scmba" />
 	<property name="ireport.scriptlethandling" value="0" />
 	<property name="ireport.encoding" value="UTF-8" />
 	<import value="java.util.*" />
 	<import value="net.sf.jasperreports.engine.*" />
 	<import value="net.sf.jasperreports.engine.data.*" />
 
-	<parameter name="pCriterio" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="pFrom" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="pCampos" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="pImages" isForPrompting="true" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="auditoria" class="java.lang.String">
 		<fieldDescription><![CDATA[auditoria]]></fieldDescription>
@@ -53,6 +49,9 @@
 	<field name="edicao" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[edicao]]></fieldDescription>
 	</field>
+	<field name="fichaPratoEmpresa" class="java.util.List">
+		<fieldDescription><![CDATA[fichaPratoEmpresa]]></fieldDescription>
+	</field>
 	<field name="fichaTecnicaPrato" class="br.com.ichef.model.FichaTecnicaPrato">
 		<fieldDescription><![CDATA[fichaTecnicaPrato]]></fieldDescription>
 	</field>
@@ -61,6 +60,9 @@
 	</field>
 	<field name="inclusao" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[inclusao]]></fieldDescription>
+	</field>
+	<field name="observacao" class="java.lang.String">
+		<fieldDescription><![CDATA[observacao]]></fieldDescription>
 	</field>
 	<field name="podeVenderAcimaDoLimite" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[podeVenderAcimaDoLimite]]></fieldDescription>
@@ -77,10 +79,89 @@
 	<field name="venderAcimaDoLimite" class="java.lang.String">
 		<fieldDescription><![CDATA[venderAcimaDoLimite]]></fieldDescription>
 	</field>
-	<field name="observacao" class="java.lang.String">
-		<fieldDescription><![CDATA[observacao]]></fieldDescription>
-	</field>
 
+
+		<group  name="item" >
+			<groupExpression><![CDATA[""+$F{fichaTecnicaPrato}.getId()]]></groupExpression>
+			<groupHeader>
+			<band height="20"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="528"
+						height="8"
+						key="textField-1"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[""+$F{fichaTecnicaPrato}.getDescricao()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="10"
+						y="8"
+						width="528"
+						height="8"
+						key="textField-3"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[""+$F{fichaTecnicaPrato}.getDescricaoPreparo()]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="10"
+						y="17"
+						width="433"
+						height="3"
+						key="subreport-1"
+						positionType="Float"/>
+					<subreportParameter  name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource( $F{fichaPratoEmpresa}  )]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/CardapioPratosEmpresa.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="obs" >
+			<groupExpression><![CDATA[$F{observacao}]]></groupExpression>
+			<groupHeader>
+			<band height="12"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[new Boolean($F{observacao}!=null)]]></printWhenExpression>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="10"
+						y="1"
+						width="528"
+						height="11"
+						key="textField-2"
+						positionType="Float">
+							<printWhenExpression><![CDATA[new Boolean($F{observacao}!=null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="7"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{observacao}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -90,7 +171,7 @@
 			</band>
 		</title>
 		<pageHeader>
-			<band height="-2"  isSplitAllowed="true" >
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</pageHeader>
 		<columnHeader>
@@ -98,63 +179,7 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="99"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="2"
-						width="105"
-						height="12"
-						key="textField"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica" size="8" isBold="false" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricao}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="24"
-						width="105"
-						height="30"
-						key="textField"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Top">
-						<font pdfFontName="Helvetica-Oblique" size="7" isItalic="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fichaTecnicaPrato}.getDescricaoPreparo()]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="14"
-						width="105"
-						height="10"
-						key="textField-1"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Top">
-						<font size="7"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fichaTecnicaPrato}.getDescricao()]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="54"
-						width="105"
-						height="30"
-						key="textField-2"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Top">
-						<font pdfFontName="Helvetica-Oblique" size="7" isItalic="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{observacao}]]></textFieldExpression>
-				</textField>
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</detail>
 		<columnFooter>

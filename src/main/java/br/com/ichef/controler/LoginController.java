@@ -1,6 +1,7 @@
 package br.com.ichef.controler;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -16,9 +17,11 @@ import org.omnifaces.util.Messages;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Empresa;
+import br.com.ichef.model.LogAcesso;
 import br.com.ichef.model.Usuario;
 import br.com.ichef.service.ConfiguracaoService;
 import br.com.ichef.service.EmpresaService;
+import br.com.ichef.service.LogAcessoService;
 import br.com.ichef.service.UsuarioService;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.util.StringUtil;
@@ -33,8 +36,11 @@ public class LoginController extends BaseController {
 	private UsuarioService service;
 
 	@Inject
+	private LogAcessoService logAcessoService;
+
+	@Inject
 	private EmpresaService empresaService;
-	
+
 	@Inject
 	private ConfiguracaoService configuracaoService;
 
@@ -103,7 +109,7 @@ public class LoginController extends BaseController {
 				return null;
 
 			} else {
-				Configuracao  config = configuracaoService.getById(1);
+				Configuracao config = configuracaoService.getById(1);
 				usuario.setEmpresaLogada(empresa);
 				JSFUtil.setSessionMapValue("loggedUser", usuario.getLogin());
 				JSFUtil.setSessionMapValue("usuario", usuario);
@@ -111,7 +117,15 @@ public class LoginController extends BaseController {
 				// JsfUtil.setSessionMapValue("perfisUsuario",usuario.getPapel());
 				JSFUtil.setSessionMapValue("loggedMatricula", usuario.getLogin());
 				JSFUtil.setSessionMapValue("configuracao", config);
+
+				LogAcesso log = new LogAcesso();
+				log.setDataLogin(new Date());
+				log.setUsuario(usuario);
+
+				logAcessoService.saveOrUpdade(log);
+
 				return "/index.xhtml?faces-redirect=true";
+
 			}
 		} else {
 			Messages.addGlobalError("Usuário ou senha inválidos");

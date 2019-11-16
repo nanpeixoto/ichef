@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,7 +127,8 @@ public class Util extends ReportUtils {
 	public  static String getDiaSemana(Date diaSemana) {
 		Calendar cal = new GregorianCalendar();
 		cal.setTime(diaSemana);
-		return new DateFormatSymbols().getWeekdays()[cal.get(Calendar.DAY_OF_WEEK)];
+		Locale brasil = new Locale( "pt" , "br" ); 
+		return new DateFormatSymbols(brasil).getWeekdays()[cal.get(Calendar.DAY_OF_WEEK)];
 	}
 
 	public static boolean ehFeriado(Calendar calendar) {

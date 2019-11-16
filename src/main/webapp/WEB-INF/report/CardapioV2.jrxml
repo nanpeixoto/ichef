@@ -2,13 +2,13 @@
 <!-- Created with iReport - A designer for JasperReports -->
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-		 name="Cardapio"
+		 name="CardapioV2"
 		 columnCount="1"
 		 printOrder="Vertical"
-		 orientation="Portrait"
-		 pageWidth="595"
-		 pageHeight="842"
-		 columnWidth="535"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
 		 columnSpacing="0"
 		 leftMargin="30"
 		 rightMargin="30"
@@ -74,74 +74,7 @@
 	<field name="usuarioCadastro" class="br.com.ichef.model.Usuario">
 		<fieldDescription><![CDATA[usuarioCadastro]]></fieldDescription>
 	</field>
-	<field name="diaSemana" class="java.lang.String">
-		<fieldDescription><![CDATA[diaSemana]]></fieldDescription>
-	</field>
 
-
-		<group  name="Data" >
-			<groupExpression><![CDATA[ $F{dataFormatada}]]></groupExpression>
-			<groupHeader>
-			<band height="21"  isSplitAllowed="true" >
-				<rectangle>
-					<reportElement
-						x="0"
-						y="7"
-						width="534"
-						height="14"
-						forecolor="#FFFFFF"
-						backcolor="#CCCCCC"
-						key="rectangle-1"/>
-					<graphicElement stretchType="NoStretch" pen="None"/>
-				</rectangle>
-				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="1"
-						y="7"
-						width="531"
-						height="14"
-						key="textField"
-						positionType="Float"
-						isPrintWhenDetailOverflows="true"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataFormatada}+" - "+$F{diaSemana}]]></textFieldExpression>
-				</textField>
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
-		<group  name="Observacao" >
-			<groupExpression><![CDATA[$F{data}+""+$F{observacao}]]></groupExpression>
-			<groupHeader>
-			<band height="15"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[new Boolean($F{observacao}==null)]]></printWhenExpression>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="1"
-						y="0"
-						width="532"
-						height="15"
-						key="textField"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font pdfFontName="Helvetica-Oblique" size="10" isItalic="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{observacao}]]></textFieldExpression>
-				</textField>
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -152,18 +85,18 @@
 					<reportElement
 						x="100"
 						y="5"
-						width="332"
+						width="582"
 						height="47"
 						key="staticText-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="24" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Programação de Cardápio]]></text>
+				<text><![CDATA[Programação de Cardápio v1]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
-						x="432"
+						x="682"
 						y="37"
 						width="28"
 						height="15"
@@ -176,7 +109,7 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="463"
+						x="713"
 						y="37"
 						width="25"
 						height="15"
@@ -189,7 +122,7 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="490"
+						x="740"
 						y="37"
 						width="15"
 						height="15"
@@ -202,7 +135,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="432"
+						x="682"
 						y="21"
 						width="28"
 						height="15"
@@ -215,7 +148,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="432"
+						x="682"
 						y="5"
 						width="28"
 						height="15"
@@ -228,7 +161,7 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="463"
+						x="713"
 						y="5"
 						width="69"
 						height="15"
@@ -241,7 +174,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="HH:mm" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="463"
+						x="713"
 						y="21"
 						width="69"
 						height="15"
@@ -254,7 +187,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="507"
+						x="757"
 						y="36"
 						width="25"
 						height="15"
@@ -287,21 +220,49 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="5"  isSplitAllowed="false" >
+			<band height="42"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="9"
+						width="98"
+						height="18"
+						key="textField"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataFormatada}]]></textFieldExpression>
+				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="1"
-						y="0"
-						width="522"
-						height="5"
+						x="100"
+						y="9"
+						width="638"
+						height="33"
 						key="subreport-1"
-						positionType="Float"/>
-					<subreportParameter  name="pData">
-						<subreportParameterExpression><![CDATA[$F{dataFormatada}]]></subreportParameterExpression>
-					</subreportParameter>
+						stretchType="RelativeToBandHeight"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource( $F{pratos})]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/CardapioPratos.jasper"]]></subreportExpression>
 				</subreport>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="27"
+						width="98"
+						height="15"
+						key="textField"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Oblique" size="7" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{observacao}]]></textFieldExpression>
+				</textField>
 			</band>
 		</detail>
 		<columnFooter>
@@ -312,7 +273,7 @@
 			<band height="15"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="303"
+						x="550"
 						y="3"
 						width="231"
 						height="12"
@@ -329,7 +290,7 @@
 					<reportElement
 						x="1"
 						y="3"
-						width="329"
+						width="317"
 						height="12"
 						key="staticText-7"
 						positionType="Float"
@@ -344,7 +305,7 @@
 					<reportElement
 						x="1"
 						y="2"
-						width="532"
+						width="779"
 						height="0"
 						key="line-1"/>
 					<graphicElement stretchType="NoStretch"/>

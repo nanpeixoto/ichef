@@ -55,6 +55,10 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	@JoinColumn(name = "CD_FICHA_TECNICA_PREPATO")
 	private FichaTecnicaPreparo fichaTecnicaPreparo;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_FICHA_TEC_PERPARO_REFERENCIA")
+	private FichaTecnicaPreparo fichaTecnicaPreparoReferencia;
+
 	@Transient
 	private boolean isAtivo;
 
@@ -192,6 +196,14 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 
 	public void setQuantidadeLiquida(BigDecimal quantidadeLiquida) {
 		this.quantidadeLiquida = quantidadeLiquida;
+	}
+
+	public FichaTecnicaPreparo getFichaTecnicaPreparoReferencia() {
+		return fichaTecnicaPreparoReferencia;
+	}
+
+	public void setFichaTecnicaPreparoReferencia(FichaTecnicaPreparo fichaTecnicaPreparoReferencia) {
+		this.fichaTecnicaPreparoReferencia = fichaTecnicaPreparoReferencia;
 	}
 
 }
