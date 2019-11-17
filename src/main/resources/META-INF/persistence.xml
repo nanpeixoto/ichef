@@ -6,6 +6,7 @@
 	<persistence-unit name="PU">
 
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>br.com.ichef.model.VwPrevisaoInsumo</class>
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ichef?useSSL=true" />
 			<property name="javax.persistence.jdbc.user" value="ichef" />
@@ -31,7 +32,7 @@
 
 			<property name="hibernate.c3p0.idle_test_period" value="3000" />
 
-			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="false" />
 		</properties>
 

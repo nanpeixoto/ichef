@@ -168,13 +168,13 @@
 								paginatorPosition="bottom" emptyMessage="Nenhum item encontrado"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
-								sortBy="#{item.descricao}">
+								sortBy="#{item.ordem}">
 
 								<p:column style="width:16px">
 									<p:rowToggler />
 								</p:column>
 
-								<p:column headerText="Descrição"
+								<p:column headerText="Descrição "
 									filterStyle="display:none; visibility:hidden;"
 									filterBy="#{item.descricao}" filterMatchMode="contains"
 									sortBy="#{item.descricao}" style="width:20%">

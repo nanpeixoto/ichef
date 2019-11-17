@@ -64,17 +64,15 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	protected T updateImpl(T entity) throws Exception {
 
 		try {
-			
-			if( !manager.isOpen() ) {
+
+			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
-				manager  = producer.createEntityManager();
+				manager = producer.createEntityManager();
 			}
 			manager.getTransaction().begin();
 			manager.merge(entity);
 			manager.flush();
 			manager.getTransaction().commit();
-			
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -88,49 +86,46 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 
 	protected T saveImpl(T entity) throws Exception {
 		try {
-			
-			if( !manager.isOpen() ) {
+
+			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
-				manager  = producer.createEntityManager();
+				manager = producer.createEntityManager();
 			}
 			manager.getTransaction().begin();
 			manager.persist(entity);
 			manager.getTransaction().commit();
-			 
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			manager.close();
 		}
 
 		return entity;
 	}
 
-	/*public GenericDAO() {
-		manager = getEntityManager();
-	}
-
-	private EntityManager getEntityManager() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("PU");
-		if (manager == null) {
-			manager = factory.createEntityManager();
-		}
-
-		return manager;
-	}*/
+	/*
+	 * public GenericDAO() { manager = getEntityManager(); }
+	 * 
+	 * private EntityManager getEntityManager() { EntityManagerFactory factory =
+	 * Persistence.createEntityManagerFactory("PU"); if (manager == null) { manager
+	 * = factory.createEntityManager(); }
+	 * 
+	 * return manager; }
+	 */
 
 	public void excluir(BaseEntity entity) {
 		try {
-			if( !manager.isOpen() ) {
+			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
-				manager  = producer.createEntityManager();
+				manager = producer.createEntityManager();
 			}
 			manager.getTransaction().begin();
 			entity = getById(entity.getId());
 			manager.remove(entity);
 			manager.flush();
 			manager.getTransaction().commit();
-			
+
 		} catch (Exception e) {
 			throw new NegocioExcepticon("Item não pode ser excluído.");
 		} finally {
@@ -150,20 +145,41 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	public List<T> listAll() {
-		return manager.createQuery(("FROM " + getTypeClass().getName())).getResultList();
+		String campoOrderBy = null;
+		try {
+			Method m = getTypeClass().getDeclaredMethod("getColumnOrderBy");
+			Class c = Class.forName(getTypeClass().getName());
+			Object t = c.newInstance();
+			campoOrderBy = (String) m.invoke(t);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			if (campoOrderBy == null)
+				return manager.createQuery(("FROM " + getTypeClass().getName())).getResultList();
+			else
+				return manager.createQuery(("FROM " + getTypeClass().getName()) + " ORDER BY " + campoOrderBy)
+						.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return null;
 		// return manager.createNativeQuery("SELECT * FROM Tarefa",
 		// BaseEntity.class).getResultList();
 	}
 
 	public List<T> findByParameters(T object) throws Exception {
-		if( !manager.isOpen() ) {
-			//System.out.println("conecao fechada");
+		if (!manager.isOpen()) {
+			// System.out.println("conecao fechada");
 			EntityManagerProducer producer = new EntityManagerProducer();
-			manager  = producer.createEntityManager();
+			manager = producer.createEntityManager();
 		}
-		
-		//System.out.println("conecao");
-		
+
+		// System.out.println("conecao");
+
 		Criteria criteria = createCriteria(object);
 
 		return criteria.list();

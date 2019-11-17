@@ -19,7 +19,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "cardapio_ficha_prato")
-public class CardapioFichaPrato extends BaseEntity {
+public class CardapioFichaPrato extends BaseEntity implements Comparable<CardapioFichaPrato>  {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -38,6 +38,9 @@ public class CardapioFichaPrato extends BaseEntity {
 
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
+
+	@Column(name = "NR_ORDEM")
+	private Integer ordem;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -103,7 +106,7 @@ public class CardapioFichaPrato extends BaseEntity {
 	@Override
 	public String getColumnOrderBy() {
 		// TODO Auto-generated method stub
-		return null;
+		return "ordem";
 	}
 
 	@Override
@@ -202,6 +205,19 @@ public class CardapioFichaPrato extends BaseEntity {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao.toUpperCase();
+	}
+
+	public Integer getOrdem() {
+		return ordem;
+	}
+
+	public void setOrdem(Integer ordem) {
+		this.ordem = ordem;
+	}
+	
+	@Override
+	public int compareTo(CardapioFichaPrato o) {
+		return this.getOrdem().compareTo(o.getOrdem());
 	}
 
 }

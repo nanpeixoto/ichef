@@ -9,6 +9,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Cardapio;
@@ -65,6 +67,7 @@ public class CardapioController extends BaseController {
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
+
 		}
 
 		obterListas();
@@ -74,6 +77,7 @@ public class CardapioController extends BaseController {
 	public void init() {
 		if (id != null) {
 			setEntity(service.getById(id));
+
 		} else {
 			setEntity(new Cardapio());
 			getEntity().setAtivo("S");
@@ -142,8 +146,13 @@ public class CardapioController extends BaseController {
 		}
 
 		if (!existe) {
+			if (getEntity().getPratos() == null) {
+				getEntity().setPratos(new ArrayList<CardapioFichaPrato>());
+			}
+
 			CardapioFichaPrato ficha = new CardapioFichaPrato();
 			ficha.setCardapio(entity);
+			ficha.setOrdem((getEntity().getPratos().size() + 1));
 			ficha.setObservacao(getObservacao());
 			ficha.setDescricao(getDescricaoCardapioFicha());
 			ficha.setQuantidade(getQuantidade());
@@ -152,9 +161,6 @@ public class CardapioController extends BaseController {
 			ficha.setFichaTecnicaPrato(getPrato());
 			ficha.setUsuarioCadastro(userLogado);
 
-			if (getEntity().getPratos() == null) {
-				getEntity().setPratos(new ArrayList<CardapioFichaPrato>());
-			}
 			getEntity().getPratos().add(ficha);
 
 			/* EMPRESAS QUE O USUÁRIO TEM ACESSO */
@@ -276,6 +282,11 @@ public class CardapioController extends BaseController {
 
 			try {
 				cardapios = service.findByParameters(new Cardapio(), visitor);
+
+				for (Cardapio cardapio : cardapios) {
+					java.util.Collections.sort(cardapio.getPratos());
+				}
+
 			} catch (Exception e) {
 				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
 			}

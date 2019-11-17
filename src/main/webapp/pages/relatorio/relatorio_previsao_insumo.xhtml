@@ -5,11 +5,11 @@
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">
-        Relatório - Cardápio
+        Relatório - Previsão de Insumo
     </ui:define>
 
     <ui:define name="body">
-        <adm:breadcrumb title="Relatório Cardápio" link="relatorio_cardapio.xhtml"/>
+        <adm:breadcrumb title="Relatório Previsão de Insumo" link="relatorio_previsao_insumo.xhtml"/>
         <h:form id="form" prependId="false">
            <p:focus context="capaPanel"/>
 
@@ -18,26 +18,33 @@
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
                         <p:commandButton value="Imprimir" update="@form"
-                                         icon="fa fa-print" styleClass="btn-primary" ajax="false" action="#{cardapioController.imprimir()}"/>
+                                         icon="fa fa-print" styleClass="btn-primary" ajax="false" action="#{previsaoInsumoController.imprimir()}"/>
                         <p:spacer width="5"/>
                     </div>
                     
                     <p:splitButton value="Imprimir" update="@form"
                                    icon="fa fa-print"
-                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{cardapioController.imprimir()}">
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{previsaoInsumoController.imprimir()}">
                     </p:splitButton>
 					
 					<p:separator/>
 
                     <div class="ui-fluid">
                     	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-2, ui-g-2">
+                    	
+                    		<p:outputLabel value="Empresa" for="empresa"/>
+		                    <p:selectOneMenu id="empresa" value="#{previsaoInsumoController.empresa}"  converter= "omnifaces.SelectItemsConverter" >
+								<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							    <f:selectItems value="#{previsaoInsumoController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
+							 </p:selectOneMenu>
+							 
                     		<p:outputLabel value="Data Inicial" for="dtInicial"/>
-                    		<p:calendar id="dtInicial" value="#{cardapioController.dataInicial}"  pattern="dd/MM/yyyy" size="10" required="true"
+                    		<p:calendar id="dtInicial" value="#{previsaoInsumoController.dataInicial}"  pattern="dd/MM/yyyy" size="10" required="true"
                     			requiredMessage="#{configuracaoController.getRequiredMessage('Data Inicial')}"
                     		/>
                     		
                     		<p:outputLabel value="Data Final" for="dtFinal"/>
-                    		<p:calendar id="dtFinal" value="#{cardapioController.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"
+                    		<p:calendar id="dtFinal" value="#{previsaoInsumoController.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"
                     			requiredMessage="#{configuracaoController.getRequiredMessage('Data Final')}"
                     		/>
                     		

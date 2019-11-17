@@ -24,6 +24,9 @@
 	<import value="net.sf.jasperreports.engine.data.*" />
 
 	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="pdataFormatada" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="pdiaSemana" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="pobservacao" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="auditoria" class="java.lang.String">
 		<fieldDescription><![CDATA[auditoria]]></fieldDescription>
@@ -81,13 +84,39 @@
 	</field>
 
 
+		<group  name="pobservacao" >
+			<groupExpression><![CDATA[$P{pobservacao}]]></groupExpression>
+			<groupHeader>
+			<band height="9"  isSplitAllowed="false" >
+				<printWhenExpression><![CDATA[new Boolean( $P{pobservacao}!=null)]]></printWhenExpression>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="532"
+						height="9"
+						key="textField-5"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font pdfFontName="Helvetica-Oblique" size="7" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{pobservacao}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
 		<group  name="item" >
 			<groupExpression><![CDATA[""+$F{fichaTecnicaPrato}.getId()]]></groupExpression>
 			<groupHeader>
-			<band height="20"  isSplitAllowed="true" >
+			<band height="20"  isSplitAllowed="false" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="0"
+						x="1"
 						y="0"
 						width="528"
 						height="8"
@@ -95,7 +124,7 @@
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[""+$F{fichaTecnicaPrato}.getDescricao()]]></textFieldExpression>
 				</textField>
@@ -109,7 +138,7 @@
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
-						<font pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true"/>
+						<font pdfFontName="Helvetica-Oblique" size="7" isBold="false" isItalic="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[""+$F{fichaTecnicaPrato}.getDescricaoPreparo()]]></textFieldExpression>
 				</textField>
@@ -119,7 +148,8 @@
 						y="17"
 						width="433"
 						height="3"
-						key="subreport-1"/>
+						key="subreport-1"
+						positionType="Float"/>
 					<subreportParameter  name="SUBREPORT_DIR">
 						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
 					</subreportParameter>
@@ -136,14 +166,14 @@
 		<group  name="obs" >
 			<groupExpression><![CDATA[$F{observacao}]]></groupExpression>
 			<groupHeader>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="10"  isSplitAllowed="false" >
 				<printWhenExpression><![CDATA[new Boolean($F{observacao}!=null)]]></printWhenExpression>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="10"
 						y="1"
 						width="528"
-						height="11"
+						height="9"
 						key="textField-2"
 						positionType="Float">
 							<printWhenExpression><![CDATA[new Boolean($F{observacao}!=null)]]></printWhenExpression>
@@ -166,7 +196,33 @@
 			</band>
 		</background>
 		<title>
-			<band height="0"  isSplitAllowed="true" >
+			<band height="11"  isSplitAllowed="false" >
+				<rectangle>
+					<reportElement
+						x="1"
+						y="1"
+						width="534"
+						height="10"
+						forecolor="#FFFFFF"
+						backcolor="#CCCCCC"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="1"
+						width="531"
+						height="10"
+						key="textField-4"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{pdataFormatada}+" - "+$P{pdiaSemana}]]></textFieldExpression>
+				</textField>
 			</band>
 		</title>
 		<pageHeader>

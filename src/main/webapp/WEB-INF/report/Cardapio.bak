@@ -82,33 +82,7 @@
 		<group  name="Data" >
 			<groupExpression><![CDATA[ $F{dataFormatada}]]></groupExpression>
 			<groupHeader>
-			<band height="21"  isSplitAllowed="true" >
-				<rectangle>
-					<reportElement
-						x="0"
-						y="7"
-						width="534"
-						height="14"
-						forecolor="#FFFFFF"
-						backcolor="#CCCCCC"
-						key="rectangle-1"/>
-					<graphicElement stretchType="NoStretch" pen="None"/>
-				</rectangle>
-				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="1"
-						y="7"
-						width="531"
-						height="14"
-						key="textField"
-						positionType="Float"
-						isPrintWhenDetailOverflows="true"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataFormatada}+" - "+$F{diaSemana}]]></textFieldExpression>
-				</textField>
+			<band height="2"  isSplitAllowed="false" >
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -119,22 +93,8 @@
 		<group  name="Observacao" >
 			<groupExpression><![CDATA[$F{data}+""+$F{observacao}]]></groupExpression>
 			<groupHeader>
-			<band height="15"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[new Boolean($F{observacao}==null)]]></printWhenExpression>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="1"
-						y="0"
-						width="532"
-						height="15"
-						key="textField"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font pdfFontName="Helvetica-Oblique" size="10" isItalic="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{observacao}]]></textFieldExpression>
-				</textField>
+			<band height="0"  isSplitAllowed="false" >
+				<printWhenExpression><![CDATA[new Boolean($F{observacao}!=null)]]></printWhenExpression>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -147,7 +107,7 @@
 			</band>
 		</background>
 		<title>
-			<band height="52"  isSplitAllowed="true" >
+			<band height="53"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="100"
@@ -159,7 +119,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Programação de Cardápio]]></text>
+				<text><![CDATA[Programação de Cardápio v1]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -296,8 +256,17 @@
 						height="5"
 						key="subreport-1"
 						positionType="Float"/>
-					<subreportParameter  name="pData">
+					<subreportParameter  name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pdataFormatada">
 						<subreportParameterExpression><![CDATA[$F{dataFormatada}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pdiaSemana">
+						<subreportParameterExpression><![CDATA[$F{diaSemana}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pobservacao">
+						<subreportParameterExpression><![CDATA[$F{observacao}]]></subreportParameterExpression>
 					</subreportParameter>
 					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource( $F{pratos})]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/CardapioPratos.jasper"]]></subreportExpression>

@@ -1,7 +1,9 @@
 package br.com.ichef.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -58,6 +61,10 @@ public class Insumo extends BaseEntity {
 
 	@Transient
 	private boolean isAtivo;
+
+	// bi-directional many-to-one association to TipPratoPreco
+	@OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<InsumoPreco> precos;
 
 	public boolean isAtivo() {
 		if (ativo != null) {
@@ -215,12 +222,22 @@ public class Insumo extends BaseEntity {
 	public void setUnidade(Unidade unidade) {
 		this.unidade = unidade;
 	}
-	
-	public String getValorFormatado () {
-		if(getValor()!=null ) {
-			return "R$ "+getValor().toString().replaceAll(",", ".").replace(".",",");
+
+	public String getValorFormatado() {
+		if (getValor() != null) {
+			return "R$ " + getValor().toString().replaceAll(",", ".").replace(".", ",");
 		}
 		return getValor().toString();
 	}
+
+	public List<InsumoPreco> getPrecos() {
+		return precos;
+	}
+
+	public void setPrecos(List<InsumoPreco> precos) {
+		this.precos = precos;
+	}
+	
+	
 
 }
