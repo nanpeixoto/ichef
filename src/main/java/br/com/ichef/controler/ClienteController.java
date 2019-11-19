@@ -39,6 +39,7 @@ import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.LocalidadeService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
+import br.com.ichef.visitor.ClienteVisitor;
 
 @Named
 @ViewScoped
@@ -551,9 +552,9 @@ public class ClienteController extends BaseController {
 			return "";
 		}
 
-		ClienteTelefone filter = new ClienteTelefone();
-		filter.setTelefone(telefone);
-		List<ClienteTelefone> telefonesClientes = clienteTelefoneService.findByParameters(filter);
+		ClienteVisitor visitor = new ClienteVisitor();
+		visitor.setTelefone(telefone.replace(" ", "").replace("(", "").replace(")", "").replace("+", "").replace("-", ""));
+		List<ClienteTelefone> telefonesClientes = clienteTelefoneService.findByParameters(new ClienteTelefone(), visitor);
 		if (telefonesClientes != null && telefonesClientes.size() > 0) {
 			id = telefonesClientes.get(0).getCliente().getId();
 			return "cadastro-cliente.xhtml?faces-redirect=true&id=" + id;
