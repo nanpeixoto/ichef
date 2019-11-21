@@ -29,7 +29,7 @@ public class CardapioVisitor extends FilterVisitor {
 		
 		if (getDataInicio() != null && getDataFim() !=null)
 			criteria.add(Restrictions.sqlRestriction(
-					" date_format( data, '%d/%m/%Y' )  between '" + Util.dateToString(getDataInicio()) + "' and '" + Util.dateToString(getDataFim()) + "'"));
+					" data between STR_TO_DATE( '" + Util.dateToString(getDataInicio()) + "', '%d/%m/%Y' ) and  STR_TO_DATE('" + Util.dateToString(getDataFim()) + "', '%d/%m/%Y' ) "));
 
 	}
 

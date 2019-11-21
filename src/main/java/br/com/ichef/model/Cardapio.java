@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
@@ -37,6 +39,7 @@ public class Cardapio extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "DATA")
 	private Date data;
 

@@ -78,30 +78,6 @@
 		<fieldDescription><![CDATA[diaSemana]]></fieldDescription>
 	</field>
 
-
-		<group  name="Data" >
-			<groupExpression><![CDATA[ $F{dataFormatada}]]></groupExpression>
-			<groupHeader>
-			<band height="2"  isSplitAllowed="false" >
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
-		<group  name="Observacao" >
-			<groupExpression><![CDATA[$F{data}+""+$F{observacao}]]></groupExpression>
-			<groupHeader>
-			<band height="0"  isSplitAllowed="false" >
-				<printWhenExpression><![CDATA[new Boolean($F{observacao}!=null)]]></printWhenExpression>
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -119,7 +95,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Programação de Cardápio v1]]></text>
+				<text><![CDATA[Programação de Cardápio]]></text>
 				</staticText>
 				<staticText>
 					<reportElement

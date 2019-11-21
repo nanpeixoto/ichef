@@ -3,13 +3,12 @@ package br.com.ichef.controler;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
@@ -75,6 +74,7 @@ public class CardapioController extends BaseController {
 
 	@PostConstruct
 	public void init() {
+		
 		if (id != null) {
 			setEntity(service.getById(id));
 

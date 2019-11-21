@@ -20,8 +20,8 @@ public class PrevisaoInsumoService extends GenericDAO<VwPrevisaoInsumo> {
 		@SuppressWarnings("unchecked")
 		List<VwPrevisaoInsumo> result = getSession().createCriteria(VwPrevisaoInsumo.class)
 				.add(Restrictions.eq("id.codigoEmpresa", empresa.getId()))
-				.add(Restrictions.sqlRestriction(" date_format( data, '%d/%m/%Y' )  between '"
-						+ Util.dateToString(dataInicial) + "' and '" + Util.dateToString(dataFinal) + "'"))
+				.add(Restrictions.sqlRestriction(" data between  STR_TO_DATE( '"
+						+ Util.dateToString(dataInicial) + "', '%d/%m/%Y' ) and  STR_TO_DATE( '" + Util.dateToString(dataFinal) + "', '%d/%m/%Y' ) "))
 				.setProjection(Projections.projectionList().add(Projections.groupProperty("id.codigoInsumo"))
 						.add(Projections.groupProperty("id.codigoEmpresa"))
 						.add(Projections.groupProperty("descricaoInsumo"))

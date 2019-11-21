@@ -1,21 +1,19 @@
 package br.com.ichef.util;
 
+import java.util.TimeZone;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.apache.log4j.Logger;
-
 @ApplicationScoped
 public class EntityManagerProducer {
 
-	private  EntityManagerFactory factory;
+	private EntityManagerFactory factory;
 
-	 
 	public EntityManagerProducer() {
 		this.factory = Persistence.createEntityManagerFactory("PU");
 		System.out.println("CONEXAO ABERTA");
@@ -23,6 +21,7 @@ public class EntityManagerProducer {
 
 	@Produces
 	public EntityManager createEntityManager() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		return this.factory.createEntityManager();
 	}
 
