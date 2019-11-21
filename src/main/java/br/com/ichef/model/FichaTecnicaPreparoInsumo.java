@@ -47,6 +47,9 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 
 	@Column(name = "NR_QTD_LIQUIDA")
 	private BigDecimal quantidadeLiquida;
+	
+	@Column(name = "NR_QTD_LIQUIDA_INFORMADA")
+	private BigDecimal quantidadeLiquidaInformada;
 
 	@Column(name = "SN_ATIVO")
 	private String ativo;
@@ -205,5 +208,15 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	public void setFichaTecnicaPreparoReferencia(FichaTecnicaPreparo fichaTecnicaPreparoReferencia) {
 		this.fichaTecnicaPreparoReferencia = fichaTecnicaPreparoReferencia;
 	}
+
+	public BigDecimal getQuantidadeLiquidaInformada() {
+		return quantidadeLiquidaInformada;
+	}
+
+	public void setQuantidadeLiquidaInformada(BigDecimal quantidadeLiquidaInformada) {
+		this.quantidadeLiquidaInformada = quantidadeLiquidaInformada;
+	}
+	
+	
 
 }

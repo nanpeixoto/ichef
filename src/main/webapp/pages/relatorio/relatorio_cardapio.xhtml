@@ -33,12 +33,12 @@
                     	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-2, ui-g-2">
                     		<p:outputLabel value="Data Inicial" for="dtInicial"/>
                     		<p:calendar id="dtInicial" value="#{cardapioController.dataInicial}"  pattern="dd/MM/yyyy" size="10" required="true"
-                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Inicial')}"
+                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Inicial')}"  mask="true" showOn="button"
                     		/>
                     		
                     		<p:outputLabel value="Data Final" for="dtFinal"/>
                     		<p:calendar id="dtFinal" value="#{cardapioController.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"
-                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Final')}"
+                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Final')}" mask="true" showOn="button"
                     		/>
                     		
 						</p:panelGrid>

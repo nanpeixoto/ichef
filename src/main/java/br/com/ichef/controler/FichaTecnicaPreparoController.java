@@ -210,13 +210,13 @@ public class FichaTecnicaPreparoController extends BaseController {
 		}
 
 		if (getInsumo() != null && getPreparo() == null) {
-			Boolean erro = adicionarInsumo(getInsumo(), true, null);
+			Boolean erro = adicionarInsumo(getInsumo(), true, null, null);
 			if (erro)
 				return;
 		}
 		if (getPreparo() != null) {
 			for (FichaTecnicaPreparoInsumo fichaTecnicaPreparoInsumo : getPreparo().getInsumos()) {
-				Boolean erro = adicionarInsumo(fichaTecnicaPreparoInsumo.getInsumo(), false, getPreparo());
+				Boolean erro = adicionarInsumo(fichaTecnicaPreparoInsumo.getInsumo(), false, getPreparo(), fichaTecnicaPreparoInsumo);
 				if (erro)
 					return;
 
@@ -237,7 +237,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 	}
 
 	public Boolean adicionarInsumo(Insumo insumoParaAdicionar, Boolean adicionardoPorInsumo,
-			FichaTecnicaPreparo fichaTecnicaPreparoReferencia) {
+			FichaTecnicaPreparo fichaTecnicaPreparoReferencia, FichaTecnicaPreparoInsumo fichaTecnicaPreparoInsumoReferencia) {
 		boolean existe = false;
 
 		if (insumoParaAdicionar == null) {
@@ -270,10 +270,20 @@ public class FichaTecnicaPreparoController extends BaseController {
 			fichaInsumo.setFichaTecnicaPreparo(getEntity());
 			fichaInsumo.setInsumo(insumoParaAdicionar);
 			fichaInsumo.setQuantidadeLiquida(qtdLiquida);
+			fichaInsumo.setQuantidadeLiquidaInformada(qtdLiquida);
+			
+			fichaInsumo.setFichaTecnicaPreparoReferencia(fichaTecnicaPreparoReferencia);
+			
+			if(fichaTecnicaPreparoReferencia !=null ) {
+				BigDecimal quantidadeLiquiquidaCalculada = 
+							(fichaTecnicaPreparoInsumoReferencia.getQuantidadeLiquida()
+								.divide( new BigDecimal(fichaTecnicaPreparoReferencia.getTamanho()) ) ).multiply(getQtdLiquida());
+				fichaInsumo.setQuantidadeLiquida(quantidadeLiquiquidaCalculada);
+			}
 
 			calcularValores(insumoParaAdicionar, fichaInsumo, getAproveitamento(), getQtdLiquida());
 
-			fichaInsumo.setFichaTecnicaPreparoReferencia(fichaTecnicaPreparoReferencia);
+			
 
 			if (getEntity().getInsumos() == null) {
 				getEntity().setInsumos(new ArrayList<FichaTecnicaPreparoInsumo>());

@@ -40,12 +40,12 @@
 							 
                     		<p:outputLabel value="Data Inicial" for="dtInicial"/>
                     		<p:calendar id="dtInicial" value="#{previsaoInsumoController.dataInicial}"  pattern="dd/MM/yyyy" size="10" required="true"
-                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Inicial')}"
+                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Inicial')}" mask="true" showOn="button"
                     		/>
                     		
                     		<p:outputLabel value="Data Final" for="dtFinal"/>
                     		<p:calendar id="dtFinal" value="#{previsaoInsumoController.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"
-                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Final')}"
+                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Final')}" mask="true" showOn="button"
                     		/>
                     		
 						</p:panelGrid>

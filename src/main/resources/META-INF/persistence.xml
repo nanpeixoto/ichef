@@ -8,7 +8,7 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>br.com.ichef.model.VwPrevisaoInsumo</class>
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/ichef?useSSL=true" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/ichef?useSSL=true&amp;serverTimezone=UTC" />
 			<property name="javax.persistence.jdbc.user" value="ichef" />
 			<property name="javax.persistence.jdbc.password" value="ichef" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
