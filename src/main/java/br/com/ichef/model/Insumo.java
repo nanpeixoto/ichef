@@ -62,9 +62,11 @@ public class Insumo extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	// bi-directional many-to-one association to TipPratoPreco
 	@OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<InsumoPreco> precos;
+
+	@OneToMany(mappedBy = "insumo")
+	private List<VwInsumoPreco> ultimoPreco;
 
 	public boolean isAtivo() {
 		if (ativo != null) {
@@ -237,7 +239,13 @@ public class Insumo extends BaseEntity {
 	public void setPrecos(List<InsumoPreco> precos) {
 		this.precos = precos;
 	}
-	
-	
+
+	public List<VwInsumoPreco> getUltimoPreco() {
+		return ultimoPreco;
+	}
+
+	public void setUltimoPreco(List<VwInsumoPreco> ultimoPreco) {
+		this.ultimoPreco = ultimoPreco;
+	}
 
 }

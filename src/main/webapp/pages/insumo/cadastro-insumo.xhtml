@@ -75,9 +75,9 @@
                     			
 					        
 					        
-					        <p:outputLabel value="Valor" for="valor"/>
+					       <!--  <p:outputLabel value="Valor" for="valor"/>
 							<p:inputNumber   id="valor" value="#{insumoController.entity.valor}" symbol="R$ " decimalSeparator="," thousandSeparator="." 
-							required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Valor')}"/>
+							required="true" requiredMessage="#{configuracaoController.getRequiredMessage('Valor')}"/> -->
                     			
                     		
 					       
@@ -85,6 +85,62 @@
                     		<p:outputLabel value="Ativo" for="ativo"/>
 					        <p:selectBooleanButton id="ativo" value="#{insumoController.entity.ativo}" 
 					        	onLabel="Ativo" offLabel="Inativo" onIcon="fa fa-thumbs-o-up" offIcon="fa fa-thumbs-o-down"/>
+						
+						</p:panelGrid>
+						
+						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+						
+						<p:panelGrid  columns="8"    layout="grid">
+						
+							<p:outputLabel value="Empresa" for="empresa"/>
+							<p:selectOneMenu id="empresa" value="#{insumoController.empresa}"  converter= "omnifaces.SelectItemsConverter">
+					            <f:selectItem itemLabel="Selecione a Empresa...." itemValue=""  noSelectionOption="true" />
+					            <f:selectItems value="#{insumoController.listaEmpresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" /> 
+					     	</p:selectOneMenu>
+						
+							<p:outputLabel value="Valor" for="valor"/>
+							<p:inputNumber   id="valor" value="#{insumoController.preco}" symbol="R$ " decimalSeparator="," thousandSeparator="." /> 
+						 	
+						 	<p:outputLabel value="Vigência" for="vigencia"/>
+						 	<p:calendar id="vigencia" value="#{insumoController.dataVigencia}"  pattern="dd/MM/yyyy" size="10" ></p:calendar>
+                    	 	
+                    	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
+                    	 	 id="btnSurname" process="@this,vigencia,valor,empresa" update="tbPreco,valor,vigencia,empresa" actionListener="#{insumoController.adicionarPreco}" 
+                    	 	 styleClass="btn-primary" />
+                    	</p:panelGrid>
+                    	
+                    	<p:panelGrid  columns="1"  layout="grid"> 	
+                    	 	<p:dataTable id="tbPreco" widgetVar="itens" rows="10" 
+								paginator="false" value="#{insumoController.entity.precos}" var="item"
+								rowKey="#{item.id}" reflow="true"
+								paginatorPosition="bottom" editable="true"
+								mptyMessage="Nenhum item encontrado" 
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+								
+								<p:column headerText="Empresa" filterStyle="display:none; visibility:hidden;" filterBy="#{item.preco}"
+									filterMatchMode="contains" sortBy="#{item.empresa.nomeFantasia}">
+									<h:outputLabel value="#{item.empresa.nomeFantasia}" />
+								</p:column>
+								
+								<p:column headerText="Preço" filterStyle="display:none; visibility:hidden;" filterBy="#{item.preco}"
+									filterMatchMode="contains" sortBy="#{item.precoFormatado}">
+									<h:outputLabel value="#{item.precoFormatado}" />
+								</p:column>
+								
+								<p:column headerText="Data Vigência" filterStyle="display:none; visibility:hidden;" filterBy="#{item.dataVigenciaFormatada}"
+									filterMatchMode="contains" sortBy="#{item.dataVigenciaFormatada}">
+									<h:outputLabel value="#{item.dataVigenciaFormatada}" />
+								</p:column>
+								
+								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="text-align: center;" >
+									 <p:commandButton process="tbPreco" update=":form:tbPreco" icon="fa fa-trash-o" value="" 
+									 	style="width:15%; " styleClass="btn btn-danger" 
+									 	 actionListener="#{insumoController.excluirItemSelecionado( item )}"
+									 	   />
+								</p:column>
+		
+							</p:dataTable>
 						
 						</p:panelGrid>
 							

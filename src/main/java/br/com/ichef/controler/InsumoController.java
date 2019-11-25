@@ -11,9 +11,13 @@ import javax.inject.Named;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Insumo;
+import br.com.ichef.model.InsumoPreco;
 import br.com.ichef.model.TipoInsumo;
+import br.com.ichef.model.InsumoPreco;
 import br.com.ichef.model.Unidade;
+import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.InsumoService;
 import br.com.ichef.service.TipoInsumoService;
 import br.com.ichef.service.UnidadeService;
@@ -30,7 +34,10 @@ public class InsumoController extends BaseController {
 
 	@Inject
 	private TipoInsumoService tipoInsumoService;
-	
+
+	@Inject
+	private EmpresaService empresaService;
+
 	@Inject
 	private UnidadeService unidadeService;
 
@@ -44,6 +51,11 @@ public class InsumoController extends BaseController {
 
 	private List<TipoInsumo> tipoInsumos = new ArrayList<TipoInsumo>();
 	private List<Unidade> unidades = new ArrayList<Unidade>();
+	private List<Empresa> listaEmpresas = new ArrayList<Empresa>();
+
+	private Empresa empresa;
+	private Double preco;
+	private Date dataVigencia;
 
 	public void inicializar() {
 		if (id != null) {
@@ -58,6 +70,7 @@ public class InsumoController extends BaseController {
 	private void obterListas() {
 		tipoInsumos = tipoInsumoService.listAll(true);
 		unidades = unidadeService.listAll(true);
+		setListaEmpresas(empresaService.listAll(true));
 	}
 
 	@PostConstruct
@@ -88,6 +101,43 @@ public class InsumoController extends BaseController {
 	public String excluir() {
 		service.excluir(entity);
 		return "lista-insumo.xhtml?faces-redirect=true";
+	}
+
+	public void adicionarPreco() {
+		InsumoPreco obj = new InsumoPreco();
+		obj.setDataCadastro(new Date());
+		obj.setUsuarioCadastro(getUserLogado());
+
+		obj.setDataVigencia(getDataVigencia());
+		obj.setPreco(getPreco());
+		obj.setEmpresa(getEmpresa());
+
+		obj.setInsumo(getEntity());
+
+		if (getEntity().getPrecos() == null)
+			getEntity().setPrecos(new ArrayList<InsumoPreco>());
+		getEntity().getPrecos().add(obj);
+
+		updateComponentes("tbPreco");
+
+		setPreco(null);
+		setDataVigencia(null);
+
+	}
+	
+	public void excluirItemSelecionado(InsumoPreco insumo) {
+		List<InsumoPreco> temp = new ArrayList<InsumoPreco>();
+		temp.addAll( entity.getPrecos() );
+		for (InsumoPreco item : entity.getPrecos()) {
+			if (insumo.equals(item))
+				temp.remove(item);
+		}
+		entity.getPrecos().clear();
+		entity.getPrecos().addAll(temp);
+		
+		
+		updateComponentes("tbPreco");
+		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
 	public InsumoService getService() {
@@ -145,7 +195,37 @@ public class InsumoController extends BaseController {
 	public void setUnidades(List<Unidade> unidades) {
 		this.unidades = unidades;
 	}
-	
-	
+
+	public Date getDataVigencia() {
+		return dataVigencia;
+	}
+
+	public void setDataVigencia(Date dataVigencia) {
+		this.dataVigencia = dataVigencia;
+	}
+
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+	public List<Empresa> getListaEmpresas() {
+		return listaEmpresas;
+	}
+
+	public void setListaEmpresas(List<Empresa> listaEmpresas) {
+		this.listaEmpresas = listaEmpresas;
+	}
 
 }
