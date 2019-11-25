@@ -226,6 +226,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 		setInsumo(null);
 		aproveitamento = 100l;
 		qtdLiquida = null;
+		setPreparo(null);
 
 	}
 
@@ -281,7 +282,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 				fichaInsumo.setQuantidadeLiquida(quantidadeLiquiquidaCalculada);
 			}
 
-			calcularValores(insumoParaAdicionar, fichaInsumo, getAproveitamento(), getQtdLiquida());
+			calcularValores(insumoParaAdicionar, fichaInsumo, getAproveitamento(), fichaInsumo.getQuantidadeLiquida());
 
 			
 
