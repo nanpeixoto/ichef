@@ -43,8 +43,8 @@ public class FichaTecnicaPratoPreparo extends BaseEntity {
 	//@Column(name = "NR_CUSTO_BRUTO")
 	//private BigDecimal custoBruto;
 
-	@Column(name = "NR_CUSTO_TOTAL")
-	private BigDecimal custoTotal;
+	//@Column(name = "NR_CUSTO_TOTAL")
+	//private BigDecimal custoTotal;
 
 	@Column(name = "NR_QTD_BRUTA")
 	private BigDecimal quantidadeBruta;
@@ -155,12 +155,13 @@ public class FichaTecnicaPratoPreparo extends BaseEntity {
 	
 
 	public BigDecimal getCustoTotal() {
-		return custoTotal;
+		//return custoTotal;
+		return getFichaTecnicaPreparo().getPrecoCustoPorcao();
 	}
 
-	public void setCustoTotal(BigDecimal custoTotal) {
-		this.custoTotal = custoTotal;
-	}
+	//public void setCustoTotal(BigDecimal custoTotal) {
+	//	this.custoTotal = custoTotal;
+	//}
 
 	public BigDecimal getQuantidadeBruta() {
 		return quantidadeBruta;

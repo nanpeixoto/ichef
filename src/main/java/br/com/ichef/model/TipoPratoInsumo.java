@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -33,8 +34,8 @@ public class TipoPratoInsumo extends BaseEntity {
 	@JoinColumn(name = "CD_INSUMO")
 	private Insumo insumo;
 
-	@Column(name = "NR_CUSTO_TOTAL")
-	private BigDecimal custoTotal;
+	//@Column(name = "NR_CUSTO_TOTAL")
+	//private BigDecimal custoTotal;
 
 	@Column(name = "NR_QTD")
 	private Long quantidade;
@@ -134,12 +135,18 @@ public class TipoPratoInsumo extends BaseEntity {
 	}
 
 	public BigDecimal getCustoTotal() {
-		return custoTotal;
+		//return new BigDecimal(insumo.getValor());
+		try {
+			return (new BigDecimal(getQuantidade().toString()).multiply(new BigDecimal(getInsumo().getValor()))).setScale(2, RoundingMode.HALF_EVEN);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new BigDecimal(0);
 	}
 
-	public void setCustoTotal(BigDecimal custoTotal) {
-		this.custoTotal = custoTotal;
-	}
+	//public void setCustoTotal(BigDecimal custoTotal) {
+	//	this.custoTotal = custoTotal;
+	//}
 
 	public TipoPrato getTipoPrato() {
 		return tipoPrato;

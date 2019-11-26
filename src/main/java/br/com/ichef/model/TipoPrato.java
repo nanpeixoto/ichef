@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -203,7 +204,7 @@ public class TipoPrato extends BaseEntity {
 			for (TipoPratoInsumo tipoPratoInsumo : insumos) {
 				custoTotal = custoTotal.add(tipoPratoInsumo.getCustoTotal());
 			}
-		return custoTotal;
+		return custoTotal.setScale(2, RoundingMode.CEILING);
 	}
 
 	public String getDescricaoComValorInsumo() {

@@ -67,11 +67,13 @@
 
 								<h:outputText value="Pesquisar: " escape="false" />
 
-								<p:inputText id="globalFilter" onkeyup="PF('itens').filter(); hideBar();"
-									style="width:150px;" maxlength="255"
-									styleClass="letras-maiusculas semClear">
-
-								</p:inputText>
+ 							<p:inputText  id="globalFilter" onchange="PF('itens').filter();" style="width:150px;"
+ 								placeholder="Pesquisar" styleClass="letras-maiusculas semClear"/>
+ 								<h:outputText value=" " escape="false" />
+ 							 <p:commandButton id="Search" value=""  icon="fa fa-search"  style="font-size: 0.8em;width:3%;" />   
+ 							
+ 						
+								
 							</p:outputPanel>
 						</f:facet>
 

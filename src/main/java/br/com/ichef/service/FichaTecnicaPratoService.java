@@ -39,35 +39,35 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 								.add(item.getCustoTotal() == null ? new BigDecimal(0) : item.getCustoTotal());
 
 				}
-				precoVendaReceita = (custoTotal.doubleValue() > 0d ? custoTotal
-						.divide(new BigDecimal(configuracao.getCustoMercadoriaVendida()).divide(new BigDecimal(100)))
-						.setScale(2, RoundingMode.CEILING) : custoTotal);
+				//precoVendaReceita = (custoTotal.doubleValue() > 0d ? custoTotal
+				//		.divide(new BigDecimal(configuracao.getCustoMercadoriaVendida()).divide(new BigDecimal(100)))
+				//		.setScale(2, RoundingMode.CEILING) : custoTotal);
 
-				entity.setPrecoVendaReceita(precoVendaReceita);
+				//entity.setPrecoVendaReceita(precoVendaReceita);
 
-				entity.setPrecoVendaPorcao((precoVendaReceita.doubleValue() > 0d
-						? (precoVendaReceita.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
-						: precoVendaReceita));
+				//entity.setPrecoVendaPorcao((precoVendaReceita.doubleValue() > 0d
+				//		? (precoVendaReceita.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
+				//		: precoVendaReceita));
 
-				entity.setPrecoCustoPorcao((custoTotal.doubleValue() > 0d
-						? (custoTotal.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
-						: custoTotal));
+				//entity.setPrecoCustoPorcao((custoTotal.doubleValue() > 0d
+				//		? (custoTotal.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
+				//		: custoTotal));
 
-				entity.setPrecoCustoReceita(custoTotal);
+				//entity.setPrecoCustoReceita(custoTotal);
 
-				if (entity.getFichaTecnicaPratoTipos() != null) {
+				/*if (entity.getFichaTecnicaPratoTipos() != null) {
 					for (FichaTecnicaPratoTipo fichaTipo : entity.getFichaTecnicaPratoTipos()) {
 						fichaTipo.setCustoTotal(custoTotal.add(fichaTipo.getTipoPrato().getCustoTotal()));
 					}
-				}
+				}*/
 
 			} else {
-				entity.setPrecoVendaReceita(new BigDecimal(0));
+				/*entity.setPrecoVendaReceita(new BigDecimal(0));
 				entity.setPrecoVendaPorcao(new BigDecimal(0));
 
 				entity.setPrecoCustoPorcao(new BigDecimal(0));
 
-				entity.setPrecoCustoReceita(new BigDecimal(0));
+				entity.setPrecoCustoReceita(new BigDecimal(0));*/
 			}
 
 		} catch (Exception e) {

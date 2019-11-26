@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -35,9 +36,9 @@ public class FichaTecnicaPratoTipo extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_FICHA_TECNICA_PRATO")
 	private FichaTecnicaPrato fichaTecnicaPrato;
-	
-	@Column(name = "NR_CUSTO_TOTAL")
-	private BigDecimal custoTotal;
+
+	// @Column(name = "NR_CUSTO_TOTAL")
+	// private BigDecimal custoTotal;
 
 	@Override
 	public Object getId() {
@@ -108,13 +109,12 @@ public class FichaTecnicaPratoTipo extends BaseEntity {
 	}
 
 	public BigDecimal getCustoTotal() {
-		return custoTotal;
+
+		return getTipoPrato().getCustoTotal();
 	}
 
-	public void setCustoTotal(BigDecimal custoTotal) {
-		this.custoTotal = custoTotal;
-	}
-	
-	
+	// public void setCustoTotal(BigDecimal custoTotal) {
+	// this.custoTotal = custoTotal;
+	// }
 
 }

@@ -169,7 +169,7 @@ public class FichaTecnicaPratoController extends BaseController {
 			FichaTecnicaPratoPreparo fichaInsumo = new FichaTecnicaPratoPreparo();
 			fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
 			// fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
-			fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
+			//fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
 			fichaInsumo.setFichaTecnicaPreparo(fichaInsumoOld.getFichaTecnicaPreparo());
 			fichaInsumo.setQuantidadeBruta(fichaInsumoOld.getQuantidadeBruta());
 			fichaInsumo.setQuantidadeLiquida(fichaInsumoOld.getQuantidadeLiquida());
@@ -235,7 +235,7 @@ public class FichaTecnicaPratoController extends BaseController {
 			fichaInsumo.setQuantidadeBruta(new BigDecimal(1));
 			// fichaInsumo.setCustoBruto( getFichaTecnicaPreparo().getPrecoCustoReceita() )
 			// ;
-			fichaInsumo.setCustoTotal(getFichaTecnicaPreparo().getPrecoCustoPorcao());
+			//fichaInsumo.setCustoTotal(getFichaTecnicaPreparo().getPrecoCustoPorcao());
 			fichaInsumo.setFichaTecnicaPrato(getEntity());
 			fichaInsumo.setFichaTecnicaPreparo(getFichaTecnicaPreparo());
 			fichaInsumo.setQuantidadeLiquida(qtdLiquida);

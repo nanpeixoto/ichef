@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,18 +37,18 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	@Column(name = "NR_APROVEITAMENTO")
 	private Long aproveitamento;
 
-	@Column(name = "NR_CUSTO_BRUTO")
-	private BigDecimal custoBruto;
+	// @Column(name = "NR_CUSTO_BRUTO")
+	// private BigDecimal custoBruto;
 
-	@Column(name = "NR_CUSTO_TOTAL")
-	private BigDecimal custoTotal;
+	// @Column(name = "NR_CUSTO_TOTAL")
+	// private BigDecimal custoTotal;
 
 	@Column(name = "NR_QTD_BRUTA")
 	private BigDecimal quantidadeBruta;
 
 	@Column(name = "NR_QTD_LIQUIDA")
 	private BigDecimal quantidadeLiquida;
-	
+
 	@Column(name = "NR_QTD_LIQUIDA_INFORMADA")
 	private BigDecimal quantidadeLiquidaInformada;
 
@@ -170,20 +171,27 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	}
 
 	public BigDecimal getCustoBruto() {
-		return custoBruto;
+		// return custoBruto;
+		return new BigDecimal(getInsumo().getValor());
 	}
 
-	public void setCustoBruto(BigDecimal custoBruto) {
-		this.custoBruto = custoBruto;
-	}
+	// public void setCustoBruto(BigDecimal custoBruto) {
+	// this.custoBruto = custoBruto;
+	// }
 
 	public BigDecimal getCustoTotal() {
-		return custoTotal;
+		// return custoTotal;
+		try {
+			return (getQuantidadeBruta().multiply(getCustoBruto())).setScale(2, RoundingMode.CEILING);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new BigDecimal(0);
 	}
 
-	public void setCustoTotal(BigDecimal custoTotal) {
-		this.custoTotal = custoTotal;
-	}
+	// public void setCustoTotal(BigDecimal custoTotal) {
+	// this.custoTotal = custoTotal;
+	// }
 
 	public BigDecimal getQuantidadeBruta() {
 		return quantidadeBruta;
@@ -216,7 +224,5 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	public void setQuantidadeLiquidaInformada(BigDecimal quantidadeLiquidaInformada) {
 		this.quantidadeLiquidaInformada = quantidadeLiquidaInformada;
 	}
-	
-	
 
 }

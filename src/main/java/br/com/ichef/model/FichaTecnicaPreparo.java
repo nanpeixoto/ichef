@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
+import br.com.ichef.util.JSFUtil;
 
 /**
  * The persistent class for the ficha_tecnica_preparo database table.
@@ -61,17 +63,17 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@Column(name = "NR_PRECO_CUSTO_RECEITA")
-	private BigDecimal precoCustoReceita;
+	// @Column(name = "NR_PRECO_CUSTO_RECEITA")
+	// private BigDecimal precoCustoReceita;
 
-	@Column(name = "NR_PRECO_CUSTO_PORCAO")
-	private BigDecimal precoCustoPorcao;
+	// @Column(name = "NR_PRECO_CUSTO_PORCAO")
+	// private BigDecimal precoCustoPorcao;
 
-	@Column(name = "NR_PRECO_VENDA_PORCAO")
-	private BigDecimal precoVendaPorcao;
+	// @Column(name = "NR_PRECO_VENDA_PORCAO")
+	// private BigDecimal precoVendaPorcao;
 
-	@Column(name = "NR_PRECO_VENDA_RECEITA")
-	private BigDecimal precoVendaReceita;
+	// @Column(name = "NR_PRECO_VENDA_RECEITA")
+	// private BigDecimal precoVendaReceita;
 
 	@Column(name = "NR_TAMANHO")
 	private Long tamanho;
@@ -200,36 +202,63 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	}
 
 	public BigDecimal getPrecoCustoReceita() {
-		return precoCustoReceita;
+		return getCustoTotal();
 	}
 
-	public void setPrecoCustoReceita(BigDecimal precoCustoReceita) {
-		this.precoCustoReceita = precoCustoReceita;
-	}
+	// public void setPrecoCustoReceita(BigDecimal precoCustoReceita) {
+	// this.precoCustoReceita = precoCustoReceita;
+	// }
 
 	public BigDecimal getPrecoCustoPorcao() {
-		return precoCustoPorcao;
+		return (getCustoTotal().doubleValue() > 0d
+				? (getCustoTotal().divide(new BigDecimal(getTamanho()), BigDecimal.ROUND_UP)).setScale(2,
+						RoundingMode.CEILING)
+				: getCustoTotal());
 	}
 
-	public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
-		this.precoCustoPorcao = precoCustoPorcao;
-	}
+	// public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
+	// this.precoCustoPorcao = precoCustoPorcao;
+	// }
 
 	public BigDecimal getPrecoVendaPorcao() {
-		return precoVendaPorcao;
+		return (getPrecoVendaReceita().doubleValue() > 0d
+				? (getPrecoVendaReceita().divide(new BigDecimal(getTamanho()), BigDecimal.ROUND_UP)).setScale(2,
+						RoundingMode.CEILING)
+				: getPrecoVendaReceita());
 	}
 
-	public void setPrecoVendaPorcao(BigDecimal precoVendaPorcao) {
-		this.precoVendaPorcao = precoVendaPorcao;
+	// public void setPrecoVendaPorcao(BigDecimal precoVendaPorcao) {
+	// this.precoVendaPorcao = precoVendaPorcao;
+	// }
+
+	public BigDecimal getCustoTotal() {
+		try {
+			BigDecimal custoTotal = new BigDecimal(0);
+			for (FichaTecnicaPreparoInsumo insumo : getInsumos()) {
+				if (insumo.getAtivo().equalsIgnoreCase("S"))
+					custoTotal = custoTotal
+							.add(insumo.getCustoTotal() == null ? new BigDecimal(0) : insumo.getCustoTotal());
+
+			}
+			return custoTotal;
+		} catch (Exception e) {
+			
+		}
+
+		return new BigDecimal(0);
 	}
 
 	public BigDecimal getPrecoVendaReceita() {
-		return precoVendaReceita;
+		Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+		return (getCustoTotal().doubleValue() > 0d
+				? getCustoTotal().divide(new BigDecimal(config.getCustoMercadoriaVendida()).divide(new BigDecimal(100)))
+						.setScale(2, RoundingMode.CEILING)
+				: getCustoTotal());
 	}
 
-	public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
-		this.precoVendaReceita = precoVendaReceita;
-	}
+	// public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
+	// this.precoVendaReceita = precoVendaReceita;
+	// }
 
 	public Long getTamanho() {
 		return tamanho;

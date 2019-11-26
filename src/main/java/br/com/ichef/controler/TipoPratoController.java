@@ -107,7 +107,7 @@ public class TipoPratoController extends BaseController {
 			tipoPratoInsumo.setAtivo(true);;
 			tipoPratoInsumo.setAtivo("S");
 			tipoPratoInsumo.setQuantidade(getQuantidade());
-			tipoPratoInsumo.setCustoTotal((new BigDecimal(tipoPratoInsumo.getQuantidade().toString()).multiply(new BigDecimal(getInsumo().getValor()))).setScale(2, RoundingMode.HALF_EVEN));
+			//tipoPratoInsumo.setCustoTotal((new BigDecimal(tipoPratoInsumo.getQuantidade().toString()).multiply(new BigDecimal(getInsumo().getValor()))).setScale(2, RoundingMode.HALF_EVEN));
 			tipoPratoInsumo.setTipoPrato(getEntity());
 			tipoPratoInsumo.setInsumo(insumo);
 			
@@ -153,7 +153,7 @@ public class TipoPratoController extends BaseController {
 			getEntity().setPrecos(new ArrayList<TipoPratoPreco>());
 		getEntity().getPrecos().add(tipoPratoPrecoObj);
 		
-		updateComponentes("dttel");
+		updateComponentes("Stable");
 
 		setPreco(null);
 		setDataVigencia(null);

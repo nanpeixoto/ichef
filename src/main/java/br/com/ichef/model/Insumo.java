@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
+import br.com.ichef.util.JSFUtil;
 
 @Entity
 @Table(name = "insumo")
@@ -28,8 +29,8 @@ public class Insumo extends BaseEntity {
 	@Column(name = "CD_INSUMO")
 	private Long id;
 
-	@Column(name = "VL_INSUMO")
-	private Double valor;
+	// @Column(name = "VL_INSUMO")
+	// private Double valor;
 
 	@Column(name = "DS_INSUMO")
 	private String descricao;
@@ -201,13 +202,13 @@ public class Insumo extends BaseEntity {
 		return "Inativo".toUpperCase();
 	}
 
-	public Double getValor() {
-		return valor;
-	}
+	// public Double getValor() {
+	// return valor;
+	// }
 
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
+	// public void setValor(Double valor) {
+	// this.valor = valor;
+	// }
 
 	public TipoInsumo getTipoInsumo() {
 		return tipoInsumo;
@@ -225,11 +226,33 @@ public class Insumo extends BaseEntity {
 		this.unidade = unidade;
 	}
 
-	public String getValorFormatado() {
-		if (getValor() != null) {
-			return "R$ " + getValor().toString().replaceAll(",", ".").replace(".", ",");
+	public Double getValor() {
+		try {
+			Usuario usuario = (Usuario) JSFUtil.getSessionMapValue("usuario");
+			Empresa empresaLogada = usuario.getEmpresaLogada();
+			for (VwInsumoPreco insumoPreco : ultimoPreco) {
+				if (insumoPreco.getEmpresa().getId().equals(empresaLogada.getId())) {
+					return insumoPreco.getPreco();
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return getValor().toString();
+		return 0d;
+
+	}
+
+	public String getValorFormatado() {
+		try {
+			if (getValor() != null) {
+				return "R$ " + getValor().toString().replaceAll(",", ".").replace(".", ",");
+			}
+			return getValor().toString();
+		} catch (Exception e) {
+			return "0";
+		}
+
 	}
 
 	public List<InsumoPreco> getPrecos() {

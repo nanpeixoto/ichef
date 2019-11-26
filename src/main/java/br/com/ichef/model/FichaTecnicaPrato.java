@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
+import br.com.ichef.util.JSFUtil;
 
 @Entity
 @Table(name = "ficha_tecnica_prato")
@@ -57,17 +59,17 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@Column(name = "NR_PRECO_CUSTO_RECEITA")
-	private BigDecimal precoCustoReceita;
+	// @Column(name = "NR_PRECO_CUSTO_RECEITA")
+	// private BigDecimal precoCustoReceita;
 
-	@Column(name = "NR_PRECO_CUSTO_PORCAO")
-	private BigDecimal precoCustoPorcao;
+	// @Column(name = "NR_PRECO_CUSTO_PORCAO")
+	// private BigDecimal precoCustoPorcao;
 
-	@Column(name = "NR_PRECO_VENDA_PORCAO")
-	private BigDecimal precoVendaPorcao;
+	// @Column(name = "NR_PRECO_VENDA_PORCAO")
+	// private BigDecimal precoVendaPorcao;
 
-	@Column(name = "NR_PRECO_VENDA_RECEITA")
-	private BigDecimal precoVendaReceita;
+	// @Column(name = "NR_PRECO_VENDA_RECEITA")
+	// private BigDecimal precoVendaReceita;
 
 	// bi-directional many-to-one association to FichaTecnicaPratoPreparo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -205,12 +207,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	}
 
 	public BigDecimal getPrecoCustoReceita() {
-		return precoCustoReceita;
+		return getCustoTotal();
 	}
 
-	public void setPrecoCustoReceita(BigDecimal precoCustoReceita) {
-		this.precoCustoReceita = precoCustoReceita;
-	}
+	// public void setPrecoCustoReceita(BigDecimal precoCustoReceita) {
+	// this.precoCustoReceita = precoCustoReceita;
+	// }
 
 	public String getCopia() {
 		return copia;
@@ -221,28 +223,67 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	}
 
 	public BigDecimal getPrecoCustoPorcao() {
-		return precoCustoPorcao;
+		try {
+			return (getCustoTotal().doubleValue() > 0d
+					? (getCustoTotal().divide(new BigDecimal(1), BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
+					: getCustoTotal());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new BigDecimal(0);
 	}
 
-	public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
-		this.precoCustoPorcao = precoCustoPorcao;
-	}
+	// public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
+	// this.precoCustoPorcao = precoCustoPorcao;
+	// }
 
 	public BigDecimal getPrecoVendaPorcao() {
-		return precoVendaPorcao;
+		try {
+			return (getPrecoVendaReceita().doubleValue() > 0d
+					? (getPrecoVendaReceita().divide(new BigDecimal(1), BigDecimal.ROUND_UP)).setScale(2,
+							RoundingMode.CEILING)
+					: getPrecoVendaReceita());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new BigDecimal(0);
 	}
 
-	public void setPrecoVendaPorcao(BigDecimal precoVendaPorcao) {
-		this.precoVendaPorcao = precoVendaPorcao;
+	// public void setPrecoVendaPorcao(BigDecimal precoVendaPorcao) {
+	// this.precoVendaPorcao = precoVendaPorcao;
+	// }
+
+	public BigDecimal getCustoTotal() {
+		BigDecimal custoTotal = new BigDecimal(0);
+		try {
+
+			for (FichaTecnicaPratoPreparo item : getFichaTecnicaPratoPreparos()) {
+				if (item.getAtivo().equalsIgnoreCase("S"))
+					custoTotal = custoTotal
+							.add(item.getCustoTotal() == null ? new BigDecimal(0) : item.getCustoTotal());
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return custoTotal;
 	}
 
 	public BigDecimal getPrecoVendaReceita() {
-		return precoVendaReceita;
+		try {
+			Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+			return getCustoTotal().doubleValue() > 0d ? getCustoTotal()
+					.divide(new BigDecimal(config.getCustoMercadoriaVendida()).divide(new BigDecimal(100)))
+					.setScale(2, RoundingMode.CEILING) : getCustoTotal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new BigDecimal(0);
 	}
 
-	public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
-		this.precoVendaReceita = precoVendaReceita;
-	}
+	// public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
+	// this.precoVendaReceita = precoVendaReceita;
+	// }
 
 	public List<FichaTecnicaPratoPreparo> getFichaTecnicaPratoPreparos() {
 		return fichaTecnicaPratoPreparos;
@@ -285,8 +326,7 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 			for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
 				if (valoresPorTipo != "")
 					valoresPorTipo += "<br>";
-				valoresPorTipo += fichaTipo.getTipoPrato().getDescricao() + " "
-						+ formataValor(fichaTipo.getCustoTotal());
+				valoresPorTipo += fichaTipo.getTipoPrato().getDescricao() + " "	+ formataValor(fichaTipo.getCustoTotal().add( getPrecoCustoPorcao()));
 			}
 		}
 		return valoresPorTipo;

@@ -16,6 +16,7 @@
 
         <adm:breadcrumb title="Cadastro Localidade #{insumoController.entity.id}" link="cadastro-insumo.xhtml?id=#{insumoController.entity.id}"/>
         <h:form id="form" prependId="false">
+        	<p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
             <p:focus context="capaPanel"/>
 
 			
@@ -102,10 +103,11 @@
 							<p:inputNumber   id="valor" value="#{insumoController.preco}" symbol="R$ " decimalSeparator="," thousandSeparator="." /> 
 						 	
 						 	<p:outputLabel value="Vigência" for="vigencia"/>
-						 	<p:calendar id="vigencia" value="#{insumoController.dataVigencia}"  pattern="dd/MM/yyyy" size="10" ></p:calendar>
+						 	<p:calendar id="vigencia" value="#{insumoController.dataVigencia}"  pattern="dd/MM/yyyy" mask="99/99/9999" size="10" ></p:calendar>
                     	 	
                     	 	<p:commandButton  value="Plus" icon="fa fa-plus" 
-                    	 	 id="btnSurname" process="@this,vigencia,valor,empresa" update="tbPreco,valor,vigencia,empresa" actionListener="#{insumoController.adicionarPreco}" 
+                    	 	 id="btnSurname" process="@this,vigencia,valor,empresa" update="growl,tbPreco,empresa,valor,vigencia" 
+                    	 	 	actionListener="#{insumoController.adicionarPreco}" 
                     	 	 styleClass="btn-primary" />
                     	</p:panelGrid>
                     	

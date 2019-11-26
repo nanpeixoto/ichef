@@ -15,7 +15,6 @@ import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Insumo;
 import br.com.ichef.model.InsumoPreco;
 import br.com.ichef.model.TipoInsumo;
-import br.com.ichef.model.InsumoPreco;
 import br.com.ichef.model.Unidade;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.InsumoService;
@@ -60,10 +59,20 @@ public class InsumoController extends BaseController {
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
+		}
+	}
+
+	@PostConstruct
+	public void init() {
+		if (id != null) {
+			setEntity(service.getById(id));
 		} else {
 			setEntity(new Insumo());
-			getEntity().setAtivo(true);
+			getEntity().setAtivo("S");
+			getEntity().setPrecos(new ArrayList<InsumoPreco>());
 		}
+		dataVigencia = new Date();
+		lista = service.listAll();
 		obterListas();
 	}
 
@@ -71,11 +80,6 @@ public class InsumoController extends BaseController {
 		tipoInsumos = tipoInsumoService.listAll(true);
 		unidades = unidadeService.listAll(true);
 		setListaEmpresas(empresaService.listAll(true));
-	}
-
-	@PostConstruct
-	public void init() {
-		lista = service.listAll();
 	}
 
 	public void excluirSelecionados() {
@@ -104,6 +108,22 @@ public class InsumoController extends BaseController {
 	}
 
 	public void adicionarPreco() {
+
+		if (getEmpresa() == null) {
+			facesMessager.error(getRequiredMessage("Empresa"));
+			return;
+		}
+
+		if (getDataVigencia() == null) {
+			facesMessager.error(getRequiredMessage("Vigência"));
+			return;
+		}
+
+		if (getPreco() == null) {
+			facesMessager.error(getRequiredMessage("Valor"));
+			return;
+		}
+
 		InsumoPreco obj = new InsumoPreco();
 		obj.setDataCadastro(new Date());
 		obj.setUsuarioCadastro(getUserLogado());
@@ -122,20 +142,20 @@ public class InsumoController extends BaseController {
 
 		setPreco(null);
 		setDataVigencia(null);
+		setEmpresa(null);
 
 	}
-	
+
 	public void excluirItemSelecionado(InsumoPreco insumo) {
 		List<InsumoPreco> temp = new ArrayList<InsumoPreco>();
-		temp.addAll( entity.getPrecos() );
+		temp.addAll(entity.getPrecos());
 		for (InsumoPreco item : entity.getPrecos()) {
 			if (insumo.equals(item))
 				temp.remove(item);
 		}
 		entity.getPrecos().clear();
 		entity.getPrecos().addAll(temp);
-		
-		
+
 		updateComponentes("tbPreco");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
