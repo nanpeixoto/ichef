@@ -109,6 +109,12 @@
 							<h:outputLabel value="#{item.empresa.nomeFantasia}" />
 						</p:column>
 						
+						<p:column headerText="Diária" filterStyle="display:none; visibility:hidden;"  width="30%" filterBy="#{item.valorDiaria}"
+							filterMatchMode="contains" sortBy="#{item.valorDiaria}">
+							<h:outputLabel value="#{entregadorController.formataValor(item.valorDiaria)}" />
+						</p:column>
+						
+						
 						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" width="10%" filterBy="#{item.situacao}"
 							filterMatchMode="contains" sortBy="#{item.situacao}">
 							<h:outputLabel value="#{item.situacao}" />

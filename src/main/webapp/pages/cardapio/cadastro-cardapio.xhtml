@@ -218,6 +218,11 @@
 												<h:outputLabel
 													value="#{empresaQtd.empresa.nomeFantasiaAbreviado}" />
 											</p:column>
+											
+											<p:column headerText="Custo Porção"  >
+												<h:outputLabel
+													value="#{empresaQtd.cardapioFichaPrato.fichaTecnicaPrato.percoPorTipoPratoPrincipal}" />
+											</p:column>
 
 											<p:column headerText="Qtd" style="width:20%">
 												<p:inplace id="ajaxInplace" label="#{empresaQtd.quantidade}"

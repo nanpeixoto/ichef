@@ -2,7 +2,9 @@ package br.com.ichef.controler;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -73,6 +75,7 @@ public class InsumoController extends BaseController {
 		}
 		dataVigencia = new Date();
 		lista = service.listAll();
+		setEmpresa(getUserLogado().getEmpresaLogada());
 		obterListas();
 	}
 
@@ -91,15 +94,37 @@ public class InsumoController extends BaseController {
 	}
 
 	public String Salvar() throws Exception {
-		if (entity.isEdicao()) {
-			entity.setUsuarioAlteracao(getUserLogado());
-			entity.setDataAlteracao(new Date());
+		if (existePrecoParaTodasAsEmpresas()) {
+			if (entity.isEdicao()) {
+				entity.setUsuarioAlteracao(getUserLogado());
+				entity.setDataAlteracao(new Date());
+			} else {
+				entity.setUsuarioCadastro(getUserLogado());
+				entity.setDataCadastro(new Date());
+			}
+			service.saveOrUpdade(entity);
+			return "lista-insumo.xhtml?faces-redirect=true";
 		} else {
-			entity.setUsuarioCadastro(getUserLogado());
-			entity.setDataCadastro(new Date());
+			FacesUtil.addErroMessage("Favor informar o valor para todas as empresa");
+			return "";
 		}
-		service.saveOrUpdade(entity);
-		return "lista-insumo.xhtml?faces-redirect=true";
+	}
+
+	private boolean existePrecoParaTodasAsEmpresas() {
+		List<Empresa> listaEmpresas = empresaService.listAll(true);
+		Map<Long, InsumoPreco> mapEmpresaPreco = new HashMap<Long, InsumoPreco>();
+
+		for (InsumoPreco preco : getEntity().getPrecos()) {
+			Long key = preco.getEmpresa().getId();
+			if (!mapEmpresaPreco.containsKey(key)) {
+				mapEmpresaPreco.put(key, preco);
+			}
+		}
+
+		if (listaEmpresas.size() == mapEmpresaPreco.size()) {
+			return true;
+		}
+		return false;
 	}
 
 	public String excluir() {
@@ -141,8 +166,8 @@ public class InsumoController extends BaseController {
 		updateComponentes("tbPreco");
 
 		setPreco(null);
-		setDataVigencia(null);
-		setEmpresa(null);
+		dataVigencia = new Date();
+		setEmpresa(getUserLogado().getEmpresaLogada());
 
 	}
 

@@ -230,7 +230,7 @@ public class ClienteCarteira extends BaseEntity {
 			return getDescricao();
 		else
 			return getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "<br>"
-					+ getDerivacao().getDescricao();
+					+ (getDerivacao()!=null? getDerivacao().getDescricao(): "");
 	}
 
 	public Derivacao getDerivacao() {

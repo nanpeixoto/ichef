@@ -120,9 +120,9 @@
 									<h:outputLabel value="#{item.fichaTecnicaPreparo.descricao}" escape="false" />
 								</p:column>
 								
-								<p:column headerText="Qtd. Bruta" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeBruta}"
-									filterMatchMode="contains" sortBy="#{item.quantidadeBruta}" style="width:15%">
-									<h:outputLabel value="#{item.quantidadeBruta}" />
+								<p:column headerText="Qtd. Bruta" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeBrutaFormatada}"
+									filterMatchMode="contains" sortBy="#{item.quantidadeBrutaFormatada}" style="width:15%">
+									<h:outputLabel value="#{item.quantidadeBrutaFormatada}" />
 								</p:column>
 								
 								<p:column headerText="Total" filterStyle="display:none; visibility:hidden;" filterBy="#{item.custoTotal}"

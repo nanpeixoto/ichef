@@ -78,7 +78,7 @@
 							<h:outputLabel value="#{item.id}" />
 						</p:column>
 						
-						<p:column headerText="Forma de Pagamento" filterBy="#{item.descricao}"   filterEvent="enter"
+						<p:column headerText="Descrição" filterBy="#{item.descricao}"   filterEvent="enter"
 							filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.descricao}">
 							<h:link value="#{item.descricao}"
 								outcome="cadastro-forma-pagamento.xhtml">
@@ -97,11 +97,14 @@
 						</p:column>
 						
 						
-						
+						<p:column headerText="Cortesia" filterStyle="display:none; visibility:hidden;" filterBy="#{item.descricaoCortesia}"
+							filterMatchMode="contains" sortBy="#{item.descricaoCortesia}">
+							<h:outputLabel value="#{item.descricaoCortesia}" />
+						</p:column>
 
-						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" filterBy="#{item.situacao}"
-							filterMatchMode="contains" sortBy="#{item.situacao}">
-							<h:outputLabel value="#{item.situacao}" />
+						<p:column headerText="Situação" filterStyle="display:none; visibility:hidden;" filterBy="#{item.descricaoCortesia}"
+							filterMatchMode="contains" sortBy="#{item.descricaoCortesia}">
+							<h:outputLabel value="#{item.descricaoCortesia}" />
 						</p:column>
 
 					</p:dataTable>

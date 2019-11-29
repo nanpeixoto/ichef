@@ -169,9 +169,10 @@
 								
 								<p:column headerText="Qtd. Liquida" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeLiquida}"
 									filterMatchMode="contains" sortBy="#{item.quantidadeLiquida}" style="width:15%">
-									<p:inplace id="ajaxInplace" label="#{item.quantidadeLiquida}" editor="true">
+									<p:inplace id="ajaxInplace" label="#{item.quantidadeLiquidaFormatada}" editor="true">
 										<p:ajax event="save" update="Stable,pvr,pvp,pcr,pcp" listener="#{fichaTecnicaPreparoController.editarInsumo(item)}"  />
-										<p:inputText value="#{item.quantidadeLiquida}" maxlength="3" style="width: 35%;" />
+										<p:inputNumber   value="#{item.quantidadeLiquida}"  style="width: 35%;"  maxlength="4"  symbol="" decimalSeparator="," thousandSeparator="." />
+                    		
 									</p:inplace>
 								</p:column>
 								
@@ -189,8 +190,8 @@
 								</p:column>
 								
 								<p:column headerText="Qtd. Bruta" filterStyle="display:none; visibility:hidden;" filterBy="#{item.quantidadeBruta}"
-									filterMatchMode="contains" sortBy="#{item.quantidadeBruta}" style="width:15%">
-									<h:outputLabel value="#{item.quantidadeBruta}" />
+									filterMatchMode="contains" sortBy="#{item.quantidadeBrutaFormatada}" style="width:15%">
+									<h:outputLabel value="#{item.quantidadeBrutaFormatada}" />
 								</p:column>
 								
 								<p:column headerText="Custo Bruto" filterStyle="display:none; visibility:hidden;" filterBy="#{item.insumo.valorFormatado}"

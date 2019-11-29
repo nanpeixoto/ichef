@@ -3,6 +3,7 @@ package br.com.ichef.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -196,6 +197,12 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	public BigDecimal getQuantidadeBruta() {
 		return quantidadeBruta;
 	}
+	
+	public String getQuantidadeBrutaFormatada() {
+		Locale meuLocal = new Locale("pt", "BR");
+		return  String.format(meuLocal, "%.2f", getQuantidadeBruta() );
+	}
+
 
 	public void setQuantidadeBruta(BigDecimal quantidadeBruta) {
 		this.quantidadeBruta = quantidadeBruta;
@@ -203,6 +210,11 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 
 	public BigDecimal getQuantidadeLiquida() {
 		return quantidadeLiquida;
+	}
+	
+	public String getQuantidadeLiquidaFormatada() {
+		Locale meuLocal = new Locale("pt", "BR");
+		return  String.format(meuLocal, "%.2f", getQuantidadeLiquida());
 	}
 
 	public void setQuantidadeLiquida(BigDecimal quantidadeLiquida) {

@@ -66,6 +66,10 @@
 					            <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{entregadorController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
 					        </p:selectOneMenu>
+					        
+					        <p:outputLabel value="Diária" for="valor"/>
+							<p:inputNumber   id="valor" value="#{entregadorController.entity.valorDiaria}" symbol="R$ " decimalSeparator="," thousandSeparator="." 
+							required="true" requiredMessage="#{entregadorController.getRequiredMessage('Valor')}"/>
                     			
                     		<p:outputLabel value="Ativo" for="ativo"/>
 					        <p:selectBooleanButton id="ativo" value="#{entregadorController.entity.ativo}" 

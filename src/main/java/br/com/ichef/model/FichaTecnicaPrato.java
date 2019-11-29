@@ -326,10 +326,32 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 			for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
 				if (valoresPorTipo != "")
 					valoresPorTipo += "<br>";
-				valoresPorTipo += fichaTipo.getTipoPrato().getDescricao() + " "	+ formataValor(fichaTipo.getCustoTotal().add( getPrecoCustoPorcao()));
+				valoresPorTipo += fichaTipo.getTipoPrato().getDescricao() + " "
+						+ formataValor(fichaTipo.getCustoTotal().add(getPrecoCustoPorcao()));
 			}
 		}
 		return valoresPorTipo;
+	}
+
+	public String getPercoPorTipoPratoPrincipal() {
+		String precoPorTipo = "0";
+		boolean precoEncontrado = false;
+
+		try {
+			Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+			for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
+				if (config.getTipoPrato().getId().equals(fichaTipo.getTipoPrato().getId())) {
+					precoPorTipo = (String) formataValor(getPrecoCustoPorcao().add(config.getTipoPrato().getCustoTotal()));
+					precoEncontrado = true;
+				}
+			}
+			if(!precoEncontrado) {
+				precoPorTipo = (String) formataValor(getPrecoCustoPorcao().add( fichaTecnicaPratoTipos.get(0).getCustoTotal()));
+			}
+		} catch (Exception e) {
+			return "0";
+		}
+		return precoPorTipo;
 	}
 
 	public Object formataValor(Object valor) {

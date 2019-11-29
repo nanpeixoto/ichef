@@ -1,5 +1,6 @@
 package br.com.ichef.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class Entregador extends BaseEntity {
 
 	@Column(name = "SN_ATIVO")
 	private String ativo;
+
+	@Column(name = "VL_DIARIA")
+	private BigDecimal valorDiaria;
 
 	@Transient
 	private boolean isAtivo;
@@ -218,6 +222,14 @@ public class Entregador extends BaseEntity {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public BigDecimal getValorDiaria() {
+		return valorDiaria;
+	}
+
+	public void setValorDiaria(BigDecimal valorDiaria) {
+		this.valorDiaria = valorDiaria;
 	}
 
 }

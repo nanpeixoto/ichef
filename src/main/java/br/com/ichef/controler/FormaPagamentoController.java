@@ -40,6 +40,7 @@ public class FormaPagamentoController extends BaseController {
 		} else {
 			setEntity(new FormaPagamento());
 			getEntity().setAtivo("S");
+			getEntity().setStatusCortesia("N");
 		}
 	}
 

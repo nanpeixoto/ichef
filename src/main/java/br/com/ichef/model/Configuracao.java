@@ -37,6 +37,10 @@ public class Configuracao extends BaseEntity {
 	@Column(name = "NR_CMV")
 	private Integer custoMercadoriaVendida;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_TIPO_PRATO_CARRO_CHEF")
+	private TipoPrato tipoPrato;
+
 	@Override
 	public Object getId() {
 		// TODO Auto-generated method stub
@@ -109,6 +113,14 @@ public class Configuracao extends BaseEntity {
 
 	public void setDataAlteracao(Date dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
+	}
+
+	public TipoPrato getTipoPrato() {
+		return tipoPrato;
+	}
+
+	public void setTipoPrato(TipoPrato tipoPrato) {
+		this.tipoPrato = tipoPrato;
 	}
 
 }

@@ -58,8 +58,14 @@ public class FormaPagamento extends BaseEntity {
 	@Column(name = "SN_PERCENTUAL")
 	private String percentual;
 
+	@Column(name = "SN_CORTESIA")
+	private String statusCortesia;
+
 	@Transient
 	private boolean isAtivo;
+
+	@Transient
+	private boolean cortesia;
 
 	@Transient
 	private boolean isCarteira;
@@ -260,6 +266,12 @@ public class FormaPagamento extends BaseEntity {
 			return "Sim".toUpperCase();
 		return "Não".toUpperCase();
 	}
+	
+	public String getDescricaoCortesia() {
+		if (getStatusCortesia().equals("S"))
+			return "Sim".toUpperCase();
+		return "Não".toUpperCase();
+	}
 
 	public String getCarteira() {
 		return carteira;
@@ -316,6 +328,32 @@ public class FormaPagamento extends BaseEntity {
 			return valor;
 		}
 
+	}
+
+	public String getStatusCortesia() {
+		return statusCortesia;
+	}
+
+	public void setStatusCortesia(String statusCortesia) {
+		this.statusCortesia = statusCortesia;
+	}
+
+	public boolean isCortesia() {
+		if (getStatusCortesia() != null) {
+			if (getStatusCortesia().equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return cortesia;
+	}
+
+	public void setCortesia(boolean isAtivo) {
+		this.cortesia = isAtivo;
+		if (cortesia == Boolean.TRUE) {
+			setStatusCortesia("S");
+		} else
+			setStatusCortesia("N");
 	}
 
 }
