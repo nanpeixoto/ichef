@@ -48,8 +48,18 @@ public class ClienteEndereco extends BaseEntity {
 	@Column(name = "SN_PRINCIPAL")
 	private String principal;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_CLIENTE")
+	private Cliente cliente;
+
 	@Transient
 	private boolean endPrincipal;
+	
+	public String getEnderecoCompleto() {
+		String endereco = getEndereco()==null?"":getEndereco();
+		
+		return endereco + " - "+getLocalidade().getDescricao();
+	}
 
 	public boolean isEndPrincipal() {
 		if (principal != null) {
@@ -94,7 +104,7 @@ public class ClienteEndereco extends BaseEntity {
 			if (endereco != null)
 				this.endereco = endereco.toUpperCase();
 			else
-				this.endereco=endereco;
+				this.endereco = endereco;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -132,10 +142,6 @@ public class ClienteEndereco extends BaseEntity {
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
-
-	@ManyToOne
-	@JoinColumn(name = "CD_CLIENTE")
-	private Cliente cliente;
 
 	@Override
 	public Object getId() {

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">Pedido</ui:define>
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Lançamento de Carteira"/>
+        <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
+        <h:form id="form" prependId="false">
+        	<p:focus context="capaCarteira"/>
+        		<div class="box box-primary">
+					<div class="box-header with-border">
+		            	<!--<div id="main-buttons" class="hidden-sm hidden-xs">
+		                	 <p:commandButton value="Salvar" update="@form" icon="fa fa-check" styleClass="btn-primary" action="#{pedidoController.Salvar()}"/> 
+		               	</div>
+		               	<p:splitButton value="Salvar" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"  action="#{pedidoController.Salvar()}"/>
+		             	<p:separator/>-->
+						<div class="ui-fluid"  >
+		               		<p:panelGrid id="capaCarteira" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
+		               			<p:outputLabel value="Empresa" for="empresa"/>
+		                    		<p:selectOneMenu id="empresa" disabled="true" value="#{pedidoController.empresa}"  converter= "omnifaces.SelectItemsConverter" >
+							    		<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							        	<f:selectItems value="#{pedidoController.listaEmpresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
+							  		</p:selectOneMenu>
+		               		
+		               			<p:outputLabel value="Data" for="data" />
+								<p:panelGrid   columns="3" layout="grid"  columnClasses="ui-g-6 ui-md-4,ui-g-6 ui-md-1,ui-g-6 ui-md-2">
+									<p:calendar id="data" value="#{pedidoController.data}" pattern="dd/MM/yyyy" size="10" disabled="true"></p:calendar>
+									<p:link
+										href="/pages/cardapio/cadastro-cardapio.xhtml?id=#{pedidoController.cardapio.id}"
+											target="_blank" title="Clique para abrir o cardápio">
+									<i class="fa fa-cutlery"></i>
+									</p:link>
+									<p:commandButton icon="fa fa-refresh"
+										id="btnAtualizarListaInsumo"  title="Clique aqui para atualizar o cardápio"
+										actionListener="#{cardapioController.atualizarListaPreparo()}"
+										styleClass="btn btn-light" />
+								</p:panelGrid>
+								<p:outputLabel value="Cliente" for="cliente"/> 
+								<p:panelGrid   columns="3" layout="grid"  columnClasses="ui-g-6 ui-md-6">
+									
+								    <p:selectOneMenu id="cliente" value="#{pedidoController.cliente}"  converter= "omnifaces.SelectItemsConverter" 
+								    	 filter="true"  filterMatchMode="contains" var="c"   >
+								   		<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+								        <f:selectItems value="#{pedidoController.listaClientes}" var="item" itemLabel="#{item.nomeCompleto}" itemValue="#{item}"  itemDisabled="#{item.desabilitado}" />
+								       	<p:column>
+											 <h:outputText value="#{c.nomeCompletoSituacao}" />
+										</p:column>
+										<p:column >
+											<p:link
+												href="/pages/cliente/cadastro-cliente.xhtml?id=#{c.id}"
+												target="_blank" title="Clique para editar cliente">
+												<i class="fa fa-pencil"></i>
+											</p:link>
+										</p:column>
+								        <p:ajax event="change" update="endereco" listener="#{pedidoController.obterEnderecoCliente()}"/>
+								    </p:selectOneMenu>
+								    
+								   <!-- <p:link
+									href="/pages/cardapio/cadastro-cliente.xhtml"
+										target="_blank" title="Clique para abrir o cardápio">
+									<i class="fa fa-cutlery"></i>
+									</p:link>
+									<p:commandButton icon="fa fa-refresh"
+										id="btnAtualizarListaCliente"  title="Clique aqui para atualizar o cardápio"
+										actionListener="#{cardapioController.atualizarListaPreparo()}"
+									styleClass="btn btn-light" /> --> 
+								    
+								</p:panelGrid>
+							    
+							    <p:outputLabel value="Endereço" for="endereco"/> 
+							    <p:selectOneMenu id="endereco" value="#{pedidoController.endereco}"  converter= "omnifaces.SelectItemsConverter" 
+							    	style="width: 787px;"  filter="true"  filterMatchMode="contains" disabled="#{pedidoController.cliente eq null}" >
+							   		<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							        <f:selectItems value="#{pedidoController.listaEnderecos}" var="item" itemLabel="#{item.enderecoCompleto}" itemValue="#{item}" />
+							    </p:selectOneMenu>
+		                    	
+							    
+							    
+								
+								<p:outputLabel value="Prato" for="prato"/> 
+							    <p:selectOneMenu id="prato" value="#{pedidoController.cardapioPrato}"  converter= "omnifaces.SelectItemsConverter" 
+							    	style="width: 787px;"  filter="true"  filterMatchMode="contains" disabled="#{pedidoController.cliente eq null}" >
+							   		<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							        <f:selectItems value="#{pedidoController.cliente.enderecos}" var="item" itemLabel="#{item.enderecoCompleto}" itemValue="#{item}" />
+							    </p:selectOneMenu>
+		                    	
+							  
+					        
+								</p:panelGrid>
+								<p:panelGrid id="capaCarteira2" columns="2" layout="grid" columnClasses="ui-g-6 ui-md-1">
+									<p:outputLabel value="Tipo de Prato" for="selectTipoPrato"  />
+	                    			<p:selectOneMenu id="selectTipoPrato" value="#{pedidoController.tipoPrato}" filter="true"  filterMatchMode="contains" 
+	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  >
+	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+						            	<f:selectItems value="#{pedidoController.listaTiposPrato}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+						            	<p:ajax event="change"/>
+						       		</p:selectOneMenu>
+						       		
+						       		<p:outputLabel value="Derivação" for="selectderivacao"  />
+	                    			<p:selectOneMenu id="selectderivacao" value="#{pedidoController.derivacao}" filter="true"  filterMatchMode="contains" 
+	                    				converter= "omnifaces.SelectItemsConverter" style="width: 487px;"  
+	                    				 >
+	                    				<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+						            	<f:selectItems value="#{pedidoController.listaDerivacoes}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+						       		</p:selectOneMenu>
+								
+								   	
+								</p:panelGrid>	
+								<p:panelGrid id="capaCarteira3" columns="4" layout="grid" columnClasses="ui-g-6 ui-md-1">
+								
+									<p:outputLabel value="Forma de Pagamento" for="selectFormaPagamento"/>
+                    					<p:selectOneMenu id="selectFormaPagamento" value="#{pedidoController.formaPagamento}" filter="true"  filterMatchMode="contains" 
+                    					converter= "omnifaces.SelectItemsConverter"  >
+                    					<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+					            		<f:selectItems value="#{pedidoController.listaFormasPagamento}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+					       			</p:selectOneMenu>
+								</p:panelGrid>	
+								<div align="right">
+									<p:panelGrid >
+										<p:commandButton  value="Adicionar" icon="fa fa-plus" id="btnAdicioanr" styleClass="btn-primary" style="width: 150px;"
+											process="@this,cliente,selectFormaPagamento,data,selectderivacao,selectTipoPrato,empresa" 
+											update="cliente,selectFormaPagamento,data,growl,selectderivacao,selectTipoPrato"
+										 	action="#{pedidoController.adicionarCarteira}"/>
+						       			<!-- 
+						       			<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 
+			                    	 	process="@this,enderecoPrincipal,endereco,localidade" 
+			                    	 	styleClass="btn-primary" update="growl,dtendereco,enderecoPrincipal,endereco,localidade"
+			                    	 	 action="#{pedidoController.adicionarEndereco}"/>
+			            				-->
+									</p:panelGrid>
+								</div>
+								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
+								<p:panel > 	
+								
+								
+						</p:panel>
+					</div>
+				</div>
+			</div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   

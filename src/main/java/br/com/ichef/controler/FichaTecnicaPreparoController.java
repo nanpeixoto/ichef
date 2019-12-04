@@ -177,7 +177,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 		clone.setId(null);
 		clone.setAtivo("S");
 		clone.setCopia("S");
-		clone.setTamanho(10l);
+		clone.setTamanho( preparo.getTamanho() );
 		clone.setClassificacao("A");
 		// Integer qtd = obetrQuantidadeFichaByNome();
 		clone.setDescricao(perparo.getDescricao());

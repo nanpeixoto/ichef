@@ -55,11 +55,9 @@ public class Cliente extends BaseEntity {
 
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
-	
+
 	@Column(name = "SN_EXIBIR_SALDO")
 	private String exibirSaldo;
-	
-	
 
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -93,7 +91,7 @@ public class Cliente extends BaseEntity {
 
 	@Transient
 	private boolean recebeSMS;
-	
+
 	@Transient
 	private boolean exibeSaldo;
 
@@ -105,7 +103,14 @@ public class Cliente extends BaseEntity {
 
 	@Transient
 	private boolean pagaEmCarteira;
-	
+
+	public boolean isDesabilitado() {
+		if (isEstaBloqueado() || !isAtivo())
+			return true;
+		else
+			return false;
+	}
+
 	public boolean isExibeSaldo() {
 		if (exibirSaldo != null) {
 			if (exibirSaldo.equalsIgnoreCase("S"))
@@ -445,6 +450,30 @@ public class Cliente extends BaseEntity {
 	public String getNomeCompleto() {
 		return "C" + getId() + " - " + getNome() + " - " + getDescricaoTelefone();
 	}
+	
+	public String getNomeCompletoSituacao() {
+		return "C" + getId() + " - " + getNome() + " - " + getDescricaoTelefone()+getSituacaoAtual();
+	}
+	
+	
+
+	private String getSituacaoAtual() {
+		String situacao = "";
+		if(isEstaBloqueado()) {
+			situacao = " -BLOQUEADO";
+		}
+		
+		if( !isAtivo() ) {
+			if(situacao.equalsIgnoreCase(""))
+				situacao += "/";
+			else 
+				situacao += " -";
+			situacao += "INATIVO";
+		}
+		
+		
+		return situacao;
+	}
 
 	public BigDecimal getTotalDevido() {
 		BigDecimal valorDevido = new BigDecimal(0);
@@ -493,7 +522,5 @@ public class Cliente extends BaseEntity {
 	public void setExibirSaldo(String exibirSaldo) {
 		this.exibirSaldo = exibirSaldo;
 	}
-	
-	
 
 }
