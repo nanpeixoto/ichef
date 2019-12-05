@@ -41,6 +41,14 @@ public class Configuracao extends BaseEntity {
 	@JoinColumn(name = "CD_TIPO_PRATO_CARRO_CHEF")
 	private TipoPrato tipoPrato;
 
+	@ManyToOne
+	@JoinColumn(name = "CD_FORMA_PAG_CARTEIRA")
+	private FormaPagamento formaPagamento;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_DERIVACAO_PADRAO")
+	private Derivacao derivacao;
+
 	@Override
 	public Object getId() {
 		// TODO Auto-generated method stub
@@ -121,6 +129,34 @@ public class Configuracao extends BaseEntity {
 
 	public void setTipoPrato(TipoPrato tipoPrato) {
 		this.tipoPrato = tipoPrato;
+	}
+
+	public FormaPagamento getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	public void setFormaPagamento(FormaPagamento formaPagamento) {
+		this.formaPagamento = formaPagamento;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
+		this.usuarioAlteracao = usuarioAlteracao;
+	}
+
+	public Derivacao getDerivacao() {
+		return derivacao;
+	}
+
+	public void setDerivacao(Derivacao derivacao) {
+		this.derivacao = derivacao;
 	}
 
 }

@@ -110,6 +110,15 @@ public class Cliente extends BaseEntity {
 		else
 			return false;
 	}
+	
+	public String getStyleDesabilitado() {
+		if(isDesabilitado()) {
+			return "opacity: .35; cursor: default!important;";
+		}
+		return "";
+	}
+
+
 
 	public boolean isExibeSaldo() {
 		if (exibirSaldo != null) {
@@ -448,30 +457,26 @@ public class Cliente extends BaseEntity {
 	}
 
 	public String getNomeCompleto() {
-		return "C" + getId() + " - " + getNome() + " - " + getDescricaoTelefone();
+		String telefone = getDescricaoTelefone() == null ? "" : " - " + getDescricaoTelefone();
+		return "C" + getId() + " - " + getNome() + telefone;
 	}
-	
-	public String getNomeCompletoSituacao() {
-		return "C" + getId() + " - " + getNome() + " - " + getDescricaoTelefone()+getSituacaoAtual();
-	}
-	
-	
 
-	private String getSituacaoAtual() {
+	public String getNomeCompletoSituacao() {
+		return getNomeCompleto() + getSituacaoAtual();
+	}
+
+	public String getSituacaoAtual() {
 		String situacao = "";
-		if(isEstaBloqueado()) {
-			situacao = " -BLOQUEADO";
+		if (isEstaBloqueado()) {
+			situacao = "BLOQUEADO";
 		}
-		
-		if( !isAtivo() ) {
-			if(situacao.equalsIgnoreCase(""))
+
+		if (!isAtivo()) {
+			if (!situacao.equalsIgnoreCase(""))
 				situacao += "/";
-			else 
-				situacao += " -";
 			situacao += "INATIVO";
 		}
-		
-		
+
 		return situacao;
 	}
 

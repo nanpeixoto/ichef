@@ -14,12 +14,13 @@ import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
 import br.com.ichef.model.Cliente;
 import br.com.ichef.model.ClienteEndereco;
+import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Derivacao;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.FichaTecnicaPrato;
+import br.com.ichef.model.FichaTecnicaPratoTipo;
 import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
-import br.com.ichef.model.TipoPrato;
 import br.com.ichef.service.CardapioService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.DerivacaoService;
@@ -27,7 +28,9 @@ import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
+import br.com.ichef.util.JSFUtil;
 import br.com.ichef.visitor.CardapioVisitor;
+import br.com.ichef.visitor.ClienteVisitor;
 
 @Named
 @ViewScoped
@@ -67,8 +70,8 @@ public class PedidoController extends BaseController {
 	private List<Derivacao> listaDerivacoes = new ArrayList<>();
 	private Derivacao derivacao;
 
-	private List<TipoPrato> listaTiposPrato = new ArrayList<>();
-	private TipoPrato tipoPrato;
+	private List<FichaTecnicaPratoTipo> listaTiposPrato = new ArrayList<>();
+	private FichaTecnicaPratoTipo fichaTecnicaPratoTipo;
 
 	private List<Empresa> listaEmpresas = new ArrayList<>();
 	private Empresa empresa;
@@ -91,7 +94,6 @@ public class PedidoController extends BaseController {
 	public void init() {
 
 		verificarCardapio();
-
 		setData(new Date());
 		obterListas();
 
@@ -120,19 +122,67 @@ public class PedidoController extends BaseController {
 		listaEmpresas = empresaService.listAll(true);
 		listaDerivacoes = derivacaoService.listAll(true);
 
-		// obter Dados Do Cardapio
-
+		Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+		// FORMA DE PAGAMENTO PADRAO CARTEIRA
+		formaPagamento = config.getFormaPagamento();
+		// DERIVACAO PADRAO
+		derivacao = config.getDerivacao();
+		// empresa logada
 		setEmpresa(userLogado.getEmpresaLogada());
 	}
 
+	public List<Cliente> autoCompleteCliente(String query) {
+		List<Cliente> allThemes = new ArrayList<>();
+
+		ClienteVisitor visitor = new ClienteVisitor();
+		visitor.setLikeNomeTelefone(query);
+
+		try {
+			allThemes = clienteService.findByParameters(new Cliente(), visitor);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return allThemes;
+
+	}
+
+	public void obterTiposDePratos() {
+		if (getCardapioPrato() != null) {
+			if (getCardapioPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().size() == 1) {
+				setFichaTecnicaPratoTipo(getCardapioPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().get(0));
+			} else {
+				// obter pelo tipo principal
+				Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+				for (FichaTecnicaPratoTipo fichaTipo : getCardapioPrato().getFichaTecnicaPrato()
+						.getFichaTecnicaPratoTipos()) {
+					if (config.getTipoPrato().getId().equals(fichaTipo.getTipoPrato().getId())) {
+						setFichaTecnicaPratoTipo(fichaTipo);
+						return;
+					} else {
+						setFichaTecnicaPratoTipo(null);
+					}
+				}
+
+			}
+		}
+	}
+
 	public void obterEnderecoCliente() {
-		if (getCliente() != null) {
-			listaEnderecos = getCliente().getEnderecos();
-			if (listaEnderecos.size() == 1) {
-				endereco = listaEnderecos.get(0);
+		if (!getCliente().isDesabilitado()) {
+			if (getCliente() != null) {
+				listaEnderecos = getCliente().getEnderecos();
+				if (listaEnderecos.size() == 1) {
+					endereco = listaEnderecos.get(0);
+				}
+			} else {
+				setEndereco(null);
 			}
 		} else {
 			setEndereco(null);
+			setCliente(null);
+			facesMessager.error("Cliente Inativo/Bloqueado");
 		}
 	}
 
@@ -248,20 +298,20 @@ public class PedidoController extends BaseController {
 		this.derivacao = derivacao;
 	}
 
-	public List<TipoPrato> getListaTiposPrato() {
+	public List<FichaTecnicaPratoTipo> getListaTiposPrato() {
 		return listaTiposPrato;
 	}
 
-	public void setListaTiposPrato(List<TipoPrato> listaTiposPrato) {
+	public void setListaTiposPrato(List<FichaTecnicaPratoTipo> listaTiposPrato) {
 		this.listaTiposPrato = listaTiposPrato;
 	}
 
-	public TipoPrato getTipoPrato() {
-		return tipoPrato;
+	public FichaTecnicaPratoTipo getFichaTecnicaPratoTipo() {
+		return fichaTecnicaPratoTipo;
 	}
 
-	public void setTipoPrato(TipoPrato tipoPrato) {
-		this.tipoPrato = tipoPrato;
+	public void setFichaTecnicaPratoTipo(FichaTecnicaPratoTipo fichaTecnicaPratoTipo) {
+		this.fichaTecnicaPratoTipo = fichaTecnicaPratoTipo;
 	}
 
 	public List<Empresa> getListaEmpresas() {
