@@ -171,22 +171,22 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 	}
 
-	private void criarClone(FichaTecnicaPreparo perparo) throws CloneNotSupportedException {
+	private void criarClone(FichaTecnicaPreparo preparoClone) throws CloneNotSupportedException {
 		FichaTecnicaPreparo clone = new FichaTecnicaPreparo();
 		// clone = perparo.clone();
 		clone.setId(null);
 		clone.setAtivo("S");
 		clone.setCopia("S");
-		clone.setTamanho( preparo.getTamanho() );
+		clone.setTamanho( preparoClone.getTamanho() );
 		clone.setClassificacao("A");
 		// Integer qtd = obetrQuantidadeFichaByNome();
-		clone.setDescricao(perparo.getDescricao());
+		clone.setDescricao(preparoClone.getDescricao());
 		clone.setCopia("S");
 		clone.setInsumos(new ArrayList<>());
 
 		List<FichaTecnicaPreparoInsumo> novaListaFichaInsumo = new ArrayList<>();
 
-		for (FichaTecnicaPreparoInsumo fichaInsumoOld : perparo.getInsumos()) {
+		for (FichaTecnicaPreparoInsumo fichaInsumoOld : preparoClone.getInsumos()) {
 			FichaTecnicaPreparoInsumo fichaInsumo = new FichaTecnicaPreparoInsumo();
 			fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
 			//fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());

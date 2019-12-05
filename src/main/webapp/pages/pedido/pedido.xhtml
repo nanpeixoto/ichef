@@ -43,10 +43,10 @@
 								<p:panelGrid   columns="3" layout="grid"  columnClasses="ui-g-6 ui-md-6">
 									
 								    <p:selectOneMenu id="cliente" value="#{pedidoController.cliente}"  converter= "omnifaces.SelectItemsConverter" 
-								    	 filter="true"  filterMatchMode="contains" var="c"   >
+								    	 filter="true"  filterMatchMode="contains"   >
 								   		<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
-								        <f:selectItems value="#{pedidoController.listaClientes}" var="item" itemLabel="#{item.nomeCompleto}" itemValue="#{item}"  itemDisabled="#{item.desabilitado}" />
-								       	<p:column>
+								        <f:selectItems value="#{pedidoController.listaClientes}" var="item" itemLabel="#{item.nomeCompletoSituacao}" itemValue="#{item}"  itemDisabled="#{item.desabilitado}" />
+								       	<!-- <p:column>
 											 <h:outputText value="#{c.nomeCompletoSituacao}" />
 										</p:column>
 										<p:column >
@@ -55,7 +55,7 @@
 												target="_blank" title="Clique para editar cliente">
 												<i class="fa fa-pencil"></i>
 											</p:link>
-										</p:column>
+										</p:column> -->
 								        <p:ajax event="change" update="endereco" listener="#{pedidoController.obterEnderecoCliente()}"/>
 								    </p:selectOneMenu>
 								    
