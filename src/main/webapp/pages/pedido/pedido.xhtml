@@ -44,7 +44,7 @@
 							<p:link
 								href="/pages/cardapio/cadastro-cardapio.xhtml?id=#{pedidoController.cardapio.id}"
 								target="_blank" title="Clique para abrir o cardápio">
-								<i class="fa fa-cutlery"></i>
+								<i class="fa fa-cutlery" style="color: #{pedidoController.cardapio.id eq null?'red' : 'black'} " ></i>
 							</p:link>
 							<p:commandButton icon="fa fa-refresh"
 								id="btnAtualizarListaInsumo"
@@ -132,7 +132,7 @@
 
 						</p:panelGrid>
 						<p:panelGrid columns="4" layout="grid"
-							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5">
+							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5 ">
 
 							<p:outputLabel value="Prato" for="prato" />
 							<p:selectOneMenu id="prato"
@@ -143,11 +143,16 @@
 									noSelectionOption="true" />
 								<f:selectItems value="#{pedidoController.cardapio.pratos}"
 									var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
-								<p:ajax event="change" update="selectTipoPrato"
+								<p:ajax event="change" update="selectTipoPrato,precoPrato"
 									listener="#{pedidoController.obterTiposDePratos()}" />
 							</p:selectOneMenu>
-
-
+							
+							<p:outputLabel value="Qtd.:" for="qtd" />
+							<p:inputNumber   value="#{pedidoController.quantidade}"  id="qtd" symbol="" decimalSeparator="," thousandSeparator="." decimalPlaces="0"  />
+							
+					</p:panelGrid>
+						<p:panelGrid columns="4" layout="grid"
+							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5 ">
 
 
 							<p:outputLabel value="Tipo de Prato" for="selectTipoPrato" />
@@ -160,9 +165,15 @@
 								<f:selectItems value="#{pedidoController.cardapioPrato.fichaTecnicaPrato.fichaTecnicaPratoTipos}"
 									var="item" itemLabel="#{item.tipoPrato.descricao}"
 									itemValue="#{item}" />
+								<p:ajax event="change" update="precoPrato"
+									listener="#{pedidoController.obterPrecoPrato()}" />
 							</p:selectOneMenu>
-
-
+							
+							<p:outputLabel value="Preço" for="precoPrato" />
+							<p:inputNumber   id="precoPrato" value="#{pedidoController.preco}" 	disabled="#{pedidoController.fichaTecnicaPratoTipo eq null}" symbol="R$ " decimalSeparator="," thousandSeparator="." /> 
+							
+							
+						
 						</p:panelGrid>
 						<p:panelGrid id="capaCarteira3" columns="4" layout="grid"
 							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5">

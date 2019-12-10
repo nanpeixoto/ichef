@@ -28,6 +28,7 @@ import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
+import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.visitor.CardapioVisitor;
 import br.com.ichef.visitor.ClienteVisitor;
@@ -90,11 +91,16 @@ public class PedidoController extends BaseController {
 
 	private Date data;
 
+	private int quantidade;
+	private Double preco;
+
 	@PostConstruct
 	public void init() {
 
-		verificarCardapio();
 		setData(new Date());
+		verificarCardapio();
+
+		setQuantidade(1);
 		obterListas();
 
 	}
@@ -108,7 +114,8 @@ public class PedidoController extends BaseController {
 			cardapio = listaCardapio.get(0);
 			listaCardapioPrato = cardapio.getPratos();
 		} catch (Exception e) {
-			e.printStackTrace();
+			FacesUtil.addErroMessage("Nenhum Cardapio encontrado, cadastre um cardapio para continuar");
+			updateComponentes("growl");
 			return "cadastro-cardapio.xhtml?faces-redirect=true";
 		}
 
@@ -117,7 +124,8 @@ public class PedidoController extends BaseController {
 	}
 
 	private void obterListas() {
-		listaClientes = clienteService.listAll(true);
+		listaClientes = clienteService.listAll();
+
 		listaFormasPagamento = formaPagamentoService.listAll(true);
 		listaEmpresas = empresaService.listAll(true);
 		listaDerivacoes = derivacaoService.listAll(true);
@@ -148,6 +156,14 @@ public class PedidoController extends BaseController {
 
 	}
 
+	public void obterPrecoPrato() {
+		try {
+			setPreco(getFichaTecnicaPratoTipo().getTipoPrato().getUltimoPreco().get(0).getPreco());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void obterTiposDePratos() {
 		if (getCardapioPrato() != null) {
 			if (getCardapioPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().size() == 1) {
@@ -170,14 +186,25 @@ public class PedidoController extends BaseController {
 	}
 
 	public void obterEnderecoCliente() {
+		endereco = null;
 		if (!getCliente().isDesabilitado()) {
 			if (getCliente() != null) {
-				listaEnderecos = getCliente().getEnderecos();
-				if (listaEnderecos.size() == 1) {
-					endereco = listaEnderecos.get(0);
+				for (ClienteEndereco endCliente : getCliente().getEnderecos()) {
+					if (endCliente.getLocalidade().getEmpresa().getId().equals(userLogado.getEmpresaLogada().getId()))
+						listaEnderecos.add(endCliente);
+					if (endCliente.isEndPrincipal() && endCliente.getLocalidade().getEmpresa().getId()
+							.equals(userLogado.getEmpresaLogada().getId()))
+						endereco = endCliente;
 				}
-			} else {
+			}
+
+			if (endereco == null && listaEnderecos.size() == 1) {
+				endereco = listaEnderecos.get(0);
+			} else if (listaEnderecos.size() < 1) {
 				setEndereco(null);
+				if (listaEnderecos == null || listaEnderecos.size() == 0) {
+					facesMessager.error("Nenhum endereço cadastradado para essa empresa, revise o cadastro do cliente");
+				}
 			}
 		} else {
 			setEndereco(null);
@@ -412,6 +439,22 @@ public class PedidoController extends BaseController {
 
 	public void setListaEnderecos(List<ClienteEndereco> listaEnderecos) {
 		this.listaEnderecos = listaEnderecos;
+	}
+
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
 	}
 
 }
