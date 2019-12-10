@@ -1,5 +1,6 @@
 package br.com.ichef.controler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,8 @@ import br.com.ichef.model.ClienteEndereco;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Derivacao;
 import br.com.ichef.model.Empresa;
+import br.com.ichef.model.Entregador;
+import br.com.ichef.model.EntregadorLocalidade;
 import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.model.FichaTecnicaPratoTipo;
 import br.com.ichef.model.FormaPagamento;
@@ -25,6 +28,7 @@ import br.com.ichef.service.CardapioService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.DerivacaoService;
 import br.com.ichef.service.EmpresaService;
+import br.com.ichef.service.EntregadorService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
@@ -32,6 +36,7 @@ import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.visitor.CardapioVisitor;
 import br.com.ichef.visitor.ClienteVisitor;
+import br.com.ichef.visitor.PedidoVisitor;
 
 @Named
 @ViewScoped
@@ -49,6 +54,9 @@ public class PedidoController extends BaseController {
 	private FormaPagamentoService formaPagamentoService;
 
 	@Inject
+	private EntregadorService entregadorService;
+
+	@Inject
 	private EmpresaService empresaService;
 
 	@Inject
@@ -63,56 +71,94 @@ public class PedidoController extends BaseController {
 	private List<Pedido> lista = new ArrayList<Pedido>();
 
 	private List<FormaPagamento> listaFormasPagamento = new ArrayList<>();
-	private FormaPagamento formaPagamento;
+	// private FormaPagamento formaPagamento;
+
+	private List<Entregador> listaEntregador = new ArrayList<>();
+	// private Entregador entregador;
 
 	private List<FichaTecnicaPrato> listaPratos = new ArrayList<>();
-	private FichaTecnicaPrato prato;
+	// private FichaTecnicaPrato prato;
 
 	private List<Derivacao> listaDerivacoes = new ArrayList<>();
-	private Derivacao derivacao;
+	// private Derivacao derivacao;
 
 	private List<FichaTecnicaPratoTipo> listaTiposPrato = new ArrayList<>();
-	private FichaTecnicaPratoTipo fichaTecnicaPratoTipo;
+	// private FichaTecnicaPratoTipo fichaTecnicaPratoTipo;
 
 	private List<Empresa> listaEmpresas = new ArrayList<>();
-	private Empresa empresa;
+	// private Empresa empresa;
 
 	private List<Cliente> listaClientes = new ArrayList<>();
-	private Cliente cliente;
+	// private Cliente cliente;
 
 	private List<Cardapio> listaCardapio = new ArrayList<>();
 	private Cardapio cardapio;
 
 	private List<CardapioFichaPrato> listaCardapioPrato = new ArrayList<>();
-	private CardapioFichaPrato cardapioPrato;
+	// private CardapioFichaPrato cardapioPrato;
 
 	private List<ClienteEndereco> listaEnderecos = new ArrayList<>();
-	private ClienteEndereco endereco;
+	// private ClienteEndereco endereco;
 
-	private Date data;
+	Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
 
-	private int quantidade;
-	private Double preco;
+	// private Double preco;
+
+	private Pedido entity;
 
 	@PostConstruct
 	public void init() {
 
-		setData(new Date());
 		verificarCardapio();
 
-		setQuantidade(1);
+		newInstance();
+
 		obterListas();
+
+		obterPedidoDia();
+
+	}
+
+	private void newInstance() {
+		setEntity(new Pedido());
+		getEntity().setDataPedido(new Date());
+
+		valoresDefault();
+
+	}
+
+	private void valoresDefault() {
+		getEntity().setQuantidade(1);
+		getEntity().setCardapio(cardapio);
+		getEntity().setFormaPagamento(config.getFormaPagamento());
+		getEntity().setDerivacao(config.getDerivacao());
+		getEntity().setEmpresa(userLogado.getEmpresaLogada());
+	}
+
+	public void obterPratosCardapio() {
+		getEntity().setTipoPrato(null);
+		getEntity().setCardapioFichaPrato(null);
+
+		cardapio = getEntity().getCardapio();
+		listaCardapioPrato = cardapio.getPratos();
 
 	}
 
 	private String verificarCardapio() {
 
 		CardapioVisitor cardapioVisitor = new CardapioVisitor();
-		cardapioVisitor.setDataCardapio(getData());
+		cardapioVisitor.setDataCardapio(new Date());
+		Cardapio filter = new Cardapio();
+		filter.setAtivo("S");
 		try {
-			listaCardapio = cardapioService.findByParameters(new Cardapio(), cardapioVisitor);
-			cardapio = listaCardapio.get(0);
+			cardapio = (cardapioService.findByParameters(filter, cardapioVisitor)).get(0);
 			listaCardapioPrato = cardapio.getPratos();
+
+			cardapioVisitor = new CardapioVisitor();
+			cardapioVisitor.setDataCardapioPossiveis(new Date());
+
+			listaCardapio = cardapioService.findByParameters(filter, cardapioVisitor);
+
 		} catch (Exception e) {
 			FacesUtil.addErroMessage("Nenhum Cardapio encontrado, cadastre um cardapio para continuar");
 			updateComponentes("growl");
@@ -130,13 +176,6 @@ public class PedidoController extends BaseController {
 		listaEmpresas = empresaService.listAll(true);
 		listaDerivacoes = derivacaoService.listAll(true);
 
-		Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
-		// FORMA DE PAGAMENTO PADRAO CARTEIRA
-		formaPagamento = config.getFormaPagamento();
-		// DERIVACAO PADRAO
-		derivacao = config.getDerivacao();
-		// empresa logada
-		setEmpresa(userLogado.getEmpresaLogada());
 	}
 
 	public List<Cliente> autoCompleteCliente(String query) {
@@ -156,28 +195,86 @@ public class PedidoController extends BaseController {
 
 	}
 
+	public void alterarEntregador() {
+		getEntity().setOrdemEntrega(1);
+		ObterValorDiariaEntregador();
+
+	}
+
+	public void ObterValorDiariaEntregador() {
+		if (getEntity().getEntregador() != null) {
+			getEntity().setValorDiariaEntregador(getEntity().getEntregador().getValorDiaria());
+		}
+	}
+
+	public void obterEntregador() {
+
+		if (getEntity().getClienteEndereco() != null) {
+
+			Entregador filter = new Entregador();
+			filter.setAtivo("S");
+			filter.setEmpresa(userLogado.getEmpresaLogada());
+
+			try {
+				listaEntregador = entregadorService.findByParameters(filter);
+				for (Entregador entregador : listaEntregador) {
+					for (EntregadorLocalidade entregadorLocalidade : entregador.getLocalidades()) {
+						if (entregadorLocalidade.getLocalidade().getId()
+								.equals(getEntity().getClienteEndereco().getLocalidade().getId())) {
+							getEntity().setEntregador(entregador);
+							getEntity().setOrdemEntrega(Integer.parseInt(entregadorLocalidade.getOrdem().toString()));
+						}
+					}
+				}
+
+				if (getEntity().getEntregador() == null) {
+					getEntity().setOrdemEntrega(1);
+					facesMessager.error("Localidade não associada a um entregador, por favor, revisar o cadastro");
+				}
+
+				ObterValorDiariaEntregador();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void obterPrecoPrato() {
 		try {
-			setPreco(getFichaTecnicaPratoTipo().getTipoPrato().getUltimoPreco().get(0).getPreco());
+			if (getEntity().getFormaPagamento() != null) {
+				if (!getEntity().getFormaPagamento().isCortesia()) {
+					if (getEntity().getFichaTecnicaPratoTipo() != null) {
+						getEntity().setValorPedido(new BigDecimal(getEntity().getFichaTecnicaPratoTipo().getTipoPrato()
+								.getUltimoPreco().get(0).getPreco()));
+					}
+				} else {
+					getEntity().setValorPedido(new BigDecimal(0));
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void obterTiposDePratos() {
-		if (getCardapioPrato() != null) {
-			if (getCardapioPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().size() == 1) {
-				setFichaTecnicaPratoTipo(getCardapioPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().get(0));
+		if (getEntity().getCardapioFichaPrato() != null) {
+			if (getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().size() == 1) {
+				getEntity().setFichaTecnicaPratoTipo(
+						getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().get(0));
+				obterPrecoPrato();
 			} else {
 				// obter pelo tipo principal
 				Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
-				for (FichaTecnicaPratoTipo fichaTipo : getCardapioPrato().getFichaTecnicaPrato()
+				for (FichaTecnicaPratoTipo fichaTipo : getEntity().getCardapioFichaPrato().getFichaTecnicaPrato()
 						.getFichaTecnicaPratoTipos()) {
 					if (config.getTipoPrato().getId().equals(fichaTipo.getTipoPrato().getId())) {
-						setFichaTecnicaPratoTipo(fichaTipo);
+						getEntity().setFichaTecnicaPratoTipo(fichaTipo);
+						getEntity().setTipoPrato(fichaTipo.getTipoPrato());
+						obterPrecoPrato();
 						return;
 					} else {
-						setFichaTecnicaPratoTipo(null);
+						getEntity().setFichaTecnicaPratoTipo(null);
 					}
 				}
 
@@ -186,35 +283,197 @@ public class PedidoController extends BaseController {
 	}
 
 	public void obterEnderecoCliente() {
-		endereco = null;
-		if (!getCliente().isDesabilitado()) {
-			if (getCliente() != null) {
-				for (ClienteEndereco endCliente : getCliente().getEnderecos()) {
+		getEntity().setClienteEndereco(null);
+		if (!getEntity().getCliente().isDesabilitado()) {
+			if (getEntity().getCliente() != null) {
+				for (ClienteEndereco endCliente : getEntity().getCliente().getEnderecos()) {
 					if (endCliente.getLocalidade().getEmpresa().getId().equals(userLogado.getEmpresaLogada().getId()))
 						listaEnderecos.add(endCliente);
 					if (endCliente.isEndPrincipal() && endCliente.getLocalidade().getEmpresa().getId()
 							.equals(userLogado.getEmpresaLogada().getId()))
-						endereco = endCliente;
+						getEntity().setClienteEndereco(endCliente);
 				}
 			}
 
-			if (endereco == null && listaEnderecos.size() == 1) {
-				endereco = listaEnderecos.get(0);
+			if (getEntity().getClienteEndereco() == null && listaEnderecos.size() == 1) {
+				getEntity().setClienteEndereco(listaEnderecos.get(0));
+
 			} else if (listaEnderecos.size() < 1) {
-				setEndereco(null);
+				getEntity().setClienteEndereco(null);
 				if (listaEnderecos == null || listaEnderecos.size() == 0) {
 					facesMessager.error("Nenhum endereço cadastradado para essa empresa, revise o cadastro do cliente");
 				}
 			}
+
+			obterEntregador();
+
 		} else {
-			setEndereco(null);
-			setCliente(null);
+			getEntity().setClienteEndereco(null);
+			getEntity().setCliente(null);
 			facesMessager.error("Cliente Inativo/Bloqueado");
 		}
 	}
 
-	public void adicionarCarteira() {
+	public void adicionarPedido(Boolean apagarCliente) {
+		try {
+			// CAMPOS OBRIGATORIOS
 
+			// CARDAPIO
+			if (getEntity().getCardapio() == null) {
+				facesMessager.error("Cardápio não encontrado, verifique o cadastro co cardápio");
+				return;
+			}
+
+			// CLIENTE
+			if (getEntity().getCliente() == null) {
+				facesMessager.error(getRequiredMessage("Cliente"));
+				return;
+			}
+
+			// ENDERECO
+			if (getEntity().getClienteEndereco() == null) {
+				facesMessager.error(getRequiredMessage("Endereço"));
+				return;
+			} else {
+				getEntity().setLocalidade(getEntity().getClienteEndereco().getLocalidade());
+			}
+
+			// PRATO
+			if (getEntity().getCardapioFichaPrato() == null) {
+				facesMessager.error(getRequiredMessage("Prato"));
+				return;
+			}
+
+			// QTD E MAIOR QUE 1
+			if (getEntity().getQuantidade() == null || getEntity().getQuantidade() < 0) {
+				facesMessager.error(getRequiredMessage("Quantidade"));
+				return;
+			}
+
+			// TIPO DE PRATO
+			if (getEntity().getFichaTecnicaPratoTipo() == null) {
+				facesMessager.error(getRequiredMessage("Tipo de Prato"));
+				return;
+			} else {
+				getEntity().setTipoPrato(getEntity().getFichaTecnicaPratoTipo().getTipoPrato());
+			}
+
+			// PRECO MAIOR QUE ZERO
+			if (getEntity().getValorPedido() == null) {
+				facesMessager.error(getRequiredMessage("Preço"));
+				return;
+			}
+
+			// valor da diaria do entregador
+			if (getEntity().getValorDiariaEntregador() == null) {
+				facesMessager.error(getRequiredMessage("Valor da Diária"));
+				return;
+			}
+
+			// DERIVACAO
+			if (getEntity().getDerivacao() == null) {
+				facesMessager.error(getRequiredMessage("Derivação"));
+				return;
+			}
+
+			// FORMA PAGAMENTO
+			if (getEntity().getFormaPagamento() == null) {
+				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
+				return;
+			}
+
+			// ENTREGADOR
+			if (getEntity().getEntregador() == null) {
+				facesMessager.error(getRequiredMessage("Entregador"));
+				return;
+			}
+
+			// ORDEM
+			if (getEntity().getOrdemEntrega() == null) {
+				facesMessager.error(getRequiredMessage("Ordem"));
+				return;
+			}
+
+			getEntity().setDataCadastro(new Date());
+			getEntity().setUsuarioCadastro(userLogado);
+
+			// setar os precos de venda e custo
+			getEntity().setPrecoCustoPorcao(
+					getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoCustoPorcao());
+			getEntity().setPrecoVendaReceita(
+					getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoVendaReceita());
+			getEntity().setPrecoVendaTipoPrato(getEntity().getCardapioFichaPrato().getFichaTecnicaPrato()
+					.getPercoPorTipoPrato(getEntity().getTipoPrato()));
+
+			if (getEntity().getPrecoCustoPorcao() == null) {
+				facesMessager.error("Não foi possível obter o Preço de Custo da Porção");
+				return;
+			}
+
+			if (getEntity().getPrecoVendaReceita() == null) {
+				facesMessager.error("Não foi possível obter o Preço de Venda da Receita");
+				return;
+			}
+
+			if (getEntity().getPrecoVendaTipoPrato() == null) {
+				facesMessager.error("Não foi possível obter o Preço de Venda por Tipo de Prato");
+				return;
+			}
+
+			service.saveOrUpdade(getEntity());
+
+			if (getEntity().getId() != null) {
+				obterPedidoDia();
+			} else {
+				facesMessager.error("Houve um erro, entre em contato com o adminstrador do sistema");
+			}
+
+			updateComponentes("tabListaPedidos");
+
+			limparPedido();
+
+			if (apagarCliente)
+				limparCliente();
+
+		} catch (
+
+		Exception e) {
+			facesMessager.error("Não foi possível executar essa operação");
+			e.printStackTrace();
+		}
+
+	}
+
+	private void limparCliente() {
+		getEntity().setCliente(null);
+		getEntity().setClienteEndereco(null);
+		getEntity().setEntregador(null);
+		getEntity().setOrdemEntrega(null);
+		getEntity().setValorDiariaEntregador(null);
+
+	}
+
+	private void limparPedido() {
+		getEntity().setId(null);
+		getEntity().setCardapioFichaPrato(null);
+		getEntity().setTipoPrato(null);
+		getEntity().setFichaTecnicaPratoTipo(null);
+		getEntity().setDerivacao(null);
+		getEntity().setFormaPagamento(null);
+		getEntity().setQuantidade(null);
+		valoresDefault();
+
+	}
+
+	private void obterPedidoDia() {
+		PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		pedidoVisitor.setData(new Date());
+
+		try {
+			setLista(service.findByParameters(new Pedido(), pedidoVisitor));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void limpar() {
@@ -285,28 +544,12 @@ public class PedidoController extends BaseController {
 		this.listaFormasPagamento = listaFormasPagamento;
 	}
 
-	public FormaPagamento getFormaPagamento() {
-		return formaPagamento;
-	}
-
-	public void setFormaPagamento(FormaPagamento formaPagamento) {
-		this.formaPagamento = formaPagamento;
-	}
-
 	public List<FichaTecnicaPrato> getListaPratos() {
 		return listaPratos;
 	}
 
 	public void setListaPratos(List<FichaTecnicaPrato> listaPratos) {
 		this.listaPratos = listaPratos;
-	}
-
-	public FichaTecnicaPrato getPrato() {
-		return prato;
-	}
-
-	public void setPrato(FichaTecnicaPrato prato) {
-		this.prato = prato;
 	}
 
 	public List<Derivacao> getListaDerivacoes() {
@@ -317,28 +560,12 @@ public class PedidoController extends BaseController {
 		this.listaDerivacoes = listaDerivacoes;
 	}
 
-	public Derivacao getDerivacao() {
-		return derivacao;
-	}
-
-	public void setDerivacao(Derivacao derivacao) {
-		this.derivacao = derivacao;
-	}
-
 	public List<FichaTecnicaPratoTipo> getListaTiposPrato() {
 		return listaTiposPrato;
 	}
 
 	public void setListaTiposPrato(List<FichaTecnicaPratoTipo> listaTiposPrato) {
 		this.listaTiposPrato = listaTiposPrato;
-	}
-
-	public FichaTecnicaPratoTipo getFichaTecnicaPratoTipo() {
-		return fichaTecnicaPratoTipo;
-	}
-
-	public void setFichaTecnicaPratoTipo(FichaTecnicaPratoTipo fichaTecnicaPratoTipo) {
-		this.fichaTecnicaPratoTipo = fichaTecnicaPratoTipo;
 	}
 
 	public List<Empresa> getListaEmpresas() {
@@ -349,14 +576,6 @@ public class PedidoController extends BaseController {
 		this.listaEmpresas = listaEmpresas;
 	}
 
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-
 	public List<Cliente> getListaClientes() {
 		return listaClientes;
 	}
@@ -365,24 +584,8 @@ public class PedidoController extends BaseController {
 		this.listaClientes = listaClientes;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
 	}
 
 	public CardapioService getCardapioService() {
@@ -417,22 +620,6 @@ public class PedidoController extends BaseController {
 		this.listaCardapioPrato = listaCardapioPrato;
 	}
 
-	public CardapioFichaPrato getCardapioPrato() {
-		return cardapioPrato;
-	}
-
-	public void setCardapioPrato(CardapioFichaPrato cardapioPrato) {
-		this.cardapioPrato = cardapioPrato;
-	}
-
-	public ClienteEndereco getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(ClienteEndereco endereco) {
-		this.endereco = endereco;
-	}
-
 	public List<ClienteEndereco> getListaEnderecos() {
 		return listaEnderecos;
 	}
@@ -441,20 +628,28 @@ public class PedidoController extends BaseController {
 		this.listaEnderecos = listaEnderecos;
 	}
 
-	public int getQuantidade() {
-		return quantidade;
+	// public Double getPreco() {
+	// return preco;
+	// }
+
+	// public void setPreco(Double preco) {
+	// this.preco = preco;
+	// }
+
+	public List<Entregador> getListaEntregador() {
+		return listaEntregador;
 	}
 
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
+	public void setListaEntregador(List<Entregador> listaEntregador) {
+		this.listaEntregador = listaEntregador;
 	}
 
-	public Double getPreco() {
-		return preco;
+	public Pedido getEntity() {
+		return entity;
 	}
 
-	public void setPreco(Double preco) {
-		this.preco = preco;
+	public void setEntity(Pedido entity) {
+		this.entity = entity;
 	}
 
 }

@@ -125,7 +125,7 @@ public class EntregadorLocalidade extends BaseEntity {
 
 	@Override
 	public String getColumnOrderBy() {
-		return "descricao";
+		return null;
 	}
 
 	@Override

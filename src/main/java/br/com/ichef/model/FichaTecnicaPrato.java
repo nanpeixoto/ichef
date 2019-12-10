@@ -333,6 +333,16 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 		return valoresPorTipo;
 	}
 
+	public BigDecimal getPercoPorTipoPrato(TipoPrato tipoPrato) {
+
+		for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
+			if (tipoPrato.getId().equals(fichaTipo.getTipoPrato().getId()))
+				return fichaTipo.getCustoTotal().add(getPrecoCustoPorcao());
+		}
+
+		return null;
+	}
+
 	public String getPercoPorTipoPratoPrincipal() {
 		String precoPorTipo = "0";
 		boolean precoEncontrado = false;
@@ -341,12 +351,14 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 			Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
 			for (FichaTecnicaPratoTipo fichaTipo : fichaTecnicaPratoTipos) {
 				if (config.getTipoPrato().getId().equals(fichaTipo.getTipoPrato().getId())) {
-					precoPorTipo = (String) formataValor(getPrecoCustoPorcao().add(config.getTipoPrato().getCustoTotal()));
+					precoPorTipo = (String) formataValor(
+							getPrecoCustoPorcao().add(config.getTipoPrato().getCustoTotal()));
 					precoEncontrado = true;
 				}
 			}
-			if(!precoEncontrado) {
-				precoPorTipo = (String) formataValor(getPrecoCustoPorcao().add( fichaTecnicaPratoTipos.get(0).getCustoTotal()));
+			if (!precoEncontrado) {
+				precoPorTipo = (String) formataValor(
+						getPrecoCustoPorcao().add(fichaTecnicaPratoTipos.get(0).getCustoTotal()));
 			}
 		} catch (Exception e) {
 			return "0";

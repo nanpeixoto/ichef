@@ -13,10 +13,11 @@ public class CardapioVisitor extends FilterVisitor {
 	private Long idDiferenteDe;
 
 	private Date dataCardapio;
-	
+
+	private Date dataCardapioPossiveis;
+
 	private Date dataInicio;
 	private Date dataFim;
-
 
 	@Override
 	public void visitCriteria(Criteria criteria) {
@@ -24,12 +25,16 @@ public class CardapioVisitor extends FilterVisitor {
 			criteria.add(Restrictions.sqlRestriction(
 					" date_format( data, '%d/%m/%Y' ) ='" + Util.dateToString(getDataCardapio()) + "'"));
 
+		if (getDataCardapioPossiveis() != null)
+			criteria.add(Restrictions.sqlRestriction(
+					"str_to_date( date_format( data, '%d/%m/%Y' ), '%d/%m/%Y') >=str_to_date('" + Util.dateToString(getDataCardapioPossiveis()) + "', '%d/%m/%Y')"));
+
 		if (getIdDiferenteDe() != null)
 			criteria.add(Restrictions.ne("id", getIdDiferenteDe()));
-		
-		if (getDataInicio() != null && getDataFim() !=null)
-			criteria.add(Restrictions.sqlRestriction(
-					" data between STR_TO_DATE( '" + Util.dateToString(getDataInicio()) + "', '%d/%m/%Y' ) and  STR_TO_DATE('" + Util.dateToString(getDataFim()) + "', '%d/%m/%Y' ) "));
+
+		if (getDataInicio() != null && getDataFim() != null)
+			criteria.add(Restrictions.sqlRestriction(" data between STR_TO_DATE( '" + Util.dateToString(getDataInicio())
+					+ "', '%d/%m/%Y' ) and  STR_TO_DATE('" + Util.dateToString(getDataFim()) + "', '%d/%m/%Y' ) "));
 
 	}
 
@@ -64,6 +69,13 @@ public class CardapioVisitor extends FilterVisitor {
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 	}
-	
+
+	public Date getDataCardapioPossiveis() {
+		return dataCardapioPossiveis;
+	}
+
+	public void setDataCardapioPossiveis(Date dataCardapioPossiveis) {
+		this.dataCardapioPossiveis = dataCardapioPossiveis;
+	}
 
 }

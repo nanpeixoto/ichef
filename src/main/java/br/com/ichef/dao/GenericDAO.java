@@ -68,6 +68,7 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
 				manager = producer.createEntityManager();
+				
 			}
 			manager.getTransaction().begin();
 			manager.merge(entity);
@@ -89,7 +90,7 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 
 			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
-				manager = producer.createEntityManager();
+				producer.closeEntityManager(manager);
 			}
 			manager.getTransaction().begin();
 			manager.persist(entity);
@@ -186,6 +187,11 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	public List<T> findByParameters(T object, FilterVisitor visitor) throws Exception {
+		if (!manager.isOpen()) {
+			// System.out.println("conecao fechada");
+			EntityManagerProducer producer = new EntityManagerProducer();
+			manager = producer.createEntityManager();
+		}
 		Criteria criteria = null;
 		if (visitor != null)
 			criteria = createCriteria(object, visitor);

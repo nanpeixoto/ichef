@@ -1,6 +1,7 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,6 +35,9 @@ public class Pedido extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
+	@Column(name = "NR_QTD")
+	private Integer quantidade;
+
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
 
@@ -43,7 +47,7 @@ public class Pedido extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "CD_CARDAPIO")
-	private Cardapio cadapio;
+	private Cardapio cardapio;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_CARDAPIO_PRATO")
@@ -57,20 +61,18 @@ public class Pedido extends BaseEntity {
 	@JoinColumn(name = "CD_EMPRESA")
 	private Empresa empresa;
 
-	@Column(name = "NR_PRECO_CUSTO_RECEITA")
-	private BigDecimal precoCustoReceita;
+	@ManyToOne
+	@JoinColumn(name = "CD_LOCALIDADE")
+	private Localidade localidade;
 
-	@Column(name = "NR_PRECO_CUSTO_PORCAO")
-	private BigDecimal precoCustoPorcao;
+	@Column(name = "VL_DIARIA_ENTREGADOR")
+	private BigDecimal valorDiariaEntregador;
 
-	@Column(name = "NR_PRECO_VENDA_PORCAO")
-	private BigDecimal precoVendaPorcao;
+	@Column(name = "VL_PEDIDO")
+	private BigDecimal valorPedido;
 
-	@Column(name = "NR_PRECO_VENDA_RECEITA")
-	private BigDecimal precoVendaReceita;
-
-	@Column(name = "NR_PRECO_VENDA")
-	private BigDecimal precoVenda;
+	@Column(name = "NR_ORDEM_ENTREGA")
+	private Integer ordemEntrega;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_TIP_PRATO")
@@ -86,15 +88,28 @@ public class Pedido extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "CD_CLIENTE")
-	private Pedido cliente;
+	private Cliente cliente;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
 	@ManyToOne
+	@JoinColumn(name = "CD_FICHA_TEC_PRATO_TIPO")
+	private FichaTecnicaPratoTipo fichaTecnicaPratoTipo;
+
+	@ManyToOne
 	@JoinColumn(name = "CD_CLIENTE_ENDERECO")
 	private ClienteEndereco clienteEndereco;
+
+	@Column(name = "NR_PRECO_VENDA_RECEITA")
+	private BigDecimal precoVendaReceita;
+
+	@Column(name = "NR_PRECO_CUSTO_PORCAO")
+	private BigDecimal precoCustoPorcao;
+
+	@Column(name = "NR_PRECO_CUSTO_TIPO_PRATO")
+	private BigDecimal precoVendaTipoPrato;
 
 	@Override
 	public Object getId() {
@@ -163,12 +178,12 @@ public class Pedido extends BaseEntity {
 		this.observacao = observacao;
 	}
 
-	public Cardapio getCadapio() {
-		return cadapio;
+	public Cardapio getCardapio() {
+		return cardapio;
 	}
 
-	public void setCadapio(Cardapio cadapio) {
-		this.cadapio = cadapio;
+	public void setCardapio(Cardapio cardapio) {
+		this.cardapio = cardapio;
 	}
 
 	public CardapioFichaPrato getCardapioFichaPrato() {
@@ -185,46 +200,6 @@ public class Pedido extends BaseEntity {
 
 	public void setEntregador(Entregador entregador) {
 		this.entregador = entregador;
-	}
-
-	public BigDecimal getPrecoCustoReceita() {
-		return precoCustoReceita;
-	}
-
-	public void setPrecoCustoReceita(BigDecimal precoCustoReceita) {
-		this.precoCustoReceita = precoCustoReceita;
-	}
-
-	public BigDecimal getPrecoCustoPorcao() {
-		return precoCustoPorcao;
-	}
-
-	public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
-		this.precoCustoPorcao = precoCustoPorcao;
-	}
-
-	public BigDecimal getPrecoVendaPorcao() {
-		return precoVendaPorcao;
-	}
-
-	public void setPrecoVendaPorcao(BigDecimal precoVendaPorcao) {
-		this.precoVendaPorcao = precoVendaPorcao;
-	}
-
-	public BigDecimal getPrecoVendaReceita() {
-		return precoVendaReceita;
-	}
-
-	public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
-		this.precoVendaReceita = precoVendaReceita;
-	}
-
-	public BigDecimal getPrecoVenda() {
-		return precoVenda;
-	}
-
-	public void setPrecoVenda(BigDecimal precoVenda) {
-		this.precoVenda = precoVenda;
 	}
 
 	public TipoPrato getTipoPrato() {
@@ -251,11 +226,11 @@ public class Pedido extends BaseEntity {
 		this.derivacao = derivacao;
 	}
 
-	public Pedido getCliente() {
+	public Cliente getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(Pedido cliente) {
+	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
 
@@ -273,6 +248,112 @@ public class Pedido extends BaseEntity {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+	public void setDataAlteracao(Date dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
+	}
+
+	public void setUsuarioCadastro(Usuario usuarioCadastro) {
+		this.usuarioCadastro = usuarioCadastro;
+	}
+
+	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
+		this.usuarioAlteracao = usuarioAlteracao;
+	}
+
+	public Integer getOrdemEntrega() {
+		return ordemEntrega;
+	}
+
+	public void setOrdemEntrega(Integer ordemEntrega) {
+		this.ordemEntrega = ordemEntrega;
+	}
+
+	public Localidade getLocalidade() {
+		return localidade;
+	}
+
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
+	}
+
+	public BigDecimal getValorDiariaEntregador() {
+		return valorDiariaEntregador;
+	}
+
+	public void setValorDiariaEntregador(BigDecimal valorDiariaEntregador) {
+		this.valorDiariaEntregador = valorDiariaEntregador;
+	}
+
+	public BigDecimal getValorPedido() {
+		return valorPedido;
+	}
+
+	public void setValorPedido(BigDecimal valorPedido) {
+		this.valorPedido = valorPedido;
+	}
+
+	public BigDecimal getPrecoVendaReceita() {
+		return precoVendaReceita;
+	}
+
+	public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
+		this.precoVendaReceita = precoVendaReceita;
+	}
+
+	public BigDecimal getPrecoCustoPorcao() {
+		return precoCustoPorcao;
+	}
+
+	public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
+		this.precoCustoPorcao = precoCustoPorcao;
+	}
+
+	public BigDecimal getPrecoVendaTipoPrato() {
+		return precoVendaTipoPrato;
+	}
+
+	public void setPrecoVendaTipoPrato(BigDecimal precoVendaTipoPrato) {
+		this.precoVendaTipoPrato = precoVendaTipoPrato;
+	}
+
+	public FichaTecnicaPratoTipo getFichaTecnicaPratoTipo() {
+		return fichaTecnicaPratoTipo;
+	}
+
+	public void setFichaTecnicaPratoTipo(FichaTecnicaPratoTipo fichaTecnicaPratoTipo) {
+		this.fichaTecnicaPratoTipo = fichaTecnicaPratoTipo;
+	}
+	
+	public String getDataFormatadaPedido() {
+		try {
+			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
+			return sdate.format(getDataPedido());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

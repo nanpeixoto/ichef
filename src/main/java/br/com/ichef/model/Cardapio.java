@@ -186,6 +186,11 @@ public class Cardapio extends BaseEntity {
 		return "Inativo".toUpperCase();
 	}
 
+	
+	public String getDescricaoComDiaSemana() {
+		return getDataFormatada()+" - "+getDiaSemana();
+	}
+
 
 	public String getDataFormatada() {
 		try {
