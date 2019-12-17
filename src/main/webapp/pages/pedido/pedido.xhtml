@@ -23,6 +23,21 @@
 		               	<p:splitButton value="Salvar" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"  action="#{pedidoController.Salvar()}"/>
 		             	<p:separator/>-->
 					<div class="ui-fluid">
+						<div align="right">
+							<p:panelGrid>
+								<p:commandButton value="" icon="fa fa-user-plus"
+									id="btnAdicionarMais" styleClass="btn-warning"
+									style="width: 50px;"
+									title="Adicionar mais pratos para o mesmo Cliente"
+									update="form,growl"
+									action="#{pedidoController.adicionarPedido(false)}" />
+
+								<p:commandButton value="" icon="fa fa-plus" id="btnAdicioanr"
+									styleClass="btn-primary" style="width: 50px;" title="Adiciona"
+									update="form,growl"
+									action="#{pedidoController.adicionarPedido(true)}" />
+							</p:panelGrid>
+						</div>
 						<p:panelGrid id="capaCarteira" columns="2" layout="grid"
 							columnClasses="ui-g-6 ui-md-1">
 							<p:outputLabel value="Empresa" for="empresa" />
@@ -39,39 +54,56 @@
 						<p:panelGrid columns="6" layout="grid"
 							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-2,ui-g-6 ui-md-4,ui-g-6 ui-md-1,ui-g-6 ui-md-6">
 							<p:outputLabel value="Data Pedido" for="data" />
-							<p:calendar id="data" value="#{pedidoController.entity.dataPedido}"
+							<p:calendar id="data"
+								value="#{pedidoController.entity.dataPedido}"
 								pattern="dd/MM/yyyy" size="10" disabled="true"></p:calendar>
 							<p:link id="linkCardadpio"
 								href="/pages/cardapio/cadastro-cardapio.xhtml?id=#{pedidoController.cardapio.id}"
 								target="_blank" title="Clique para abrir o cardápio">
-								<i class="fa fa-cutlery" style="color: #{pedidoController.cardapio.id eq null?'red' : 'black'} " ></i>
+								<i class="fa fa-cutlery"
+									style="color: #{pedidoController.cardapio.id eq null?'red' : 'black'} "></i>
 							</p:link>
 							<!-- <p:commandButton icon="fa fa-refresh"
 								id="btnAtualizarListaInsumo"
 								title="Clique aqui para atualizar o cardápio"
 								actionListener="#{pedidoController.atualizarListaPreparo()}"
 								styleClass="btn btn-light" /> -->
-						
-						
-						<p:outputLabel value="Cardápio" for="selectCardapio" />
+
+
+							<p:outputLabel value="Cardápio" for="selectCardapio" />
 							<p:selectOneMenu id="selectCardapio"
 								value="#{pedidoController.entity.cardapio}"
-								converter="omnifaces.SelectItemsConverter" 
-								filter="true" filterMatchMode="contains">
+								converter="omnifaces.SelectItemsConverter" filter="true"
+								filterMatchMode="contains">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
 								<f:selectItems value="#{pedidoController.listaCardapio}"
-									var="item" itemLabel="#{item.descricaoComDiaSemana}" itemValue="#{item}" />
-								 
+									var="item" itemLabel="#{item.descricaoComDiaSemana}"
+									itemValue="#{item}" />
+
 								<p:ajax event="itemSelect"
 									listener="#{pedidoController.obterPratosCardapio()}"
 									update="prato,selectTipoPrato,linkCardadpio" />
 							</p:selectOneMenu>
 						</p:panelGrid>
-						<p:panelGrid columns="4" layout="grid"
-							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5">
+						<p:panelGrid columns="5" layout="grid"
+							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5">
+
 							<p:outputLabel value="Cliente" for="cliente" />
-							<p:autoComplete id="cliente" value="#{pedidoController.entity.cliente}"
+							<p:inputNumber id="codigoCliente"
+								value="#{pedidoController.codigoCliente}" symbol=""
+								decimalSeparator="," thousandSeparator="." decimalPlaces="0">
+								<p:ajax event="change"
+									listener="#{pedidoController.obterCliente()}"
+									update="growl,endereco,cliente,selectEntregador, ordemEntrega,valorDiaria" />
+								<p:tooltip id="toolTipFade" for="codigoCliente"
+									value="Digite o Código do Cliente para pesquisar"
+									position="top" />
+							</p:inputNumber>
+
+
+							<p:autoComplete id="cliente"
+								value="#{pedidoController.entity.cliente}"
 								completeMethod="#{pedidoController.autoCompleteCliente}"
 								var="item" itemLabel="#{item.nomeCompletoSituacao}"
 								cache="false" maxResults="12"
@@ -129,11 +161,11 @@
 										actionListener="#{cardapioController.atualizarListaPreparo()}"
 									styleClass="btn btn-light" /> -->
 
-						 							<p:outputLabel value="Endereço" for="endereco" />
+							<p:outputLabel value="Endereço" for="endereco" />
 							<p:selectOneMenu id="endereco"
 								value="#{pedidoController.entity.clienteEndereco}"
-								converter="omnifaces.SelectItemsConverter"
-								filter="true" filterMatchMode="contains"
+								converter="omnifaces.SelectItemsConverter" filter="true"
+								filterMatchMode="contains"
 								disabled="#{pedidoController.entity.cliente eq null}">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
@@ -151,8 +183,8 @@
 							<p:outputLabel value="Prato" for="prato" />
 							<p:selectOneMenu id="prato"
 								value="#{pedidoController.entity.cardapioFichaPrato}"
-								converter="omnifaces.SelectItemsConverter" 
-								filter="true" filterMatchMode="contains">
+								converter="omnifaces.SelectItemsConverter" filter="true"
+								filterMatchMode="contains">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
 								<f:selectItems value="#{pedidoController.cardapio.pratos}"
@@ -160,34 +192,41 @@
 								<p:ajax event="change" update="selectTipoPrato,precoPrato"
 									listener="#{pedidoController.obterTiposDePratos()}" />
 							</p:selectOneMenu>
-							
+
 							<p:outputLabel value="Qtd.:" for="qtd" />
-							<p:inputNumber   value="#{pedidoController.entity.quantidade}"  id="qtd" symbol="" decimalSeparator="," thousandSeparator="." decimalPlaces="0"  />
-							
-					</p:panelGrid>
+							<p:inputNumber value="#{pedidoController.entity.quantidade}"
+								id="qtd" symbol="" decimalSeparator="," thousandSeparator="."
+								decimalPlaces="0" />
+
+						</p:panelGrid>
 						<p:panelGrid columns="4" layout="grid"
 							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5 ">
 
 
 							<p:outputLabel value="Tipo de Prato" for="selectTipoPrato" />
-							<p:selectOneMenu id="selectTipoPrato" 	disabled="#{pedidoController.entity.cardapioFichaPrato eq null}"
-								value="#{pedidoController.entity.fichaTecnicaPratoTipo}" filter="true"
-								filterMatchMode="contains"
-								converter="omnifaces.SelectItemsConverter" >
+							<p:selectOneMenu id="selectTipoPrato"
+								disabled="#{pedidoController.entity.cardapioFichaPrato eq null}"
+								value="#{pedidoController.entity.fichaTecnicaPratoTipo}"
+								filter="true" filterMatchMode="contains"
+								converter="omnifaces.SelectItemsConverter">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
-								<f:selectItems value="#{pedidoController.entity.cardapioFichaPrato.fichaTecnicaPrato.fichaTecnicaPratoTipos}"
+								<f:selectItems
+									value="#{pedidoController.entity.cardapioFichaPrato.fichaTecnicaPrato.fichaTecnicaPratoTipos}"
 									var="item" itemLabel="#{item.tipoPrato.descricao}"
 									itemValue="#{item}" />
 								<p:ajax event="change" update="precoPrato"
 									listener="#{pedidoController.obterPrecoPrato()}" />
 							</p:selectOneMenu>
-							
+
 							<p:outputLabel value="Preço" for="precoPrato" />
-							<p:inputNumber   id="precoPrato" value="#{pedidoController.entity.valorPedido}" 	disabled="#{pedidoController.entity.tipoPrato eq null}" symbol="R$ " decimalSeparator="," thousandSeparator="." /> 
-							
-							
-						
+							<p:inputNumber id="precoPrato"
+								value="#{pedidoController.entity.valorPedido}"
+								disabled="#{pedidoController.entity.tipoPrato eq null}"
+								symbol="R$ " decimalSeparator="," thousandSeparator="." />
+
+
+
 						</p:panelGrid>
 						<p:panelGrid id="capaCarteira3" columns="4" layout="grid"
 							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5">
@@ -217,7 +256,8 @@
 									var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 							</p:selectOneMenu>
 						</p:panelGrid>
-						<p:panelGrid   columns="6" layout="grid" columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-6,ui-g-6 ui-md-2,ui-g-6 ui-md-2,ui-g-6 ui-md-1">
+						<p:panelGrid columns="6" layout="grid"
+							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-6,ui-g-6 ui-md-2,ui-g-6 ui-md-2,ui-g-6 ui-md-1">
 
 							<p:outputLabel value="Entregador" for="selectEntregador" />
 							<p:selectOneMenu id="selectEntregador"
@@ -231,93 +271,142 @@
 								<p:ajax event="change" update="valorDiaria,ordemEntrega"
 									listener="#{pedidoController.alterarEntregador()}" />
 							</p:selectOneMenu>
-							
+
 							<p:outputLabel value="Ordem de Entrega" for="ordemEntrega" />
-							<p:inputNumber   value="#{pedidoController.entity.ordemEntrega}"  id="ordemEntrega" symbol="" decimalSeparator="," thousandSeparator="." decimalPlaces="0"  />
-							
+							<p:inputNumber value="#{pedidoController.entity.ordemEntrega}"
+								id="ordemEntrega" symbol="" decimalSeparator=","
+								thousandSeparator="." decimalPlaces="0" />
+
 							<p:outputLabel value="Diária" for="valorDiaria" />
-							<p:inputNumber   id="valorDiaria" value="#{pedidoController.entity.valorDiariaEntregador}" 	
-							disabled="true" symbol="R$ " decimalSeparator="," thousandSeparator="." /> 
-							
+							<p:inputNumber id="valorDiaria"
+								value="#{pedidoController.entity.valorDiariaEntregador}"
+								disabled="true" symbol="R$ " decimalSeparator=","
+								thousandSeparator="." />
+
 
 						</p:panelGrid>
-						<p:panelGrid   columns="1" layout="grid"  >
-							<p:outputLabel for="observacao" value="Observação"/>
-		           			<p:inputTextarea id="observacao" value="#{pedidoController.entity.observacao}" rows="5" cols="30" maxlength="450" counter="display" counterTemplate="Faltam {0} characteres" autoResize="false" />
-		  					<h:outputText id="display" />
-		  				</p:panelGrid>			
-		  							
-						<div align="right">
-							<p:panelGrid>
-							
-								<p:commandButton value="" icon="fa fa-user-plus"
-									id="btnAdicionarMais" styleClass="btn-warning"
-									style="width: 50px;" title="Adiconar mais pratos para o mesmo Cliente"
-									update="form,growl"
-									action="#{pedidoController.adicionarPedido(false)}" />
-								
-								
-								<p:commandButton value="" icon="fa fa-plus"
-									id="btnAdicioanr" styleClass="btn-primary"
-									style="width: 50px;" title="Adiconar"
-									update="form,growl"
-									action="#{pedidoController.adicionarPedido(true)}" />
-									
-								
-							</p:panelGrid>
-						</div>
+						<p:panelGrid columns="1" layout="grid">
+							<p:outputLabel for="observacao" value="Observação" />
+							<p:inputTextarea id="observacao"
+								value="#{pedidoController.entity.observacao}" rows="3" cols="30"
+								maxlength="450" counter="display"
+								counterTemplate="Faltam {0} characteres" autoResize="false" />
+							<h:outputText id="display" />
+						</p:panelGrid>
+
+
 						<p:panelGrid columns="1" layout="grid">
 							<p:separator />
 						</p:panelGrid>
 						<p:panel>
-						
-						
-						<p:dataTable id="tabListaPedidos" widgetVar="items" rows="10" 
-											paginator="false" value="#{pedidoController.lista}" var="item"
-											rowKey="#{item.id}" reflow="true"
-											paginatorPosition="bottom" editable="false"
-											mptyMessage="Nenhum item encontrado"   sortOrder="DESCENDING"
-											paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-											currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
-										
-							<p:column headerText="Data" filterBy="#{item.dataFormatadaPedido}"  
-								filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.dataFormatadaPedido}">
-							 	<h:outputLabel value="#{item.dataFormatadaPedido}" escape="false" />
-							</p:column>
-							
-							<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"  
-								filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.cliente.nome}">
-							 	<h:outputLabel value="#{item.cliente.nome}" escape="false" />
-							</p:column>
-							
-							<p:column headerText="Localidade" filterBy="#{item.localidade.descricao}"  
-								filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.localidade.descricao}">
-							 	<h:outputLabel value="#{item.localidade.descricao}" escape="false" />
-							</p:column>
-							
-							<p:column headerText="Qtd" filterBy="#{item.quantidade}"  
-								filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.quantidade}">
-							 	<h:outputLabel value="#{item.quantidade}" escape="false" />
-							</p:column>
-							
-							<p:column headerText="Prato" filterBy="#{item.cardapioFichaPrato.descricao}"  
-								filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.cardapioFichaPrato.descricao}">
-							 	<h:outputLabel value="#{item.cardapioFichaPrato.descricao}" escape="false" />
-							</p:column>
-							
-							<p:column headerText="Tipo" filterBy="#{item.tipoPrato.descricao}"  
-								filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.tipoPrato.descricao}">
-							 	<h:outputLabel value="#{item.tipoPrato.descricao}" escape="false" />
-							</p:column>
-							
-							<p:column headerText="Derivacao" filterBy="#{item.derivacao.descricao}"  
-								filterMatchMode="contains" filterStyle="display:none; visibility:hidden;" sortBy="#{item.derivacao.descricao}">
-							 	<h:outputLabel value="#{item.derivacao.descricao}" escape="false" />
-							</p:column>
-							
-							
-											 
-						</p:dataTable>
+
+
+							<p:dataTable id="tabListaPedidos" widgetVar="itens" rows="10"
+								paginator="false" value="#{pedidoController.lista}" var="item"
+								rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
+								editable="false" emptyMessage="Nenhum item encontrado"
+								sortOrder="DESCENDING" 
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+
+								<f:facet name="header">
+									<p:outputPanel style="text-align:right; margin-right:-10px"
+										styleClass="ui-widget-auxiliar">
+
+										<h:outputText value="Pesquisar: " escape="false" />
+
+										<p:inputText id="globalFilter"
+											onchange="PF('itens').filter();" style="width:150px;"
+											placeholder="Pesquisar"
+											styleClass="letras-maiusculas semClear" />
+										<h:outputText value=" " escape="false" />
+										<p:commandButton id="Search" value="" icon="fa fa-search"
+											style="font-size: 0.8em;width:3%;" />
+
+
+
+									</p:outputPanel>
+								</f:facet>
+
+								<p:column style="width:5%">
+									<p:rowToggler />
+								</p:column>
+
+								<p:column headerText="Data"
+									filterBy="#{item.dataFormatadaPedido}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.dataFormatadaPedido}">
+									<h:outputLabel value="#{item.dataFormatadaPedido}"
+										escape="false" />
+								</p:column>
+
+								<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.cliente.nome}">
+									<h:outputLabel value="#{item.cliente.nome}" escape="false" />
+								</p:column>
+
+								<p:column headerText="Localidade"
+									filterBy="#{item.localidade.descricao}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.localidade.descricao}">
+									<h:outputLabel value="#{item.localidade.descricao}"
+										escape="false" />
+								</p:column>
+
+								<p:column headerText="Prato"
+									filterBy="#{item.cardapioFichaPrato.descricao}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.cardapioFichaPrato.descricao}">
+									<h:outputLabel value="#{item.cardapioFichaPrato.descricao}"
+										escape="false" />
+								</p:column>
+
+								<p:column headerText="Tipo"
+									filterBy="#{item.tipoPrato.descricao}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.tipoPrato.descricao}">
+									<h:outputLabel
+										value="#{item.tipoPrato.descricao}-#{item.derivacao.descricao}"
+										escape="false" />
+								</p:column>
+
+								<p:column headerText="Qtd" filterBy="#{item.quantidade}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.quantidade}">
+									<h:outputLabel value="#{item.quantidade}" escape="false" />
+								</p:column>
+
+
+								<p:rowExpansion id="expanded">
+									<p:outputPanel id="carDetail" style="text-align:center;">
+										<p:panelGrid columns="2">
+											<f:facet name="header">
+												<h:outputText
+													value="Cardápio: #{item.cardapio.descricaoComDiaSemana}" />
+											</f:facet>
+											<h:outputText value="Observacao:"
+												rendered="#{!(item.observacao eq '')}" />
+											<h:outputText value="#{item.observacao}"
+												rendered="#{!(item.observacao eq '')}" />
+											<h:outputText value="Endereço:" />
+											<h:outputText value="#{item.clienteEndereco.endereco}" />
+											<h:outputText value="Entregador:" />
+											<h:outputText value="#{item.entregador.nome}" />
+											<h:outputText value="Ordem de Entrega:" />
+											<h:outputText value="#{item.ordemEntrega}" />
+										</p:panelGrid>
+									</p:outputPanel>
+								</p:rowExpansion>
+
+
+							</p:dataTable>
 
 
 						</p:panel>

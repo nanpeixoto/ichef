@@ -50,6 +50,19 @@ public class Util extends ReportUtils {
 	public static final String LETRAS_COM_ACENTUACAO = "Ãƒï¿½Ãƒâ‚¬ÃƒÆ’Ãƒâ€šÃƒâ€žÃƒâ€°ÃƒË†ÃƒÅ Ãƒâ€¹Ãƒï¿½ÃƒÅ’Ãƒï¿½ÃƒÅ½Ãƒâ€œÃƒâ€™Ãƒâ€¢Ãƒâ€�Ãƒâ€“ÃƒÅ¡Ãƒâ„¢Ãƒâ€ºÃƒÅ“Ãƒâ€¡Ãƒâ€˜Ãƒï¿½Ã…Â¸ÃƒÂ¡ÃƒÂ ÃƒÂ£ÃƒÂ¢ÃƒÂ¤ÃƒÂ©ÃƒÂ¨ÃƒÂªÃƒÂ«ÃƒÂ­ÃƒÂ¬ÃƒÂ¯ÃƒÂ®ÃƒÂ³ÃƒÂ²ÃƒÂµÃƒÂ´ÃƒÂ¶ÃƒÂºÃƒÂ¹ÃƒÂ»ÃƒÂ¼ÃƒÂ§ÃƒÂ±ÃƒÂ½ÃƒÂ¿";
 	public static final String LETRAS_SEM_ACENTUACAO = "AAAAAEEEEIIIIOOOOOUUUUCNYYaaaaaeeeeiiiiooooouuuucnyy";
 
+	
+	
+	 public static Date zerarHoras(Date data){
+	        Calendar cal = Calendar.getInstance();
+	        cal.setTime(data);
+	        cal.set(Calendar.HOUR_OF_DAY, 0);
+	        cal.set(Calendar.MINUTE, 0);
+	        cal.set(Calendar.SECOND, 0);
+	        cal.set(Calendar.MILLISECOND, 0);
+	        return cal.getTime();
+	    }
+
+	 
 	public static String calculaIdadeCompletaPaciente(Date dataNasc) {
 		Calendar dateOfBirth = new GregorianCalendar();
 		dateOfBirth.setTime(dataNasc);

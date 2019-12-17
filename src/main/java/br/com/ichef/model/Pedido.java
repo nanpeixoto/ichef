@@ -175,7 +175,16 @@ public class Pedido extends BaseEntity {
 	}
 
 	public void setObservacao(String observacao) {
-		this.observacao = observacao;
+		try {
+
+			if (observacao != null)
+				this.observacao = observacao.toUpperCase();
+			else
+				this.observacao = observacao;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public Cardapio getCardapio() {

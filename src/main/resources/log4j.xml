@@ -7,6 +7,10 @@
             <param name="ConversionPattern" value="%d %-5p (%c.java:%L).%M - %m%n"/>
         </layout>
     </appender>
+    
+    <logger name="org.hibernate.type" level="TRACE" />
+
+    
 
     <root>
         <priority value="ERROR" />

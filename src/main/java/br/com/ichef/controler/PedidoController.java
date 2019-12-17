@@ -34,9 +34,9 @@ import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
+import br.com.ichef.util.Util;
 import br.com.ichef.visitor.CardapioVisitor;
 import br.com.ichef.visitor.ClienteVisitor;
-import br.com.ichef.visitor.PedidoVisitor;
 
 @Named
 @ViewScoped
@@ -105,6 +105,8 @@ public class PedidoController extends BaseController {
 	// private Double preco;
 
 	private Pedido entity;
+	
+	private Long codigoCliente;
 
 	@PostConstruct
 	public void init() {
@@ -282,8 +284,16 @@ public class PedidoController extends BaseController {
 		}
 	}
 
+	public void obterCliente() {
+		if( getCodigoCliente()!=null ) {
+			getEntity().setCliente(  (Cliente) clienteService.getById(getCodigoCliente()) );
+			obterEnderecoCliente();
+		}
+	}
+	
 	public void obterEnderecoCliente() {
 		getEntity().setClienteEndereco(null);
+		listaEnderecos = new ArrayList<>();
 		if (!getEntity().getCliente().isDesabilitado()) {
 			if (getEntity().getCliente() != null) {
 				for (ClienteEndereco endCliente : getEntity().getCliente().getEnderecos()) {
@@ -320,7 +330,7 @@ public class PedidoController extends BaseController {
 
 			// CARDAPIO
 			if (getEntity().getCardapio() == null) {
-				facesMessager.error("Cardápio não encontrado, verifique o cadastro co cardápio");
+				facesMessager.error("Cardápio não encontrado, verifique o cadastro do cardápio");
 				return;
 			}
 
@@ -450,6 +460,7 @@ public class PedidoController extends BaseController {
 		getEntity().setEntregador(null);
 		getEntity().setOrdemEntrega(null);
 		getEntity().setValorDiariaEntregador(null);
+		setCodigoCliente(null);
 
 	}
 
@@ -461,16 +472,25 @@ public class PedidoController extends BaseController {
 		getEntity().setDerivacao(null);
 		getEntity().setFormaPagamento(null);
 		getEntity().setQuantidade(null);
+		getEntity().setObservacao(null);
 		valoresDefault();
 
 	}
 
 	private void obterPedidoDia() {
-		PedidoVisitor pedidoVisitor = new PedidoVisitor();
-		pedidoVisitor.setData(new Date());
+		Cardapio cardapioFilter = new Cardapio();
+		cardapioFilter.setData(Util.zerarHoras ( new Date()) );
+		
+		Pedido filter = new Pedido();
+		filter.setCardapio(cardapioFilter);
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+		
+		//PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		//pedidoVisitor.setData(new Date());
 
 		try {
-			setLista(service.findByParameters(new Pedido(), pedidoVisitor));
+			//setLista(service.findByParameters(new Pedido(), pedidoVisitor));
+			setLista(service.findByParameters(filter));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -650,6 +670,14 @@ public class PedidoController extends BaseController {
 
 	public void setEntity(Pedido entity) {
 		this.entity = entity;
+	}
+
+	public Long getCodigoCliente() {
+		return codigoCliente;
+	}
+
+	public void setCodigoCliente(Long codigoCliente) {
+		this.codigoCliente = codigoCliente;
 	}
 
 }
