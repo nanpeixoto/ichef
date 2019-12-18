@@ -72,13 +72,20 @@
 							<p:outputPanel style="text-align:right; margin-right:-10px"
 								styleClass="ui-widget-auxiliar">
 
-								<h:outputText value="Pesquisar: " escape="false" />
+								<h:outputText value="Pesquisar " escape="false" />
 
-								<p:inputText id="globalFilter" onkeyup="PF('itens').filter(); hideBar();"
-									style="width:150px;"  >
-									
-								</p:inputText>
-								
+								<p:inputText id="globalFilter" onchange="PF('itens').filter();"
+									style="width:150px;" placeholder="Pesquisar"
+									styleClass="letras-maiusculas semClear" />
+								<h:outputText value=" " escape="false" />
+								<p:commandButton id="Search" value="" icon="fa fa-search"
+									style="font-size: 0.8em;width:3%;" />
+
+
+								<h:commandLink>
+			                    	<h:graphicImage value="#{resource['images/excel_icon.png']}" style="WIDTH: 29px;" /> 
+			                    	<p:dataExporter type="xls" target="TarefaTable" fileName="iChef - Lista Cliente" />
+			               		</h:commandLink>
 							</p:outputPanel>
 						</f:facet>
 
