@@ -304,14 +304,13 @@
 							<p:dataTable id="tabListaPedidos" widgetVar="itens" rows="10"
 								paginator="false" value="#{pedidoController.lista}" var="item"
 								rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
-								editable="false" emptyMessage="Nenhum item encontrado"
-								sortOrder="DESCENDING" 
+								editable="false" emptyMessage="Nenhum item encontrado" sortBy="#{item.cardapio.descricaoComDiaSemana}"
+								 expandableRowGroups="true"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
 
 								<f:facet name="header">
-									<p:outputPanel style="text-align:right; margin-right:-10px"
-										styleClass="ui-widget-auxiliar">
+									<p:outputPanel style="text-align:right; margin-right:-10px" styleClass="ui-widget-auxiliar">
 
 										<h:outputText value="Pesquisar: " escape="false" />
 
@@ -322,12 +321,15 @@
 										<h:outputText value=" " escape="false" />
 										<p:commandButton id="Search" value="" icon="fa fa-search"
 											style="font-size: 0.8em;width:3%;" />
-
-
-
 									</p:outputPanel>
 								</f:facet>
 
+								<p:headerRow>
+						            <p:column colspan="3">
+						                <h:outputText value="#{item.cardapio.descricaoComDiaSemana}" />
+						            </p:column>
+						        </p:headerRow>
+						        
 								<p:column style="width:5%">
 									<p:rowToggler />
 								</p:column>
@@ -375,12 +377,21 @@
 										value="#{item.tipoPrato.descricao}-#{item.derivacao.descricao}"
 										escape="false" />
 								</p:column>
-
+											
 								<p:column headerText="Qtd" filterBy="#{item.quantidade}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.quantidade}">
-									<h:outputLabel value="#{item.quantidade}" escape="false" />
+									<p:inplace id="ajaxInplace" label="#{item.quantidade}" editor="true">
+										<p:ajax event="save" update="tabListaPedidos,growl"  listener="#{pedidoController.atualizarPedido(item)}"/>
+										<p:inputText value="#{item.quantidade}" maxlength="3" style="width: 20%;" />
+									</p:inplace>
+								</p:column>
+								
+								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" style="width:5%" >
+								 <p:commandButton process="tabListaPedidos" update="tabListaPedidos" icon="fa fa-trash-o" value=" "  styleClass="btn btn-danger" 
+									 	 actionListener="#{pedidoController.excluirItem( item )}"
+									 	   />
 								</p:column>
 
 
@@ -391,10 +402,15 @@
 												<h:outputText
 													value="Cardápio: #{item.cardapio.descricaoComDiaSemana}" />
 											</f:facet>
-											<h:outputText value="Observacao:"
-												rendered="#{!(item.observacao eq '')}" />
-											<h:outputText value="#{item.observacao}"
-												rendered="#{!(item.observacao eq '')}" />
+											<h:outputText value="Observacao:" />
+											<p:inplace  label="#{item.observacao}" editor="true"  >
+												<p:ajax event="save" update="tabListaPedidos,growl"  listener="#{pedidoController.atualizarPedido(item)}"/>
+													<p:inputTextarea id="observacao"
+														value="#{item.observacao}" rows="3" cols="30"
+														maxlength="450" counter="display"
+														counterTemplate="Faltam {0} characteres" autoResize="false" />
+													<h:outputText id="display" />
+											</p:inplace>
 											<h:outputText value="Endereço:" />
 											<h:outputText value="#{item.clienteEndereco.endereco}" />
 											<h:outputText value="Entregador:" />

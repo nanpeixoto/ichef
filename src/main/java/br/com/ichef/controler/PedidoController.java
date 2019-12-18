@@ -34,9 +34,9 @@ import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
-import br.com.ichef.util.Util;
 import br.com.ichef.visitor.CardapioVisitor;
 import br.com.ichef.visitor.ClienteVisitor;
+import br.com.ichef.visitor.PedidoVisitor;
 
 @Named
 @ViewScoped
@@ -105,7 +105,7 @@ public class PedidoController extends BaseController {
 	// private Double preco;
 
 	private Pedido entity;
-	
+
 	private Long codigoCliente;
 
 	@PostConstruct
@@ -285,12 +285,12 @@ public class PedidoController extends BaseController {
 	}
 
 	public void obterCliente() {
-		if( getCodigoCliente()!=null ) {
-			getEntity().setCliente(  (Cliente) clienteService.getById(getCodigoCliente()) );
+		if (getCodigoCliente() != null) {
+			getEntity().setCliente((Cliente) clienteService.getById(getCodigoCliente()));
 			obterEnderecoCliente();
 		}
 	}
-	
+
 	public void obterEnderecoCliente() {
 		getEntity().setClienteEndereco(null);
 		listaEnderecos = new ArrayList<>();
@@ -477,20 +477,51 @@ public class PedidoController extends BaseController {
 
 	}
 
+	public void excluirItem(Pedido itemExcluir) {
+		try {
+			List<Pedido> temp = new ArrayList<Pedido>();
+			temp.addAll(lista);
+			for (Pedido item : lista) {
+				if (itemExcluir.getId().equals(item.getId()))
+					temp.remove(item);
+			}
+			service.excluir( itemExcluir );
+			
+			lista.clear();
+			lista.addAll(temp);
+			// service.calcularPercos(entity, configuracao);
+			updateComponentes("tabListaPedidos");
+			FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		} catch (Exception e) {
+			FacesUtil.addErroMessage("Não foi possível executar essa operação:" + e.getMessage());
+		}
+		
+	}
+
+	public void atualizarPedido(Pedido pedido) {
+		try {
+			service.saveOrUpdade(pedido);
+		} catch (Exception e) {
+			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
+			e.printStackTrace();	
+		}
+
+	}
+
 	private void obterPedidoDia() {
-		Cardapio cardapioFilter = new Cardapio();
-		cardapioFilter.setData(Util.zerarHoras ( new Date()) );
-		
+		//Cardapio cardapioFilter = new Cardapio();
+		//cardapioFilter.setData(Util.zerarHoras(new Date()));
+
 		Pedido filter = new Pedido();
-		filter.setCardapio(cardapioFilter);
+		//filter.setCardapio(cardapioFilter);
 		filter.setEmpresa(userLogado.getEmpresaLogada());
-		
-		//PedidoVisitor pedidoVisitor = new PedidoVisitor();
-		//pedidoVisitor.setData(new Date());
+
+		 PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		 pedidoVisitor.setData(new Date());
 
 		try {
-			//setLista(service.findByParameters(new Pedido(), pedidoVisitor));
-			setLista(service.findByParameters(filter));
+			setLista(service.findByParameters(filter, pedidoVisitor));
+			//setLista(service.findByParameters(filter));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

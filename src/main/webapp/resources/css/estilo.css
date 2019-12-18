@@ -15,3 +15,8 @@
 .ui-inplace-cancel  {
 	width: 10% !important;
 }
+
+
+.ui-rowgroup-toggler-icon{
+	    display: none;
+}

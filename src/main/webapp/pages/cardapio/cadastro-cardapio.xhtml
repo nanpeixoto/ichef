@@ -164,12 +164,12 @@
 
 							<p:dataTable id="StableCardapio" widgetVar="itens" rows="10"
 								paginator="true" value="#{cardapioController.entity.pratos}"
-								var="item" rowKey="#{item.id}" reflow="true" 
+								var="item" rowKey="#{item.id}" reflow="true"  draggableRows="true"
 								paginatorPosition="bottom" emptyMessage="Nenhum item encontrado"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30"
 								sortBy="#{item.ordem}">
-
+								<p:ajax event="rowReorder" listener="#{cardapioController.onRowReorder}" update="mensagemCardapio, StableCardapio" />
 								<p:column style="width:16px">
 									<p:rowToggler />
 								</p:column>
@@ -178,7 +178,7 @@
 									filterStyle="display:none; visibility:hidden;"
 									filterBy="#{item.descricao}" filterMatchMode="contains"
 									sortBy="#{item.descricao}" style="width:20%">
-									<h:outputLabel value="#{item.descricao}" escape="false" />
+									<h:outputLabel value="#{item.ordem}" escape="false" />-	<h:outputLabel value="#{item.descricao}" escape="false" />
 									<br />
 									<p:tooltip id="toolTipFade" for="observacaoPratoplance"
 										value="Clique aqui para editar" position="top" />

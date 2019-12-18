@@ -19,7 +19,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "cardapio_ficha_prato")
-public class CardapioFichaPrato extends BaseEntity implements Comparable<CardapioFichaPrato>  {
+public class CardapioFichaPrato extends BaseEntity implements Comparable<CardapioFichaPrato> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -58,6 +58,13 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 
 	@Column(name = "SN_VENDER_ACIMA_LIMITE")
 	private String venderAcimaDoLimite;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
+	private Usuario usuarioAlteracao;
+
+	@Column(name = "DATA_ALTERACAO")
+	private Date dataAlteracao;
 
 	@Transient
 	private boolean podeVenderAcimaDoLimite;
@@ -116,12 +123,12 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 
 	@Override
 	public Usuario getUsuarioAlteracao() {
-		return null;
+		return usuarioAlteracao;
 	}
 
 	@Override
 	public Date getDataAlteracao() {
-		return null;
+		return dataAlteracao;
 	}
 
 	@Override
@@ -214,10 +221,18 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 	public void setOrdem(Integer ordem) {
 		this.ordem = ordem;
 	}
-	
+
 	@Override
 	public int compareTo(CardapioFichaPrato o) {
 		return this.getOrdem().compareTo(o.getOrdem());
+	}
+
+	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
+		this.usuarioAlteracao = usuarioAlteracao;
+	}
+
+	public void setDataAlteracao(Date dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
 	}
 
 }

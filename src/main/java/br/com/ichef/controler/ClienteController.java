@@ -162,7 +162,7 @@ public class ClienteController extends BaseController {
 		getEntity().setCidade(obterCidadeSalvador());
 		getEntity().setRecebeMaladireta(true);
 		getEntity().setRecebeSMS(true);
-		getEntity().setPagaEmCarteira(false);
+		getEntity().setPagaEmCarteira(true);
 		getEntity().setEstaBloqueado(false);
 	}
 

@@ -3,12 +3,14 @@ package br.com.ichef.controler;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.ReorderEvent;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
@@ -74,7 +76,7 @@ public class CardapioController extends BaseController {
 
 	@PostConstruct
 	public void init() {
-		
+
 		if (id != null) {
 			setEntity(service.getById(id));
 
@@ -232,6 +234,13 @@ public class CardapioController extends BaseController {
 			FacesUtil.addErroMessage("Já existe um cardápio cadastrado nesse dia");
 			return "";
 		}
+		
+		if(getEntity().getPratos()!=null) {
+			for (Cardapio cardapio : lista) {
+				cardapio.setUsuarioAlteracao(userLogado);
+				cardapio.setDataAlteracao(new Date() );
+			}
+		}
 
 		if (entity.isEdicao()) {
 			entity.setUsuarioAlteracao(getUserLogado());
@@ -304,6 +313,38 @@ public class CardapioController extends BaseController {
 
 		}
 
+	}
+
+	public void onRowReorder(ReorderEvent event) {
+		DataTable dataTable = (DataTable) event.getSource();
+		dataTable.setRowIndex(event.getFromIndex());
+		CardapioFichaPrato origem = null;
+		CardapioFichaPrato destino = null;
+		destino = (CardapioFichaPrato) dataTable.getRowData();
+		dataTable.setRowIndex(event.getToIndex());
+		origem = (CardapioFichaPrato) dataTable.getRowData();
+		
+		
+		try {
+			destino.setOrdem(event.getFromIndex()+1);
+			destino.setUsuarioAlteracao(userLogado);
+			destino.setDataAlteracao(new Date() );
+			cardapioFichaPratoService.atualizarOrdem(destino);
+
+			origem.setOrdem( event.getToIndex()+1 );
+			origem.setUsuarioAlteracao(userLogado);
+			origem.setDataAlteracao(new Date() );
+			cardapioFichaPratoService.atualizarOrdem(origem);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesUtil.addErroMessage("Erro, entre em contato com a administrador do sistema:"+e.getMessage());
+		}
+		
+		
+		 
+		
+	 
 	}
 
 	public String excluir() {
