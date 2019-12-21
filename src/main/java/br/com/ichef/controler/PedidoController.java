@@ -13,6 +13,7 @@ import javax.inject.Named;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
+import br.com.ichef.model.CardapioFichaPratoEmpresa;
 import br.com.ichef.model.Cliente;
 import br.com.ichef.model.ClienteEndereco;
 import br.com.ichef.model.Configuracao;
@@ -108,6 +109,10 @@ public class PedidoController extends BaseController {
 
 	private Long codigoCliente;
 
+	// relatorio
+	private Date dataInicial;
+	private Date dataFinal;
+
 	@PostConstruct
 	public void init() {
 
@@ -117,7 +122,7 @@ public class PedidoController extends BaseController {
 
 		obterListas();
 
-		obterPedidoDia();
+		// obterPedidoDia();
 
 	}
 
@@ -284,10 +289,48 @@ public class PedidoController extends BaseController {
 		}
 	}
 
+	public Long getQuantidadeDisponivel() {
+		try {
+			CardapioFichaPratoEmpresa fichaEmpresaLoga = null;
+			int totalPedido;
+			if (getEntity().getCardapioFichaPrato() != null) {
+				fichaEmpresaLoga = obterFichaEmpresaLogada();
+
+				totalPedido = service.findTotalPedidoPrato(entity);
+
+				return (long) (fichaEmpresaLoga.getQuantidade() - totalPedido);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return 0l;
+
+	}
+
+	private CardapioFichaPratoEmpresa obterFichaEmpresaLogada() {
+		CardapioFichaPratoEmpresa fichaEmpresaLoga = null;
+		for (CardapioFichaPratoEmpresa fichaEmpresa : getEntity().getCardapioFichaPrato().getFichaPratoEmpresa()) {
+			if (fichaEmpresa.getEmpresa().getId().equals(userLogado.getEmpresaLogada().getId())) {
+				fichaEmpresaLoga = fichaEmpresa;
+			}
+		}
+		return fichaEmpresaLoga;
+	}
+
 	public void obterCliente() {
+		Cliente cliente = null;
 		if (getCodigoCliente() != null) {
-			getEntity().setCliente((Cliente) clienteService.getById(getCodigoCliente()));
-			obterEnderecoCliente();
+			cliente = (Cliente) clienteService.getById(getCodigoCliente());
+			if (cliente == null) {
+				facesMessager.error("Nenhum cliente encontrado");
+				return;
+			} else {
+				getEntity().setCliente(cliente);
+				obterEnderecoCliente();
+			}
 		}
 	}
 
@@ -326,6 +369,7 @@ public class PedidoController extends BaseController {
 
 	public void adicionarPedido(Boolean apagarCliente) {
 		try {
+
 			// CAMPOS OBRIGATORIOS
 
 			// CARDAPIO
@@ -404,6 +448,16 @@ public class PedidoController extends BaseController {
 				return;
 			}
 
+			// VERFICO A QUANTIDADE
+			Long quantidadeJaPedida = getQuantidadeDisponivel();
+			CardapioFichaPratoEmpresa fichaEmpresaLogada = obterFichaEmpresaLogada();
+
+			if (!fichaEmpresaLogada.isPodeVenderAcimaDoLimite()
+					&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
+				facesMessager.error("Quantidade disponível menor que a quantidade solicitada");
+				return;
+			}
+
 			getEntity().setDataCadastro(new Date());
 			getEntity().setUsuarioCadastro(userLogado);
 
@@ -474,7 +528,6 @@ public class PedidoController extends BaseController {
 		getEntity().setQuantidade(null);
 		getEntity().setObservacao(null);
 		valoresDefault();
-
 	}
 
 	public void excluirItem(Pedido itemExcluir) {
@@ -485,8 +538,8 @@ public class PedidoController extends BaseController {
 				if (itemExcluir.getId().equals(item.getId()))
 					temp.remove(item);
 			}
-			service.excluir( itemExcluir );
-			
+			service.excluir(itemExcluir);
+
 			lista.clear();
 			lista.addAll(temp);
 			// service.calcularPercos(entity, configuracao);
@@ -495,7 +548,7 @@ public class PedidoController extends BaseController {
 		} catch (Exception e) {
 			FacesUtil.addErroMessage("Não foi possível executar essa operação:" + e.getMessage());
 		}
-		
+
 	}
 
 	public void atualizarPedido(Pedido pedido) {
@@ -503,28 +556,91 @@ public class PedidoController extends BaseController {
 			service.saveOrUpdade(pedido);
 		} catch (Exception e) {
 			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 
 	}
 
-	private void obterPedidoDia() {
-		//Cardapio cardapioFilter = new Cardapio();
-		//cardapioFilter.setData(Util.zerarHoras(new Date()));
+	public void obterPedidoDia() {
+		Cardapio cardapioFilter = new Cardapio();
+		cardapioFilter.setAtivo("S");
 
 		Pedido filter = new Pedido();
-		//filter.setCardapio(cardapioFilter);
+		filter.setCardapio(cardapioFilter);
 		filter.setEmpresa(userLogado.getEmpresaLogada());
 
-		 PedidoVisitor pedidoVisitor = new PedidoVisitor();
-		 pedidoVisitor.setData(new Date());
+		PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		pedidoVisitor.setData(new Date());
+		pedidoVisitor.setDataCardapio(new Date());
 
 		try {
 			setLista(service.findByParameters(filter, pedidoVisitor));
-			//setLista(service.findByParameters(filter));
+			// setLista(service.findByParameters(filter));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void obterCardapioPedidosDia() {
+		Cardapio cardapioFilter = new Cardapio();
+		cardapioFilter.setAtivo("S");
+
+		Pedido filter = new Pedido();
+		filter.setCardapio(cardapioFilter);
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+
+		PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		// pedidoVisitor.setData(new Date());
+		pedidoVisitor.setDataCardapio(new Date());
+
+		try {
+			setLista(service.findByParameters(filter, pedidoVisitor));
+			// setLista(service.findByParameters(filter));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void imprimir() {
+		if (getDataInicial() == null || getDataFinal() == null) {
+			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
+			return;
+		} else {
+			
+			Cardapio cardapioFilter = new Cardapio();
+			cardapioFilter.setAtivo("S");
+
+			Pedido filter = new Pedido();
+			filter.setCardapio(cardapioFilter);
+			filter.setEmpresa(userLogado.getEmpresaLogada());
+
+			PedidoVisitor pedidoVisitor = new PedidoVisitor();
+			pedidoVisitor.setDataInicial(getDataInicial());
+			pedidoVisitor.setDataFinal(getDataFinal());
+			
+
+			List<Pedido> pedidos = new ArrayList<>();
+
+			try {
+				pedidos = service.findByParameters(filter, pedidoVisitor);
+
+			} catch (Exception e) {
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+			}
+
+			if (pedidos.size() == 0) {
+				FacesUtil.addErroMessage("Nenhum dado encontrado");
+			} else {
+				try {
+					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					escreveRelatorioPDF("Pedidos", true, pedidos);
+				} catch (Exception e) {
+					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+				}
+			}
+
+		}
+
 	}
 
 	public void limpar() {
@@ -709,6 +825,22 @@ public class PedidoController extends BaseController {
 
 	public void setCodigoCliente(Long codigoCliente) {
 		this.codigoCliente = codigoCliente;
+	}
+
+	public Date getDataInicial() {
+		return dataInicial;
+	}
+
+	public void setDataInicial(Date dataInicial) {
+		this.dataInicial = dataInicial;
+	}
+
+	public Date getDataFinal() {
+		return dataFinal;
+	}
+
+	public void setDataFinal(Date dataFinal) {
+		this.dataFinal = dataFinal;
 	}
 
 }

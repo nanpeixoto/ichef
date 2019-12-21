@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Relatório - Pedidos
+    </ui:define>
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Relatório Cardápio" link="relatorio_cardapio.xhtml"/>
+        <h:form id="form" prependId="false">
+           <p:focus context="capaPanel"/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Imprimir" update="@form"
+                                         icon="fa fa-print" styleClass="btn-primary" ajax="false" action="#{pedidoController.imprimir()}"/>
+                        <p:spacer width="5"/>
+                    </div>
+                    
+                    <p:splitButton value="Imprimir" update="@form"
+                                   icon="fa fa-print"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{pedidoController.imprimir()}">
+                    </p:splitButton>
+					
+					<p:separator/>
+
+                    <div class="ui-fluid">
+                    	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-2, ui-g-2">
+                    		<p:outputLabel value="Data Inicial" for="dtInicial"/>
+                    		<p:calendar id="dtInicial" value="#{pedidoController.dataInicial}"  pattern="dd/MM/yyyy" size="10" required="true"
+                    			requiredMessage="#{pedidoController.getRequiredMessage('Data Inicial')}"  mask="true" showOn="button" locale="pt_BR"
+                    		/>
+                    		
+                    		<p:outputLabel value="Data Final" for="dtFinal"/>
+                    		<p:calendar id="dtFinal" value="#{pedidoController.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"
+                    			requiredMessage="#{pedidoController.getRequiredMessage('Data Final')}" mask="true" showOn="button" locale="pt_BR"
+                    		/>
+                    		
+						</p:panelGrid>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   

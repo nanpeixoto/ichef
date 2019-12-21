@@ -10,6 +10,9 @@
 	<ui:define name="title">Pedido</ui:define>
 
 	<ui:define name="body">
+		<f:metadata>
+			<f:event listener="#{pedidoController.obterPedidoDia()}" type="preRenderView"></f:event>
+		</f:metadata>
 		<adm:breadcrumb title="Lançamento de Carteira" />
 		<p:growl id="growl" showDetail="false" sticky="false" escape="true"
 			autoUpdate="false" />
@@ -177,19 +180,19 @@
 							</p:selectOneMenu>
 
 						</p:panelGrid>
-						<p:panelGrid columns="4" layout="grid"
-							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-5 ">
+						<p:panelGrid columns="6" layout="grid"
+							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-5,ui-g-6 ui-md-1,ui-g-6 ui-md-2,ui-g-6 ui-md-1,ui-g-6 ui-md-1">
 
 							<p:outputLabel value="Prato" for="prato" />
 							<p:selectOneMenu id="prato"
 								value="#{pedidoController.entity.cardapioFichaPrato}"
 								converter="omnifaces.SelectItemsConverter" filter="true"
-								filterMatchMode="contains">
+									filterMatchMode="contains">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
 								<f:selectItems value="#{pedidoController.cardapio.pratos}"
 									var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
-								<p:ajax event="change" update="selectTipoPrato,precoPrato"
+								<p:ajax event="change" update="selectTipoPrato,precoPrato,txtQtdDisponivel"
 									listener="#{pedidoController.obterTiposDePratos()}" />
 							</p:selectOneMenu>
 
@@ -197,6 +200,9 @@
 							<p:inputNumber value="#{pedidoController.entity.quantidade}"
 								id="qtd" symbol="" decimalSeparator="," thousandSeparator="."
 								decimalPlaces="0" />
+								
+								<p:outputLabel value="Disponível"  />
+							<p:outputLabel style="#{pedidoController.quantidadeDisponivel le 0 ? 'color:red' : 'color:green'}" id="txtQtdDisponivel"  value="#{pedidoController.quantidadeDisponivel}"/>
 
 						</p:panelGrid>
 						<p:panelGrid columns="4" layout="grid"

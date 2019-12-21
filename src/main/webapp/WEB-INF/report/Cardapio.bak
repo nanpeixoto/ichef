@@ -95,7 +95,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Programação de Cardápio]]></text>
+				<text><![CDATA[Programação de Cardápio v1]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
