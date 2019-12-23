@@ -234,12 +234,12 @@
 			</band>
 		</background>
 		<title>
-			<band height="85"  isSplitAllowed="true" >
+			<band height="52"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="100"
 						y="5"
-						width="332"
+						width="582"
 						height="47"
 						key="staticText-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -250,7 +250,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="432"
+						x="682"
 						y="37"
 						width="28"
 						height="15"
@@ -263,7 +263,7 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="463"
+						x="713"
 						y="37"
 						width="25"
 						height="15"
@@ -276,7 +276,7 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="490"
+						x="740"
 						y="37"
 						width="15"
 						height="15"
@@ -289,7 +289,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="432"
+						x="682"
 						y="21"
 						width="28"
 						height="15"
@@ -302,7 +302,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="432"
+						x="682"
 						y="5"
 						width="28"
 						height="15"
@@ -315,7 +315,7 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="463"
+						x="713"
 						y="5"
 						width="69"
 						height="15"
@@ -328,7 +328,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="HH:mm" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="463"
+						x="713"
 						y="21"
 						width="69"
 						height="15"
@@ -341,7 +341,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="507"
+						x="757"
 						y="36"
 						width="25"
 						height="15"

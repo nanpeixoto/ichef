@@ -642,6 +642,52 @@ public class PedidoController extends BaseController {
 		}
 
 	}
+	
+	public void imprimirCardapioHoje() {
+		setDataFinal(new Date());
+		setDataInicial(new Date());
+
+		if (getDataInicial() == null || getDataFinal() == null) {
+			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
+			return;
+		} else {
+			
+			Cardapio cardapioFilter = new Cardapio();
+			cardapioFilter.setAtivo("S");
+
+			Pedido filter = new Pedido();
+			filter.setCardapio(cardapioFilter);
+			filter.setEmpresa(userLogado.getEmpresaLogada());
+
+			PedidoVisitor pedidoVisitor = new PedidoVisitor();
+			pedidoVisitor.setDataInicial(getDataInicial());
+			pedidoVisitor.setDataFinal(getDataFinal());
+			
+
+			List<Pedido> pedidos = new ArrayList<>();
+
+			try {
+				pedidos = service.findByParameters(filter, pedidoVisitor);
+
+			} catch (Exception e) {
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+			}
+
+			if (pedidos.size() == 0) {
+				FacesUtil.addErroMessage("Nenhum dado encontrado");
+			} else {
+				try {
+					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					escreveRelatorioPDF("Pedidos", true, pedidos);
+				} catch (Exception e) {
+					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+				}
+			}
+
+		}
+
+	}
+
 
 	public void limpar() {
 

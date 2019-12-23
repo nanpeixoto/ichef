@@ -17,7 +17,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "pedido")
-public class Pedido extends BaseEntity implements Comparable<Pedido>{
+public class Pedido extends BaseEntity implements Comparable<Pedido> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -171,7 +171,10 @@ public class Pedido extends BaseEntity implements Comparable<Pedido>{
 	}
 
 	public String getObservacao() {
+		if (observacao == null || observacao.equalsIgnoreCase(""))
+			return "-";
 		return observacao;
+
 	}
 
 	public void setObservacao(String observacao) {
@@ -184,7 +187,7 @@ public class Pedido extends BaseEntity implements Comparable<Pedido>{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public Cardapio getCardapio() {
@@ -354,7 +357,7 @@ public class Pedido extends BaseEntity implements Comparable<Pedido>{
 	public void setFichaTecnicaPratoTipo(FichaTecnicaPratoTipo fichaTecnicaPratoTipo) {
 		this.fichaTecnicaPratoTipo = fichaTecnicaPratoTipo;
 	}
-	
+
 	public String getDataFormatadaPedido() {
 		try {
 			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
@@ -364,12 +367,10 @@ public class Pedido extends BaseEntity implements Comparable<Pedido>{
 		}
 		return null;
 	}
-	
 
 	@Override
 	public int compareTo(Pedido o) {
 		return this.getOrdemEntrega().compareTo(o.getOrdemEntrega());
 	}
-
 
 }

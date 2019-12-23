@@ -57,7 +57,7 @@
 						            </p:column>
 						        </p:headerRow>
 						        
-								<p:column style="width:5%">
+								<p:column width="5%">
 									<p:rowToggler />
 								</p:column>
 								
@@ -65,7 +65,7 @@
 									filterBy="#{item.ordemEntrega}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.ordemEntrega}">
+									sortBy="#{item.ordemEntrega}" width="8%">
 									
 									<p:inplace id="ajaxInplace" label="#{item.ordemEntrega}" editor="true">
 										<p:ajax event="save" update="tabListaPedidos,growl"  listener="#{pedidoController.atualizarPedido(item)}"/>
