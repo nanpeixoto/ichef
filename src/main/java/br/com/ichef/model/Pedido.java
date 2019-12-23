@@ -125,7 +125,7 @@ public class Pedido extends BaseEntity implements Comparable<Pedido>{
 	@Override
 	public String getColumnOrderBy() {
 		// TODO Auto-generated method stub
-		return "entregador.nome,ordemEntrega";
+		return "entregador.nome,ordemEntrega,cliente.nome";
 	}
 
 	@Override

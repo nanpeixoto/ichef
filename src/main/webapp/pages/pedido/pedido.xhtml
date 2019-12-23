@@ -18,6 +18,7 @@
 			autoUpdate="false" />
 		<h:form id="form" prependId="false">
 			<p:focus context="capaCarteira" />
+			<p:poll interval="30"   update="tabListaPedidos" />
 			<div class="box box-primary">
 				<div class="box-header with-border">
 					<!--<div id="main-buttons" class="hidden-sm hidden-xs">
@@ -307,7 +308,7 @@
 						<p:panel>
 
 
-							<p:dataTable id="tabListaPedidos" widgetVar="itens" rows="10"
+							<p:dataTable id="tabListaPedidos" widgetVar="itens"
 								paginator="false" value="#{pedidoController.lista}" var="item"
 								rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
 								editable="false" emptyMessage="Nenhum item encontrado" sortBy="#{item.cardapio.descricaoComDiaSemana}"
