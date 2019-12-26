@@ -102,6 +102,8 @@ public class PedidoController extends BaseController {
 	// private ClienteEndereco endereco;
 
 	Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+	
+	private List<Entregador> listaEntregadorCarregada = new ArrayList<>();
 
 	// private Double preco;
 
@@ -183,6 +185,15 @@ public class PedidoController extends BaseController {
 		listaEmpresas = empresaService.listAll(true);
 		listaDerivacoes = derivacaoService.listAll(true);
 
+		Entregador filter = new Entregador();
+		filter.setAtivo("S");
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+		try {
+			listaEntregadorCarregada = entregadorService.findByParameters(filter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public List<Cliente> autoCompleteCliente(String query) {
@@ -551,9 +562,19 @@ public class PedidoController extends BaseController {
 
 	}
 
-	public void atualizarPedido(Pedido pedido) {
+	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
+			if(tipoAlteracao.equals("E")) {
+				if (pedido.getEntregador() != null) {
+					if(pedido.getEntregador().getValorDiaria()==null) {
+						facesMessager.error("Entregador sem diária cadastrada");
+						return;
+					}
+					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
+				}
+			}
 			service.saveOrUpdade(pedido);
+			
 		} catch (Exception e) {
 			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
 			e.printStackTrace();
@@ -634,6 +655,49 @@ public class PedidoController extends BaseController {
 				try {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
 					escreveRelatorioPDF("Pedidos", true, pedidos);
+				} catch (Exception e) {
+					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+				}
+			}
+
+		}
+
+	}
+	
+	public void imprimirRota() {
+		setDataFinal(getDataInicial() ) ;
+		if (getDataInicial() == null || getDataFinal() == null) {
+			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
+			return;
+		} else {
+			
+			Cardapio cardapioFilter = new Cardapio();
+			cardapioFilter.setAtivo("S");
+
+			Pedido filter = new Pedido();
+			filter.setCardapio(cardapioFilter);
+			filter.setEmpresa(userLogado.getEmpresaLogada());
+
+			PedidoVisitor pedidoVisitor = new PedidoVisitor();
+			pedidoVisitor.setDataInicial(getDataInicial());
+			pedidoVisitor.setDataFinal(getDataFinal());
+			
+
+			List<Pedido> pedidos = new ArrayList<>();
+
+			try {
+				pedidos = service.findByParameters(filter, pedidoVisitor);
+
+			} catch (Exception e) {
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+			}
+
+			if (pedidos.size() == 0) {
+				FacesUtil.addErroMessage("Nenhum dado encontrado");
+			} else {
+				try {
+					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					escreveRelatorioPDF("Rota", true, pedidos);
 				} catch (Exception e) {
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
 				}
@@ -887,6 +951,14 @@ public class PedidoController extends BaseController {
 
 	public void setDataFinal(Date dataFinal) {
 		this.dataFinal = dataFinal;
+	}
+
+	public List<Entregador> getListaEntregadorCarregada() {
+		return listaEntregadorCarregada;
+	}
+
+	public void setListaEntregadorCarregada(List<Entregador> listaEntregadorCarregada) {
+		this.listaEntregadorCarregada = listaEntregadorCarregada;
 	}
 
 }

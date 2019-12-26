@@ -61,7 +61,7 @@ public class Localidade extends BaseEntity {
 	private Empresa empresa;
 
 	// bi-directional many-to-one association to AreaLocalidade
-	@OneToMany(mappedBy = "localidade",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "localidade", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AreaLocalidade> areaLocalidades;
 
 	@Transient
@@ -171,6 +171,7 @@ public class Localidade extends BaseEntity {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao.toUpperCase();
 	}
+
 	public String getAtivo() {
 		return ativo;
 	}
@@ -233,6 +234,13 @@ public class Localidade extends BaseEntity {
 		this.areaLocalidades = areaLocalidades;
 	}
 
+	public String getDescricaoComStatus() {
+		if (getAtivo().equals("S"))
+			return getDescricao();
+		else
+			return getDescricao() + " - "+ getSituacao();
+	}
+
 	public String getAreas() {
 		String areas = "";
 		for (AreaLocalidade areaLocalidade : areaLocalidades) {
@@ -240,8 +248,8 @@ public class Localidade extends BaseEntity {
 				areas += ",";
 			areas += areaLocalidade.getArea().getDescricao();
 		}
-		if(areas.equals("")) 
-			areas =  "Sem Área";
+		if (areas.equals(""))
+			areas = "Sem Área";
 		return areas.toUpperCase();
 	}
 

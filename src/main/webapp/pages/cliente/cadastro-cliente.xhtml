@@ -180,7 +180,7 @@
 		                    		<p:outputLabel value="Localidade" for="localidade"/>
 		                    		<p:selectOneMenu id="localidade" value="#{clienteController.localidade}" filter="true"  filterMatchMode="contains" converter= "omnifaces.SelectItemsConverter">
 		                    		 	 <f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
-							            <f:selectItems value="#{clienteController.localidades}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+							            <f:selectItems value="#{clienteController.localidades}" var="item" itemLabel="#{item.descricaoComStatus}" itemValue="#{item}" />
 							        </p:selectOneMenu>
 		                    	 	
 		                    	 	<p:commandButton value="Plus" icon="fa fa-plus" id="cmdBtnendereco" 

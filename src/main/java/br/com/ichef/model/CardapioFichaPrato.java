@@ -234,5 +234,9 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 	public void setDataAlteracao(Date dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
 	}
+	
+	public String getDescricaoPratoOrdem() {
+		return getOrdem()+"-"+getDescricao();
+	}
 
 }

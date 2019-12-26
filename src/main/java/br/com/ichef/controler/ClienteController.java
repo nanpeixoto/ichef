@@ -192,7 +192,7 @@ public class ClienteController extends BaseController {
 
 	private void obterListas() {
 		cidades = cidadeService.listAll(true);
-		localidades = localidadeService.listAll(true);
+		localidades = localidadeService.listAll();
 		listaFormasPagamento = formaPagamentoService.listAll(true);
 		listaPratos = fichaTecnicaPratoService.listAll(true);
 		listaEmpresas = empresaService.listAll(true);

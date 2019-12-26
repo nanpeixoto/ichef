@@ -110,15 +110,13 @@ public class Cliente extends BaseEntity {
 		else
 			return false;
 	}
-	
+
 	public String getStyleDesabilitado() {
-		if(isDesabilitado()) {
+		if (isDesabilitado()) {
 			return "opacity: .35; cursor: default!important;";
 		}
 		return "";
 	}
-
-
 
 	public boolean isExibeSaldo() {
 		if (exibirSaldo != null) {
@@ -526,6 +524,24 @@ public class Cliente extends BaseEntity {
 
 	public void setExibirSaldo(String exibirSaldo) {
 		this.exibirSaldo = exibirSaldo;
+	}
+	
+	public String getNomeComTelefonePrincipal() {
+		String telPrincipal = getTelefonePrincipal();
+		if(telPrincipal !=null)  {
+			return getNome()+"-"+getTelefonePrincipal();
+		}
+		return getNome();
+	}
+
+	public String getTelefonePrincipal() {
+		for (ClienteTelefone tel : telefones) {
+			if (tel.isTelefonePrincipal())
+				return tel.getTelefone();
+		}
+		
+		return null;
+
 	}
 
 }

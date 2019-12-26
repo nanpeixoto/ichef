@@ -33,7 +33,8 @@
 
 								<p:commandButton value="" icon="fa fa-file-pdf-o"
 									id="btnImprimir" styleClass="btn btn-info" style="width: 31px;"
-									title="Imprimir pedido do cardápio do dia" update="form,growl" ajax="false"
+									title="Imprimir pedido do cardápio do dia" update="form,growl"
+									ajax="false"
 									action="#{pedidoController.imprimirCardapioHoje()}" />
 								<p:commandButton value="" icon="fa fa-user-plus"
 									id="btnAdicionarMais" styleClass="btn-warning"
@@ -405,7 +406,7 @@
 									<p:inplace id="ajaxInplace" label="#{item.quantidade}"
 										editor="true">
 										<p:ajax event="save" update="tabListaPedidos,growl"
-											listener="#{pedidoController.atualizarPedido(item)}" />
+											listener="#{pedidoController.atualizarPedido(item,'Q')}" />
 										<p:inputText value="#{item.quantidade}" maxlength="3"
 											style="width: 20%;" />
 									</p:inplace>
@@ -434,7 +435,7 @@
 												editor="true" toggleable="true" emptyLabel="Vazio"
 												saveLabel="Salvar" cancelLabel="Cancelar">
 												<p:ajax event="save" update="tabListaPedidos,growl"
-													listener="#{pedidoController.atualizarPedido(item)}" />
+													listener="#{pedidoController.atualizarPedido(item,'O')}" />
 												<p:inputTextarea id="observacao" value="#{item.observacao}"
 													rows="3" cols="30" maxlength="450" counter="display"
 													counterTemplate="Faltam {0} characteres" autoResize="false" />
@@ -443,7 +444,29 @@
 											<h:outputText value="Endereço:" />
 											<h:outputText value="#{item.clienteEndereco.endereco}" />
 											<h:outputText value="Entregador:" />
-											<h:outputText value="#{item.entregador.nome}" />
+											<p:inplace id="inplaceEntregador"
+												label="#{item.entregador.nome}" editor="true"
+												toggleable="true" emptyLabel="Vazio" saveLabel="Salvar"
+												cancelLabel="Cancelar">
+												<p:ajax event="save" update="tabListaPedidos,growl"
+													listener="#{pedidoController.atualizarPedido(item, 'E')}" />
+												<p:selectOneMenu id="selectEntregador"
+													value="#{item.entregador}" filter="true"
+													filterMatchMode="contains"
+													converter="omnifaces.SelectItemsConverter">
+													<f:selectItem itemLabel="Selecionar" itemValue=""
+														noSelectionOption="true" />
+													<f:selectItems value="#{pedidoController.listaEntregadorCarregada}"
+														var="entregador" itemLabel="#{entregador.nome}" itemValue="#{entregador}" />
+													<p:ajax event="change" update="outValorDiaria,selectEntregador" />
+												</p:selectOneMenu>
+
+												 
+											</p:inplace>
+											
+											<h:outputText value="valorDiaria" />
+											<h:outputText value="#{item.valorDiariaEntregador}"  id="outValorDiaria"/>
+											
 											<h:outputText value="Ordem de Entrega:" />
 											<h:outputText value="#{item.ordemEntrega}" />
 										</p:panelGrid>
