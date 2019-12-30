@@ -18,26 +18,47 @@ public class PedidoVisitor extends FilterVisitor {
 	private Date dataInicial;
 	private Date dataFinal;
 
+	private Date dataEntrega;
+
+	private Date dataEntregaInicial;
+	private Date dataEntregaFinal;
+
 	@Override
 	public void visitCriteria(Criteria criteria) {
 		if (getData() != null && getDataCardapio() == null)
-			criteria.add(Restrictions
-					.sqlRestriction(" date_format( dt_pedido, '%d/%m/%Y' ) ='" + Util.dateToString(getData()) + "'"));
+			criteria.add(Restrictions.or(
+					Restrictions.sqlRestriction(
+							" date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEntrega()) + "'"),
+					Restrictions.sqlRestriction(
+							" date_format( this_.dt_cadastro, '%d/%m/%Y' ) ='" + Util.dateToString(getData()) + "'")));
 
 		if (getDataCardapio() != null && getData() != null)
 			criteria.add(Restrictions.or(
 					Restrictions.sqlRestriction(
-							" date_format( dt_pedido, '%d/%m/%Y' ) ='" + Util.dateToString(getData()) + "'"),
+							" date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEntrega()) + "'"),
 					Restrictions.sqlRestriction(" date_format(cardapio1_.data, '%d/%m/%Y' ) ='"
-							+ Util.dateToString(getDataCardapio()) + "'")));
+							+ Util.dateToString(getDataCardapio()) + "'"),
+					Restrictions.sqlRestriction(
+							" date_format(  this_.dt_cadastro, '%d/%m/%Y' ) ='" + Util.dateToString(getData()) + "'")));
 
 		if (getDataCardapio() != null && getData() == null)
 			criteria.add(Restrictions.sqlRestriction(
 					" date_format(cardapio1_.data, '%d/%m/%Y' ) ='" + Util.dateToString(getDataCardapio()) + "'"));
 
 		if (getDataInicial() != null && getDataFinal() != null)
-			criteria.add(Restrictions.sqlRestriction(" cardapio1_.data between STR_TO_DATE( '" + Util.dateToString(getDataInicial())
-					+ "', '%d/%m/%Y' ) and  STR_TO_DATE('" + Util.dateToString(getDataFinal()) + "', '%d/%m/%Y' ) "));
+			criteria.add(Restrictions.sqlRestriction(" cardapio1_.data between STR_TO_DATE( '"
+					+ Util.dateToString(getDataInicial()) + "', '%d/%m/%Y' ) and  STR_TO_DATE('"
+					+ Util.dateToString(getDataFinal()) + "', '%d/%m/%Y' ) "));
+
+		if (getDataEntrega() != null)
+			criteria.add(Restrictions
+					.sqlRestriction(" date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEntrega()) + "'"));
+
+		if (getDataEntregaInicial() != null && getDataEntregaFinal() != null)
+			criteria.add(Restrictions.sqlRestriction(" dt_entrega between STR_TO_DATE( '"
+					+ Util.dateToString(getDataEntregaInicial()) + "', '%d/%m/%Y' ) and  STR_TO_DATE('"
+					+ Util.dateToString(getDataEntregaFinal()) + "', '%d/%m/%Y' ) "));
+
 	}
 
 	public Date getData() {
@@ -70,6 +91,30 @@ public class PedidoVisitor extends FilterVisitor {
 
 	public void setDataFinal(Date dataFinal) {
 		this.dataFinal = dataFinal;
+	}
+
+	public Date getDataEntrega() {
+		return dataEntrega;
+	}
+
+	public void setDataEntrega(Date dataEntrega) {
+		this.dataEntrega = dataEntrega;
+	}
+
+	public Date getDataEntregaFinal() {
+		return dataEntregaFinal;
+	}
+
+	public void setDataEntregaFinal(Date dataEntregaFinal) {
+		this.dataEntregaFinal = dataEntregaFinal;
+	}
+
+	public Date getDataEntregaInicial() {
+		return dataEntregaInicial;
+	}
+
+	public void setDataEntregaInicial(Date dataEntregaInicial) {
+		this.dataEntregaInicial = dataEntregaInicial;
 	}
 
 }

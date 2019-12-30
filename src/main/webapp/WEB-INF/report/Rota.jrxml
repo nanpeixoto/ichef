@@ -56,8 +56,8 @@
 	<field name="dataFormatadaPedido" class="java.lang.String">
 		<fieldDescription><![CDATA[dataFormatadaPedido]]></fieldDescription>
 	</field>
-	<field name="dataPedido" class="java.util.Date">
-		<fieldDescription><![CDATA[dataPedido]]></fieldDescription>
+	<field name="dataEntrega" class="java.util.Date">
+		<fieldDescription><![CDATA[dataEntrega]]></fieldDescription>
 	</field>
 	<field name="derivacao" class="br.com.ichef.model.Derivacao">
 		<fieldDescription><![CDATA[derivacao]]></fieldDescription>
@@ -119,13 +119,14 @@
 	<field name="valorPedido" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[valorPedido]]></fieldDescription>
 	</field>
+	<field name="dataEntregaFormatada" class="java.lang.String"/>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
 	</variable>
 
-		<group  name="Cardapio" isReprintHeaderOnEachPage="true" >
-			<groupExpression><![CDATA[$F{cardapio}.getId()]]></groupExpression>
+		<group  name="Entrega" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
+			<groupExpression><![CDATA[ $F{dataEntrega}]]></groupExpression>
 			<groupHeader>
 			<band height="26"  isSplitAllowed="true" >
 				<rectangle>
@@ -150,7 +151,7 @@
 					<textElement textAlignment="Center">
 						<font size="12"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapio}.getDescricaoComDiaSemana()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Entrega: "+$F{dataEntregaFormatada}]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupHeader>

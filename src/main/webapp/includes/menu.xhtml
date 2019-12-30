@@ -5,7 +5,7 @@
 
 
 	<ul class="sidebar-menu">
-		<li><p:link href="/pages/tarefa/lista-tarefa.xhtml">
+		<li><p:link href="/index.xhtml">
 				<i class="fa fa-home"></i>
 				<span>Home</span>
 			</p:link></li>
@@ -19,106 +19,66 @@
 				<span>Pedidos</span>
 			</p:link></li>
 
-
-
-
-
-		<li class="treeview"><a href="#"> <i class="fa fa-map"></i> <span>Localização</span>
-				<span class="pull-right-container"> <i
-					class="fa fa-angle-left pull-right"></i>
-			</span>
-		</a>
+		<li class="treeview">
+			<a href="#"> <i class="fa fa-server"></i>
+				<span>Ficha Técnica</span> <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+			</a>
 			<ul class="treeview-menu" style="display: none;">
-				<li><p:link href="/pages/cidade/lista-cidade.xhtml">
-						<i class="fa fa-circle-o"></i>Cidade</p:link></li>
-				<li><p:link
-						href="/pages/tipolocalidade/lista-tipolocalidade.xhtml">
-						<i class="fa fa-circle-o"></i>Tipo de Localidade</p:link></li>
-				<li><p:link href="/pages/localidade/lista-localidade.xhtml">
-						<i class="fa fa-circle-o"></i>Localidade</p:link></li>
-				<li><p:link href="/pages/localidade/lista-area.xhtml">
-						<i class="fa fa-circle-o"></i>Área</p:link></li>
-				<li><p:link href="/pages/localidade/lista-entregador.xhtml">
-						<i class="fa fa-circle-o"></i>Entregador</p:link></li>
+				<li><p:link href="/pages/insumo/lista-derivacao.xhtml"><i class="fa fa-circle-o"></i>Derivação</p:link></li>
+				<li><p:link href="/pages/insumo/lista-insumo.xhtml"><i class="fa fa-circle-o"></i>Insumo</p:link></li>
+				<li><p:link href="/pages/ficha-tecnica/lista-ficha-tecnica-prato.xhtml"><i class="fa fa-circle-o"></i>Prato</p:link></li>
+				<li><p:link href="/pages/ficha-tecnica/lista-ficha-tecnica-preparo.xhtml"><i class="fa fa-circle-o"></i>Preparo</p:link></li>
+				<li><p:link href="/pages/insumo/lista-tipo-insumo.xhtml"><i class="fa fa-circle-o"></i>Tipo de Insumo</p:link></li>
+				<li><p:link href="/pages/unidade/lista-unidade.xhtml"><i class="fa fa-circle-o"></i>Unidade</p:link></li>
+			</ul>
+		</li>
+
+		<li class="treeview">
+			<a href="#"> 
+				<i class="fa fa-money"></i><span>Financeiro</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i></span>
+			</a>
+			<ul class="treeview-menu" style="display: none;">
+				<li><a href="#"><i class="fa fa-circle-o"></i>Entrada de Produtos</a></li>
+				<li><p:link href="/pages/financeiro/lista-forma-pagamento.xhtml"><i class="fa fa-circle-o"></i>Forma de Pagamento</p:link></li>
+				<li><a href="#"><i class="fa fa-circle-o"></i>Fornecedor</a></li>
+				<li><p:link href="/pages/financeiro/lancamento-carteira.xhtml"><i class="fa fa-circle-o"></i>Lançamento de Carteira</p:link></li>
+				<li><p:link href="/pages/financeiro/lista-tipo-prato.xhtml"><i class="fa fa-circle-o"></i>Tipo de Prato</p:link></li>
+			</ul>
+		</li>
+		
+		<li class="treeview">
+			<a href="#"> 
+				<i class="fa fa-map"></i> <span>Localização</span><span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i></span>
+			</a>
+			<ul class="treeview-menu" style="display: none;">
+				<li><p:link href="/pages/localidade/lista-area.xhtml"><i class="fa fa-circle-o"></i>Área</p:link></li>
+				<li><p:link href="/pages/cidade/lista-cidade.xhtml"><i class="fa fa-circle-o"></i>Cidade</p:link></li>
+				<li><p:link href="/pages/localidade/lista-entregador.xhtml"><i class="fa fa-circle-o"></i>Entregador</p:link></li>
+				<li><p:link href="/pages/localidade/lista-localidade.xhtml"><i class="fa fa-circle-o"></i>Localidade</p:link></li>
+				<li><p:link href="/pages/tipolocalidade/lista-tipolocalidade.xhtml"><i class="fa fa-circle-o"></i>Tipo de Localidade</p:link></li>
 			</ul></li>
 
-		<li class="treeview"><a href="#"> <i class="fa fa-server"></i>
-				<span>Ficha Técnica</span> <span class="pull-right-container">
-					<i class="fa fa-angle-left pull-right"></i>
-			</span>
-		</a>
+		<li class="treeview">
+			<a href="#"> 
+				<i class="fa fa-list-alt"></i><span>Pedido</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i></span>
+			</a>
 			<ul class="treeview-menu" style="display: none;">
-				<li><p:link
-						href="/pages/ficha-tecnica/lista-ficha-tecnica-prato.xhtml">
-						<i class="fa fa-circle-o"></i>Prato</p:link></li>
-				<li><p:link
-						href="/pages/ficha-tecnica/lista-ficha-tecnica-preparo.xhtml">
-						<i class="fa fa-circle-o"></i>Preparo</p:link></li>
-				<li><p:link href="/pages/insumo/lista-insumo.xhtml">
-						<i class="fa fa-circle-o"></i>Insumo</p:link></li>
-				<li><p:link href="/pages/insumo/lista-tipo-insumo.xhtml">
-						<i class="fa fa-circle-o"></i>Tipo de Insumo</p:link></li>
-				<li><p:link href="/pages/insumo/lista-derivacao.xhtml">
-						<i class="fa fa-circle-o"></i>Derivação</p:link></li>
-				<li><p:link href="/pages/unidade/lista-unidade.xhtml">
-						<i class="fa fa-circle-o"></i>Unidade</p:link></li>
-			</ul></li>
+				<li><p:link href="/pages/cardapio/lista-cardapio.xhtml"><i class="fa fa-circle-o"></i>Cardápio</p:link></li>
+				<li><p:link href="/pages/cliente/lista-cliente.xhtml"><i class="fa fa-circle-o"></i>Cliente</p:link></li>
+				<li><p:link href="/pages/pedido/ordenacao-pedidos.xhtml"><i class="fa fa-circle-o"></i>Ordenação de Pedidos</p:link></li>
+				<li><p:link href="/pages/pedido/pedido.xhtml"><i class="fa fa-circle-o"></i>Pedido</p:link></li>
+			</ul>
+		</li>
 
-		<li class="treeview"><a href="#"> <i class="fa fa-money"></i>
-				<span>Financeiro</span> <span class="pull-right-container"> <i
-					class="fa fa-angle-left pull-right"></i>
-			</span>
-		</a>
+		<li class="treeview">
+			<a href="#"> 
+				<i class="fa fa-pie-chart"></i><span>Relatório</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i></span>
+			</a>
 			<ul class="treeview-menu" style="display: none;">
-				<li><p:link href="/pages/financeiro/lista-tipo-prato.xhtml">
-						<i class="fa fa-circle-o"></i>Tipo de Prato</p:link></li>
-				<li><p:link
-						href="/pages/financeiro/lista-forma-pagamento.xhtml">
-						<i class="fa fa-circle-o"></i>Forma de Pagamento</p:link></li>
-				<li><p:link href="/pages/financeiro/lancamento-carteira.xhtml">
-						<i class="fa fa-circle-o"></i>Lançamento de Carteira</p:link></li>
-				<li><a href="#"><i class="fa fa-circle-o"></i> Fornecedor</a></li>
-				<li><a href="#"><i class="fa fa-circle-o"></i> Entrada de
-						Produtos</a></li>
-			</ul></li>
-
-		<li class="treeview"><a href="#"> <i class="fa fa-list-alt"></i>
-				<span>Pedido</span> <span class="pull-right-container"> <i
-					class="fa fa-angle-left pull-right"></i>
-			</span>
-		</a>
-			<ul class="treeview-menu" style="display: none;">
-				<li><p:link href="/pages/pedido/pedido-entregador.xhtml">
-						<i class="fa fa-circle-o"></i>Pedido-Entregador</p:link></li>
-
-				<li><p:link href="/pages/pedido/pedido.xhtml">
-						<i class="fa fa-circle-o"></i>Pedido</p:link></li>
-
-				<li><p:link href="/pages/cliente/lista-cliente.xhtml">
-						<i class="fa fa-circle-o"></i>Cliente</p:link></li>
-				<li><p:link href="/pages/cardapio/lista-cardapio.xhtml">
-						<i class="fa fa-circle-o"></i>Cardápio</p:link></li>
-			</ul></li>
-
-
-
-		<li class="treeview"><a href="#"> <i class="fa fa-pie-chart"></i>
-				<span>Relatório</span> <span class="pull-right-container"> <i
-					class="fa fa-angle-left pull-right"></i>
-			</span>
-		</a>
-			<ul class="treeview-menu" style="display: none;">
-				<li><p:link href="/pages/relatorio/relatorio_pedido.xhtml	">
-						<i class="fa fa-circle-o"></i>Pedidos</p:link></li>
-				<li><p:link href="/pages/relatorio/relatorio_cardapio.xhtml	">
-						<i class="fa fa-circle-o"></i>Cardápio</p:link></li>
-				<li><p:link
-						href="/pages/relatorio/relatorio_previsao_insumo.xhtml	">
-						<i class="fa fa-circle-o"></i>Previsão de Insumos</p:link></li>
-
-				<li><p:link href="/pages/relatorio/relatorio_rota.xhtml	">
-						<i class="fa fa-circle-o"></i>Rota de Entrega</p:link></li>
-				
+				<li><p:link href="/pages/relatorio/relatorio_cardapio.xhtml	"><i class="fa fa-circle-o"></i>Cardápio</p:link></li>
+				<li><p:link href="/pages/relatorio/relatorio_pedido.xhtml	"><i class="fa fa-circle-o"></i>Pedidos</p:link></li>
+				<li><p:link href="/pages/relatorio/relatorio_previsao_insumo.xhtml	"><i class="fa fa-circle-o"></i>Previsão de Insumos</p:link></li>
+				<li><p:link href="/pages/relatorio/relatorio_rota.xhtml	"><i class="fa fa-circle-o"></i>Rota de Entrega</p:link></li>
 				<!--
 				<li><a href="#"><i class="fa fa-circle-o"></i>Inumos</a></li>
 				<li><a href="#"><i class="fa fa-circle-o"></i>Devedores</a></li>
@@ -128,18 +88,8 @@
 				-->
 			</ul></li>
 
-		<li><p:link href="/pages/tarefa/cadastro-configuracao.xhtml">
-				<i class="fa fa-cog"></i>
-				<span>Configuração</span>
-			</p:link></li>
-
-
-		<li><p:link href="/pages/empresa/lista-empresa.xhtml">
-				<i class="fa fa-building"></i>
-				<span>Empresa</span>
-			</p:link></li>
-
-
+		<li><p:link href="/pages/tarefa/cadastro-configuracao.xhtml"><i class="fa fa-cog"></i><span>Configuração</span></p:link></li>
+		<li><p:link href="/pages/empresa/lista-empresa.xhtml"><i class="fa fa-building"></i><span>Empresa</span></p:link></li>
 
 	</ul>
 

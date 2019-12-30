@@ -119,13 +119,16 @@
 	<field name="valorPedido" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[valorPedido]]></fieldDescription>
 	</field>
+	<field name="dataEntregaFormatada" class="java.lang.String">
+		<fieldDescription><![CDATA[dataEntregaFormatada]]></fieldDescription>
+	</field>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
 	</variable>
 
-		<group  name="Cardapio" >
-			<groupExpression><![CDATA[$F{cardapio}.getId()]]></groupExpression>
+		<group  name="Entrega" >
+			<groupExpression><![CDATA[ $F{dataEntregaFormatada}]]></groupExpression>
 			<groupHeader>
 			<band height="26"  isSplitAllowed="true" >
 				<rectangle>
@@ -150,7 +153,7 @@
 					<textElement textAlignment="Center">
 						<font size="12"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapio}.getDescricaoComDiaSemana()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Entrega: "+ $F{dataEntregaFormatada}]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupHeader>
@@ -246,7 +249,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Pedidos por Entregador]]></text>
+				<text><![CDATA[Pedidos]]></text>
 				</staticText>
 				<staticText>
 					<reportElement

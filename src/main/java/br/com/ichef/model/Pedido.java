@@ -29,8 +29,8 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastro;
 
-	@Column(name = "DT_PEDIDO")
-	private Date dataPedido;
+	@Column(name = "DT_ENTREGA")
+	private Date dataEntrega;
 
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
@@ -125,7 +125,7 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 	@Override
 	public String getColumnOrderBy() {
 		// TODO Auto-generated method stub
-		return "entregador.nome,ordemEntrega,cliente.nome";
+		return "dataEntrega,entregador.nome,ordemEntrega,cliente.nome";
 	}
 
 	@Override
@@ -162,12 +162,12 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 		return !isInclusao();
 	}
 
-	public Date getDataPedido() {
-		return dataPedido;
+	public Date getDataEntrega() {
+		return dataEntrega;
 	}
 
-	public void setDataPedido(Date dataPedido) {
-		this.dataPedido = dataPedido;
+	public void setDataEntrega(Date dataEntrega) {
+		this.dataEntrega = dataEntrega;
 	}
 
 	public String getObservacao() {
@@ -361,7 +361,7 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 	public String getDataFormatadaPedido() {
 		try {
 			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
-			return sdate.format(getDataPedido());
+			return sdate.format(getDataEntrega());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -371,6 +371,16 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 	@Override
 	public int compareTo(Pedido o) {
 		return this.getOrdemEntrega().compareTo(o.getOrdemEntrega());
+	}
+	
+	public String getDataEntregaFormatada() {
+		try {
+			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
+			return sdate.format(getDataEntrega());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

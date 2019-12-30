@@ -172,7 +172,7 @@ public class Empresa extends BaseEntity {
 
 	@Override
 	public String getColumnOrderBy() {
-		return null;
+		return "nomeFantasia";
 	}
 
 	@Override
