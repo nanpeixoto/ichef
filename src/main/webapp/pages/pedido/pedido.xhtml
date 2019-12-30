@@ -84,7 +84,7 @@
 							<p:outputLabel value="Data Entrega" for="data" />
 							<p:calendar id="data" binding="#{pedidoController.componenteDataEntrega}"
 								value="#{pedidoController.entity.dataEntrega}"
-								pattern="dd/MM/yyyy" size="10">
+								pattern="dd/MM/yyyy" size="10" mask="99/99/9999">
 								<p:ajax event="blur" process="@this"
 									update="selectTipoPrato,precoPrato,txtQtdDisponivel"
 									listener="#{pedidoController.mudarDataPrato()}" />
