@@ -82,9 +82,13 @@
 							</p:selectOneMenu>
 							
 							<p:outputLabel value="Data Entrega" for="data" />
-							<p:calendar id="data"
+							<p:calendar id="data" binding="#{pedidoController.componenteDataEntrega}"
 								value="#{pedidoController.entity.dataEntrega}"
-								pattern="dd/MM/yyyy" size="10"></p:calendar>
+								pattern="dd/MM/yyyy" size="10">
+								<p:ajax event="blur" process="@this"
+									update="selectTipoPrato,precoPrato,txtQtdDisponivel"
+									listener="#{pedidoController.mudarDataPrato()}" />
+								</p:calendar>
 							<p:link id="linkCardadpio"
 								href="/pages/cardapio/cadastro-cardapio.xhtml?id=#{pedidoController.cardapio.id}"
 								target="_blank" title="Clique para abrir o cardápio">
@@ -200,7 +204,7 @@
 									noSelectionOption="true" />
 								<f:selectItems value="#{pedidoController.cardapio.pratos}"
 									var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
-								<p:ajax event="change"
+								<p:ajax event="change" process="@form"
 									update="selectTipoPrato,precoPrato,txtQtdDisponivel"
 									listener="#{pedidoController.obterTiposDePratos()}" />
 							</p:selectOneMenu>

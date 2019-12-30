@@ -1,6 +1,7 @@
 package br.com.ichef.controler;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.component.calendar.Calendar;
 
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Cardapio;
@@ -25,6 +28,7 @@ import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.model.FichaTecnicaPratoTipo;
 import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
+import br.com.ichef.model.TipoPrato;
 import br.com.ichef.service.CardapioService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.DerivacaoService;
@@ -102,8 +106,12 @@ public class PedidoController extends BaseController {
 	// private ClienteEndereco endereco;
 
 	Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
-	
+
 	private List<Entregador> listaEntregadorCarregada = new ArrayList<>();
+
+	SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
+
+	private Calendar componenteDataEntrega = new Calendar();
 
 	// private Double preco;
 
@@ -114,7 +122,7 @@ public class PedidoController extends BaseController {
 	// relatorio
 	private Date dataInicial;
 	private Date dataFinal;
-	
+
 	private boolean entregaDataCardapio;
 
 	@PostConstruct
@@ -125,7 +133,7 @@ public class PedidoController extends BaseController {
 		newInstance();
 
 		obterListas();
-		
+
 		setEntregaDataCardapio(true);
 
 		// obterPedidoDia();
@@ -154,8 +162,8 @@ public class PedidoController extends BaseController {
 
 		cardapio = getEntity().getCardapio();
 		listaCardapioPrato = cardapio.getPratos();
-		
-		if(isEntregaDataCardapio())
+
+		if (isEntregaDataCardapio())
 			getEntity().setDataEntrega(cardapio.getData());
 
 	}
@@ -201,7 +209,7 @@ public class PedidoController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public List<Cliente> autoCompleteCliente(String query) {
@@ -231,6 +239,11 @@ public class PedidoController extends BaseController {
 		if (getEntity().getEntregador() != null) {
 			getEntity().setValorDiariaEntregador(getEntity().getEntregador().getValorDiaria());
 		}
+	}
+
+	public String getDataHojeFormatada() {
+
+		return formatarData.format(new Date());
 	}
 
 	public void obterEntregador() {
@@ -283,6 +296,14 @@ public class PedidoController extends BaseController {
 		}
 	}
 
+	public void mudarDataPrato() {
+		if (componenteDataEntrega != null) {
+			getEntity().setDataEntrega((Date) componenteDataEntrega.getValue());
+		}
+		obterTiposDePratos();
+		
+	}
+
 	public void obterTiposDePratos() {
 		if (getEntity().getCardapioFichaPrato() != null) {
 			if (getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getFichaTecnicaPratoTipos().size() == 1) {
@@ -294,6 +315,15 @@ public class PedidoController extends BaseController {
 				Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
 				for (FichaTecnicaPratoTipo fichaTipo : getEntity().getCardapioFichaPrato().getFichaTecnicaPrato()
 						.getFichaTecnicaPratoTipos()) {
+					if (!formatarData.format(getEntity().getDataEntrega())
+							.equals(formatarData.format(getEntity().getCardapio().getData()))) {
+						if ((TipoPrato.TIPO_PRATO_CONGELADO) == (Long) fichaTipo.getTipoPrato().getId()) {
+							getEntity().setFichaTecnicaPratoTipo(fichaTipo);
+							getEntity().setTipoPrato(fichaTipo.getTipoPrato());
+							obterPrecoPrato();
+							return;
+						}
+					}
 					if (config.getTipoPrato().getId().equals(fichaTipo.getTipoPrato().getId())) {
 						getEntity().setFichaTecnicaPratoTipo(fichaTipo);
 						getEntity().setTipoPrato(fichaTipo.getTipoPrato());
@@ -502,11 +532,10 @@ public class PedidoController extends BaseController {
 				facesMessager.error("Não foi possível obter o Preço de Venda por Tipo de Prato");
 				return;
 			}
-			
-			if(getEntity().getFormaPagamento().isCortesia()) {
-				getEntity().setValorPedido( new BigDecimal(0) );
+
+			if (getEntity().getFormaPagamento().isCortesia()) {
+				getEntity().setValorPedido(new BigDecimal(0));
 			}
-				
 
 			service.saveOrUpdade(getEntity());
 
@@ -577,9 +606,9 @@ public class PedidoController extends BaseController {
 
 	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
-			if(tipoAlteracao.equals("E")) {
+			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
-					if(pedido.getEntregador().getValorDiaria()==null) {
+					if (pedido.getEntregador().getValorDiaria() == null) {
 						facesMessager.error("Entregador sem diária cadastrada");
 						return;
 					}
@@ -588,9 +617,9 @@ public class PedidoController extends BaseController {
 			}
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
-			
+
 			service.saveOrUpdade(pedido);
-			
+
 		} catch (Exception e) {
 			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
 			e.printStackTrace();
@@ -637,7 +666,7 @@ public class PedidoController extends BaseController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void obterEntregasDia() {
 		Cardapio cardapioFilter = new Cardapio();
 		cardapioFilter.setAtivo("S");
@@ -662,7 +691,7 @@ public class PedidoController extends BaseController {
 			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
 			return;
 		} else {
-			
+
 			Cardapio cardapioFilter = new Cardapio();
 			cardapioFilter.setAtivo("S");
 
@@ -673,7 +702,6 @@ public class PedidoController extends BaseController {
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
-			
 
 			List<Pedido> pedidos = new ArrayList<>();
 
@@ -700,14 +728,15 @@ public class PedidoController extends BaseController {
 		}
 
 	}
-	
-	public void imprimirRota() {
-		setDataFinal(getDataInicial() ) ;
+
+	public void imprimirRotaHoje() {
+		setDataFinal(new Date());
+		setDataInicial(new Date());
 		if (getDataInicial() == null || getDataFinal() == null) {
 			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
 			return;
 		} else {
-			
+
 			Cardapio cardapioFilter = new Cardapio();
 			cardapioFilter.setAtivo("S");
 
@@ -718,7 +747,6 @@ public class PedidoController extends BaseController {
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
-			
 
 			List<Pedido> pedidos = new ArrayList<>();
 
@@ -745,7 +773,51 @@ public class PedidoController extends BaseController {
 		}
 
 	}
-	
+
+	public void imprimirRota() {
+		setDataFinal(getDataInicial());
+		if (getDataInicial() == null || getDataFinal() == null) {
+			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
+			return;
+		} else {
+
+			Cardapio cardapioFilter = new Cardapio();
+			cardapioFilter.setAtivo("S");
+
+			Pedido filter = new Pedido();
+			filter.setCardapio(cardapioFilter);
+			filter.setEmpresa(userLogado.getEmpresaLogada());
+
+			PedidoVisitor pedidoVisitor = new PedidoVisitor();
+			pedidoVisitor.setDataEntregaInicial(getDataInicial());
+			pedidoVisitor.setDataEntregaFinal(getDataFinal());
+
+			List<Pedido> pedidos = new ArrayList<>();
+
+			try {
+				pedidos = service.findByParameters(filter, pedidoVisitor);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+			}
+
+			if (pedidos.size() == 0) {
+				FacesUtil.addErroMessage("Nenhum dado encontrado");
+			} else {
+				try {
+					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					escreveRelatorioPDF("Rota", true, pedidos);
+				} catch (Exception e) {
+					e.printStackTrace();
+					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+				}
+			}
+
+		}
+
+	}
+
 	public void imprimirCardapioHoje() {
 		setDataFinal(new Date());
 		setDataInicial(new Date());
@@ -754,7 +826,7 @@ public class PedidoController extends BaseController {
 			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
 			return;
 		} else {
-			
+
 			Cardapio cardapioFilter = new Cardapio();
 			cardapioFilter.setAtivo("S");
 
@@ -765,7 +837,6 @@ public class PedidoController extends BaseController {
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
 			pedidoVisitor.setDataInicial(getDataInicial());
 			pedidoVisitor.setDataFinal(getDataFinal());
-			
 
 			List<Pedido> pedidos = new ArrayList<>();
 
@@ -790,7 +861,6 @@ public class PedidoController extends BaseController {
 		}
 
 	}
-
 
 	public void limpar() {
 
@@ -1006,6 +1076,14 @@ public class PedidoController extends BaseController {
 
 	public void setEntregaDataCardapio(boolean entregaDataCardapio) {
 		this.entregaDataCardapio = entregaDataCardapio;
+	}
+
+	public Calendar getComponenteDataEntrega() {
+		return componenteDataEntrega;
+	}
+
+	public void setComponenteDataEntrega(Calendar componenteDataEntrega) {
+		this.componenteDataEntrega = componenteDataEntrega;
 	}
 
 }

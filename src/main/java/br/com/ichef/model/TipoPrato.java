@@ -30,6 +30,8 @@ import br.com.ichef.arquitetura.BaseEntity;
 @Table(name = "tip_prato")
 public class TipoPrato extends BaseEntity {
 	private static final long serialVersionUID = 1L;
+	
+	public static final long TIPO_PRATO_CONGELADO = 5l;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

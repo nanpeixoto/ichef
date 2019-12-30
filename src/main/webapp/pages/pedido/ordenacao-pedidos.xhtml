@@ -7,11 +7,12 @@
 	xmlns:adm="http://github.com/adminfaces"
 	template="/WEB-INF/templates/template.xhtml">
 
-	<ui:define name="title">Pedido - Entregador</ui:define>
+	<ui:define name="title">Pedido - Entrega Prevista para a data de:  #{pedidoController.dataHojeFormatada}</ui:define>
 
 	<ui:define name="body">
 		<f:metadata>
-			<f:event listener="#{pedidoController.obterEntregasDia()}" type="preRenderView"></f:event>
+			<f:event listener="#{pedidoController.obterEntregasDia()}"
+				type="preRenderView"></f:event>
 		</f:metadata>
 		<adm:breadcrumb title="Pedido-Entregador" />
 		<p:growl id="growl" showDetail="false" sticky="false" escape="true"
@@ -19,135 +20,144 @@
 		<h:form id="form" prependId="false">
 			<div class="box box-primary">
 				<div class="box-header with-border">
-					<!--<div id="main-buttons" class="hidden-sm hidden-xs">
-		                	 <p:commandButton value="Salvar" update="@form" icon="fa fa-check" styleClass="btn-primary" action="#{pedidoController.Salvar()}"/> 
-		               	</div>
-		               	<p:splitButton value="Salvar" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"  action="#{pedidoController.Salvar()}"/>
-		             	<p:separator/>-->
 					<div class="ui-fluid">
 						<div align="right">
 							<p:panel>
+								<div align="right">
+									<p:panelGrid>
+
+										<p:commandButton value="" icon="fa fa-map-marker"
+											id="btnImprimir" style="width: 31px;"
+											styleClass="btn btn-info"
+											title="Imprimir rota de entrega do dia" update="form,growl"
+											ajax="false" action="#{pedidoController.imprimirRotaHoje()}" />
+									</p:panelGrid>
+								</div>
 
 
-							<p:dataTable id="tabListaPedidos" widgetVar="itens" rows="10"
-								paginator="false" value="#{pedidoController.lista}" var="item"
-								rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
-								editable="true" emptyMessage="Nenhum item encontrado" sortBy="#{item.entregador.nome}"
-								 expandableRowGroups="true" 
-								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
-								
-								 
-								<f:facet name="header">
-									<p:outputPanel style="text-align:right; margin-right:-10px" styleClass="ui-widget-auxiliar">
-										<h:outputText value="Pesquisar: " escape="false" />
-										<p:inputText id="globalFilter"
-											onchange="PF('itens').filter();" style="width:150px;"
-											placeholder="Pesquisar"
-											styleClass="letras-maiusculas semClear" />
-										<h:outputText value=" " escape="false" />
-										<p:commandButton id="Search" value="" icon="fa fa-search"
-											style="font-size: 0.8em;width:3%;" />
-									</p:outputPanel>
-								</f:facet>
+								<p:dataTable id="tabListaPedidos" widgetVar="itens" rows="10"
+									paginator="false" value="#{pedidoController.lista}" var="item"
+									rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
+									editable="true" emptyMessage="Nenhum item encontrado"
+									sortBy="#{item.entregador.nome}" expandableRowGroups="true"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									currentPageReportTemplate=""
+									rowsPerPageTemplate="5,10,15,20,30">
 
-								<p:headerRow>
-						            <p:column colspan="3">
-						                <h:outputText value="#{item.entregador.nome}" />
-						            </p:column>
-						        </p:headerRow>
-						        
-								<p:column width="5%">
-									<p:rowToggler />
-								</p:column>
-								
-								<p:column headerText="Ordem"
-									filterBy="#{item.ordemEntrega}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.ordemEntrega}" width="8%">
-									
-									<p:inplace id="ajaxInplace" label="#{item.ordemEntrega}" editor="true">
-										<p:ajax event="save" update="tabListaPedidos,growl"  listener="#{pedidoController.atualizarPedido(item)}"/>
-										<p:inputNumber
-												value="#{item.ordemEntrega}"
-												id="ordemEntrega" symbol="" decimalSeparator=","
-												thousandSeparator="." decimalPlaces="0" />
-									</p:inplace>
-									
-									
-								</p:column>
 
-								<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.cliente.nome}">
-									<h:outputLabel value="#{item.cliente.nome}" escape="false" />
-								</p:column>
-								
-								<p:column headerText="Endereço"
-									filterBy="#{item.clienteEndereco.endereco}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.clienteEndereco.endereco}">
-									<h:outputLabel value="#{item.clienteEndereco.endereco}"
-										escape="false" />
-								</p:column>
+									<f:facet name="header">
+										<p:outputPanel style="text-align:right; margin-right:-10px"
+											styleClass="ui-widget-auxiliar">
+											<h:outputText value="Pesquisar: " escape="false" />
+											<p:inputText id="globalFilter"
+												onchange="PF('itens').filter();" style="width:150px;"
+												placeholder="Pesquisar"
+												styleClass="letras-maiusculas semClear" />
+											<h:outputText value=" " escape="false" />
+											<p:commandButton id="Search" value="" icon="fa fa-search"
+												style="font-size: 0.8em;width:3%;" />
+										</p:outputPanel>
+									</f:facet>
 
-								<p:column headerText="Localidade"
-									filterBy="#{item.localidade.descricao}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.localidade.descricao}">
-									<h:outputLabel value="#{item.localidade.descricao}"
-										escape="false" />
-								</p:column>
+									<p:headerRow>
+										<p:column colspan="3">
+											<h:outputText value="#{item.entregador.nome}" />
+										</p:column>
+									</p:headerRow>
 
-								<p:column headerText="Prato"
-									filterBy="#{item.cardapioFichaPrato.descricao}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.cardapioFichaPrato.descricao}">
-									<h:outputLabel value="#{item.cardapioFichaPrato.descricao}"
-										escape="false" />
-								</p:column>
-								
-								
-								
+									<p:column width="5%">
+										<p:rowToggler />
+									</p:column>
 
-								<p:rowExpansion id="expanded">
-									<p:outputPanel id="carDetail" style="text-align:center;">
-										<p:panelGrid columns="2">
-											<f:facet name="header">
-												<h:outputText
-													value="Cardápio: #{item.cardapio.descricaoComDiaSemana}" />
-											</f:facet>
-											<h:outputText value="Observacao:" />
-											<p:inplace  label="#{item.observacao}" editor="true"  >
-												<p:ajax event="save" update="tabListaPedidos,growl"  listener="#{pedidoController.atualizarPedido(item)}"/>
-													<p:inputTextarea id="observacao"
-														value="#{item.observacao}" rows="3" cols="30"
-														maxlength="450" counter="display"
-														counterTemplate="Faltam {0} characteres" autoResize="false" />
+									<p:column headerText="Ordem" filterBy="#{item.ordemEntrega}"
+										filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;"
+										sortBy="#{item.ordemEntrega}" width="8%">
+
+										<p:inplace id="ajaxInplace" label="#{item.ordemEntrega}"
+											editor="true">
+											<p:ajax event="save" update="tabListaPedidos,growl"
+												listener="#{pedidoController.atualizarPedido(item)}" />
+											<p:inputNumber value="#{item.ordemEntrega}" id="ordemEntrega"
+												symbol="" decimalSeparator="," thousandSeparator="."
+												decimalPlaces="0" />
+										</p:inplace>
+
+
+									</p:column>
+
+									<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
+										filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;"
+										sortBy="#{item.cliente.nome}">
+										<h:outputLabel value="#{item.cliente.nome}" escape="false" />
+									</p:column>
+
+									<p:column headerText="Endereço"
+										filterBy="#{item.clienteEndereco.endereco}"
+										filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;"
+										sortBy="#{item.clienteEndereco.endereco}">
+										<h:outputLabel value="#{item.clienteEndereco.endereco}"
+											escape="false" />
+									</p:column>
+
+									<p:column headerText="Localidade"
+										filterBy="#{item.localidade.descricao}"
+										filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;"
+										sortBy="#{item.localidade.descricao}">
+										<h:outputLabel value="#{item.localidade.descricao}"
+											escape="false" />
+									</p:column>
+
+									<p:column headerText="Prato"
+										filterBy="#{item.cardapioFichaPrato.descricao}"
+										filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;"
+										sortBy="#{item.cardapioFichaPrato.descricao}">
+										<h:outputLabel value="#{item.cardapioFichaPrato.descricao}"
+											escape="false" />
+									</p:column>
+
+
+
+
+									<p:rowExpansion id="expanded">
+										<p:outputPanel id="carDetail" style="text-align:center;">
+											<p:panelGrid columns="2">
+												<f:facet name="header">
+													<h:outputText
+														value="Cardápio: #{item.cardapio.descricaoComDiaSemana}" />
+												</f:facet>
+												<h:outputText value="Observacao:" />
+												<p:inplace label="#{item.observacao}" editor="true">
+													<p:ajax event="save" update="tabListaPedidos,growl"
+														listener="#{pedidoController.atualizarPedido(item)}" />
+													<p:inputTextarea id="observacao" value="#{item.observacao}"
+														rows="3" cols="30" maxlength="450" counter="display"
+														counterTemplate="Faltam {0} characteres"
+														autoResize="false" />
 													<h:outputText id="display" />
-											</p:inplace>
-											<h:outputText value="Qtd:" />
-											<h:outputText value="#{item.quantidade}" />
-											<h:outputText value="Tipo:" />
-											<h:outputText value="#{item.tipoPrato.descricao}-#{item.derivacao.descricao}" />
-										</p:panelGrid>
-									</p:outputPanel>
-								</p:rowExpansion>
+												</p:inplace>
+												<h:outputText value="Qtd:" />
+												<h:outputText value="#{item.quantidade}" />
+												<h:outputText value="Tipo:" />
+												<h:outputText
+													value="#{item.tipoPrato.descricao}-#{item.derivacao.descricao}" />
+											</p:panelGrid>
+										</p:outputPanel>
+									</p:rowExpansion>
 
 
-							</p:dataTable>
-							
-							  
+								</p:dataTable>
 
-						</p:panel>
+
+
+							</p:panel>
+						</div>
 					</div>
 				</div>
-			</div>
 			</div>
 		</h:form>
 
