@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -91,6 +92,13 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 	private Cliente cliente;
 
 	@ManyToOne
+	@JoinColumn(name = "CD_USUARIO_FINALIZACAO")
+	private Usuario usuarioFinalizacao;
+
+	@Column(name = "DT_FINALIZACAO")
+	private Date dataFinalizacao;
+
+	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
@@ -110,6 +118,33 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 
 	@Column(name = "NR_PRECO_CUSTO_TIPO_PRATO")
 	private BigDecimal precoVendaTipoPrato;
+
+	@Column(name = "SN_CONFIRMADO")
+	private String snConfirmado;
+
+	@Column(name = "LOG_LANCAMENTO_CARTEIRA")
+	private String logLancamentoCarteira;
+
+	@Transient
+	private boolean confirmado;
+
+	public boolean isConfirmado() {
+		if (snConfirmado != null) {
+			if (snConfirmado.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return confirmado;
+	}
+
+	public void setConfirmado(boolean confirmado) {
+		this.confirmado = confirmado;
+		if (confirmado == Boolean.TRUE) {
+			setSnConfirmado("S");
+		} else
+			setSnConfirmado("N");
+	}
 
 	@Override
 	public Object getId() {
@@ -372,7 +407,7 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 	public int compareTo(Pedido o) {
 		return this.getOrdemEntrega().compareTo(o.getOrdemEntrega());
 	}
-	
+
 	public String getDataEntregaFormatada() {
 		try {
 			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
@@ -381,6 +416,38 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public String getSnConfirmado() {
+		return snConfirmado;
+	}
+
+	public void setSnConfirmado(String snConfirmado) {
+		this.snConfirmado = snConfirmado;
+	}
+
+	public String getLogLancamentoCarteira() {
+		return logLancamentoCarteira;
+	}
+
+	public void setLogLancamentoCarteira(String logLancamentoCarteira) {
+		this.logLancamentoCarteira = logLancamentoCarteira;
+	}
+
+	public Usuario getUsuarioFinalizacao() {
+		return usuarioFinalizacao;
+	}
+
+	public void setUsuarioFinalizacao(Usuario usuarioFinalizacao) {
+		this.usuarioFinalizacao = usuarioFinalizacao;
+	}
+
+	public Date getDataFinalizacao() {
+		return dataFinalizacao;
+	}
+
+	public void setDataFinalizacao(Date dataFinalizacao) {
+		this.dataFinalizacao = dataFinalizacao;
 	}
 
 }

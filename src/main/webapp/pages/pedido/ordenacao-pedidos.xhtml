@@ -31,6 +31,11 @@
 											styleClass="btn btn-info"
 											title="Imprimir rota de entrega do dia" update="form,growl"
 											ajax="false" action="#{pedidoController.imprimirRotaHoje()}" />
+
+										<p:commandButton value="" icon="fa fa-gavel" id="btnFinalizar"
+											style="width: 31px;" styleClass="btn btn-danger"
+											title="Finalizar Lançamentos do dia" update="form,growl"
+											actionListener="#{pedidoController.finalizarListaPedidos()}" />
 									</p:panelGrid>
 								</div>
 
@@ -61,7 +66,27 @@
 
 									<p:headerRow>
 										<p:column colspan="3">
-											<h:outputText value="#{item.entregador.nome}" />
+
+											<p:inplace id="inentregador" label="#{item.entregador.nome}"
+												editor="true">
+												<p:tooltip for="inentregador"
+													value="Clique no campo para editar o entregador de todos os pedidos"
+													position="top" />
+												<p:ajax event="save" update="tabListaPedidos,growl"
+													listener="#{pedidoController.atualizarPedido(item,'E')}" />
+												<p:selectOneMenu id="selectEntregador"
+													value="#{item.entregador}" filter="true"
+													filterMatchMode="contains" disabled="#{item.confirmado}"
+													converter="omnifaces.SelectItemsConverter">
+													<f:selectItem itemLabel="Selecionar" itemValue=""
+														noSelectionOption="true" />
+													<f:selectItems
+														value="#{pedidoController.listaEntregadorCarregada}"
+														var="itemEntregador" itemLabel="#{itemEntregador.nome}"
+														itemValue="#{itemEntregador}"
+														itemDisabled="#{itemEntregador.valorDiaria eq null}" />
+												</p:selectOneMenu>
+											</p:inplace>
 										</p:column>
 									</p:headerRow>
 
@@ -77,10 +102,10 @@
 										<p:inplace id="ajaxInplace" label="#{item.ordemEntrega}"
 											editor="true">
 											<p:ajax event="save" update="tabListaPedidos,growl"
-												listener="#{pedidoController.atualizarPedido(item)}" />
+												listener="#{pedidoController.atualizarPedido(item, 'R')}" />
 											<p:inputNumber value="#{item.ordemEntrega}" id="ordemEntrega"
 												symbol="" decimalSeparator="," thousandSeparator="."
-												decimalPlaces="0" />
+												decimalPlaces="0" disabled="#{item.confirmado}" />
 										</p:inplace>
 
 
@@ -90,15 +115,7 @@
 										filterMatchMode="contains"
 										filterStyle="display:none; visibility:hidden;"
 										sortBy="#{item.cliente.nome}">
-										<h:outputLabel value="#{item.cliente.nome}" escape="false" />
-									</p:column>
-
-									<p:column headerText="Endereço"
-										filterBy="#{item.clienteEndereco.endereco}"
-										filterMatchMode="contains"
-										filterStyle="display:none; visibility:hidden;"
-										sortBy="#{item.clienteEndereco.endereco}">
-										<h:outputLabel value="#{item.clienteEndereco.endereco}"
+										<h:outputLabel value="#{item.cliente.id}-#{item.cliente.nome}"
 											escape="false" />
 									</p:column>
 
@@ -120,6 +137,44 @@
 											escape="false" />
 									</p:column>
 
+									<p:column headerText="Forma Pagamento"
+										filterBy="#{item.formaPagamento.descricao}"
+										filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;"
+										sortBy="#{item.formaPagamento.descricao}">
+
+										<p:tooltip for="inFormaPagamento"
+											value="Clique no campo para editar" position="top" />
+
+										<p:inplace label="#{item.formaPagamento.descricao}"
+											editor="true" id="inFormaPagamento">
+											<p:ajax event="save" update="tabListaPedidos,growl"
+												listener="#{pedidoController.atualizarPedido(item,'F')}" />
+											<p:selectOneMenu id="selectFormaPagamento"
+												value="#{item.formaPagamento}" filter="true"
+												filterMatchMode="contains" disabled="#{item.confirmado}"
+												converter="omnifaces.SelectItemsConverter">
+												<f:selectItem itemLabel="Selecionar" itemValue=""
+													noSelectionOption="true" />
+												<f:selectItems
+													value="#{pedidoController.listaFormasPagamento}"
+													var="itemFormaPg" itemLabel="#{itemFormaPg.descricao}"
+													itemValue="#{itemFormaPg}" />
+											</p:selectOneMenu>
+										</p:inplace>
+									</p:column>
+
+									<p:column headerText="" width="5%"
+										filterStyle="display:none; visibility:hidden;">
+										<p:tooltip for="tipotaxa"
+											value="#{ item.confirmado?'Item confirmado':'Sem confirmação' }"
+											position="top" />
+
+										<p:selectBooleanButton id="tipotaxa"
+											value="#{item.confirmado}" onLabel=". " offLabel=" ."
+											onIcon="fa fa-check" offIcon="fa fa-times" disabled="true" />
+									</p:column>
+
 
 
 
@@ -131,20 +186,58 @@
 														value="Cardápio: #{item.cardapio.descricaoComDiaSemana}" />
 												</f:facet>
 												<h:outputText value="Observacao:" />
-												<p:inplace label="#{item.observacao}" editor="true">
+
+												<p:inplace label="#{item.observacao}" editor="true"
+													id="inobservacao">
+													<p:tooltip for="inobservacao"
+														value="Clique no campo para editar" position="top" />
 													<p:ajax event="save" update="tabListaPedidos,growl"
-														listener="#{pedidoController.atualizarPedido(item)}" />
+														listener="#{pedidoController.atualizarPedido(item,'O')}" />
 													<p:inputTextarea id="observacao" value="#{item.observacao}"
 														rows="3" cols="30" maxlength="450" counter="display"
 														counterTemplate="Faltam {0} characteres"
-														autoResize="false" />
+														disabled="#{item.confirmado}" autoResize="false" />
 													<h:outputText id="display" />
 												</p:inplace>
 												<h:outputText value="Qtd:" />
-												<h:outputText value="#{item.quantidade}" />
+
+												<p:inplace label="#{item.quantidade}" editor="true"
+													id="inquantidade">
+													<p:tooltip for="inquantidade"
+														value="Clique no campo para editar" position="top" />
+													<p:ajax event="save" update="tabListaPedidos,growl"
+														listener="#{pedidoController.atualizarPedido(item,'Q')}" />
+													<p:inputNumber value="#{item.quantidade}" id="qtd"
+														disabled="#{item.confirmado}" symbol=""
+														decimalSeparator="," thousandSeparator="."
+														decimalPlaces="0" />
+												</p:inplace>
 												<h:outputText value="Tipo:" />
 												<h:outputText
 													value="#{item.tipoPrato.descricao}-#{item.derivacao.descricao}" />
+												<h:outputText value="Entregador" />
+												<p:inplace id="inentregadorpedido"
+													label="#{item.entregador.nome}" editor="true">
+													<p:tooltip for="inentregadorpedido"
+														value="Clique no campo para editar" position="top" />
+													<p:ajax event="save" update="tabListaPedidos,growl"
+														listener="#{pedidoController.atualizarPedido(item,'E')}" />
+													<p:selectOneMenu id="selectEntregadorPedido"
+														value="#{item.entregador}" filter="true"
+														filterMatchMode="contains" disabled="#{item.confirmado}"
+														converter="omnifaces.SelectItemsConverter">
+														<f:selectItem itemLabel="Selecionar" itemValue=""
+															noSelectionOption="true" />
+														<f:selectItems
+															value="#{pedidoController.listaEntregadorCarregada}"
+															var="itemEntregador" itemLabel="#{itemEntregador.nome}"
+															itemValue="#{itemEntregador}"
+															itemDisabled="#{itemEntregador.valorDiaria eq null}" />
+													</p:selectOneMenu>
+												</p:inplace>
+
+												<h:outputText value="Valor Diária" />
+												<h:outputText value="#{item.valorDiariaEntregador}" />
 											</p:panelGrid>
 										</p:outputPanel>
 									</p:rowExpansion>

@@ -18,6 +18,7 @@ import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
 import br.com.ichef.model.CardapioFichaPratoEmpresa;
 import br.com.ichef.model.Cliente;
+import br.com.ichef.model.ClienteCarteira;
 import br.com.ichef.model.ClienteEndereco;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Derivacao;
@@ -30,6 +31,7 @@ import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
 import br.com.ichef.model.TipoPrato;
 import br.com.ichef.service.CardapioService;
+import br.com.ichef.service.ClienteCarteiraService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.DerivacaoService;
 import br.com.ichef.service.EmpresaService;
@@ -69,6 +71,9 @@ public class PedidoController extends BaseController {
 
 	@Inject
 	private DerivacaoService derivacaoService;
+
+	@Inject
+	private ClienteCarteiraService clienteCarteiraService;
 
 	@Inject
 	private TipoPratoService tipoPratoService;
@@ -615,6 +620,10 @@ public class PedidoController extends BaseController {
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
 				}
 			}
+
+			if (tipoAlteracao.equals("F")) {
+				obterPrecoPrato();
+			}
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
 
@@ -860,6 +869,62 @@ public class PedidoController extends BaseController {
 
 		}
 
+	}
+
+	public void finalizarListaPedidos() {
+		try {
+
+			obterEntregasDia();
+			// List<ClienteCarteira> listaCarteiras = new ArrayList<>();
+
+			for (Pedido pedido : lista) {
+				String log = null;
+
+				if (!pedido.isConfirmado()) {
+					try {
+						// if (pedido.getFormaPagamento().isCarteira()) {
+						ClienteCarteira carteira = new ClienteCarteira();
+						carteira.setCardapio(pedido.getCardapio());
+						carteira.setCliente(pedido.getCliente());
+						carteira.setData(pedido.getDataEntrega());
+						carteira.setDataCadastrado(new Date());
+						carteira.setDerivacao(pedido.getDerivacao());
+						carteira.setDescricao("Pedido REALIZADO em: " + formatarData.format(pedido.getDataCadastro()));
+						carteira.setEmpresa(pedido.getEmpresa());
+						carteira.setEmpresaLogada(userLogado.getEmpresaLogada());
+						carteira.setFichaTecnicaPrato(pedido.getCardapioFichaPrato().getFichaTecnicaPrato());
+						carteira.setFormaPagamento(pedido.getFormaPagamento());
+						carteira.setTipoCarteira("P");
+						carteira.setTipoPrato(pedido.getTipoPrato());
+						carteira.setUsuarioCadastro(userLogado);
+						carteira.setValorDevido(pedido.getValorPedido());
+						if (!pedido.getFormaPagamento().isCarteira() && !pedido.getFormaPagamento().isCortesia()) {
+							carteira.setValorPago(pedido.getValorPedido());
+						}
+						carteira.setPedido(pedido);
+						log = "Lançamento Efetuado em Carteira";
+						pedido.setLogLancamentoCarteira(log);
+
+						pedido.setUsuarioFinalizacao(userLogado);
+						pedido.setDataFinalizacao(new Date());
+						pedido.setSnConfirmado("S");
+
+						clienteCarteiraService.saveOrUpdade(carteira);
+						service.finalizarPedido(pedido);
+					} catch (Exception e) {
+						pedido.setSnConfirmado("N");
+						pedido.setLogLancamentoCarteira(e.getMessage());
+						service.finalizarPedido(pedido);
+						e.printStackTrace();
+						return;
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void limpar() {

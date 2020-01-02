@@ -16,20 +16,22 @@ public class EntityManagerProducer {
 
 	public EntityManagerProducer() {
 		this.factory = Persistence.createEntityManagerFactory("PU");
-		//System.out.println("CONEXAO ABERTA - EntityManagerProducer");
+		// System.out.println("CONEXAO ABERTA - EntityManagerProducer");
 	}
 
 	@Produces
 	public EntityManager createEntityManager() {
-		//System.out.println("CONEXAO ABERTA - createEntityManager");
+		// System.out.println("CONEXAO ABERTA - createEntityManager");
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		return this.factory.createEntityManager();
 	}
 
 	public void closeEntityManager(@Disposes EntityManager manager) {
-		//System.out.println("CONEXAO FECHADA");
-		manager.close();
-	
+		// System.out.println("CONEXAO FECHADA");
+		if (manager.isOpen())
+
+			manager.close();
+
 	}
 
 }

@@ -1,5 +1,6 @@
 package br.com.ichef.service;
 
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import br.com.ichef.dao.GenericDAO;
@@ -11,34 +12,39 @@ public class CardapioFichaPratoService extends GenericDAO<CardapioFichaPrato> {
 
 	public String atualizarOrdem(CardapioFichaPrato entity) {
 
+		EntityTransaction tx = null;
 		try {
 
 			StringBuilder hql = null;
 			int result = -1;
-			
+
 			hql = new StringBuilder();
-			
-			hql.append("UPDATE CardapioFichaPrato SET ordem = "+entity.getOrdem()+", usuarioAlteracao.id = "+entity.getUsuarioAlteracao().getId()+ ", dataAlteracao = now() where id = "+entity.getId()) ;
+
+			hql.append("UPDATE CardapioFichaPrato SET ordem = " + entity.getOrdem() + ", usuarioAlteracao.id = "
+					+ entity.getUsuarioAlteracao().getId() + ", dataAlteracao = now() where id = " + entity.getId());
 
 			if (hql != null) {
 				if (!getManager().isOpen()) {
 					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager( producer.createEntityManager() ) ;
+					setManager(producer.createEntityManager());
 				}
-				
-				getManager().getTransaction().begin();
+
+				tx = getManager().getTransaction();
+				tx.begin();
 				Query query = getManager().createQuery(hql.toString());
 				result = query.executeUpdate();
-				getManager().getTransaction().commit();
+				tx.commit();
 			}
 			if (result == 0)
 				return "Operação Não Realizada. Contact o ADM do sistema";
 			return null;
 		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
 			return e.getMessage();
 		} finally {
 			getManager().close();
 		}
-		
+
 	}
 }

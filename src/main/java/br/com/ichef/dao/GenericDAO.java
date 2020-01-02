@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -62,23 +63,26 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	protected T updateImpl(T entity) throws Exception {
-
+		EntityTransaction tx = null;
 		try {
 
 			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
 				manager = producer.createEntityManager();
-				
+
 			}
-			manager.getTransaction().begin();
+			tx = manager.getTransaction();
+			tx.begin();
 			manager.merge(entity);
 			manager.flush();
-			manager.getTransaction().commit();
+			tx.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			e.printStackTrace();
+			if (tx != null)
+				tx.rollback();
 		} finally {
+			if(manager.isOpen())
 			manager.close();
 		}
 
@@ -86,20 +90,25 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	protected T saveImpl(T entity) throws Exception {
+		EntityTransaction tx = null;
 		try {
 
 			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
-				producer.closeEntityManager(manager);
+				manager = producer.createEntityManager();
 			}
-			manager.getTransaction().begin();
+			tx = manager.getTransaction();
+			tx.begin();
 			manager.persist(entity);
-			manager.getTransaction().commit();
+			tx.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			if (tx != null)
+				tx.rollback();
 		} finally {
-			manager.close();
+			if (manager.isOpen())
+				manager.close();
 		}
 
 		return entity;
@@ -116,21 +125,26 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	 */
 
 	public void excluir(BaseEntity entity) {
+		EntityTransaction tx = null;
 		try {
 			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
 				manager = producer.createEntityManager();
 			}
-			manager.getTransaction().begin();
+			tx = manager.getTransaction();
+			tx.begin();
 			entity = getById(entity.getId());
 			manager.remove(entity);
 			manager.flush();
-			manager.getTransaction().commit();
+			tx.commit();
 
 		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
 			throw new NegocioExcepticon("Item não pode ser excluído.");
 		} finally {
-			manager.close();
+			if (manager.isOpen())
+				manager.close();
 		}
 	}
 

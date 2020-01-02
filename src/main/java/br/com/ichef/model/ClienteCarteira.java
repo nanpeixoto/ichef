@@ -28,9 +28,6 @@ public class ClienteCarteira extends BaseEntity {
 	@Column(name = "CD_CARTEIRA")
 	private Long id;
 
-	@Column(name = "CD_CARDAPIO")
-	private Long cardapio;
-
 	@Column(name = "DATA")
 	private Date data;
 
@@ -75,6 +72,10 @@ public class ClienteCarteira extends BaseEntity {
 	private Cliente cliente;
 
 	@ManyToOne
+	@JoinColumn(name = "CD_CARDAPIO")
+	private Cardapio cardapio;
+
+	@ManyToOne
 	@JoinColumn(name = "CD_FICHA_TEC_PRATO")
 	private FichaTecnicaPrato fichaTecnicaPrato;
 
@@ -88,6 +89,10 @@ public class ClienteCarteira extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_PEDIDO")
+	private Pedido pedido;
 
 	@Override
 	public Object getId() {
@@ -149,12 +154,20 @@ public class ClienteCarteira extends BaseEntity {
 		return !isInclusao();
 	}
 
-	public Long getCardapio() {
+	public Cardapio getCardapio() {
 		return cardapio;
 	}
 
-	public void setCardapio(Long cardapio) {
+	public void setCardapio(Cardapio cardapio) {
 		this.cardapio = cardapio;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getData() {
@@ -226,11 +239,15 @@ public class ClienteCarteira extends BaseEntity {
 	}
 
 	public String getDescricaoOuPrato() {
-		if (getDescricao() != null)
+		if (getDescricao() != null && getFichaTecnicaPrato()==null)
 			return getDescricao();
-		else
-			return getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "<br>"
-					+ (getDerivacao()!=null? getDerivacao().getDescricao(): "");
+		if(getFichaTecnicaPrato()!=null  && getDescricao()!=null  )
+			return getDescricao()+" <br>"+getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "-"
+					+ (getDerivacao() != null ? getDerivacao().getDescricao() : "");
+		if(getFichaTecnicaPrato()!=null  && getDescricao()==null  )
+			return getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "-"
+					+ (getDerivacao() != null ? getDerivacao().getDescricao() : "");
+		return getDescricao();
 	}
 
 	public Derivacao getDerivacao() {
@@ -271,6 +288,14 @@ public class ClienteCarteira extends BaseEntity {
 
 	public void setEmpresaLogada(Empresa empresaLogada) {
 		this.empresaLogada = empresaLogada;
+	}
+
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
 }

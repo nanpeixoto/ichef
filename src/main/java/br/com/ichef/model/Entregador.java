@@ -83,14 +83,6 @@ public class Entregador extends BaseEntity {
 			setAtivo("N");
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -125,69 +117,50 @@ public class Entregador extends BaseEntity {
 	}
 
 	@Override
+	public String getColumnOrderBy() {
+		return "nome";
+	}
+
+	@Override
+	public Object getId() {
+		// TODO Auto-generated method stub
+		return id;
+	}
+
+	@Override
 	public void setId(Object id) {
 		this.id = (Long) id;
 
 	}
 
 	@Override
-	public String getColumnOrderBy() {
-		return "nome";
-	}
-
-	@Override
 	public String getAuditoria() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Usuario getUsuarioAlteracao() {
+		// TODO Auto-generated method stub
 		return usuarioAlteracao;
 	}
 
 	@Override
 	public Date getDataAlteracao() {
+		// TODO Auto-generated method stub
 		return dataAlteracao;
 	}
 
 	@Override
 	public Usuario getUsuarioCadastro() {
+		// TODO Auto-generated method stub
 		return usuarioCadastro;
 	}
 
 	@Override
 	public Date getDataCadastro() {
+		// TODO Auto-generated method stub
 		return dataCadastro;
-	}
-
-	public String getAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(String ativo) {
-		this.ativo = ativo;
-	}
-
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
-
-	public void setDataAlteracao(Date dataAlteracao) {
-		this.dataAlteracao = dataAlteracao;
-	}
-
-	public void setUsuarioCadastro(Usuario usuarioCadastro) {
-		this.usuarioCadastro = usuarioCadastro;
-	}
-
-	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
-		this.usuarioAlteracao = usuarioAlteracao;
-	}
-
-	public String getSituacao() {
-		if (getAtivo().equals("S"))
-			return "Ativo".toUpperCase();
-		return "Inativo".toUpperCase();
 	}
 
 	public Date getDataInicio() {
@@ -199,13 +172,27 @@ public class Entregador extends BaseEntity {
 	}
 
 	public String getNome() {
-		if (nome == null)
-			return nome;
-		return nome.toUpperCase();
+		return nome;
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome.toUpperCase();
+		this.nome = nome;
+	}
+
+	public String getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(String ativo) {
+		this.ativo = ativo;
+	}
+
+	public BigDecimal getValorDiaria() {
+		return valorDiaria;
+	}
+
+	public void setValorDiaria(BigDecimal valorDiaria) {
+		this.valorDiaria = valorDiaria;
 	}
 
 	public List<EntregadorLocalidade> getLocalidades() {
@@ -224,12 +211,20 @@ public class Entregador extends BaseEntity {
 		this.empresa = empresa;
 	}
 
-	public BigDecimal getValorDiaria() {
-		return valorDiaria;
+	public void setUsuarioCadastro(Usuario usuarioCadastro) {
+		this.usuarioCadastro = usuarioCadastro;
 	}
 
-	public void setValorDiaria(BigDecimal valorDiaria) {
-		this.valorDiaria = valorDiaria;
+	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
+		this.usuarioAlteracao = usuarioAlteracao;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+	public void setDataAlteracao(Date dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
 	}
 
 }
