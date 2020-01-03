@@ -40,7 +40,7 @@
 								</div>
 
 
-								<p:dataTable id="tabListaPedidos" widgetVar="itens" 
+								<p:dataTable id="tabListaPedidos" widgetVar="itens"
 									paginator="false" value="#{pedidoController.lista}" var="item"
 									rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
 									editable="true" emptyMessage="Nenhum item encontrado"
@@ -117,6 +117,12 @@
 										sortBy="#{item.cliente.nome}">
 										<h:outputLabel value="#{item.cliente.id}-#{item.cliente.nome}"
 											escape="false" />
+										<br />
+										<i><h:outputText value="Pedido realizado em:" /> <h:outputText
+												value="#{item.dataCadastro}">
+												<f:convertDateTime pattern="dd/MM/yy" />
+											</h:outputText>
+										</i>
 									</p:column>
 
 									<p:column headerText="Localidade"
