@@ -863,6 +863,7 @@ public class PedidoController extends BaseController {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
 					escreveRelatorioPDF("Pedidos", true, pedidos);
 				} catch (Exception e) {
+					e.printStackTrace();
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
 				}
 			}

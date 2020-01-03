@@ -56,8 +56,8 @@
 	<field name="dataFormatadaPedido" class="java.lang.String">
 		<fieldDescription><![CDATA[dataFormatadaPedido]]></fieldDescription>
 	</field>
-	<field name="dataPedido" class="java.util.Date">
-		<fieldDescription><![CDATA[dataPedido]]></fieldDescription>
+	<field name="dataEntrega" class="java.util.Date">
+		<fieldDescription><![CDATA[dataEntrega]]></fieldDescription>
 	</field>
 	<field name="derivacao" class="br.com.ichef.model.Derivacao">
 		<fieldDescription><![CDATA[derivacao]]></fieldDescription>
@@ -125,8 +125,8 @@
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
 	</variable>
 
-		<group  name="Cardapio" isReprintHeaderOnEachPage="true" >
-			<groupExpression><![CDATA[$F{cardapio}.getId()]]></groupExpression>
+		<group  name="Entrega" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
+			<groupExpression><![CDATA[ $F{dataEntrega}]]></groupExpression>
 			<groupHeader>
 			<band height="26"  isSplitAllowed="true" >
 				<rectangle>

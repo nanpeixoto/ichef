@@ -123,7 +123,6 @@ public class Entregador extends BaseEntity {
 
 	@Override
 	public Object getId() {
-		// TODO Auto-generated method stub
 		return id;
 	}
 

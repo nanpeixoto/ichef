@@ -47,11 +47,23 @@
 	<field name="columnOrderBy" class="java.lang.String">
 		<fieldDescription><![CDATA[columnOrderBy]]></fieldDescription>
 	</field>
+	<field name="confirmado" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[confirmado]]></fieldDescription>
+	</field>
 	<field name="dataAlteracao" class="java.util.Date">
 		<fieldDescription><![CDATA[dataAlteracao]]></fieldDescription>
 	</field>
 	<field name="dataCadastro" class="java.util.Date">
 		<fieldDescription><![CDATA[dataCadastro]]></fieldDescription>
+	</field>
+	<field name="dataEntrega" class="java.util.Date">
+		<fieldDescription><![CDATA[dataEntrega]]></fieldDescription>
+	</field>
+	<field name="dataEntregaFormatada" class="java.lang.String">
+		<fieldDescription><![CDATA[dataEntregaFormatada]]></fieldDescription>
+	</field>
+	<field name="dataFinalizacao" class="java.util.Date">
+		<fieldDescription><![CDATA[dataFinalizacao]]></fieldDescription>
 	</field>
 	<field name="dataFormatadaPedido" class="java.lang.String">
 		<fieldDescription><![CDATA[dataFormatadaPedido]]></fieldDescription>
@@ -83,6 +95,9 @@
 	<field name="localidade" class="br.com.ichef.model.Localidade">
 		<fieldDescription><![CDATA[localidade]]></fieldDescription>
 	</field>
+	<field name="logLancamentoCarteira" class="java.lang.String">
+		<fieldDescription><![CDATA[logLancamentoCarteira]]></fieldDescription>
+	</field>
 	<field name="observacao" class="java.lang.String">
 		<fieldDescription><![CDATA[observacao]]></fieldDescription>
 	</field>
@@ -101,6 +116,9 @@
 	<field name="quantidade" class="java.lang.Integer">
 		<fieldDescription><![CDATA[quantidade]]></fieldDescription>
 	</field>
+	<field name="snConfirmado" class="java.lang.String">
+		<fieldDescription><![CDATA[snConfirmado]]></fieldDescription>
+	</field>
 	<field name="tipoPrato" class="br.com.ichef.model.TipoPrato">
 		<fieldDescription><![CDATA[tipoPrato]]></fieldDescription>
 	</field>
@@ -110,14 +128,14 @@
 	<field name="usuarioCadastro" class="br.com.ichef.model.Usuario">
 		<fieldDescription><![CDATA[usuarioCadastro]]></fieldDescription>
 	</field>
+	<field name="usuarioFinalizacao" class="br.com.ichef.model.Usuario">
+		<fieldDescription><![CDATA[usuarioFinalizacao]]></fieldDescription>
+	</field>
 	<field name="valorDiariaEntregador" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[valorDiariaEntregador]]></fieldDescription>
 	</field>
 	<field name="valorPedido" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[valorPedido]]></fieldDescription>
-	</field>
-	<field name="dataEntregaFormatada" class="java.lang.String">
-		<fieldDescription><![CDATA[dataEntregaFormatada]]></fieldDescription>
 	</field>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
@@ -388,7 +406,7 @@
 					<textElement verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[""+$F{cliente}.getNome()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cliente}.getId()+"-"+$F{cliente}.getNome()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -422,9 +440,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="491"
+						x="431"
 						y="0"
-						width="240"
+						width="181"
 						height="18"
 						key="textField-5"
 						stretchType="RelativeToTallestObject"
@@ -439,7 +457,7 @@
 					<reportElement
 						x="282"
 						y="0"
-						width="209"
+						width="150"
 						height="18"
 						key="textField"
 						stretchType="RelativeToTallestObject"
@@ -449,6 +467,21 @@
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getEndereco()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="612"
+						y="0"
+						width="120"
+						height="18"
+						key="textField-6"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{formaPagamento}.getDescricao()]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
