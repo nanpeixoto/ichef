@@ -205,6 +205,8 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 			// System.out.println("conecao fechada");
 			EntityManagerProducer producer = new EntityManagerProducer();
 			manager = producer.createEntityManager();
+		} else {
+			manager.clear();
 		}
 		Criteria criteria = null;
 		if (visitor != null)

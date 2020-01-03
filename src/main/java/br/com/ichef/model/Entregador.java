@@ -226,4 +226,10 @@ public class Entregador extends BaseEntity {
 		this.dataAlteracao = dataAlteracao;
 	}
 
+	public String getSituacao() {
+		if (getAtivo().equals("S"))
+			return "Ativo".toUpperCase();
+		return "Inativo".toUpperCase();
+	}
+
 }

@@ -18,7 +18,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "pedido")
-public class Pedido extends BaseEntity implements Comparable<Pedido> {
+public class Pedido extends BaseEntity   {
 
 	private static final long serialVersionUID = 1L;
 
@@ -403,10 +403,7 @@ public class Pedido extends BaseEntity implements Comparable<Pedido> {
 		return null;
 	}
 
-	@Override
-	public int compareTo(Pedido o) {
-		return this.getOrdemEntrega().compareTo(o.getOrdemEntrega());
-	}
+	 
 
 	public String getDataEntregaFormatada() {
 		try {

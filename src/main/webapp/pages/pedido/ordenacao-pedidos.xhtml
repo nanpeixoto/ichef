@@ -43,7 +43,7 @@
 								<p:dataTable id="tabListaPedidos" widgetVar="itens"
 									paginator="false" value="#{pedidoController.lista}" var="item"
 									rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
-									editable="true" emptyMessage="Nenhum item encontrado"
+									editable="true" emptyMessage="Nenhum item encontrado" sortField="#{item.ordemEntrega}" 
 									sortBy="#{item.entregador.nome}" expandableRowGroups="true"
 									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 									currentPageReportTemplate=""
@@ -64,7 +64,7 @@
 										</p:outputPanel>
 									</f:facet>
 
-									<p:headerRow>
+									<p:headerRow >
 										<p:column colspan="3">
 
 											<p:inplace id="inentregador" label="#{item.entregador.nome}"
@@ -97,7 +97,7 @@
 									<p:column headerText="Ordem" filterBy="#{item.ordemEntrega}"
 										filterMatchMode="contains"
 										filterStyle="display:none; visibility:hidden;"
-										sortBy="#{item.ordemEntrega}" width="8%">
+										  width="8%">
 
 										<p:inplace id="ajaxInplace" label="#{item.ordemEntrega}"
 											editor="true">
@@ -114,7 +114,7 @@
 									<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
 										filterMatchMode="contains"
 										filterStyle="display:none; visibility:hidden;"
-										sortBy="#{item.cliente.nome}">
+										 >
 										<h:outputLabel value="#{item.cliente.id}-#{item.cliente.nome}"
 											escape="false" />
 										<br />
@@ -129,7 +129,7 @@
 										filterBy="#{item.localidade.descricao}"
 										filterMatchMode="contains"
 										filterStyle="display:none; visibility:hidden;"
-										sortBy="#{item.localidade.descricao}">
+										 >
 										<h:outputLabel value="#{item.localidade.descricao}"
 											escape="false" />
 									</p:column>
@@ -138,7 +138,7 @@
 										filterBy="#{item.cardapioFichaPrato.descricao}"
 										filterMatchMode="contains"
 										filterStyle="display:none; visibility:hidden;"
-										sortBy="#{item.cardapioFichaPrato.descricao}">
+										>
 										<h:outputLabel value="#{item.cardapioFichaPrato.descricao}"
 											escape="false" />
 									</p:column>
@@ -147,7 +147,7 @@
 										filterBy="#{item.formaPagamento.descricao}"
 										filterMatchMode="contains"
 										filterStyle="display:none; visibility:hidden;"
-										sortBy="#{item.formaPagamento.descricao}">
+										 >
 
 										<p:tooltip for="inFormaPagamento"
 											value="Clique no campo para editar" position="top" />
