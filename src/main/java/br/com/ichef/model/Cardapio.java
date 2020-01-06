@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,7 +59,7 @@ public class Cardapio extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch =FetchType.EAGER,  mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CardapioFichaPrato> pratos;
 
 	public Usuario getUsuarioAlteracao() {

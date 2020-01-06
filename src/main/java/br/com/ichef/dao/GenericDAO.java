@@ -5,7 +5,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -198,6 +200,19 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 		Criteria criteria = createCriteria(object);
 
 		return criteria.list();
+	}
+	
+	public List<T> mount(List<T> list) {
+		if (list != null && list.size() > 0) {
+			Map<Object, T> map = new HashMap<Object, T>();
+			for (T item : list) {
+				if (!map.containsKey(item.getId())) {
+					map.put((Object) item.getId(), item);
+				}
+			}
+			return (new ArrayList<T>(map.values()));
+		}
+		return list;
 	}
 
 	public List<T> findByParameters(T object, FilterVisitor visitor) throws Exception {

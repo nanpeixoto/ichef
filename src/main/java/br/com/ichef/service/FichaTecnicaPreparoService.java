@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.FichaTecnicaPreparo;
 import br.com.ichef.model.FichaTecnicaPreparoInsumo;
+
 
 public class FichaTecnicaPreparoService extends GenericDAO<FichaTecnicaPreparo> {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +21,18 @@ public class FichaTecnicaPreparoService extends GenericDAO<FichaTecnicaPreparo> 
 		}
 		return entity;
 
+	}
+	
+	@Override
+	public List<FichaTecnicaPreparo> findByParameters(FichaTecnicaPreparo object, FilterVisitor visitor) throws Exception {
+
+		return mount(super.findByParameters(object, visitor));
+	}
+	
+	@Override
+	public List<FichaTecnicaPreparo> findByParameters(FichaTecnicaPreparo object) throws Exception {
+
+		return mount(super.findByParameters(object));
 	}
 
 	public void calcularPercos(FichaTecnicaPreparo entity, Configuracao configuracao) {

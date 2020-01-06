@@ -2,10 +2,12 @@ package br.com.ichef.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,11 +65,11 @@ public class Insumo extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<InsumoPreco> precos;
 
-	@OneToMany(mappedBy = "insumo")
-	private List<VwInsumoPreco> ultimoPreco;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo")
+	private Set<VwInsumoPreco> ultimoPreco;
 
 	public boolean isAtivo() {
 		if (ativo != null) {
@@ -263,11 +265,11 @@ public class Insumo extends BaseEntity {
 		this.precos = precos;
 	}
 
-	public List<VwInsumoPreco> getUltimoPreco() {
+	public Set<VwInsumoPreco> getUltimoPreco() {
 		return ultimoPreco;
 	}
 
-	public void setUltimoPreco(List<VwInsumoPreco> ultimoPreco) {
+	public void setUltimoPreco(Set<VwInsumoPreco> ultimoPreco) {
 		this.ultimoPreco = ultimoPreco;
 	}
 

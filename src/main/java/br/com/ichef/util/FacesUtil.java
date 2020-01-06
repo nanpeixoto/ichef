@@ -6,7 +6,7 @@ import javax.faces.context.FacesContext;
 public class FacesUtil {
 
 	public static void addInfoMessage(String mensagem) {
-		FacesContext.getCurrentInstance().addMessage(null,
+		FacesContext.getCurrentInstance().addMessage("",
 				new FacesMessage(FacesMessage.SEVERITY_INFO, null, mensagem));
 
 	}

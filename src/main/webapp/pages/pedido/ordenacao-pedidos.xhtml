@@ -7,7 +7,7 @@
 	xmlns:adm="http://github.com/adminfaces"
 	template="/WEB-INF/templates/template.xhtml">
 
-	<ui:define name="title">Pedido - Entrega Prevista para a data de:  #{pedidoController.dataHojeFormatada}</ui:define>
+	<ui:define name="title">Pedido - Entrega Prevista</ui:define>
 
 	<ui:define name="body">
 		<f:metadata>
@@ -43,7 +43,8 @@
 								<p:dataTable id="tabListaPedidos" widgetVar="itens"
 									paginator="false" value="#{pedidoController.lista}" var="item"
 									rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
-									editable="true" emptyMessage="Nenhum item encontrado" sortField="#{item.ordemEntrega}" 
+									editable="true" emptyMessage="Nenhum item encontrado"
+									sortField="#{item.ordemEntrega}"
 									sortBy="#{item.entregador.nome}" expandableRowGroups="true"
 									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 									currentPageReportTemplate=""
@@ -51,29 +52,39 @@
 
 
 									<f:facet name="header">
-										<p:outputPanel style="text-align:right; margin-right:-10px"
-											styleClass="ui-widget-auxiliar">
-											<h:outputText value="Pesquisar: " escape="false" />
+										<p:panelGrid columns="5" layout="grid">
+
+											<h:outputText value="Data Entrega:" escape="false" />
+											<p:calendar id="dtInicial"
+												value="#{pedidoController.dataEntrega}" pattern="dd/MM/yyyy"
+												size="10" mask="true" showOn="button" locale="pt_BR">
+												<p:ajax event="dateSelect"
+													listener="#{pedidoController.obterEntregasDia()}"
+													update="tabListaPedidos"></p:ajax>
+											</p:calendar>
+											<h:outputText value="Pesquisar:" escape="false" />
 											<p:inputText id="globalFilter"
 												onchange="PF('itens').filter();" style="width:150px;"
 												placeholder="Pesquisar"
 												styleClass="letras-maiusculas semClear" />
-											<h:outputText value=" " escape="false" />
+
 											<p:commandButton id="Search" value="" icon="fa fa-search"
 												style="font-size: 0.8em;width:3%;" />
-										</p:outputPanel>
+
+										</p:panelGrid>
 									</f:facet>
 
-									<p:headerRow >
+									<p:headerRow>
 										<p:column colspan="3">
+											<h:outputLabel value="#{item.entregador.nome}" />
 
-											<p:inplace id="inentregador" label="#{item.entregador.nome}"
+											<!--<p:inplace id="inentregador" label="#{item.entregador.nome}"
 												editor="true">
 												<p:tooltip for="inentregador"
 													value="Clique no campo para editar o entregador de todos os pedidos"
 													position="top" />
 												<p:ajax event="save" update="tabListaPedidos,growl"
-													listener="#{pedidoController.atualizarPedido(item,'E')}" />
+													listener="#{pedidoController.atualizarTodosEntregadores(item)}" />
 												<p:selectOneMenu id="selectEntregador"
 													value="#{item.entregador}" filter="true"
 													filterMatchMode="contains" disabled="#{item.confirmado}"
@@ -86,7 +97,7 @@
 														itemValue="#{itemEntregador}"
 														itemDisabled="#{itemEntregador.valorDiaria eq null}" />
 												</p:selectOneMenu>
-											</p:inplace>
+											</p:inplace>  -->
 										</p:column>
 									</p:headerRow>
 
@@ -96,8 +107,7 @@
 
 									<p:column headerText="Ordem" filterBy="#{item.ordemEntrega}"
 										filterMatchMode="contains"
-										filterStyle="display:none; visibility:hidden;"
-										  width="8%">
+										filterStyle="display:none; visibility:hidden;" width="8%">
 
 										<p:inplace id="ajaxInplace" label="#{item.ordemEntrega}"
 											editor="true">
@@ -113,23 +123,20 @@
 
 									<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
 										filterMatchMode="contains"
-										filterStyle="display:none; visibility:hidden;"
-										 >
+										filterStyle="display:none; visibility:hidden;">
 										<h:outputLabel value="#{item.cliente.id}-#{item.cliente.nome}"
 											escape="false" />
 										<br />
 										<i><h:outputText value="Pedido realizado em:" /> <h:outputText
 												value="#{item.dataCadastro}">
 												<f:convertDateTime pattern="dd/MM/yy" />
-											</h:outputText>
-										</i>
+											</h:outputText> </i>
 									</p:column>
 
 									<p:column headerText="Localidade"
 										filterBy="#{item.localidade.descricao}"
 										filterMatchMode="contains"
-										filterStyle="display:none; visibility:hidden;"
-										 >
+										filterStyle="display:none; visibility:hidden;">
 										<h:outputLabel value="#{item.localidade.descricao}"
 											escape="false" />
 									</p:column>
@@ -137,8 +144,7 @@
 									<p:column headerText="Prato"
 										filterBy="#{item.cardapioFichaPrato.descricao}"
 										filterMatchMode="contains"
-										filterStyle="display:none; visibility:hidden;"
-										>
+										filterStyle="display:none; visibility:hidden;">
 										<h:outputLabel value="#{item.cardapioFichaPrato.descricao}"
 											escape="false" />
 									</p:column>
@@ -146,8 +152,7 @@
 									<p:column headerText="Forma Pagamento"
 										filterBy="#{item.formaPagamento.descricao}"
 										filterMatchMode="contains"
-										filterStyle="display:none; visibility:hidden;"
-										 >
+										filterStyle="display:none; visibility:hidden;">
 
 										<p:tooltip for="inFormaPagamento"
 											value="Clique no campo para editar" position="top" />
@@ -156,6 +161,9 @@
 											editor="true" id="inFormaPagamento">
 											<p:ajax event="save" update="tabListaPedidos,growl"
 												listener="#{pedidoController.atualizarPedido(item,'F')}" />
+											<p:inputNumber id="valor"
+												value="#{item.valorPago}"
+												symbol="R$ " decimalSeparator="," thousandSeparator="." />
 											<p:selectOneMenu id="selectFormaPagamento"
 												value="#{item.formaPagamento}" filter="true"
 												filterMatchMode="contains" disabled="#{item.confirmado}"

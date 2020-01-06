@@ -18,7 +18,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "pedido")
-public class Pedido extends BaseEntity   {
+public class Pedido extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -71,6 +71,9 @@ public class Pedido extends BaseEntity   {
 
 	@Column(name = "VL_PEDIDO")
 	private BigDecimal valorPedido;
+
+	@Column(name = "VL_PAGO")
+	private BigDecimal valorPago;
 
 	@Column(name = "NR_ORDEM_ENTREGA")
 	private Integer ordemEntrega;
@@ -403,8 +406,6 @@ public class Pedido extends BaseEntity   {
 		return null;
 	}
 
-	 
-
 	public String getDataEntregaFormatada() {
 		try {
 			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
@@ -445,6 +446,14 @@ public class Pedido extends BaseEntity   {
 
 	public void setDataFinalizacao(Date dataFinalizacao) {
 		this.dataFinalizacao = dataFinalizacao;
+	}
+
+	public BigDecimal getValorPago() {
+		return valorPago;
+	}
+
+	public void setValorPago(BigDecimal valorPago) {
+		this.valorPago = valorPago;
 	}
 
 }

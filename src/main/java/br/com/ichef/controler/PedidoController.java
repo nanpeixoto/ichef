@@ -127,6 +127,7 @@ public class PedidoController extends BaseController {
 	// relatorio
 	private Date dataInicial;
 	private Date dataFinal;
+	private Date dataEntrega;
 
 	private boolean entregaDataCardapio;
 
@@ -140,6 +141,7 @@ public class PedidoController extends BaseController {
 		obterListas();
 
 		setEntregaDataCardapio(true);
+		setDataEntrega(new Date());
 
 		// obterPedidoDia();
 
@@ -470,6 +472,8 @@ public class PedidoController extends BaseController {
 			if (getEntity().getValorPedido() == null) {
 				facesMessager.error(getRequiredMessage("Preço"));
 				return;
+			} else {
+				getEntity().setValorPago( getEntity().getValorPedido() );
 			}
 
 			// valor da diaria do entregador
@@ -510,6 +514,11 @@ public class PedidoController extends BaseController {
 					&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
 				facesMessager.error("Quantidade disponível menor que a quantidade solicitada");
 				return;
+			}
+
+			if ((quantidadeJaPedida - getEntity().getQuantidade()) <= 5) {
+				FacesUtil.addInfoMessage(
+						"Quantdade disponível para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
 			}
 
 			getEntity().setDataCadastro(new Date());
@@ -677,15 +686,22 @@ public class PedidoController extends BaseController {
 	}
 
 	public void obterEntregasDia() {
-		//Cardapio cardapioFilter = new Cardapio();
-		//cardapioFilter.setAtivo("S");
-//
+
+		obterEntrega( null );
+	}
+
+	 
+
+	private void obterEntrega(Date data) {
+
+		if (data != null) {
+			setDataEntrega(data);
+		}
 		Pedido filter = new Pedido();
-		//filter.setCardapio(cardapioFilter);
 		filter.setEmpresa(userLogado.getEmpresaLogada());
 
 		PedidoVisitor pedidoVisitor = new PedidoVisitor();
-		pedidoVisitor.setDataEntrega(new Date());
+		pedidoVisitor.setDataEntrega(getDataEntrega());
 
 		try {
 			setLista(service.findByParameters(filter, pedidoVisitor));
@@ -823,7 +839,7 @@ public class PedidoController extends BaseController {
 						carteira.setUsuarioCadastro(userLogado);
 						carteira.setValorDevido(pedido.getValorPedido());
 						if (!pedido.getFormaPagamento().isCarteira() && !pedido.getFormaPagamento().isCortesia()) {
-							carteira.setValorPago(pedido.getValorPedido());
+							carteira.setValorPago(pedido.getValorPago());
 						}
 						carteira.setPedido(pedido);
 						log = "Lançamento Efetuado em Carteira";
@@ -848,6 +864,54 @@ public class PedidoController extends BaseController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void atualizarTodosEntregadores(Pedido pedido) {
+
+		try {
+
+			if (pedido.getEntregador() != null) {
+				if (pedido.getEntregador().getValorDiaria() == null) {
+					facesMessager.error("Entregador sem diária cadastrada");
+					return;
+				}
+				List<Pedido> listaPedidosEntregador = obterPedidosDoEntregador(pedido.getEntregador());
+				BigDecimal valorDiariaEntregador = pedido.getEntregador().getValorDiaria();
+
+				for (Pedido pedidoEntregador : listaPedidosEntregador) {
+					pedidoEntregador.setEntregador(pedido.getEntregador());
+					pedidoEntregador.setValorDiariaEntregador(valorDiariaEntregador);
+					pedidoEntregador.setDataAlteracao(new Date());
+					pedidoEntregador.setUsuarioAlteracao(userLogado);
+					service.saveOrUpdade(pedidoEntregador);
+
+				}
+
+			}
+
+		} catch (Exception e) {
+			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
+			e.printStackTrace();
+		}
+
+	}
+
+	public List<Pedido> obterPedidosDoEntregador(Entregador entregador) {
+
+		Pedido filter = new Pedido();
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+		filter.setEntregador(entregador);
+
+		PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		pedidoVisitor.setDataEntrega(new Date());
+
+		try {
+			return service.findByParameters(filter, pedidoVisitor);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -1073,6 +1137,14 @@ public class PedidoController extends BaseController {
 
 	public void setComponenteDataEntrega(Calendar componenteDataEntrega) {
 		this.componenteDataEntrega = componenteDataEntrega;
+	}
+
+	public Date getDataEntrega() {
+		return dataEntrega;
+	}
+
+	public void setDataEntrega(Date dataEntrega) {
+		this.dataEntrega = dataEntrega;
 	}
 
 }

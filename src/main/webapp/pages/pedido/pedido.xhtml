@@ -72,11 +72,11 @@
 								filterMatchMode="contains">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
-								<f:selectItems value="#{pedidoController.listaCardapio}"
+								<f:selectItems value="#{pedidoController.listaCardapio}" 
 									var="item" itemLabel="#{item.descricaoComDiaSemana}"
 									itemValue="#{item}" />
 
-								<p:ajax event="itemSelect" 
+								<p:ajax event="itemSelect"  process="@this"
 									listener="#{pedidoController.obterPratosCardapio()}"
 									update="prato,selectTipoPrato,linkCardadpio,data" />
 							</p:selectOneMenu>

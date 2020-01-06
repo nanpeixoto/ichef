@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -84,7 +85,7 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	@Column(name = "TP_CLASSIFICACAO")
 	private String classificacao;
 
-	@OneToMany(mappedBy = "fichaTecnicaPreparo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "fichaTecnicaPreparo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FichaTecnicaPreparoInsumo> insumos;
 
 	@Transient
