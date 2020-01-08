@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="EtiquetaEntrega"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="170"
+		 pageHeight="141"
+		 columnWidth="170"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="pLogo" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
+
+	<field name="auditoria" class="java.lang.String">
+		<fieldDescription><![CDATA[auditoria]]></fieldDescription>
+	</field>
+	<field name="cardapio" class="br.com.ichef.model.Cardapio">
+		<fieldDescription><![CDATA[cardapio]]></fieldDescription>
+	</field>
+	<field name="cardapioFichaPrato" class="br.com.ichef.model.CardapioFichaPrato">
+		<fieldDescription><![CDATA[cardapioFichaPrato]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="cliente" class="br.com.ichef.model.Cliente">
+		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	</field>
+	<field name="clienteEndereco" class="br.com.ichef.model.ClienteEndereco">
+		<fieldDescription><![CDATA[clienteEndereco]]></fieldDescription>
+	</field>
+	<field name="columnOrderBy" class="java.lang.String">
+		<fieldDescription><![CDATA[columnOrderBy]]></fieldDescription>
+	</field>
+	<field name="confirmado" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[confirmado]]></fieldDescription>
+	</field>
+	<field name="dataAlteracao" class="java.util.Date">
+		<fieldDescription><![CDATA[dataAlteracao]]></fieldDescription>
+	</field>
+	<field name="dataCadastro" class="java.util.Date">
+		<fieldDescription><![CDATA[dataCadastro]]></fieldDescription>
+	</field>
+	<field name="dataEntrega" class="java.util.Date">
+		<fieldDescription><![CDATA[dataEntrega]]></fieldDescription>
+	</field>
+	<field name="dataEntregaFormatada" class="java.lang.String">
+		<fieldDescription><![CDATA[dataEntregaFormatada]]></fieldDescription>
+	</field>
+	<field name="dataFinalizacao" class="java.util.Date">
+		<fieldDescription><![CDATA[dataFinalizacao]]></fieldDescription>
+	</field>
+	<field name="dataFormatadaPedido" class="java.lang.String">
+		<fieldDescription><![CDATA[dataFormatadaPedido]]></fieldDescription>
+	</field>
+	<field name="derivacao" class="br.com.ichef.model.Derivacao">
+		<fieldDescription><![CDATA[derivacao]]></fieldDescription>
+	</field>
+	<field name="edicao" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[edicao]]></fieldDescription>
+	</field>
+	<field name="empresa" class="br.com.ichef.model.Empresa">
+		<fieldDescription><![CDATA[empresa]]></fieldDescription>
+	</field>
+	<field name="entregador" class="br.com.ichef.model.Entregador">
+		<fieldDescription><![CDATA[entregador]]></fieldDescription>
+	</field>
+	<field name="fichaTecnicaPratoTipo" class="br.com.ichef.model.FichaTecnicaPratoTipo">
+		<fieldDescription><![CDATA[fichaTecnicaPratoTipo]]></fieldDescription>
+	</field>
+	<field name="formaPagamento" class="br.com.ichef.model.FormaPagamento">
+		<fieldDescription><![CDATA[formaPagamento]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Object">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="inclusao" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[inclusao]]></fieldDescription>
+	</field>
+	<field name="localidade" class="br.com.ichef.model.Localidade">
+		<fieldDescription><![CDATA[localidade]]></fieldDescription>
+	</field>
+	<field name="logLancamentoCarteira" class="java.lang.String">
+		<fieldDescription><![CDATA[logLancamentoCarteira]]></fieldDescription>
+	</field>
+	<field name="observacao" class="java.lang.String">
+		<fieldDescription><![CDATA[observacao]]></fieldDescription>
+	</field>
+	<field name="ordemEntrega" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ordemEntrega]]></fieldDescription>
+	</field>
+	<field name="precoCustoPorcao" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[precoCustoPorcao]]></fieldDescription>
+	</field>
+	<field name="precoVendaReceita" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[precoVendaReceita]]></fieldDescription>
+	</field>
+	<field name="precoVendaTipoPrato" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[precoVendaTipoPrato]]></fieldDescription>
+	</field>
+	<field name="quantidade" class="java.lang.Integer">
+		<fieldDescription><![CDATA[quantidade]]></fieldDescription>
+	</field>
+	<field name="snConfirmado" class="java.lang.String">
+		<fieldDescription><![CDATA[snConfirmado]]></fieldDescription>
+	</field>
+	<field name="tipoPrato" class="br.com.ichef.model.TipoPrato">
+		<fieldDescription><![CDATA[tipoPrato]]></fieldDescription>
+	</field>
+	<field name="usuarioAlteracao" class="br.com.ichef.model.Usuario">
+		<fieldDescription><![CDATA[usuarioAlteracao]]></fieldDescription>
+	</field>
+	<field name="usuarioCadastro" class="br.com.ichef.model.Usuario">
+		<fieldDescription><![CDATA[usuarioCadastro]]></fieldDescription>
+	</field>
+	<field name="usuarioFinalizacao" class="br.com.ichef.model.Usuario">
+		<fieldDescription><![CDATA[usuarioFinalizacao]]></fieldDescription>
+	</field>
+	<field name="valorDiariaEntregador" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valorDiariaEntregador]]></fieldDescription>
+	</field>
+	<field name="valorPedido" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valorPedido]]></fieldDescription>
+	</field>
+
+	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
+		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
+	</variable>
+
+		<group  name="Entregador" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
+			<groupExpression><![CDATA[$F{entregador}.getId()]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="141"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="26"
+						y="10"
+						width="142"
+						height="11"
+						key="textField-12"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="7"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["@cozinhadechefe - "+$F{empresa}.getTelefone()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="21"
+						width="168"
+						height="11"
+						key="textField-13"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cliente}.getId()+"-"+$F{cliente}.getNome()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="35"
+						width="168"
+						height="11"
+						key="textField-14"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getLocalidade().getDescricao() ]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="45"
+						width="168"
+						height="11"
+						key="textField-15"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="7" isBold="false" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getEndereco() ]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="67"
+						width="168"
+						height="11"
+						key="textField-16"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricao()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="77"
+						width="168"
+						height="43"
+						key="textField-17"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="7" isBold="false" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{derivacao}.getDescricao()+
+( $F{observacao}!=null && !$F{observacao}.equals("-" ) ? " obs:"+$F{observacao} : "" )]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="128"
+						width="94"
+						height="11"
+						key="textField-18"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Entregador:"+$F{entregador}.getNome()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="112"
+						y="0"
+						width="57"
+						height="11"
+						key="textField-19"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{dataEntrega}]]></textFieldExpression>
+				</textField>
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="1"
+						width="26"
+						height="20"
+						key="image-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{pLogo}]]></imageExpression>
+				</image>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

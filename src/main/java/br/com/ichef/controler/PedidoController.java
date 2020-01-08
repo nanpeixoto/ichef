@@ -473,7 +473,7 @@ public class PedidoController extends BaseController {
 				facesMessager.error(getRequiredMessage("Preço"));
 				return;
 			} else {
-				getEntity().setValorPago( getEntity().getValorPedido() );
+				getEntity().setValorPago(getEntity().getValorPedido());
 			}
 
 			// valor da diaria do entregador
@@ -687,10 +687,8 @@ public class PedidoController extends BaseController {
 
 	public void obterEntregasDia() {
 
-		obterEntrega( null );
+		obterEntrega(null);
 	}
-
-	 
 
 	private void obterEntrega(Date data) {
 
@@ -794,6 +792,48 @@ public class PedidoController extends BaseController {
 				try {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
 					escreveRelatorioPDF("Rota", true, pedidos);
+				} catch (Exception e) {
+					e.printStackTrace();
+					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+				}
+			}
+		}
+	}
+
+	public void imprimirEtiquetaEntrega() {
+		setDataFinal(getDataInicial());
+		if (getDataInicial() == null || getDataFinal() == null) {
+			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
+			return;
+		} else {
+
+			Cardapio cardapioFilter = new Cardapio();
+			cardapioFilter.setAtivo("S");
+
+			Pedido filter = new Pedido();
+			filter.setCardapio(cardapioFilter);
+			filter.setEmpresa(userLogado.getEmpresaLogada());
+
+			PedidoVisitor pedidoVisitor = new PedidoVisitor();
+			pedidoVisitor.setDataEntregaInicial(getDataInicial());
+			pedidoVisitor.setDataEntregaFinal(getDataFinal());
+
+			List<Pedido> pedidos = new ArrayList<>();
+
+			try {
+				pedidos = service.findByParameters(filter, pedidoVisitor);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+			}
+
+			if (pedidos.size() == 0) {
+				FacesUtil.addErroMessage("Nenhum dado encontrado");
+			} else {
+				try {
+					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
