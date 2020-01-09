@@ -4,19 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.cdi.ViewScoped;
+
 import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
 import br.com.ichef.model.VwClienteSaldo;
 import br.com.ichef.service.ClienteSaldoService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class ClienteSaldoController extends BaseController {
+public class ClienteSaldoController extends BaseConsultaCRUD<VwClienteSaldo> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,21 +34,21 @@ public class ClienteSaldoController extends BaseController {
 
 	private List<VwClienteSaldo> listaSelecionadas = new ArrayList<VwClienteSaldo>();
 
+	@Override
+	protected VwClienteSaldo newInstance() {
+		// TODO Auto-generated method stub
+		return new VwClienteSaldo();
+	}
+
+	@Override
+	protected AbstractService<VwClienteSaldo> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
 	@PostConstruct
 	public void init() {
 		lista = service.listAll();
-	}
-
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
-			service.excluir(entity);
-			lista.remove(entity);
-		}
-		FacesUtil.addInfoMessage("VwClienteSaldos excluídas com sucesso");
-	}
-
-	public ClienteSaldoService getService() {
-		return service;
 	}
 
 	public void setService(ClienteSaldoService service) {

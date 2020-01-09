@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.JSFUtil;
 
@@ -85,7 +88,8 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	@Column(name = "TP_CLASSIFICACAO")
 	private String classificacao;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "fichaTecnicaPreparo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany( mappedBy = "fichaTecnicaPreparo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<FichaTecnicaPreparoInsumo> insumos;
 
 	@Transient

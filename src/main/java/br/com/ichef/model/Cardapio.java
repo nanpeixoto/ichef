@@ -19,6 +19,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.Util;
 
@@ -60,6 +63,7 @@ public class Cardapio extends BaseEntity {
 	private boolean isAtivo;
 
 	@OneToMany(fetch =FetchType.EAGER,  mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<CardapioFichaPrato> pratos;
 
 	public Usuario getUsuarioAlteracao() {

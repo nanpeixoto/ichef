@@ -9,11 +9,11 @@ import javax.faces.convert.FacesConverter;
 import br.com.ichef.arquitetura.util.Constantes;
 import br.com.ichef.util.Util;
 
-@FacesConverter("cnpjConverter")
+@FacesConverter("converter.CnpjConverter")
 public class CnpjConverter implements Converter {
 	
 	/**
-	 * MÃ©todo para remover os pontos e hifens do CNPJ;
+	 * Método para remover os pontos e hifens do CNPJ;
 	 * 
 	 */
 	
@@ -31,7 +31,7 @@ public class CnpjConverter implements Converter {
 	}
 
     /**
-	 * MÃ©todo para adicionar pontos e hifens no CNPJ alÃ©m de colocar zeros a esquerda;
+	 * Método para adicionar pontos e hifens no CNPJ além de colocar zeros a esquerda;
 	 * 
 	 */
 	

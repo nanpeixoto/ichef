@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.JSFUtil;
 
@@ -65,10 +68,12 @@ public class Insumo extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(   mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<InsumoPreco> precos;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo")
+	@OneToMany( mappedBy = "insumo")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private Set<VwInsumoPreco> ultimoPreco;
 
 	public boolean isAtivo() {

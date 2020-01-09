@@ -8,20 +8,21 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.VwPrevisaoInsumo;
 import br.com.ichef.util.Util;
 
-public class PrevisaoInsumoService extends GenericDAO<VwPrevisaoInsumo> {
+public class PrevisaoInsumoService extends AbstractService<VwPrevisaoInsumo> {
 	private static final long serialVersionUID = 1L;
 
 	public List<VwPrevisaoInsumo> findPrevisao(Empresa empresa, Date dataInicial, Date dataFinal) {
 		@SuppressWarnings("unchecked")
 		List<VwPrevisaoInsumo> result = getSession().createCriteria(VwPrevisaoInsumo.class)
 				.add(Restrictions.eq("id.codigoEmpresa", empresa.getId()))
-				.add(Restrictions.sqlRestriction(" data between  STR_TO_DATE( '"
-						+ Util.dateToString(dataInicial) + "', '%d/%m/%Y' ) and  STR_TO_DATE( '" + Util.dateToString(dataFinal) + "', '%d/%m/%Y' ) "))
+				.add(Restrictions.sqlRestriction(" data between  STR_TO_DATE( '" + Util.dateToString(dataInicial)
+						+ "', '%d/%m/%Y' ) and  STR_TO_DATE( '" + Util.dateToString(dataFinal) + "', '%d/%m/%Y' ) "))
 				.setProjection(Projections.projectionList().add(Projections.groupProperty("id.codigoInsumo"))
 						.add(Projections.groupProperty("id.codigoEmpresa"))
 						.add(Projections.groupProperty("descricaoInsumo"))
@@ -37,6 +38,24 @@ public class PrevisaoInsumoService extends GenericDAO<VwPrevisaoInsumo> {
 				.addOrder(Order.asc("descricaoTipoInsumo")).addOrder(Order.asc("descricaoInsumo")).list();
 
 		return result;
+	}
+
+	@Override
+	protected void validaCampos(VwPrevisaoInsumo entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void validaRegras(VwPrevisaoInsumo entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void validaRegrasExcluir(VwPrevisaoInsumo entity) throws AppException {
+		// TODO Auto-generated method stub
+
 	}
 
 }

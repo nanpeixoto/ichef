@@ -2,10 +2,11 @@ package br.com.ichef.service;
 
 import java.util.List;
 
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Unidade;
 
-public class UnidadeService extends GenericDAO<Unidade> {
+public class UnidadeService extends AbstractService<Unidade> {
 	private static final long serialVersionUID = 1L;
 
 	public List<Unidade> listAll(Boolean ativo) {
@@ -20,6 +21,24 @@ public class UnidadeService extends GenericDAO<Unidade> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	protected void validaCampos(Unidade entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegras(Unidade entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegrasExcluir(Unidade entity) throws AppException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

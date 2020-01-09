@@ -5,19 +5,22 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.cdi.ViewScoped;
+
 import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cidade;
 import br.com.ichef.service.CidadeService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class CidadeController extends BaseController {
+public class CidadeController  extends BaseConsultaCRUD<Cidade>  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,6 +37,19 @@ public class CidadeController extends BaseController {
 	private List<Cidade> listaSelecionadas 	= new ArrayList<Cidade>();
 	
 	
+	@Override
+	protected Cidade newInstance() {
+		// TODO Auto-generated method stub
+		return new Cidade();
+	}
+
+	@Override
+	protected AbstractService<Cidade> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
+	
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
@@ -48,8 +64,8 @@ public class CidadeController extends BaseController {
 		lista = service.listAll();
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (Cidade entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
@@ -69,13 +85,16 @@ public class CidadeController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-cidade.xhtml?faces-redirect=true";
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
-	public CidadeService getService() {
-		return service;
-	}
+ 
 
 	public void setService(CidadeService service) {
 		this.service = service;

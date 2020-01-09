@@ -6,12 +6,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.model.FichaTecnicaPratoPreparo;
 import br.com.ichef.model.FichaTecnicaPratoTipo;
@@ -25,7 +27,7 @@ import br.com.ichef.visitor.FIchaTecnicaPratoVisitor;
 
 @Named
 @ViewScoped
-public class FichaTecnicaPratoController extends BaseController {
+public class FichaTecnicaPratoController extends BaseConsultaCRUD<FichaTecnicaPrato> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,6 +59,18 @@ public class FichaTecnicaPratoController extends BaseController {
 	private Long aproveitamento;
 	private BigDecimal qtdBruta;
 	private Long copia;
+
+	@Override
+	protected FichaTecnicaPrato newInstance() {
+		// TODO Auto-generated method stub
+		return new FichaTecnicaPrato();
+	}
+
+	@Override
+	protected AbstractService<FichaTecnicaPrato> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
 
 	public void inicializar() {
 		if (id != null) {
@@ -98,10 +112,10 @@ public class FichaTecnicaPratoController extends BaseController {
 			FichaTecnicaPreparo filter = new FichaTecnicaPreparo();
 			filter.setAtivo("S");
 
-			//FIchaTecnicaPreparoVisitor visitor = new FIchaTecnicaPreparoVisitor();
-			//visitor.setObterPreparoDesvinculadoPrato(true);
+			// FIchaTecnicaPreparoVisitor visitor = new FIchaTecnicaPreparoVisitor();
+			// visitor.setObterPreparoDesvinculadoPrato(true);
 
-			setPreparos(fichaTecnicaPreparoService.findByParameters(filter));//, visitor));
+			setPreparos(fichaTecnicaPreparoService.findByParameters(filter));// , visitor));
 
 			TipoPrato filterTipoPrato = new TipoPrato();
 			filterTipoPrato.setAtivo("S");
@@ -124,7 +138,7 @@ public class FichaTecnicaPratoController extends BaseController {
 		entity.getFichaTecnicaPratoPreparos().addAll(temp);
 		service.calcularPercos(entity, configuracao);
 		updateComponentes("Stable");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public String copiar(FichaTecnicaPrato perparo) {
@@ -161,15 +175,15 @@ public class FichaTecnicaPratoController extends BaseController {
 		// Integer qtd = obetrQuantidadeFichaByNome();
 		clone.setDescricao(perparo.getDescricao());
 		clone.setCopia("S");
-		clone.setFichaTecnicaPratoPreparos(new ArrayList<>());
+		clone.setFichaTecnicaPratoPreparos(new ArrayList<FichaTecnicaPratoPreparo>());
 
-		List<FichaTecnicaPratoPreparo> novaListaFicha = new ArrayList<>();
+		List<FichaTecnicaPratoPreparo> novaListaFicha = new ArrayList<FichaTecnicaPratoPreparo>();
 
 		for (FichaTecnicaPratoPreparo fichaInsumoOld : perparo.getFichaTecnicaPratoPreparos()) {
 			FichaTecnicaPratoPreparo fichaInsumo = new FichaTecnicaPratoPreparo();
 			fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
 			// fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
-			//fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
+			// fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
 			fichaInsumo.setFichaTecnicaPreparo(fichaInsumoOld.getFichaTecnicaPreparo());
 			fichaInsumo.setQuantidadeBruta(fichaInsumoOld.getQuantidadeBruta());
 			fichaInsumo.setQuantidadeLiquida(fichaInsumoOld.getQuantidadeLiquida());
@@ -178,7 +192,7 @@ public class FichaTecnicaPratoController extends BaseController {
 			novaListaFicha.add(fichaInsumo);
 		}
 
-		List<FichaTecnicaPratoTipo> novosTipos = new ArrayList<>();
+		List<FichaTecnicaPratoTipo> novosTipos = new ArrayList<FichaTecnicaPratoTipo>();
 
 		for (FichaTecnicaPratoTipo tipoOld : perparo.getFichaTecnicaPratoTipos()) {
 			FichaTecnicaPratoTipo pratoTipo = new FichaTecnicaPratoTipo();
@@ -186,17 +200,14 @@ public class FichaTecnicaPratoController extends BaseController {
 			pratoTipo.setTipoPrato(tipoOld.getTipoPrato());
 			novosTipos.add(pratoTipo);
 		}
-		
-		
 
 		setEntity(null);
 
 		clone.setFichaTecnicaPratoTipos(novosTipos);
 		clone.setFichaTecnicaPratoPreparos(novaListaFicha);
-		
-		
+
 		setEntity(clone);
-		
+
 		inicializarlistaTiposSelecionados(getEntity());
 	}
 
@@ -235,7 +246,7 @@ public class FichaTecnicaPratoController extends BaseController {
 			fichaInsumo.setQuantidadeBruta(new BigDecimal(1));
 			// fichaInsumo.setCustoBruto( getFichaTecnicaPreparo().getPrecoCustoReceita() )
 			// ;
-			//fichaInsumo.setCustoTotal(getFichaTecnicaPreparo().getPrecoCustoPorcao());
+			// fichaInsumo.setCustoTotal(getFichaTecnicaPreparo().getPrecoCustoPorcao());
 			fichaInsumo.setFichaTecnicaPrato(getEntity());
 			fichaInsumo.setFichaTecnicaPreparo(getFichaTecnicaPreparo());
 			fichaInsumo.setQuantidadeLiquida(qtdLiquida);
@@ -251,17 +262,17 @@ public class FichaTecnicaPratoController extends BaseController {
 			qtdLiquida = null;
 
 		} else {
-			facesMessager.error("Insumo já cadastrado");
+			facesMessager.error("Insumo jï¿½ cadastrado");
 		}
 
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (FichaTecnicaPrato  entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	/*
@@ -272,7 +283,7 @@ public class FichaTecnicaPratoController extends BaseController {
 	 * (local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()))
 	 * temp.remove(arealoc); } entity.getLocalidades().clear();
 	 * entity.getLocalidades().addAll(temp); updateComponentes("Stable");
-	 * FacesUtil.addInfoMessage("Itens excluídos com sucesso"); }
+	 * FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso"); }
 	 */
 
 	public String Salvar(boolean validarNome) throws Exception {
@@ -281,7 +292,7 @@ public class FichaTecnicaPratoController extends BaseController {
 			criarClone(getEntity());
 		}
 
-		if (getListaTiposSelecionados() == null || getListaTiposSelecionados().length == 0 ) {
+		if (getListaTiposSelecionados() == null || getListaTiposSelecionados().length == 0) {
 			FacesUtil.addErroMessage("Selecione o(s) tipo(s) de prato(s)");
 			return "";
 		} else {
@@ -294,8 +305,8 @@ public class FichaTecnicaPratoController extends BaseController {
 				tipo.setTipoPrato(tipoPratoService.getById(idTipoPrato));
 				tipo.setFichaTecnicaPrato(getEntity());
 
-				if(getEntity().getFichaTecnicaPratoTipos()==null ) {
-					getEntity().setFichaTecnicaPratoTipos( new ArrayList<>() );
+				if (getEntity().getFichaTecnicaPratoTipos() == null) {
+					getEntity().setFichaTecnicaPratoTipos(new ArrayList<FichaTecnicaPratoTipo>());
 				}
 				getEntity().getFichaTecnicaPratoTipos().add(tipo);
 
@@ -313,11 +324,11 @@ public class FichaTecnicaPratoController extends BaseController {
 			if (validarNome) {
 
 				if (qtdPreparos > 1) {
-					FacesUtil.addErroMessage("Já existe um prato com estas mesmas preparações");
+					FacesUtil.addErroMessage("Jï¿½ existe um prato com estas mesmas preparaï¿½ï¿½es");
 					return "";
 				}
 				if (qtdFichaMesmoNome > 1) {
-					FacesUtil.addErroMessage("Já existe um item com esse nome");
+					FacesUtil.addErroMessage("Jï¿½ existe um item com esse nome");
 					return "";
 				}
 			}
@@ -326,12 +337,12 @@ public class FichaTecnicaPratoController extends BaseController {
 			entity.setDataCadastro(new Date());
 			if (validarNome) {
 				if (qtdPreparos > 0) {
-					FacesUtil.addErroMessage("Já existe um prato com estas mesmas preparações");
+					FacesUtil.addErroMessage("Jï¿½ existe um prato com estas mesmas preparaï¿½ï¿½es");
 					return "";
 				}
-				
+
 				if (qtdFichaMesmoNome > 0) {
-					FacesUtil.addErroMessage("Já existe um item com esse nome");
+					FacesUtil.addErroMessage("Jï¿½ existe um item com esse nome");
 					return "";
 				}
 			}
@@ -356,29 +367,30 @@ public class FichaTecnicaPratoController extends BaseController {
 		Integer qtdFichaMesmoNome = (service.findByParameters(new FichaTecnicaPrato(), visitor)).size();
 		return qtdFichaMesmoNome;
 	}
-	
+
 	private Integer obterQuantidadeFichaByPreparacao() throws Exception {
 		String listaPreparacoes = "";
-		if( getEntity().getFichaTecnicaPratoPreparos()!=null ) {
+		if (getEntity().getFichaTecnicaPratoPreparos() != null) {
 			for (FichaTecnicaPratoPreparo preparo : getEntity().getFichaTecnicaPratoPreparos()) {
-				if(!listaPreparacoes.equalsIgnoreCase("")) {
-					listaPreparacoes =listaPreparacoes+",";
+				if (!listaPreparacoes.equalsIgnoreCase("")) {
+					listaPreparacoes = listaPreparacoes + ",";
 				}
-				listaPreparacoes =listaPreparacoes+ preparo.getFichaTecnicaPreparo().getId().toString();
+				listaPreparacoes = listaPreparacoes + preparo.getFichaTecnicaPreparo().getId().toString();
 			}
 		}
-			
-		Integer qtd = service.findQuantidadeFichaByPreparacao(listaPreparacoes) ;
+
+		Integer qtd = service.findQuantidadeFichaByPreparacao(listaPreparacoes);
 		return qtd;
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-ficha-tecnica-prato.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public FichaTecnicaPratoService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(FichaTecnicaPratoService service) {

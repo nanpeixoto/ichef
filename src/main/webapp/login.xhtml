@@ -103,7 +103,6 @@
                         <p:inputText value="#{loginController.login}" styleClass="form-control" placeholder="Login"
                                      required="true" autocomplete="off" id="usuario"
                                      requiredMessage="Email is required." onblur="#{loginController.buscarEmpresa()}" onchange="#{loginController.buscarEmpresa()}">
-							<p:ajax event="blur" update="empresa" listener="#{loginController.buscarEmpresa()}" />      
 							<p:ajax event="blur"
 								      listener="#{loginController.buscarEmpresa()}"
 								      process="@this" partialSubmit="true"

@@ -1,1 +1,10 @@
-/target/
+*.class
+*.war
+*.ear
+
+target/
+.metadata/
+.settings/
+ *.releaseBackup
+.classpath
+.project

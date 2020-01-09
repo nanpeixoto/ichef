@@ -5,19 +5,21 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class FormaPagamentoController extends BaseController {
+public class FormaPagamentoController extends BaseConsultaCRUD<FormaPagamento> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,12 +30,23 @@ public class FormaPagamentoController extends BaseController {
 
 	private Long id;
 
-	private List<FormaPagamento> lista 				= new ArrayList<FormaPagamento>();
-	private List<FormaPagamento> listaFiltro		= new ArrayList<FormaPagamento>();
+	private List<FormaPagamento> lista = new ArrayList<FormaPagamento>();
+	private List<FormaPagamento> listaFiltro = new ArrayList<FormaPagamento>();
 
-	private List<FormaPagamento> listaSelecionadas 	= new ArrayList<FormaPagamento>();
-	
-	
+	private List<FormaPagamento> listaSelecionadas = new ArrayList<FormaPagamento>();
+
+	@Override
+	protected FormaPagamento newInstance() {
+		// TODO Auto-generated method stub
+		return new FormaPagamento();
+	}
+
+	@Override
+	protected AbstractService<FormaPagamento> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
@@ -49,8 +62,8 @@ public class FormaPagamentoController extends BaseController {
 		lista = service.listAll();
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (FormaPagamento entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
@@ -59,10 +72,10 @@ public class FormaPagamentoController extends BaseController {
 
 	public String Salvar() throws Exception {
 		if (entity.isEdicao()) {
-			entity.setUsuarioAlteracao( getUserLogado() );
+			entity.setUsuarioAlteracao(getUserLogado());
 			entity.setDataAlteracao(new Date());
 		} else {
-			entity.setUsuarioCadastro(  getUserLogado() );
+			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
 		}
 		service.saveOrUpdade(entity);
@@ -70,12 +83,13 @@ public class FormaPagamentoController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-forma-pagamento.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public FormaPagamentoService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(FormaPagamentoService service) {

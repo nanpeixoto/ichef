@@ -1,18 +1,18 @@
 package br.com.ichef.controler;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Insumo;
 import br.com.ichef.model.TipoInsumo;
 import br.com.ichef.model.TipoPrato;
@@ -24,12 +24,14 @@ import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class TipoPratoController extends BaseController {
+public class TipoPratoController extends BaseConsultaCRUD<TipoPrato> {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject	private TipoPratoService service;
-	@Inject private InsumoService insumoService;
+	@Inject
+	private TipoPratoService service;
+	@Inject
+	private InsumoService insumoService;
 
 	private TipoPrato entity;
 
@@ -39,20 +41,32 @@ public class TipoPratoController extends BaseController {
 	private List<TipoPrato> listaFiltro = new ArrayList<TipoPrato>();
 
 	private List<TipoPrato> listaSelecionadas = new ArrayList<TipoPrato>();
-	
+
 	private List<Insumo> insumos = new ArrayList<Insumo>();
 	private Insumo insumo = new Insumo();
-	private Long quantidade ;
+	private Long quantidade;
 
 	private Double preco;
 	private Date dataVigencia;
+
+	@Override
+	protected TipoPrato newInstance() {
+		// TODO Auto-generated method stub
+		return new TipoPrato();
+	}
+
+	@Override
+	protected AbstractService<TipoPrato> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
 
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
 		}
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		if (id != null) {
@@ -61,7 +75,7 @@ public class TipoPratoController extends BaseController {
 			setEntity(new TipoPrato());
 			getEntity().setAtivo("S");
 		}
-		dataVigencia  = new Date();
+		dataVigencia = new Date();
 		lista = service.listAll();
 		setQuantidade(1l);
 		obterListas();
@@ -69,7 +83,7 @@ public class TipoPratoController extends BaseController {
 
 	private void obterListas() {
 		try {
-			Insumo filter = new Insumo();	
+			Insumo filter = new Insumo();
 			TipoInsumo tipoInsumo = new TipoInsumo();
 			tipoInsumo.setId(TipoInsumo.COD_INSUMO_MATERIAL);
 			filter.setTipoInsumo(tipoInsumo);
@@ -77,9 +91,9 @@ public class TipoPratoController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void adicionarInsumo() {
 		boolean existe = false;
 
@@ -93,8 +107,6 @@ public class TipoPratoController extends BaseController {
 			return;
 		}
 
-		
-
 		if (getEntity().getInsumos() != null) {
 			for (TipoPratoInsumo tipoPratoInsumo : getEntity().getInsumos()) {
 				if (insumo.getId().equals(tipoPratoInsumo.getInsumo().getId()))
@@ -104,25 +116,27 @@ public class TipoPratoController extends BaseController {
 
 		if (!existe) {
 			TipoPratoInsumo tipoPratoInsumo = new TipoPratoInsumo();
-			tipoPratoInsumo.setAtivo(true);;
+			tipoPratoInsumo.setAtivo(true);
+			;
 			tipoPratoInsumo.setAtivo("S");
 			tipoPratoInsumo.setQuantidade(getQuantidade());
-			//tipoPratoInsumo.setCustoTotal((new BigDecimal(tipoPratoInsumo.getQuantidade().toString()).multiply(new BigDecimal(getInsumo().getValor()))).setScale(2, RoundingMode.HALF_EVEN));
+			// tipoPratoInsumo.setCustoTotal((new
+			// BigDecimal(tipoPratoInsumo.getQuantidade().toString()).multiply(new
+			// BigDecimal(getInsumo().getValor()))).setScale(2, RoundingMode.HALF_EVEN));
 			tipoPratoInsumo.setTipoPrato(getEntity());
 			tipoPratoInsumo.setInsumo(insumo);
-			
 
 			if (getEntity().getInsumos() == null) {
 				getEntity().setInsumos(new ArrayList<TipoPratoInsumo>());
 			}
 			getEntity().getInsumos().add(tipoPratoInsumo);
 
-			//service.calcularPercos(entity, configuracao);
+			// service.calcularPercos(entity, configuracao);
 			setInsumo(null);
 			setQuantidade(1l);
 
 		} else {
-			facesMessager.error("Insumo já cadastrado");
+			facesMessager.error("Insumo jï¿½ cadastrado");
 		}
 
 	}
@@ -136,23 +150,22 @@ public class TipoPratoController extends BaseController {
 		}
 		entity.getInsumos().clear();
 		entity.getInsumos().addAll(temp);
-		//service.calcularPercos(entity, configuracao);
+		// service.calcularPercos(entity, configuracao);
 		updateComponentes("Stable");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
-	
 
 	public void adicionarPreco() {
 		TipoPratoPreco tipoPratoPrecoObj = new TipoPratoPreco();
 		tipoPratoPrecoObj.setDataCadastro(new Date());
 		tipoPratoPrecoObj.setDataVigencia(getDataVigencia());
-		tipoPratoPrecoObj.setPreco( getPreco() );
+		tipoPratoPrecoObj.setPreco(getPreco());
 		tipoPratoPrecoObj.setTipoPrato(getEntity());
 		tipoPratoPrecoObj.setUsuarioCadastro(getUserLogado());
 		if (getEntity().getPrecos() == null)
 			getEntity().setPrecos(new ArrayList<TipoPratoPreco>());
 		getEntity().getPrecos().add(tipoPratoPrecoObj);
-		
+
 		updateComponentes("Stable");
 
 		setPreco(null);
@@ -160,12 +173,12 @@ public class TipoPratoController extends BaseController {
 
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (TipoPrato entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -183,12 +196,13 @@ public class TipoPratoController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-tipo-prato.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public TipoPratoService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(TipoPratoService service) {
@@ -274,7 +288,5 @@ public class TipoPratoController extends BaseController {
 	public void setQuantidade(Long quantidade) {
 		this.quantidade = quantidade;
 	}
-	
-	
 
 }

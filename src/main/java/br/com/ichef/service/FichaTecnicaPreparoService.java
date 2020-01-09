@@ -5,30 +5,22 @@ import java.math.RoundingMode;
 import java.util.List;
 
 import br.com.ichef.arquitetura.util.FilterVisitor;
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.FichaTecnicaPreparo;
 import br.com.ichef.model.FichaTecnicaPreparoInsumo;
 
-
-public class FichaTecnicaPreparoService extends GenericDAO<FichaTecnicaPreparo> {
+public class FichaTecnicaPreparoService extends AbstractService<FichaTecnicaPreparo> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public FichaTecnicaPreparo saveOrUpdade(FichaTecnicaPreparo entity) throws Exception {
-		if (validaRegras(entity)) {
-			return super.saveOrUpdade(entity);
-		}
-		return entity;
-
-	}
-	
-	@Override
-	public List<FichaTecnicaPreparo> findByParameters(FichaTecnicaPreparo object, FilterVisitor visitor) throws Exception {
+	public List<FichaTecnicaPreparo> findByParameters(FichaTecnicaPreparo object, FilterVisitor visitor)
+			throws Exception {
 
 		return mount(super.findByParameters(object, visitor));
 	}
-	
+
 	@Override
 	public List<FichaTecnicaPreparo> findByParameters(FichaTecnicaPreparo object) throws Exception {
 
@@ -51,34 +43,34 @@ public class FichaTecnicaPreparoService extends GenericDAO<FichaTecnicaPreparo> 
 				precoVendaReceita = (custoTotal.doubleValue() > 0d ? custoTotal
 						.divide(new BigDecimal(configuracao.getCustoMercadoriaVendida()).divide(new BigDecimal(100)))
 						.setScale(2, RoundingMode.CEILING) : custoTotal);
-				//entity.setPrecoVendaReceita(precoVendaReceita);
-				//entity.setPrecoVendaPorcao((precoVendaReceita.doubleValue() > 0d
-				//		? (precoVendaReceita.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
-				//		: precoVendaReceita));
+				// entity.setPrecoVendaReceita(precoVendaReceita);
+				// entity.setPrecoVendaPorcao((precoVendaReceita.doubleValue() > 0d
+				// ? (precoVendaReceita.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2,
+				// RoundingMode.CEILING)
+				// : precoVendaReceita));
 
-				//entity.setPrecoCustoPorcao((custoTotal.doubleValue() > 0d
-				//		? (custoTotal.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING)
-				//		: custoTotal));
+				// entity.setPrecoCustoPorcao((custoTotal.doubleValue() > 0d
+				// ? (custoTotal.divide(tamanho, BigDecimal.ROUND_UP)).setScale(2,
+				// RoundingMode.CEILING)
+				// : custoTotal));
 
-				//entity.setPrecoCustoReceita(custoTotal);
+				// entity.setPrecoCustoReceita(custoTotal);
 
 			} else {
-				/*entity.setPrecoVendaReceita(new BigDecimal(0));
-				entity.setPrecoVendaPorcao(new BigDecimal(0));
-
-				entity.setPrecoCustoPorcao(new BigDecimal(0));
-
-				entity.setPrecoCustoReceita(new BigDecimal(0));*/
+				/*
+				 * entity.setPrecoVendaReceita(new BigDecimal(0));
+				 * entity.setPrecoVendaPorcao(new BigDecimal(0));
+				 * 
+				 * entity.setPrecoCustoPorcao(new BigDecimal(0));
+				 * 
+				 * entity.setPrecoCustoReceita(new BigDecimal(0));
+				 */
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-	}
-
-	private boolean validaRegras(FichaTecnicaPreparo entity) {
-		return true;
 	}
 
 	public List<FichaTecnicaPreparo> listAll(Boolean ativo) {
@@ -93,6 +85,24 @@ public class FichaTecnicaPreparoService extends GenericDAO<FichaTecnicaPreparo> 
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	protected void validaCampos(FichaTecnicaPreparo entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void validaRegras(FichaTecnicaPreparo entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void validaRegrasExcluir(FichaTecnicaPreparo entity) throws AppException {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -3,6 +3,7 @@ package br.com.ichef.model;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -72,13 +76,16 @@ public class Cliente extends BaseEntity {
 	private Usuario usuarioAlteracao;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<ClienteTelefone> telefones;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ClienteEndereco> enderecos;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private Set<ClienteEndereco> enderecos;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ClienteCarteira> carteiras;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private Set<ClienteCarteira> carteiras;
 
 	@Column(name = "DS_APELIDO")
 	private String apelido;
@@ -418,14 +425,6 @@ public class Cliente extends BaseEntity {
 		this.apelido = apelido.toUpperCase();
 	}
 
-	public List<ClienteEndereco> getEnderecos() {
-		return enderecos;
-	}
-
-	public void setEnderecos(List<ClienteEndereco> enderecos) {
-		this.enderecos = enderecos;
-	}
-
 	public String getAllTelefones() {
 		String listaTelefones = "";
 		for (ClienteTelefone tel : telefones) {
@@ -444,14 +443,6 @@ public class Cliente extends BaseEntity {
 
 	public void setDescricaoTelefone(String descricaoTelefone) {
 		this.descricaoTelefone = descricaoTelefone;
-	}
-
-	public List<ClienteCarteira> getCarteiras() {
-		return carteiras;
-	}
-
-	public void setCarteiras(List<ClienteCarteira> carteiras) {
-		this.carteiras = carteiras;
 	}
 
 	public String getNomeCompleto() {
@@ -525,11 +516,11 @@ public class Cliente extends BaseEntity {
 	public void setExibirSaldo(String exibirSaldo) {
 		this.exibirSaldo = exibirSaldo;
 	}
-	
+
 	public String getNomeComTelefonePrincipal() {
 		String telPrincipal = getTelefonePrincipal();
-		if(telPrincipal !=null)  {
-			return getNome()+"-"+getTelefonePrincipal();
+		if (telPrincipal != null) {
+			return getNome() + "-" + getTelefonePrincipal();
 		}
 		return getNome();
 	}
@@ -539,9 +530,25 @@ public class Cliente extends BaseEntity {
 			if (tel.isTelefonePrincipal())
 				return tel.getTelefone();
 		}
-		
+
 		return null;
 
+	}
+
+	public Set<ClienteEndereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(Set<ClienteEndereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	public Set<ClienteCarteira> getCarteiras() {
+		return carteiras;
+	}
+
+	public void setCarteiras(Set<ClienteCarteira> carteiras) {
+		this.carteiras = carteiras;
 	}
 
 }

@@ -3,11 +3,12 @@ package br.com.ichef.service;
 import java.util.List;
 
 import br.com.ichef.arquitetura.util.FilterVisitor;
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Insumo;
 
 
-public class InsumoService extends GenericDAO<Insumo> {
+public class InsumoService extends AbstractService<Insumo> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -34,6 +35,24 @@ public class InsumoService extends GenericDAO<Insumo> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	protected void validaCampos(Insumo entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegras(Insumo entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegrasExcluir(Insumo entity) throws AppException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

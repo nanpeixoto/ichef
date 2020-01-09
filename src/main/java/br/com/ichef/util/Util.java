@@ -524,7 +524,7 @@ public class Util extends ReportUtils {
 		return scontext.getRealPath(getProperties().getProperty("dir.relatorio") + relatorio);
 	}
 
-	public static String getRequiredMessage(String label) {
+	public String getRequiredMessage(String label) {
 		return MensagemUtil.obterMensagem("geral.required.field", MensagemUtil.obterMensagem(label));
 	}
 

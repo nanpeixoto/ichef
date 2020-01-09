@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Insumo;
 import br.com.ichef.model.InsumoPreco;
@@ -26,7 +28,7 @@ import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class InsumoController extends BaseController {
+public class InsumoController extends BaseConsultaCRUD<Insumo> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,6 +60,18 @@ public class InsumoController extends BaseController {
 	private Double preco;
 	private Date dataVigencia;
 
+	@Override
+	protected Insumo newInstance() {
+		// TODO Auto-generated method stub
+		return new Insumo();
+	}
+
+	@Override
+	protected AbstractService<Insumo> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
@@ -85,12 +99,12 @@ public class InsumoController extends BaseController {
 		setListaEmpresas(empresaService.listAll(true));
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (Insumo entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -128,8 +142,13 @@ public class InsumoController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-insumo.xhtml?faces-redirect=true";
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void adicionarPreco() {
@@ -140,7 +159,7 @@ public class InsumoController extends BaseController {
 		}
 
 		if (getDataVigencia() == null) {
-			facesMessager.error(getRequiredMessage("Vigência"));
+			facesMessager.error(getRequiredMessage("Vigï¿½ncia"));
 			return;
 		}
 
@@ -182,11 +201,7 @@ public class InsumoController extends BaseController {
 		entity.getPrecos().addAll(temp);
 
 		updateComponentes("tbPreco");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
-	}
-
-	public InsumoService getService() {
-		return service;
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void setService(InsumoService service) {

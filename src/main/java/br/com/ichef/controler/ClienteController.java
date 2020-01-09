@@ -7,14 +7,16 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cidade;
 import br.com.ichef.model.Cliente;
 import br.com.ichef.model.ClienteCarteira;
@@ -43,7 +45,8 @@ import br.com.ichef.visitor.ClienteVisitor;
 
 @Named
 @ViewScoped
-public class ClienteController extends BaseController {
+public class ClienteController  extends BaseConsultaCRUD<Cliente> 
+ {
 
 	private static final long serialVersionUID = 1L;
 
@@ -106,22 +109,37 @@ public class ClienteController extends BaseController {
 	private Double valorPago;
 	private String descricao;
 
-	private List<FormaPagamento> listaFormasPagamento = new ArrayList<>();
+	private List<FormaPagamento> listaFormasPagamento = new ArrayList<FormaPagamento>();
 	private FormaPagamento formaPagamento;
 
-	private List<FichaTecnicaPrato> listaPratos = new ArrayList<>();
+	private List<FichaTecnicaPrato> listaPratos = new ArrayList<FichaTecnicaPrato>();
 	private FichaTecnicaPrato prato;
 
-	private List<Derivacao> listaDerivacoes = new ArrayList<>();
+	private List<Derivacao> listaDerivacoes = new ArrayList<Derivacao>();
 	private Derivacao derivacao;
 
-	private List<TipoPrato> listaTiposPrato = new ArrayList<>();
+	private List<TipoPrato> listaTiposPrato = new ArrayList<TipoPrato>();
 	private TipoPrato tipoPrato;
 
-	private List<Empresa> listaEmpresas = new ArrayList<>();
+	private List<Empresa> listaEmpresas = new ArrayList<Empresa>();
 	private Empresa empresa;
 
 	private ClienteCarteira carteiraSelecionada;
+	
+	
+	@Override
+	protected Cliente newInstance() {
+		// TODO Auto-generated method stub
+		return new Cliente();
+	}
+
+	@Override
+	protected AbstractService<Cliente> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
+	
 
 	public void inicializar() {
 		if (id != null) {
@@ -145,7 +163,7 @@ public class ClienteController extends BaseController {
 			telefone = "5571 ";
 		} else {
 			if (telefone == null) {
-				newInstance();
+				limpar();
 				telefone = "5571 ";
 				lista = service.listAll();
 			}
@@ -153,7 +171,7 @@ public class ClienteController extends BaseController {
 		obterListas();
 	}
 
-	private void newInstance() {
+	private void limpar() {
 		setEntity(new Cliente());
 		setStsTelefonePrincipal(true);
 		setStsEnderecoPrincipal(true);
@@ -180,7 +198,7 @@ public class ClienteController extends BaseController {
 	}
 
 	public void obterTiposPrato() {
-		listaTiposPrato = new ArrayList<>();
+		listaTiposPrato = new ArrayList<TipoPrato>();
 		if (getPrato().getFichaTecnicaPratoTipos() != null) {
 			for (FichaTecnicaPratoTipo fichaTecnicaPratoTipo : getPrato().getFichaTecnicaPratoTipos()) {
 				listaTiposPrato.add(fichaTecnicaPratoTipo.getTipoPrato());
@@ -201,16 +219,16 @@ public class ClienteController extends BaseController {
 		// listaTiposPrato = tipoPratoService.listAll(true);
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (Cliente entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void excluirTelefonesSelecionados(ClienteTelefone obj) {
-		List<ClienteTelefone> temp = new ArrayList<>();
+		List<ClienteTelefone> temp = new ArrayList<ClienteTelefone>();
 		temp.addAll(entity.getTelefones());
 		for (ClienteTelefone item : entity.getTelefones()) {
 			if (obj.getTelefone().equals(item.getTelefone()))
@@ -219,11 +237,11 @@ public class ClienteController extends BaseController {
 		entity.getTelefones().clear();
 		entity.getTelefones().addAll(temp);
 		updateComponentes(":form:tabs:dttel");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void excluirLocalidadesSelecionadas(ClienteEndereco obj) {
-		List<ClienteEndereco> temp = new ArrayList<>();
+		List<ClienteEndereco> temp = new ArrayList<ClienteEndereco>();
 		temp.addAll(entity.getEnderecos());
 		for (ClienteEndereco item : entity.getEnderecos()) {
 			if (obj.getLocalidade().getId().equals(item.getLocalidade().getId()))
@@ -232,7 +250,7 @@ public class ClienteController extends BaseController {
 		entity.getEnderecos().clear();
 		entity.getEnderecos().addAll(temp);
 		updateComponentes(":form:tabs:dtendereco");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -251,7 +269,7 @@ public class ClienteController extends BaseController {
 		entity.setDescricaoTelefone(entity.getAllTelefones());
 		service.saveOrUpdade(entity);
 
-		FacesUtil.addInfoMessage("Novo cliente criado código: " + getEntity().getId());
+		FacesUtil.addInfoMessage("Novo cliente criado cï¿½digo: " + getEntity().getId());
 
 		return "lista-cliente.xhtml?faces-redirect=true";
 
@@ -265,8 +283,13 @@ public class ClienteController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-cliente.xhtml?faces-redirect=true";
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void adicionarTelefone() {
@@ -292,10 +315,10 @@ public class ClienteController extends BaseController {
 				setStsTelefonePrincipal(false);
 				setTelefone(null);
 			} else {
-				facesMessager.error("Já existe um telefone principal para esse cliente");
+				facesMessager.error("Jï¿½ existe um telefone principal para esse cliente");
 			}
 			// } else {
-			// facesMessager.error("Telefone já adicionado para essa cliente");
+			// facesMessager.error("Telefone jï¿½ adicionado para essa cliente");
 			// }
 		}
 	}
@@ -338,8 +361,8 @@ public class ClienteController extends BaseController {
 		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO
 																										// FOR PARA
 																										// OUTRA EMPRESA
-			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO NÃO FOR CREDITO
-				facesMessager.error("O tipo de Lançamento para outra empresa só pode ser Crédito");
+			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO Nï¿½O FOR CREDITO
+				facesMessager.error("O tipo de Lanï¿½amento para outra empresa sï¿½ pode ser Crï¿½dito");
 				return;
 			}
 		}
@@ -351,7 +374,7 @@ public class ClienteController extends BaseController {
 
 		if (getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO FOR CREDITO
 			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Descrição"));
+				facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o"));
 				return;
 			}
 			if (getData() == null) {// data precisa estar preenhida
@@ -378,7 +401,7 @@ public class ClienteController extends BaseController {
 				return;
 			}
 			// if (getDerivacao() == null) {// descricao precisa estar preenhida
-			// facesMessager.error(getRequiredMessage("Derivação"));
+			// facesMessager.error(getRequiredMessage("Derivaï¿½ï¿½o"));
 			// return;
 			// }
 			if (getData() == null) {// data precisa estar preenhida
@@ -393,7 +416,7 @@ public class ClienteController extends BaseController {
 
 		if (getTipoCarteira().equalsIgnoreCase("D")) { // SE O SELECIONADO FOR CREDITO
 			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Descrição"));
+				facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o"));
 				return;
 			}
 
@@ -438,7 +461,7 @@ public class ClienteController extends BaseController {
 			carteira.setValorPago(new BigDecimal(getValorPago().toString()));
 
 		if (getEntity().getCarteiras() == null) {
-			getEntity().setCarteiras(new ArrayList<>());
+			getEntity().setCarteiras( new ArrayList<ClienteCarteira>());
 		}
 
 		try {
@@ -536,10 +559,10 @@ public class ClienteController extends BaseController {
 				setEndereco(null);
 				setLocalidade(null);
 			} else {
-				facesMessager.error("Já existe um endereco principal para esse cliente");
+				facesMessager.error("Jï¿½ existe um endereco principal para esse cliente");
 			}
 		} else {
-			facesMessager.error("Endereco já adicionado para essa cliente");
+			facesMessager.error("Endereco jï¿½ adicionado para essa cliente");
 		}
 
 	}
@@ -548,7 +571,7 @@ public class ClienteController extends BaseController {
 		System.out.println(telefone);
 
 		if (telefone.length() < 8) {
-			FacesUtil.addErroMessage("Informe um telefone válido para continuar");
+			FacesUtil.addErroMessage("Informe um telefone vï¿½lido para continuar");
 			return "";
 		}
 
@@ -599,14 +622,14 @@ public class ClienteController extends BaseController {
 				telefoneEditado.setDataAlteracao(new Date());
 				clienteTelefoneService.saveOrUpdade(telefoneEditado);
 			} else {
-				FacesUtil.addErroMessage("Já existe um telefone principal para esse cliente");
+				FacesUtil.addErroMessage("Jï¿½ existe um telefone principal para esse cliente");
 			}
 		}
 
 	}
 
 	public void excluirCarteira(ClienteCarteira obj) {
-		List<ClienteCarteira> temp = new ArrayList<>();
+		List<ClienteCarteira> temp = new ArrayList<ClienteCarteira>();
 		temp.addAll(entity.getCarteiras());
 		for (ClienteCarteira item : entity.getCarteiras()) {
 			if (obj.equals(item))
@@ -615,7 +638,7 @@ public class ClienteController extends BaseController {
 		entity.getCarteiras().clear();
 		entity.getCarteiras().addAll(temp);
 		// updateComponentes(":form:tabCarteira:tableCarteira");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void editarLinhaEndereco(RowEditEvent event) throws Exception {
@@ -636,9 +659,7 @@ public class ClienteController extends BaseController {
 
 	}
 
-	public ClienteService getService() {
-		return service;
-	}
+	 
 
 	public void setService(ClienteService service) {
 		this.service = service;

@@ -5,15 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.ReorderEvent;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
 import br.com.ichef.model.CardapioFichaPratoEmpresa;
@@ -28,7 +29,7 @@ import br.com.ichef.visitor.CardapioVisitor;
 
 @Named
 @ViewScoped
-public class CardapioController extends BaseController {
+public class CardapioController extends BaseConsultaCRUD<Cardapio> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -118,13 +119,13 @@ public class CardapioController extends BaseController {
 
 		updateComponentes("StableCardapio");
 
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void adicionarPrato() {
 
 		if (!isNotEmptyOrNull(getDescricaoCardapioFicha()) || getDescricaoCardapioFicha() == null) {
-			facesMessager.error(getRequiredMessage("Descrição da Ficha"));
+			facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o da Ficha"));
 			return;
 		}
 
@@ -165,7 +166,7 @@ public class CardapioController extends BaseController {
 
 			getEntity().getPratos().add(ficha);
 
-			/* EMPRESAS QUE O USUÁRIO TEM ACESSO */
+			/* EMPRESAS QUE O USUï¿½RIO TEM ACESSO */
 			List<Empresa> listaEmpresa = empresaService.listAll(true);
 
 			for (Empresa empresa : listaEmpresa) {
@@ -195,17 +196,17 @@ public class CardapioController extends BaseController {
 			setDescricaoCardapioFicha(null);
 
 		} else {
-			facesMessager.error("Prato já cadastrado");
+			facesMessager.error("Prato jï¿½ cadastrado");
 		}
 
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (Cardapio entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void atualizarListaPreparo() {
@@ -220,25 +221,25 @@ public class CardapioController extends BaseController {
 	 * (local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()))
 	 * temp.remove(arealoc); } entity.getLocalidades().clear();
 	 * entity.getLocalidades().addAll(temp); updateComponentes("Stable");
-	 * FacesUtil.addInfoMessage("Itens excluídos com sucesso"); }
+	 * FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso"); }
 	 */
 
 	public String Salvar() throws Exception {
 
 		if (getEntity().getPratos() == null || getEntity().getPratos().size() == 0) {
-			FacesUtil.addErroMessage("Não é possível adicionar um cardápio sem prato");
+			FacesUtil.addErroMessage("Nï¿½o ï¿½ possï¿½vel adicionar um cardï¿½pio sem prato");
 			return "";
 		}
 
 		if (existeCardapio()) {
-			FacesUtil.addErroMessage("Já existe um cardápio cadastrado nesse dia");
+			FacesUtil.addErroMessage("Jï¿½ existe um cardï¿½pio cadastrado nesse dia");
 			return "";
 		}
-		
-		if(getEntity().getPratos()!=null) {
+
+		if (getEntity().getPratos() != null) {
 			for (Cardapio cardapio : lista) {
 				cardapio.setUsuarioAlteracao(userLogado);
-				cardapio.setDataAlteracao(new Date() );
+				cardapio.setDataAlteracao(new Date());
 			}
 		}
 
@@ -265,7 +266,7 @@ public class CardapioController extends BaseController {
 		}
 		visitor.setDataCardapio(getEntity().getData());
 
-		List<Cardapio> listaCardapio = new ArrayList<>();
+		List<Cardapio> listaCardapio = new ArrayList<Cardapio>();
 
 		try {
 			listaCardapio = service.findByParameters(new Cardapio(), visitor);
@@ -287,7 +288,7 @@ public class CardapioController extends BaseController {
 			visitor.setDataInicio(getDataInicial());
 			visitor.setDataFim(getDataFinal());
 
-			List<Cardapio> cardapios = new ArrayList<>();
+			List<Cardapio> cardapios = new ArrayList<Cardapio>();
 
 			try {
 				cardapios = service.findByParameters(new Cardapio(), visitor);
@@ -297,7 +298,7 @@ public class CardapioController extends BaseController {
 				}
 
 			} catch (Exception e) {
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (cardapios.size() == 0) {
@@ -307,7 +308,7 @@ public class CardapioController extends BaseController {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
 					escreveRelatorioPDF("Cardapio", true, cardapios);
 				} catch (Exception e) {
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 
@@ -323,38 +324,36 @@ public class CardapioController extends BaseController {
 		destino = (CardapioFichaPrato) dataTable.getRowData();
 		dataTable.setRowIndex(event.getToIndex());
 		origem = (CardapioFichaPrato) dataTable.getRowData();
-		
-		
+
 		try {
-			destino.setOrdem(event.getFromIndex()+1);
+			destino.setOrdem(event.getFromIndex() + 1);
 			destino.setUsuarioAlteracao(userLogado);
-			destino.setDataAlteracao(new Date() );
+			destino.setDataAlteracao(new Date());
 			cardapioFichaPratoService.atualizarOrdem(destino);
 
-			origem.setOrdem( event.getToIndex()+1 );
+			origem.setOrdem(event.getToIndex() + 1);
 			origem.setUsuarioAlteracao(userLogado);
-			origem.setDataAlteracao(new Date() );
+			origem.setDataAlteracao(new Date());
 			cardapioFichaPratoService.atualizarOrdem(origem);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesUtil.addErroMessage("Erro, entre em contato com a administrador do sistema:"+e.getMessage());
+			FacesUtil.addErroMessage("Erro, entre em contato com a administrador do sistema:" + e.getMessage());
 		}
-		
-		
-		 
-		
-	 
+
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-cardapio.xhtml?faces-redirect=true";
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
-	public CardapioService getService() {
-		return service;
-	}
+	 
 
 	public void setService(CardapioService service) {
 		this.service = service;
@@ -466,6 +465,18 @@ public class CardapioController extends BaseController {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	@Override
+	protected Cardapio newInstance() {
+		// TODO Auto-generated method stub
+		return new Cardapio();
+	}
+
+	@Override
+	protected AbstractService<Cardapio> getService() {
+		// TODO Auto-generated method stub
+		return service;
 	}
 
 }

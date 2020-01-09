@@ -5,25 +5,26 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Unidade;
 import br.com.ichef.service.UnidadeService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class UnidadeController extends BaseController {
+public class UnidadeController extends BaseConsultaCRUD<Unidade> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private UnidadeService service;
-	
 
 	private Unidade entity;
 
@@ -34,6 +35,17 @@ public class UnidadeController extends BaseController {
 
 	private List<Unidade> listaSelecionadas = new ArrayList<Unidade>();
 
+	@Override
+	protected Unidade newInstance() {
+		// TODO Auto-generated method stub
+		return new Unidade();
+	}
+
+	@Override
+	protected AbstractService<Unidade> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
 
 	public void inicializar() {
 		if (id != null) {
@@ -45,9 +57,8 @@ public class UnidadeController extends BaseController {
 		obterListas();
 	}
 
-	
 	private void obterListas() {
-	
+
 	}
 
 	@PostConstruct
@@ -55,8 +66,8 @@ public class UnidadeController extends BaseController {
 		lista = service.listAll();
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (Unidade entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
@@ -76,12 +87,13 @@ public class UnidadeController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-unidade.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public UnidadeService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(UnidadeService service) {
@@ -120,16 +132,12 @@ public class UnidadeController extends BaseController {
 		this.listaSelecionadas = listaSelecionadas;
 	}
 
-
 	public List<Unidade> getListaFiltro() {
 		return listaFiltro;
 	}
 
-
 	public void setListaFiltro(List<Unidade> listaFiltro) {
 		this.listaFiltro = listaFiltro;
 	}
-
-	
 
 }

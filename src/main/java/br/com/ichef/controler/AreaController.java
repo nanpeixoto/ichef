@@ -5,12 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.cdi.ViewScoped;
+
 import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
 import br.com.ichef.model.Area;
 import br.com.ichef.model.AreaLocalidade;
 import br.com.ichef.model.Empresa;
@@ -23,7 +24,7 @@ import br.com.ichef.visitor.LocalidadeVisitor;
 
 @Named
 @ViewScoped
-public class AreaController extends BaseController {
+public class AreaController extends BaseConsultaCRUD<Area> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,6 +52,12 @@ public class AreaController extends BaseController {
 
 	private List<Empresa> empresas = new ArrayList<Empresa>();
 
+	@Override
+	protected Area newInstance() {
+		return new Area();
+
+	}
+
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
@@ -76,7 +83,7 @@ public class AreaController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		obterListas();
 	}
 
@@ -84,14 +91,14 @@ public class AreaController extends BaseController {
 
 		Localidade filter = new Localidade();
 		filter.setEmpresa(getUserLogado().getEmpresaLogada());
-		
+
 		filter.setAtivo(true);
-		
+
 		LocalidadeVisitor visitor = new LocalidadeVisitor();
 		visitor.setListaDesvinculadosDasAreas(true);
-		
+
 		empresas = empresaService.listAll(true);
-		
+
 		try {
 			localidades = localidadeService.findByParameters(filter, visitor);
 		} catch (Exception e) {
@@ -99,10 +106,10 @@ public class AreaController extends BaseController {
 		}
 
 	}
-	
+
 	public void adicionarLocalidade() {
 		boolean existe = false;
-		ArrayList<Localidade> listaLocal = new ArrayList<>();
+		ArrayList<Localidade> listaLocal = new ArrayList<Localidade>();
 
 		if (getEntity().getLocalidades() != null)
 			for (AreaLocalidade areaLocalidade : getEntity().getLocalidades()) {
@@ -126,7 +133,7 @@ public class AreaController extends BaseController {
 			getEntity().getLocalidades().add(obj);
 
 		} else {
-			facesMessager.error("Item já cadastrado");
+			facesMessager.error("Item jï¿½ cadastrado");
 		}
 
 		LocalidadeVisitor visitor = new LocalidadeVisitor();
@@ -145,15 +152,20 @@ public class AreaController extends BaseController {
 	}
 
 	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
-			service.excluir(entity);
-			lista.remove(entity);
+		for (Area entity : listaSelecionadas) {
+			try {
+				service.excluir(entity);
+				lista.remove(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			FacesUtil.addInfoMessage("Itens excluÃ­dos com sucesso");
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
 	public void excluirLocalidadesSelecionadas(AreaLocalidade local) {
-		List<AreaLocalidade> temp = new ArrayList<>();
+		List<AreaLocalidade> temp = new ArrayList<AreaLocalidade>();
 		temp.addAll(entity.getLocalidades());
 		for (AreaLocalidade arealoc : entity.getLocalidades()) {
 			if (local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()))
@@ -162,7 +174,7 @@ public class AreaController extends BaseController {
 		entity.getLocalidades().clear();
 		entity.getLocalidades().addAll(temp);
 		updateComponentes("Stable");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -180,7 +192,12 @@ public class AreaController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return "lista-area.xhtml?faces-redirect=true";
 	}
 

@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cidade;
 import br.com.ichef.model.TipoLocalidade;
 import br.com.ichef.service.TipoLocalidadeService;
@@ -18,13 +20,12 @@ import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class TipoLocalidadeController extends BaseController {
+public class TipoLocalidadeController extends BaseConsultaCRUD<TipoLocalidade> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private TipoLocalidadeService service;
-	
 
 	private TipoLocalidade entity;
 
@@ -36,6 +37,18 @@ public class TipoLocalidadeController extends BaseController {
 
 	private List<Cidade> cidades = new ArrayList<Cidade>();
 
+	@Override
+	protected TipoLocalidade newInstance() {
+		// TODO Auto-generated method stub
+		return new TipoLocalidade();
+	}
+
+	@Override
+	protected AbstractService<TipoLocalidade> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
@@ -46,9 +59,8 @@ public class TipoLocalidadeController extends BaseController {
 		obterListas();
 	}
 
-	
 	private void obterListas() {
-	
+
 	}
 
 	@PostConstruct
@@ -56,8 +68,8 @@ public class TipoLocalidadeController extends BaseController {
 		lista = service.listAll();
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (TipoLocalidade entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
@@ -77,12 +89,13 @@ public class TipoLocalidadeController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-tipolocalidade.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public TipoLocalidadeService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(TipoLocalidadeService service) {

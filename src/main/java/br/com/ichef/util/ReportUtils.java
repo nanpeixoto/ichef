@@ -25,12 +25,14 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 
+ 
+
 @SuppressWarnings("deprecation")
 public class ReportUtils {
     public static final String REL_TIPO_PDF = "PDF";
 
     /**
-     * Indicativo para geração no formato XLS.
+     * Indicativo para geraï¿½ï¿½o no formato XLS.
      */
     public static final String REL_TIPO_XLS = "XLS";
 
@@ -94,11 +96,11 @@ public class ReportUtils {
      * Converte o <code>stream</code> informado para um array de bytes de um arquivo 
      * do tipo XLS. 
      * 
-     * @param stream Stream do relatório jasper
-     * @param parametros Parâmetros a ser enviado para o relatório
-     * @param dataSource Dados utilizados no preenchimento do relatório
+     * @param stream Stream do relatï¿½rio jasper
+     * @param parametros Parï¿½metros a ser enviado para o relatï¿½rio
+     * @param dataSource Dados utilizados no preenchimento do relatï¿½rio
      * @return
-     * @throws JRException Caso haja algum erro no preenchimento do relatório
+     * @throws JRException Caso haja algum erro no preenchimento do relatï¿½rio
      */
     private byte[] toXLS(InputStream stream, Map<String, Object> parametros,
             Object dataSource) throws JRException {
@@ -168,7 +170,7 @@ public class ReportUtils {
     public byte[] obterRelatorio(InputStream is, HashMap<String, Object> parametros, List<?> colecaoDataSource, String tipo) throws Exception {
 
         if (is == null) {
-            throw new Exception("ReportUtils.obterRelatorio(InputStream, HashMap, List, String) : InputStream enviado é nulo");
+            throw new Exception("ReportUtils.obterRelatorio(InputStream, HashMap, List, String) : InputStream enviado ï¿½ nulo");
         }
 
         byte[] relatorio = null;
@@ -195,7 +197,7 @@ public class ReportUtils {
 
     public byte[] obterRelatorio(InputStream is, HashMap<String, Object> parametros, List<?> colecaoDataSource, String tipo, Connection conexao) throws Exception {
         if (is == null) {
-            throw new Exception("ReportUtils.obterRelatorio(InputStream, HashMap, List, String) : InputStream enviado é nulo");
+            throw new Exception("ReportUtils.obterRelatorio(InputStream, HashMap, List, String) : InputStream enviado ï¿½ nulo");
         }
 
         byte[] relatorio = null;
@@ -223,7 +225,7 @@ public class ReportUtils {
 
     /**
      * Retorna um array de bytes de um arquivo do tipo XLS correspondente ao jasper informado
-     * através do <code>arquivoJasper</code>.
+     * atravï¿½s do <code>arquivoJasper</code>.
      * 
      * @param caminhoJasper
      * @param arquivoJasper
@@ -270,7 +272,7 @@ public class ReportUtils {
      * Adiciona o array de bytes <code>relatorio</code> como excel na resposta do Servlet.
      * 
      * @param relatorio array de bytes a ser escrito
-     * @param nomeRelatorio nome de saída do arquivo no cliente
+     * @param nomeRelatorio nome de saï¿½da do arquivo no cliente
      * @param httpServletResponse objeto HTTP contendo o stream de resposta. 
      * @throws Exception
      * @throws IOException

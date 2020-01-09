@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -62,6 +65,7 @@ public class Empresa extends BaseEntity {
 	private Usuario usuarioAlteracao;
 
 	@OneToMany(mappedBy = "empresa",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 
 	@ManyToOne

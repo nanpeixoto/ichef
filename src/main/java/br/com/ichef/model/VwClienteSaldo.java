@@ -6,13 +6,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -32,7 +33,33 @@ public class VwClienteSaldo extends BaseEntity {
 
 	// bi-directional many-to-one association to AreaLocalidade
 	@OneToMany(mappedBy = "cliente")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<VwClienteCarteiraSaldo> saldos;
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VwClienteSaldo other = (VwClienteSaldo) obj;
+		if (cliente == null) {
+			if (other.getId() != null)
+				return false;
+		} else if (!cliente.equals(other.getId()))
+			return false;
+		return true;
+	}
 
 	@Override
 	public Object getId() {

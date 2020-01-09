@@ -15,6 +15,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -62,6 +65,7 @@ public class Localidade extends BaseEntity {
 
 	// bi-directional many-to-one association to AreaLocalidade
 	@OneToMany(mappedBy = "localidade", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<AreaLocalidade> areaLocalidades;
 
 	@Transient
@@ -249,7 +253,7 @@ public class Localidade extends BaseEntity {
 			areas += areaLocalidade.getArea().getDescricao();
 		}
 		if (areas.equals(""))
-			areas = "Sem Área";
+			areas = "Sem ï¿½rea";
 		return areas.toUpperCase();
 	}
 

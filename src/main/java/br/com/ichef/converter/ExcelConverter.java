@@ -4,12 +4,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.faces.validator.FacesValidator;
-import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;  
   
 /** 
-* Efetua a validaÃ§Ã£o de um valor decimal. 
+* Efetua a validação de um valor decimal. 
 */  
 @FacesConverter("ExcelConverter")  
 public class ExcelConverter implements Converter {  

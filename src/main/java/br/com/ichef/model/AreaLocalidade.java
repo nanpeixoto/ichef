@@ -18,7 +18,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
 @Table(name = "area_localidade")
-public class AreaLocalidade extends BaseEntity  implements  SelectableDataModel<AreaLocalidade> {
+public class AreaLocalidade extends BaseEntity   {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -195,15 +195,6 @@ public class AreaLocalidade extends BaseEntity  implements  SelectableDataModel<
 		this.area = area;
 	}
 
-	@Override
-	public AreaLocalidade getRowData(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getRowKey(AreaLocalidade arg0) {
-		return getId(); 
-	}
+	 
 
 }

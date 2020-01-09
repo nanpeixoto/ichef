@@ -6,15 +6,16 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 
+import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.LogAcesso;
@@ -28,7 +29,7 @@ import br.com.ichef.util.StringUtil;
 
 @Named
 @ViewScoped
-public class LoginController extends BaseController {
+public class LoginController  extends BaseConsultaCRUD<Usuario>  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -94,14 +95,14 @@ public class LoginController extends BaseController {
 
 	public String autenticar() throws Exception {
 
-		List<Usuario> usuarios = new ArrayList<>();
+		List<Usuario> usuarios = new ArrayList<Usuario>();
 		usuarios = (List<Usuario>) service.findByLogin(login, StringUtil.criptografa(senha));
 		Faces.getFlash().setKeepMessages(true);
 
 		if (usuarios != null && usuarios.size() > 0) {
 			usuario = usuarios.get(0);
 			if (usuario.getAtivo().equalsIgnoreCase("N")) {
-				Messages.addGlobalError("O usuário não está ativo");
+				Messages.addGlobalError("O usuï¿½rio nï¿½o estï¿½ ativo");
 				return null;
 			}
 			if (empresa == null) {
@@ -128,7 +129,7 @@ public class LoginController extends BaseController {
 
 			}
 		} else {
-			Messages.addGlobalError("Usuário ou senha inválidos");
+			Messages.addGlobalError("Usuï¿½rio ou senha invï¿½lidos");
 			return null;
 		}
 
@@ -175,6 +176,18 @@ public class LoginController extends BaseController {
 
 	public void setEmpresas(List<Empresa> empresas) {
 		this.empresas = empresas;
+	}
+
+	@Override
+	protected Usuario newInstance() {
+		// TODO Auto-generated method stub
+		return new Usuario();
+	}
+
+	@Override
+	protected AbstractService<Usuario> getService() {
+		// TODO Auto-generated method stub
+		return service;
 	}
 
 }

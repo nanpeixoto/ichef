@@ -15,6 +15,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -71,6 +74,7 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 
 	// bi-directional many-to-one association to AreaLocalidade
 	@OneToMany(mappedBy = "cardapioFichaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<CardapioFichaPratoEmpresa> fichaPratoEmpresa;
 
 	public boolean isPodeVenderAcimaDoLimite() {

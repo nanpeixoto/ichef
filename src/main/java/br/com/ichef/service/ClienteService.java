@@ -5,29 +5,17 @@ import java.util.List;
 
 import org.apache.regexp.recompile;
 
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cliente;
 import br.com.ichef.model.ClienteTelefone;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.ClienteVisitor;
 
-public class ClienteService extends GenericDAO<Cliente> {
+public class ClienteService extends AbstractService<Cliente> {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public Cliente saveOrUpdade(Cliente entity) throws Exception {
-		if (validaRegras(entity)) {
-			return super.saveOrUpdade(entity);
-		}
-		return entity;
-
-	}
-
-	
-	private boolean validaRegras(Cliente entity) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	 
 
 
 	public List<Cliente> listAll(Boolean ativo) {
@@ -42,6 +30,33 @@ public class ClienteService extends GenericDAO<Cliente> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+
+
+
+	@Override
+	protected void validaCampos(Cliente entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	protected void validaRegras(Cliente entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	protected void validaRegrasExcluir(Cliente entity) throws AppException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

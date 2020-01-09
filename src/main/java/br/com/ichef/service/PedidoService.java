@@ -2,16 +2,17 @@ package br.com.ichef.service;
 
 import java.util.List;
 
-import javax.persistence.EntityTransaction;
+
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import br.com.ichef.arquitetura.util.FilterVisitor;
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Pedido;
-import br.com.ichef.util.EntityManagerProducer;
 
-public class PedidoService extends GenericDAO<Pedido> {
+
+public class PedidoService extends AbstractService<Pedido> {
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -50,7 +51,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 				+ " and date_format( data, '%d/%m/%Y' ) =   '" + pedido.getCardapio().getDataFormatada() + "'  "
 				+ " group by c.DATA,  p.CD_EMPRESA, p.CD_CARDAPIO_PRATO ");
 		try {
-			Query query = getManager().createNativeQuery(sb.toString());
+			Query query = entityManager.createNativeQuery(sb.toString());
 			int count = query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
 			return count;
 		} catch (NoResultException e) {
@@ -60,7 +61,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	}
 
 	public String finalizarPedido(Pedido entity) {
-		EntityTransaction tx = null;
+	
 		try {
 
 			StringBuilder hql = null;
@@ -78,24 +79,17 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 			if (hql != null) {
 
-				if (!getManager().isOpen()) {
-					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager(producer.createEntityManager());
-				} else {
-					getManager().clear();
-				}
+				 
 
-				tx = getManager().getTransaction();
-				tx.begin();
-
-				Query query = getManager().createQuery(hql.toString());
+				 
+				Query query = entityManager.createQuery(hql.toString());
 				result = query.executeUpdate();
-				tx.commit();
+				
 
 			}
 			if (result == 0) {
 
-				return "Operação Não Realizada. Contact o ADM do sistema";
+				return "Operaï¿½ï¿½o Nï¿½o Realizada. Contact o ADM do sistema";
 			}
 
 			return null;
@@ -107,6 +101,24 @@ public class PedidoService extends GenericDAO<Pedido> {
 			 * finally { if (getManager().isOpen()) getManager().close(); }
 			 */
 
+	}
+
+	@Override
+	protected void validaCampos(Pedido entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegras(Pedido entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegrasExcluir(Pedido entity) throws AppException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

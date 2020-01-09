@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Area;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Entregador;
@@ -25,7 +27,7 @@ import br.com.ichef.visitor.LocalidadeVisitor;
 
 @Named
 @ViewScoped
-public class EntregadorController extends BaseController {
+public class EntregadorController extends BaseConsultaCRUD<Entregador> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -53,6 +55,18 @@ public class EntregadorController extends BaseController {
 	private EmpresaService empresaService;
 	private List<Empresa> empresas = new ArrayList<Empresa>();
 
+	@Override
+	protected Entregador newInstance() {
+		// TODO Auto-generated method stub
+		return new Entregador();
+	}
+
+	@Override
+	protected AbstractService<Entregador> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
 	public void inicializar() {
 		if (id != null) {
 			setEntity(service.getById(id));
@@ -78,7 +92,7 @@ public class EntregadorController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		obterListas();
 	}
 
@@ -88,9 +102,10 @@ public class EntregadorController extends BaseController {
 		filter.setEmpresa(getUserLogado().getEmpresaLogada());
 		filter.setAtivo(true);
 
-		/*AreaVisitor visitor = new AreaVisitor();
-		visitor.setListaDesvinculados(true);*/
-		
+		/*
+		 * AreaVisitor visitor = new AreaVisitor(); visitor.setListaDesvinculados(true);
+		 */
+
 		empresas = empresaService.listAll(true);
 		try {
 			localidades = areaService.findByParameters(filter);
@@ -103,7 +118,7 @@ public class EntregadorController extends BaseController {
 	public void adicionarArea() {
 		boolean existe = false;
 		boolean itemAdicionado = false;
-		
+
 		// OBTER AS LOCALIDADES QUE NAO POSSUEM ENTREGADOR
 		LocalidadeVisitor visitor = new LocalidadeVisitor();
 		visitor.setArea(getArea());
@@ -125,32 +140,33 @@ public class EntregadorController extends BaseController {
 				}
 
 				if (!existe) {
-					
+
 					if (getEntity().getLocalidades() == null)
 						getEntity().setLocalidades(new ArrayList<EntregadorLocalidade>());
-					
+
 					EntregadorLocalidade obj = new EntregadorLocalidade();
 					obj.setUsuarioCadastro(getUserLogado());
 					obj.setDataCadastro(new Date());
 					obj.setAtivo("S");
 					obj.setLocalidade(localidade);
 					obj.setEntregador(getEntity());
-					obj.setOrdem( (long) ( getEntity().getLocalidades().size()+1 ) );
-					
+					obj.setOrdem((long) (getEntity().getLocalidades().size() + 1));
+
 					itemAdicionado = true;
 
 					getEntity().getLocalidades().add(obj);
 
 				}
 			}
-			
-			if ( localidades==null || localidades.size() ==0 ) {
-				facesMessager.error("Nenhuma localidade encontrada, verifique se a área informada não está vinculada a outro entregador e/ou se área possui localidades vinculadas");
-				return ;
+
+			if (localidades == null || localidades.size() == 0) {
+				facesMessager.error(
+						"Nenhuma localidade encontrada, verifique se a ï¿½rea informada nï¿½o estï¿½ vinculada a outro entregador e/ou se ï¿½rea possui localidades vinculadas");
+				return;
 			}
-			
-			if(!itemAdicionado) {
-				facesMessager.error("Localidade(s) não vinculada(s) verifique duplicidade(s)");
+
+			if (!itemAdicionado) {
+				facesMessager.error("Localidade(s) nï¿½o vinculada(s) verifique duplicidade(s)");
 			}
 
 			setArea(null);
@@ -164,17 +180,17 @@ public class EntregadorController extends BaseController {
 
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (Entregador entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void excluirItensSelecionadas(EntregadorLocalidade local) {
-		
-		List<EntregadorLocalidade> temp = new ArrayList<>();
+
+		List<EntregadorLocalidade> temp = new ArrayList<EntregadorLocalidade>();
 		temp.addAll(entity.getLocalidades());
 		for (EntregadorLocalidade arealoc : entity.getLocalidades()) {
 			if (local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()))
@@ -183,8 +199,8 @@ public class EntregadorController extends BaseController {
 		entity.getLocalidades().clear();
 		entity.getLocalidades().addAll(temp);
 		updateComponentes("Stable");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
-		
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
+
 	}
 
 	public String Salvar() throws Exception {
@@ -196,24 +212,19 @@ public class EntregadorController extends BaseController {
 			entity.setUsuarioCadastro(getUserLogado());
 			entity.setDataCadastro(new Date());
 		}
-		List<String> mensagem = service.validaRegras(getEntity());
-		if (mensagem == null  ) {
-			service.saveOrUpdade(entity);
-		} else {
-			FacesUtil.addErroMessage(mensagem.get(0));
-			return "";
-		}
+		
 		return "lista-entregador.xhtml?faces-redirect=true";
 
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-entregador.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public EntregadorService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(EntregadorService service) {

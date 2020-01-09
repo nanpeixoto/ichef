@@ -1,18 +1,215 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>br.com.ichef</groupId>
-	<artifactId>iChef</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.scmba</groupId>
+	<artifactId>ichef</artifactId>
+	<version>1.0.0</version>
+	<packaging>war</packaging>
+	<name>SAC</name>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.bom</groupId>
+				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+				<version>1.0.1.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<compiler.plugin.version>2.3.2</compiler.plugin.version>
+		<surefire.plugin.version>2.4.3</surefire.plugin.version>
+		<release.plugin.version>2.2.2</release.plugin.version>
+		<resources.plugin.version>2.5</resources.plugin.version>
+
+		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<war.plugin.version>2.1.1</war.plugin.version>
+
+		<version.arquillian_container>7.1.3.Final</version.arquillian_container>
+	</properties>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${release.plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${resources.plugin.version}</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<includes>
+						<include>br/scmba/**</include>
+					</includes>
+					<test>**/*Test</test>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.9.v20130131</version>
+				<configuration>
+					<webAppConfig>
+						<contextPath>/ichef</contextPath>
+					</webAppConfig>
+					<scanIntervalSeconds>5</scanIntervalSeconds>
+					<connectors>
+						<connector
+							implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+							<port>8080</port>
+						</connector>
+					</connectors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>${project.build.sourceDirectory}</directory>
+							<targetPath>sources</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>deploy-jboss</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${surefire.plugin.version}</version>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${resources.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>copy-prod-resources</id>
+								<phase>install</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${jbosseap6-deploy-dir}/</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${basedir}/target/</directory>
+											<includes>
+												<include>**/*.war</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<!-- Import the Common Annotations API (JSR-250), we use provided scope 
+			as the API is included in JBoss AS 7 -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.annotation</groupId>
+			<artifactId>jboss-annotations-api_1.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901.jdbc4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Import the JSF API, we use provided scope as the API is included in 
+			JBoss AS 7 -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.faces</groupId>
+			<artifactId>jboss-jsf-api_2.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Import the CDI API, we use provided scope as the API is included in 
+			JBoss AS 7 -->
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -23,6 +220,85 @@
 			<version>5.6.0</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-fonts</artifactId>
+			<version>5.6.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+
+		<!-- Import the JPA API, we use provided scope as the API is included in 
+			JBoss AS 7 -->
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.spec.javax.servlet</groupId>
+			<artifactId>jboss-servlet-api_3.0_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- JSR-303 (Bean Validation) Implementation -->
+		<!-- Provides portable constraints such as @Email -->
+		<!-- Hibernate Validator is shipped in JBoss AS 7 -->
+		<!-- Now we declare any tools needed -->
+		<!-- Annotation processor to generate the JPA 2.0 metamodel classes for 
+			typesafe criteria queries -->
+
+		<!-- Annotation processor that raising compilation errors whenever constraint 
+			annotations are incorrectly used. -->
+
+		<!-- Optional, but highly recommended -->
+		<!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA) 
+			JPA from JUnit/TestNG -->
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+			<version>1.0.3.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.arquillian.protocol</groupId>
+			<artifactId>arquillian-protocol-servlet</artifactId>
+			<scope>test</scope>
+			<version>1.0.3.Final</version>
+		</dependency>
+
+		<!-- Needed for running tests (you may also use TestNG) -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+			<version>4.9</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.primefaces.themes</groupId> <artifactId>bootstrap</artifactId> 
+			<version>1.0.10</version> </dependency> -->
+
+		<dependency>
+			<groupId>org.omnifaces</groupId>
+			<artifactId>omnifaces</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+		
+		<!-- Admin Template -->
+		<dependency>
+			<groupId>com.github.adminfaces</groupId>
+			<artifactId>admin-template</artifactId>
+			<version>1.0.0-RC1</version>
+		</dependency>
+		
+
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -30,173 +306,152 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
-
-		<!-- CDI -->
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-			<version>1.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet</artifactId>
-			<version>2.4.2.Final</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<!-- JSF API e RI -->
-		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>javax.faces-api</artifactId>
-			<version>2.2</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.faces</artifactId>
-			<version>2.2.14</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<!-- Admin Template -->
-		<dependency>
-			<groupId>com.github.adminfaces</groupId>
-			<artifactId>admin-template</artifactId>
-			<version>1.0.0-RC1</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.primefaces/primefaces -->
-		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 			<version>6.1</version>
 		</dependency>
 
-
 		<dependency>
-			<groupId>org.primefaces.extensions</groupId>
-			<artifactId>primefaces-extensions</artifactId>
-			<version>6.1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>font-awesome</artifactId>
-			<version>5.8.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.omnifaces</groupId>
-			<artifactId>omnifaces</artifactId>
-			<version>2.6.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>5.3.3.Final</version>
-			<scope>compile</scope>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.2.4.Final</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+			</exclusions>
+			<optional>false</optional>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.18</version>
-		</dependency>
-
-
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.2.4.Final</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
+			<optional>false</optional>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple <dependency> 
-			<groupId>org.slf4j</groupId> <artifactId>slf4j-simple</artifactId> <version>1.7.28</version> 
-			<scope>test</scope> </dependency> -->
-
-
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api <dependency> 
-			<groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> <version>1.7.28</version> 
-			</dependency> -->
-
-		<!-- https://mvnrepository.com/artifact/log4j/log4j <dependency> <groupId>log4j</groupId> 
-			<artifactId>log4j</artifactId> <version>1.2.16</version> </dependency> -->
-
-
-
-		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0 -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-			<version>5.4.2.Final</version>
+			<artifactId>hibernate-validator</artifactId>
+			<scope>provided</scope>
+			<optional>false</optional>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.mchange/c3p0 <dependency> <groupId>com.mchange</groupId> 
-			<artifactId>c3p0</artifactId> <version>0.9.5.2</version> </dependency> -->
-
-		<!-- https://mvnrepository.com/artifact/com.mchange/mchange-commons-java 
-			<dependency> <groupId>com.mchange</groupId> <artifactId>mchange-commons-java</artifactId> 
-			<version>0.2.11</version> </dependency> -->
-
-
-
-		<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz <dependency> 
-			<groupId>org.quartz-scheduler</groupId> <artifactId>quartz</artifactId> <version>2.2.1</version> 
-			</dependency> <dependency> <groupId>org.quartz-scheduler</groupId> <artifactId>quartz-jobs</artifactId> 
-			<version>2.2.1</version> </dependency> -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-search-engine</artifactId>
+			<!--version>4.2.0.Final</version -->
+		</dependency>
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.5</version>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
 		</dependency>
 
-
-		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+		<!-- FileUpload -->
 		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-			<version>1.5.1</version>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
 		</dependency>
 
-
-
-		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>javax.mail-api</artifactId>
-			<version>1.6.0</version>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-java7</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<!-- Quartz library -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>br.com.caelum.stella</groupId>
+			<artifactId>caelum-stella-core</artifactId>
+			<version>2.1.3</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>br.com.caelum.stella</groupId> <artifactId>caelum-stella-boleto</artifactId> 
+			<version>2.1.3</version> </dependency> -->
+
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.facelets</groupId>
+			<artifactId>jsf-facelets</artifactId>
+			<version>1.1.15.B1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.webjars/font-awesome -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>4.7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.barcode4j</groupId>
+			<artifactId>barcode4j</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik-bridge</artifactId>
+			<version>1.6-1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>br.scmba</groupId>
+			<artifactId>boleto</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
 		</dependency>
 
 
-
+		<!-- https://mvnrepository.com/artifact/org.webjars/font-awesome <dependency> 
+			<groupId>org.webjars</groupId> <artifactId>font-awesome</artifactId> <version>5.3.1</version> 
+			</dependency> -->
 	</dependencies>
-
-	<build>
-		<finalName>iChef</finalName>
-	</build>
-
-	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
-
-	<packaging>war</packaging>
 </project>

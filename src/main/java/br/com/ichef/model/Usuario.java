@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.ichef.arquitetura.BaseEntity;
@@ -71,6 +73,7 @@ public class Usuario extends BaseEntity {
 	private String senha;
 
 	@OneToMany(mappedBy = "usuario",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 	
 	@Transient

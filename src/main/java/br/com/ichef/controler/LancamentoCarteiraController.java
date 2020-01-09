@@ -6,13 +6,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.RowEditEvent;
 
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cliente;
 import br.com.ichef.model.ClienteCarteira;
 import br.com.ichef.model.Derivacao;
@@ -33,7 +35,7 @@ import br.com.ichef.visitor.ClienteCarteiraVisitor;
 
 @Named
 @ViewScoped
-public class LancamentoCarteiraController extends BaseController {
+public class LancamentoCarteiraController extends BaseConsultaCRUD<ClienteCarteira> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -67,23 +69,35 @@ public class LancamentoCarteiraController extends BaseController {
 	private Double valorPago;
 	private String descricao;
 
-	private List<FormaPagamento> listaFormasPagamento = new ArrayList<>();
+	private List<FormaPagamento> listaFormasPagamento = new ArrayList<FormaPagamento>();
 	private FormaPagamento formaPagamento;
 
-	private List<FichaTecnicaPrato> listaPratos = new ArrayList<>();
+	private List<FichaTecnicaPrato> listaPratos = new ArrayList<FichaTecnicaPrato>();
 	private FichaTecnicaPrato prato;
 
-	private List<Derivacao> listaDerivacoes = new ArrayList<>();
+	private List<Derivacao> listaDerivacoes = new ArrayList<Derivacao>();
 	private Derivacao derivacao;
 
-	private List<TipoPrato> listaTiposPrato = new ArrayList<>();
+	private List<TipoPrato> listaTiposPrato = new ArrayList<TipoPrato>();
 	private TipoPrato tipoPrato;
 
-	private List<Empresa> listaEmpresas = new ArrayList<>();
+	private List<Empresa> listaEmpresas = new ArrayList<Empresa>();
 	private Empresa empresa;
 
-	private List<Cliente> listaClientes = new ArrayList<>();
+	private List<Cliente> listaClientes = new ArrayList<Cliente>();
 	private Cliente cliente;
+
+	@Override
+	protected ClienteCarteira newInstance() {
+		// TODO Auto-generated method stub
+		return new ClienteCarteira();
+	}
+
+	@Override
+	protected AbstractService<ClienteCarteira> getService() {
+		// TODO Auto-generated method stub
+		return clienteCarteiraService;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -100,7 +114,7 @@ public class LancamentoCarteiraController extends BaseController {
 	}
 
 	public void obterTiposPrato() {
-		listaTiposPrato = new ArrayList<>();
+		listaTiposPrato = new ArrayList<TipoPrato>();
 		if (getPrato().getFichaTecnicaPratoTipos() != null) {
 			for (FichaTecnicaPratoTipo fichaTecnicaPratoTipo : getPrato().getFichaTecnicaPratoTipos()) {
 				listaTiposPrato.add(fichaTecnicaPratoTipo.getTipoPrato());
@@ -129,9 +143,11 @@ public class LancamentoCarteiraController extends BaseController {
 
 	public void adicionarCarteira() {
 
-		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO FOR PARA OUTRA EMPRESA
-			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO NÃO FOR CREDITO
-				facesMessager.error("O tipo de Lançamento para outra empresa só pode ser Crédito");
+		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO
+																										// FOR PARA
+																										// OUTRA EMPRESA
+			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO Nï¿½O FOR CREDITO
+				facesMessager.error("O tipo de Lanï¿½amento para outra empresa sï¿½ pode ser Crï¿½dito");
 				return;
 			}
 		}
@@ -143,7 +159,7 @@ public class LancamentoCarteiraController extends BaseController {
 
 		if (getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO FOR CREDITO
 			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Descrição"));
+				facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o"));
 				return;
 			}
 			if (getData() == null) {// data precisa estar preenhida
@@ -170,7 +186,7 @@ public class LancamentoCarteiraController extends BaseController {
 				return;
 			}
 			// if (getDerivacao() == null) {// descricao precisa estar preenhida
-			// facesMessager.error(getRequiredMessage("Derivação"));
+			// facesMessager.error(getRequiredMessage("Derivaï¿½ï¿½o"));
 			// return;
 			// }
 			if (getData() == null) {// data precisa estar preenhida
@@ -185,7 +201,7 @@ public class LancamentoCarteiraController extends BaseController {
 
 		if (getTipoCarteira().equalsIgnoreCase("D")) { // SE O SELECIONADO FOR CREDITO
 			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Descrição"));
+				facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o"));
 				return;
 			}
 
@@ -284,8 +300,8 @@ public class LancamentoCarteiraController extends BaseController {
 
 	}
 
-	public void excluirCarteira(ClienteCarteira obj) {
-		List<ClienteCarteira> temp = new ArrayList<>();
+	public void excluirCarteira(ClienteCarteira obj) throws AppException {
+		List<ClienteCarteira> temp = new ArrayList<ClienteCarteira>();
 		temp.addAll(lista);
 		for (ClienteCarteira item : lista) {
 			if (obj.equals(item)) {
@@ -297,7 +313,7 @@ public class LancamentoCarteiraController extends BaseController {
 		lista.clear();
 		lista.addAll(temp);
 		// updateComponentes(":form:tabCarteira:tableCarteira");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void editarLinhaCarteira(RowEditEvent event) throws Exception {
@@ -307,10 +323,6 @@ public class LancamentoCarteiraController extends BaseController {
 		itemEditado.setDataAlteracao(new Date());
 		clienteCarteiraService.saveOrUpdade(itemEditado);
 
-	}
-
-	public ClienteService getService() {
-		return service;
 	}
 
 	public void setService(ClienteService service) {

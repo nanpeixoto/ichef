@@ -6,12 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.controller.BaseController;
-import br.com.ichef.model.Cardapio;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.VwPrevisaoInsumo;
 import br.com.ichef.model.VwPrevisaoInsumoID;
@@ -21,7 +22,7 @@ import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class PrevisaoInsumoController extends BaseController {
+public class PrevisaoInsumoController extends BaseConsultaCRUD<VwPrevisaoInsumo> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,11 +35,23 @@ public class PrevisaoInsumoController extends BaseController {
 	private Long id;
 
 	// relatorio
-	List<VwPrevisaoInsumo> previsaoInsumo = new ArrayList<>();
-	private List<Empresa> empresas = new ArrayList<>();
+	List<VwPrevisaoInsumo> previsaoInsumo = new ArrayList<VwPrevisaoInsumo>();
+	private List<Empresa> empresas = new ArrayList<Empresa>();
 	private Empresa empresa;
 	private Date dataInicial;
 	private Date dataFinal;
+
+	@Override
+	protected VwPrevisaoInsumo newInstance() {
+		// TODO Auto-generated method stub
+		return new VwPrevisaoInsumo();
+	}
+
+	@Override
+	protected AbstractService<VwPrevisaoInsumo> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
 
 	public void inicializar() {
 
@@ -74,14 +87,14 @@ public class PrevisaoInsumoController extends BaseController {
 			VwPrevisaoInsumoID id = new VwPrevisaoInsumoID();
 			id.setCodigoEmpresa(getEmpresa().getId());
 
-			VwPrevisaoInsumo filter = new VwPrevisaoInsumo(); 
+			VwPrevisaoInsumo filter = new VwPrevisaoInsumo();
 			filter.setId(id);
 
 			try {
 				previsaoInsumo = service.findPrevisao(getEmpresa(), getDataInicial(), getDataFinal());
 
 			} catch (Exception e) {
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (previsaoInsumo.size() == 0) {
@@ -92,21 +105,17 @@ public class PrevisaoInsumoController extends BaseController {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
 					setParametroReport("pDescricaoEmpresa", getEmpresa().getNomeFantasia());
 					setParametroReport("pDataInicio", format.format(getDataInicial()));
-					setParametroReport("pDataFinal", format.format( getDataFinal()) );
-					
+					setParametroReport("pDataFinal", format.format(getDataFinal()));
+
 					escreveRelatorioPDF("PrevisaoInsumos", true, previsaoInsumo);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 
 		}
 
-	}
-
-	public PrevisaoInsumoService getService() {
-		return service;
 	}
 
 	public void setService(PrevisaoInsumoService service) {

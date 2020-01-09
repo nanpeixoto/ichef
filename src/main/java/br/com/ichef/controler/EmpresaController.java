@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cidade;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Localidade;
@@ -21,7 +23,7 @@ import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class EmpresaController extends BaseController {
+public class EmpresaController extends BaseConsultaCRUD<Empresa> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +34,7 @@ public class EmpresaController extends BaseController {
 
 	@Inject
 	private CidadeService cidadeService;
-	
+
 	@Inject
 	private LocalidadeService localidadeService;
 
@@ -44,6 +46,18 @@ public class EmpresaController extends BaseController {
 
 	private List<Cidade> cidades = new ArrayList<Cidade>();
 	private List<Localidade> localidades = new ArrayList<Localidade>();
+
+	@Override
+	protected Empresa newInstance() {
+		// TODO Auto-generated method stub
+		return new Empresa();
+	}
+
+	@Override
+	protected AbstractService<Empresa> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
 
 	public void inicializar() {
 		if (id != null) {
@@ -81,12 +95,12 @@ public class EmpresaController extends BaseController {
 		lista = service.listAll();
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (Empresa entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Empresas excluídas com sucesso");
+		FacesUtil.addInfoMessage("Empresas excluï¿½das com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -102,12 +116,13 @@ public class EmpresaController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-empresa.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public EmpresaService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(EmpresaService service) {
@@ -141,7 +156,7 @@ public class EmpresaController extends BaseController {
 	public List<Empresa> getListaSelecionadas() {
 		return listaSelecionadas;
 	}
-	
+
 	public void setListaSelecionadas(List<Empresa> listaSelecionadas) {
 		this.listaSelecionadas = listaSelecionadas;
 	}

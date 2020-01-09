@@ -1,0 +1,10 @@
+Prezado(a) <EMPREGADO>, 
+
+	1.	Informamos a <STATUS> de requisição de documentos conforme descrito abaixo:
+	
+	NÚMERO DA REQUISIÇÃO                      DATA HORA                DOCUMENTO 
+	
+	2.	Para acompanhamento do atendimento da requisição, acesse http://sired.caixa.
+
+SIRED – SISTEMA DE RECUPERAÇÃO E REMESSA DE DOCUMENTOS
+MENSAGEM GERADA AUTOMATICAMENTE. FAVOR NÃO RESPONDER

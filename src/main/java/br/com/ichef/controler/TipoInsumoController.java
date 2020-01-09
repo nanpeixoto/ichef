@@ -5,25 +5,26 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.arquitetura.controller.BaseController;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.TipoInsumo;
 import br.com.ichef.service.TipoInsumoService;
 import br.com.ichef.util.FacesUtil;
 
 @Named
 @ViewScoped
-public class TipoInsumoController extends BaseController {
+public class TipoInsumoController extends BaseConsultaCRUD<TipoInsumo> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private TipoInsumoService service;
-	
 
 	private TipoInsumo entity;
 
@@ -34,6 +35,17 @@ public class TipoInsumoController extends BaseController {
 
 	private List<TipoInsumo> listaSelecionadas = new ArrayList<TipoInsumo>();
 
+	@Override
+	protected TipoInsumo newInstance() {
+		// TODO Auto-generated method stub
+		return new TipoInsumo();
+	}
+
+	@Override
+	protected AbstractService<TipoInsumo> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
 
 	public void inicializar() {
 		if (id != null) {
@@ -45,9 +57,8 @@ public class TipoInsumoController extends BaseController {
 		obterListas();
 	}
 
-	
 	private void obterListas() {
-	
+
 	}
 
 	@PostConstruct
@@ -55,8 +66,8 @@ public class TipoInsumoController extends BaseController {
 		lista = service.listAll();
 	}
 
-	public void excluirSelecionados() {
-		for (BaseEntity entity : listaSelecionadas) {
+	public void excluirSelecionados() throws AppException {
+		for (TipoInsumo entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
@@ -76,12 +87,13 @@ public class TipoInsumoController extends BaseController {
 	}
 
 	public String excluir() {
-		service.excluir(entity);
-		return "lista-tipo-insumo.xhtml?faces-redirect=true";
-	}
+		try {
+			service.excluir(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	public TipoInsumoService getService() {
-		return service;
+		return "lista-area.xhtml?faces-redirect=true";
 	}
 
 	public void setService(TipoInsumoService service) {
@@ -120,16 +132,12 @@ public class TipoInsumoController extends BaseController {
 		this.listaSelecionadas = listaSelecionadas;
 	}
 
-
 	public List<TipoInsumo> getListaFiltro() {
 		return listaFiltro;
 	}
 
-
 	public void setListaFiltro(List<TipoInsumo> listaFiltro) {
 		this.listaFiltro = listaFiltro;
 	}
-
-	
 
 }

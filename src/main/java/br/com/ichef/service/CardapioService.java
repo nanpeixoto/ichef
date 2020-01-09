@@ -3,10 +3,11 @@ package br.com.ichef.service;
 import java.util.List;
 
 import br.com.ichef.arquitetura.util.FilterVisitor;
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Cardapio;
 
-public class CardapioService extends GenericDAO<Cardapio> {
+public class CardapioService extends AbstractService<Cardapio> {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -34,6 +35,24 @@ public class CardapioService extends GenericDAO<Cardapio> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	protected void validaCampos(Cardapio entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegras(Cardapio entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegrasExcluir(Cardapio entity) throws AppException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

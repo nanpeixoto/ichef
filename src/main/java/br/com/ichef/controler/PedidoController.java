@@ -3,17 +3,19 @@ package br.com.ichef.controler;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.component.calendar.Calendar;
 
-import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.controller.BaseConsultaCRUD;
+import br.com.ichef.dao.AbstractService;
 import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
 import br.com.ichef.model.CardapioFichaPratoEmpresa;
@@ -47,7 +49,7 @@ import br.com.ichef.visitor.PedidoVisitor;
 
 @Named
 @ViewScoped
-public class PedidoController extends BaseController {
+public class PedidoController extends BaseConsultaCRUD<Pedido> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -80,39 +82,39 @@ public class PedidoController extends BaseController {
 
 	private List<Pedido> lista = new ArrayList<Pedido>();
 
-	private List<FormaPagamento> listaFormasPagamento = new ArrayList<>();
+	private List<FormaPagamento> listaFormasPagamento = new ArrayList<FormaPagamento>();
 	// private FormaPagamento formaPagamento;
 
-	private List<Entregador> listaEntregador = new ArrayList<>();
+	private List<Entregador> listaEntregador = new ArrayList<Entregador>();
 	// private Entregador entregador;
 
-	private List<FichaTecnicaPrato> listaPratos = new ArrayList<>();
+	private List<FichaTecnicaPrato> listaPratos = new ArrayList<FichaTecnicaPrato>();
 	// private FichaTecnicaPrato prato;
 
-	private List<Derivacao> listaDerivacoes = new ArrayList<>();
+	private List<Derivacao> listaDerivacoes = new ArrayList<Derivacao>();
 	// private Derivacao derivacao;
 
-	private List<FichaTecnicaPratoTipo> listaTiposPrato = new ArrayList<>();
+	private List<FichaTecnicaPratoTipo> listaTiposPrato = new ArrayList<FichaTecnicaPratoTipo>();
 	// private FichaTecnicaPratoTipo fichaTecnicaPratoTipo;
 
-	private List<Empresa> listaEmpresas = new ArrayList<>();
+	private List<Empresa> listaEmpresas = new ArrayList<Empresa>();
 	// private Empresa empresa;
 
-	private List<Cliente> listaClientes = new ArrayList<>();
+	private List<Cliente> listaClientes = new ArrayList<Cliente>();
 	// private Cliente cliente;
 
-	private List<Cardapio> listaCardapio = new ArrayList<>();
+	private List<Cardapio> listaCardapio = new ArrayList<Cardapio>();
 	private Cardapio cardapio;
 
-	private List<CardapioFichaPrato> listaCardapioPrato = new ArrayList<>();
+	private List<CardapioFichaPrato> listaCardapioPrato = new ArrayList<CardapioFichaPrato>();
 	// private CardapioFichaPrato cardapioPrato;
 
-	private List<ClienteEndereco> listaEnderecos = new ArrayList<>();
+	private List<ClienteEndereco> listaEnderecos = new ArrayList<ClienteEndereco>();
 	// private ClienteEndereco endereco;
 
 	Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
 
-	private List<Entregador> listaEntregadorCarregada = new ArrayList<>();
+	private List<Entregador> listaEntregadorCarregada = new ArrayList<Entregador>();
 
 	SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -131,12 +133,24 @@ public class PedidoController extends BaseController {
 
 	private boolean entregaDataCardapio;
 
+	@Override
+	protected Pedido newInstance() {
+		// TODO Auto-generated method stub
+		return new Pedido();
+	}
+
+	@Override
+	protected AbstractService<Pedido> getService() {
+		// TODO Auto-generated method stub
+		return service;
+	}
+
 	@PostConstruct
 	public void init() {
 
 		verificarCardapio();
 
-		newInstance();
+		limpar();
 
 		obterListas();
 
@@ -147,7 +161,7 @@ public class PedidoController extends BaseController {
 
 	}
 
-	private void newInstance() {
+	private void limpar() {
 		setEntity(new Pedido());
 		getEntity().setDataEntrega(new Date());
 
@@ -220,7 +234,7 @@ public class PedidoController extends BaseController {
 	}
 
 	public List<Cliente> autoCompleteCliente(String query) {
-		List<Cliente> allThemes = new ArrayList<>();
+		List<Cliente> allThemes = new ArrayList<Cliente>();
 
 		ClienteVisitor visitor = new ClienteVisitor();
 		visitor.setLikeNomeTelefone(query);
@@ -275,7 +289,7 @@ public class PedidoController extends BaseController {
 
 				if (getEntity().getEntregador() == null) {
 					getEntity().setOrdemEntrega(1);
-					facesMessager.error("Localidade não associada a um entregador, por favor, revisar o cadastro");
+					facesMessager.error("Localidade nï¿½o associada a um entregador, por favor, revisar o cadastro");
 				}
 
 				ObterValorDiariaEntregador();
@@ -392,7 +406,7 @@ public class PedidoController extends BaseController {
 
 	public void obterEnderecoCliente() {
 		getEntity().setClienteEndereco(null);
-		listaEnderecos = new ArrayList<>();
+		listaEnderecos = new ArrayList<ClienteEndereco>();
 		if (!getEntity().getCliente().isDesabilitado()) {
 			if (getEntity().getCliente() != null) {
 				for (ClienteEndereco endCliente : getEntity().getCliente().getEnderecos()) {
@@ -410,7 +424,7 @@ public class PedidoController extends BaseController {
 			} else if (listaEnderecos.size() < 1) {
 				getEntity().setClienteEndereco(null);
 				if (listaEnderecos == null || listaEnderecos.size() == 0) {
-					facesMessager.error("Nenhum endereço cadastradado para essa empresa, revise o cadastro do cliente");
+					facesMessager.error("Nenhum endereï¿½o cadastradado para essa empresa, revise o cadastro do cliente");
 				}
 			}
 
@@ -430,7 +444,7 @@ public class PedidoController extends BaseController {
 
 			// CARDAPIO
 			if (getEntity().getCardapio() == null) {
-				facesMessager.error("Cardápio não encontrado, verifique o cadastro do cardápio");
+				facesMessager.error("Cardï¿½pio nï¿½o encontrado, verifique o cadastro do cardï¿½pio");
 				return;
 			}
 
@@ -442,7 +456,7 @@ public class PedidoController extends BaseController {
 
 			// ENDERECO
 			if (getEntity().getClienteEndereco() == null) {
-				facesMessager.error(getRequiredMessage("Endereço"));
+				facesMessager.error(getRequiredMessage("Endereï¿½o"));
 				return;
 			} else {
 				getEntity().setLocalidade(getEntity().getClienteEndereco().getLocalidade());
@@ -470,7 +484,7 @@ public class PedidoController extends BaseController {
 
 			// PRECO MAIOR QUE ZERO
 			if (getEntity().getValorPedido() == null) {
-				facesMessager.error(getRequiredMessage("Preço"));
+				facesMessager.error(getRequiredMessage("Preï¿½o"));
 				return;
 			} else {
 				getEntity().setValorPago(getEntity().getValorPedido());
@@ -478,13 +492,13 @@ public class PedidoController extends BaseController {
 
 			// valor da diaria do entregador
 			if (getEntity().getValorDiariaEntregador() == null) {
-				facesMessager.error(getRequiredMessage("Valor da Diária"));
+				facesMessager.error(getRequiredMessage("Valor da Diï¿½ria"));
 				return;
 			}
 
 			// DERIVACAO
 			if (getEntity().getDerivacao() == null) {
-				facesMessager.error(getRequiredMessage("Derivação"));
+				facesMessager.error(getRequiredMessage("Derivaï¿½ï¿½o"));
 				return;
 			}
 
@@ -512,13 +526,13 @@ public class PedidoController extends BaseController {
 
 			if (!fichaEmpresaLogada.isPodeVenderAcimaDoLimite()
 					&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
-				facesMessager.error("Quantidade disponível menor que a quantidade solicitada");
+				facesMessager.error("Quantidade disponï¿½vel menor que a quantidade solicitada");
 				return;
 			}
 
 			if ((quantidadeJaPedida - getEntity().getQuantidade()) <= 5) {
 				FacesUtil.addInfoMessage(
-						"Quantdade disponível para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
+						"Quantdade disponï¿½vel para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
 			}
 
 			getEntity().setDataCadastro(new Date());
@@ -533,17 +547,17 @@ public class PedidoController extends BaseController {
 					.getPercoPorTipoPrato(getEntity().getTipoPrato()));
 
 			if (getEntity().getPrecoCustoPorcao() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Custo da Porção");
+				facesMessager.error("Nï¿½o foi possï¿½vel obter o Preï¿½o de Custo da Porï¿½ï¿½o");
 				return;
 			}
 
 			if (getEntity().getPrecoVendaReceita() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Venda da Receita");
+				facesMessager.error("Nï¿½o foi possï¿½vel obter o Preï¿½o de Venda da Receita");
 				return;
 			}
 
 			if (getEntity().getPrecoVendaTipoPrato() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Venda por Tipo de Prato");
+				facesMessager.error("Nï¿½o foi possï¿½vel obter o Preï¿½o de Venda por Tipo de Prato");
 				return;
 			}
 
@@ -569,7 +583,7 @@ public class PedidoController extends BaseController {
 		} catch (
 
 		Exception e) {
-			facesMessager.error("Não foi possível executar essa operação");
+			facesMessager.error("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o");
 			e.printStackTrace();
 		}
 
@@ -611,9 +625,9 @@ public class PedidoController extends BaseController {
 			lista.addAll(temp);
 			// service.calcularPercos(entity, configuracao);
 			updateComponentes("tabListaPedidos");
-			FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+			FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 		} catch (Exception e) {
-			FacesUtil.addErroMessage("Não foi possível executar essa operação:" + e.getMessage());
+			FacesUtil.addErroMessage("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o:" + e.getMessage());
 		}
 
 	}
@@ -623,7 +637,7 @@ public class PedidoController extends BaseController {
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
 					if (pedido.getEntregador().getValorDiaria() == null) {
-						facesMessager.error("Entregador sem diária cadastrada");
+						facesMessager.error("Entregador sem diï¿½ria cadastrada");
 						return;
 					}
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
@@ -639,7 +653,7 @@ public class PedidoController extends BaseController {
 			service.saveOrUpdade(pedido);
 
 		} catch (Exception e) {
-			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
+			facesMessager.error("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o:" + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -726,14 +740,14 @@ public class PedidoController extends BaseController {
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
-			List<Pedido> pedidos = new ArrayList<>();
+			List<Pedido> pedidos = new ArrayList<Pedido>();
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (pedidos.size() == 0) {
@@ -744,7 +758,7 @@ public class PedidoController extends BaseController {
 					escreveRelatorioPDF("Pedidos", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 
@@ -776,14 +790,14 @@ public class PedidoController extends BaseController {
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
-			List<Pedido> pedidos = new ArrayList<>();
+			List<Pedido> pedidos = new ArrayList<Pedido>();
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (pedidos.size() == 0) {
@@ -794,7 +808,7 @@ public class PedidoController extends BaseController {
 					escreveRelatorioPDF("Rota", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 		}
@@ -818,14 +832,14 @@ public class PedidoController extends BaseController {
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
-			List<Pedido> pedidos = new ArrayList<>();
+			List<Pedido> pedidos = new ArrayList<Pedido>();
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (pedidos.size() == 0) {
@@ -836,7 +850,7 @@ public class PedidoController extends BaseController {
 					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 
@@ -882,7 +896,7 @@ public class PedidoController extends BaseController {
 							carteira.setValorPago(pedido.getValorPago());
 						}
 						carteira.setPedido(pedido);
-						log = "Lançamento Efetuado em Carteira";
+						log = "Lanï¿½amento Efetuado em Carteira";
 						pedido.setLogLancamentoCarteira(log);
 
 						pedido.setUsuarioFinalizacao(userLogado);
@@ -913,7 +927,7 @@ public class PedidoController extends BaseController {
 
 			if (pedido.getEntregador() != null) {
 				if (pedido.getEntregador().getValorDiaria() == null) {
-					facesMessager.error("Entregador sem diária cadastrada");
+					facesMessager.error("Entregador sem diï¿½ria cadastrada");
 					return;
 				}
 				List<Pedido> listaPedidosEntregador = obterPedidosDoEntregador(pedido.getEntregador());
@@ -931,7 +945,7 @@ public class PedidoController extends BaseController {
 			}
 
 		} catch (Exception e) {
-			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
+			facesMessager.error("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o:" + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -953,14 +967,6 @@ public class PedidoController extends BaseController {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public void limpar() {
-
-	}
-
-	public PedidoService getService() {
-		return service;
 	}
 
 	public void setService(PedidoService service) {

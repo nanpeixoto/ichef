@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +17,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.JSFUtil;
@@ -73,10 +77,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 
 	// bi-directional many-to-one association to FichaTecnicaPratoPreparo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private Set<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos;
 
 	// bi-directional many-to-one association to FichaTecnicaPratoTipo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<FichaTecnicaPratoTipo> fichaTecnicaPratoTipos;
 
 	@Transient
@@ -285,13 +291,7 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	// this.precoVendaReceita = precoVendaReceita;
 	// }
 
-	public List<FichaTecnicaPratoPreparo> getFichaTecnicaPratoPreparos() {
-		return fichaTecnicaPratoPreparos;
-	}
 
-	public void setFichaTecnicaPratoPreparos(List<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos) {
-		this.fichaTecnicaPratoPreparos = fichaTecnicaPratoPreparos;
-	}
 
 	public List<FichaTecnicaPratoTipo> getFichaTecnicaPratoTipos() {
 		return fichaTecnicaPratoTipos;
@@ -383,4 +383,14 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 		}
 
 	}
+
+	public Set<FichaTecnicaPratoPreparo> getFichaTecnicaPratoPreparos() {
+		return fichaTecnicaPratoPreparos;
+	}
+
+	public void setFichaTecnicaPratoPreparos(Set<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos) {
+		this.fichaTecnicaPratoPreparos = fichaTecnicaPratoPreparos;
+	}
+	
+	
 }

@@ -33,12 +33,12 @@ public class PedidoVisitor extends FilterVisitor {
 							" date_format( this_.dt_cadastro, '%d/%m/%Y' ) ='" + Util.dateToString(getData()) + "'")));
 
 		if (getDataCardapio() != null && getData() != null)
-			criteria.add(Restrictions.or(
+			criteria.add(Restrictions.or( Restrictions.or(
 					Restrictions.sqlRestriction(
 							" date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEntrega()) + "'"),
 					Restrictions.sqlRestriction(" date_format(cardapio1_.data, '%d/%m/%Y' ) ='"
-							+ Util.dateToString(getDataCardapio()) + "'"),
-					Restrictions.sqlRestriction(
+							+ Util.dateToString(getDataCardapio()) + "'")
+					) , Restrictions.sqlRestriction(
 							" date_format(  this_.dt_cadastro, '%d/%m/%Y' ) ='" + Util.dateToString(getData()) + "'")));
 
 		if (getDataCardapio() != null && getData() == null)

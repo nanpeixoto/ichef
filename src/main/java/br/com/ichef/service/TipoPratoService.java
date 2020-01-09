@@ -2,25 +2,14 @@ package br.com.ichef.service;
 
 import java.util.List;
 
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.TipoPrato;
 
-public class TipoPratoService extends GenericDAO<TipoPrato> {
+public class TipoPratoService extends AbstractService<TipoPrato> {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public TipoPrato saveOrUpdade(TipoPrato entity) throws Exception {
-		if (validaRegras(entity)) {
-			return super.saveOrUpdade(entity);
-		}
-		return entity;
 
-	}
-
-	
-	private boolean validaRegras(TipoPrato entity) {
-		return true;
-	}
 
 
 	public List<TipoPrato> listAll(Boolean ativo) {
@@ -35,6 +24,33 @@ public class TipoPratoService extends GenericDAO<TipoPrato> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+
+
+
+	@Override
+	protected void validaCampos(TipoPrato entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	protected void validaRegras(TipoPrato entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	protected void validaRegrasExcluir(TipoPrato entity) throws AppException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

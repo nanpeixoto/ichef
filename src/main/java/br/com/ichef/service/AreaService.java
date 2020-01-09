@@ -2,26 +2,12 @@ package br.com.ichef.service;
 
 import java.util.List;
 
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Area;
 
-public class AreaService extends GenericDAO<Area> {
+public class AreaService extends AbstractService<Area> {
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	public Area saveOrUpdade(Area entity) throws Exception {
-		if (validaRegras(entity)) {
-			return super.saveOrUpdade(entity);
-		}
-		return entity;
-
-	}
-
-	
-	private boolean validaRegras(Area entity) {
-		return true;
-	}
-
 
 	public List<Area> listAll(Boolean ativo) {
 		Area filter = new Area();
@@ -35,6 +21,24 @@ public class AreaService extends GenericDAO<Area> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	protected void validaCampos(Area entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void validaRegras(Area entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void validaRegrasExcluir(Area entity) throws AppException {
+		// TODO Auto-generated method stub
+
 	}
 
 }

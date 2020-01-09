@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -59,6 +62,7 @@ public class Entregador extends BaseEntity {
 	private boolean isAtivo;
 
 	@OneToMany(mappedBy = "entregador", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<EntregadorLocalidade> localidades;
 
 	@ManyToOne

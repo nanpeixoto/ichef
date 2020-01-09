@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +21,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 /**
@@ -30,7 +34,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 @Table(name = "tip_prato")
 public class TipoPrato extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final long TIPO_PRATO_CONGELADO = 5l;
 
 	@Id
@@ -65,13 +69,17 @@ public class TipoPrato extends BaseEntity {
 
 	// bi-directional many-to-one association to TipPratoPreco
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
+
 	private List<TipoPratoPreco> precos;
 
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<TipoPratoInsumo> insumos;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private Set<TipoPratoInsumo> insumos;
 
 	@OneToMany(mappedBy = "tipoPrato")
-	private List<VwTipoPratoPreco> ultimoPreco;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private Set<VwTipoPratoPreco> ultimoPreco;
 
 	@Override
 	public Object getId() {
@@ -186,14 +194,6 @@ public class TipoPrato extends BaseEntity {
 		return "Inativo".toUpperCase();
 	}
 
-	public List<TipoPratoInsumo> getInsumos() {
-		return insumos;
-	}
-
-	public void setInsumos(List<TipoPratoInsumo> insumos) {
-		this.insumos = insumos;
-	}
-
 	public Long getQuantidadeTotal() {
 		Long quantidadeTotal = 0l;
 		if (insumos != null)
@@ -246,12 +246,32 @@ public class TipoPrato extends BaseEntity {
 		return preco;
 	}
 
-	public List<VwTipoPratoPreco> getUltimoPreco() {
+	public Set<TipoPratoInsumo> getInsumos() {
+		return insumos;
+	}
+
+	public void setInsumos(Set<TipoPratoInsumo> insumos) {
+		this.insumos = insumos;
+	}
+
+	public Set<VwTipoPratoPreco> getUltimoPreco() {
 		return ultimoPreco;
 	}
 
-	public void setUltimoPreco(List<VwTipoPratoPreco> ultimoPreco) {
+	public void setUltimoPreco(Set<VwTipoPratoPreco> ultimoPreco) {
 		this.ultimoPreco = ultimoPreco;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public static long getTipoPratoCongelado() {
+		return TIPO_PRATO_CONGELADO;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

@@ -15,12 +15,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.dao.AbstractService;
 import br.com.ichef.dto.EmailDTO;
+import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Email;
 
 @SessionScoped
-public class EmailService extends GenericDAO<Email> {
+public class EmailService extends AbstractService<Email> {
 
 	/**
 	 * 
@@ -116,6 +117,24 @@ public class EmailService extends GenericDAO<Email> {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	protected void validaCampos(Email entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegras(Email entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void validaRegrasExcluir(Email entity) throws AppException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
