@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author jsouzaa
  *
  */
-@WebFilter(servletNames={"facesServlet"})
+
 public class NoCacheFilter implements Filter {
 	
 	/**
@@ -32,13 +32,6 @@ public class NoCacheFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        if (!request.getRequestURI().startsWith(request.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER)) { // pula JSF resources (CSS/JS/Images/etc)
-            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-            response.setDateHeader("Expires", 0); // Proxies.
-        }
-        
-        ((HttpServletResponse) response).setHeader("X-UA-Compatible", "IE=8");
         
 
         chain.doFilter(req, res);

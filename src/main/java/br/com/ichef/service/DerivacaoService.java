@@ -2,10 +2,13 @@ package br.com.ichef.service;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Derivacao;
 
+@Stateless
 public class DerivacaoService extends AbstractService<Derivacao> {
 	private static final long serialVersionUID = 1L;
 

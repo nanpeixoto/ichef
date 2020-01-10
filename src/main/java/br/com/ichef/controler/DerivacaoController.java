@@ -71,7 +71,7 @@ public class DerivacaoController extends BaseConsultaCRUD<Derivacao> {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Item excluído com sucesso");
+		FacesUtil.addInfoMessage("Item excluï¿½do com sucesso");
 	}
 
 	public String Salvar() throws Exception {

@@ -3,6 +3,8 @@ package br.com.ichef.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -14,6 +16,7 @@ import br.com.ichef.model.Empresa;
 import br.com.ichef.model.VwPrevisaoInsumo;
 import br.com.ichef.util.Util;
 
+@Stateless
 public class PrevisaoInsumoService extends AbstractService<VwPrevisaoInsumo> {
 	private static final long serialVersionUID = 1L;
 

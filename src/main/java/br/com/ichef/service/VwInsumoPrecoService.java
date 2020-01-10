@@ -1,9 +1,12 @@
 package br.com.ichef.service;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.VwInsumoPreco;
 
+@Stateless
 public class VwInsumoPrecoService extends AbstractService<VwInsumoPreco> {
 
 	/**

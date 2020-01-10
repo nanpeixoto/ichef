@@ -9,9 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 import org.hibernate.Criteria;
 
@@ -32,12 +36,12 @@ import br.com.ichef.util.Util;
  * @param <T>
  */
 @Stateless
-
-
-// @Interceptors(AppLogInterceptor.class)
-//@TransactionManagement(TransactionManagementType.CONTAINER)
+@TransactionManagement(TransactionManagementType.CONTAINER) 
 public abstract class AbstractService<T extends BaseEntity> extends AppService<T> {
 
+	
+	@Resource
+	UserTransaction tx;
 	
 	 
 	private static final long serialVersionUID = 297699908122496343L;
@@ -302,8 +306,11 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 */
 	public void excluir(T entity) throws AppException {
 		try {
+			
+			//tx.begin();
 			processDeleteValidations(entity);
 			deleteImpl(entity);
+			//tx.commit();
 
 		} catch (Exception e) {
 			throw new AppException(e.getMessage());
@@ -372,7 +379,9 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 */
 	protected T saveImpl(T entity) throws AppException {
 		try {
+			//tx.begin();
 			entityManager.persist(entity);
+			//tx.commit();
 		} catch (Exception e) {
 			mensagens.add(e.getMessage());
 			if (!Util.isNullOuVazio(mensagens))
@@ -413,12 +422,14 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 * @return
 	 * @throws AppException
 	 */
+	
 	protected T updateImpl(T entity) throws AppException {
 
 		try {
-
+			//tx.begin();
 			entityManager.merge(entity);
 			entityManager.flush();
+			//tx.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();

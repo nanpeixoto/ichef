@@ -4,127 +4,9 @@
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	metadata-complete="false" version="3.0">
+
 	<display-name>ichef</display-name>
 
-
-	<context-param>
-		<param-name>primefaces.THEME</param-name>
-		<param-value>admin</param-value>
-	</context-param>
-
-	<mime-mapping>
-		<extension>eot</extension>
-		<mime-type>application/vnd.ms-fontobject</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>otf</extension>
-		<mime-type>font/opentype</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>ttf</extension>
-		<mime-type>application/x-font-ttf</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>woff</extension>
-		<mime-type>application/x-font-woff</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>woff2</extension>
-		<mime-type>application/x-font-woff2</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>svg</extension>
-		<mime-type>image/svg+xml</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>ico</extension>
-		<mime-type>image/x-icon</mime-type>
-	</mime-mapping>
-
-
-	<context-param>
-		<param-name>com.sun.faces.defaultResourceMaxAge</param-name>
-		<param-value>3628800000</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.FACELETS_BUFFER_SIZE</param-name>
-		<param-value>65535</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
-		<param-value>0</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.PROJECT_STAGE</param-name>
-		<param-value>Development</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-		<param-value>client</param-value>
-	</context-param>
-	<context-param>
-		<param-name>org.omnifaces.FACES_VIEWS_SCAN_PATHS</param-name>
-		<param-value>/*.xhtml</param-value>
-	</context-param>
-
-	<servlet>
-		<servlet-name>facesServlet</servlet-name>
-		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>facesServlet</servlet-name>
-		<url-pattern>*.xhtml</url-pattern>
-	</servlet-mapping>
-	<filter>
-		<filter-name>PrimeFaces FileUpload Filter</filter-name>
-		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
-	</filter>
-
-	<servlet-mapping>
-		<servlet-name>facesServlet</servlet-name>
-		<url-pattern>/javax.faces.resource/*</url-pattern>
-		<url-pattern>*.xhtml</url-pattern>
-	</servlet-mapping>
-	<filter-mapping>
-		<filter-name>PrimeFaces FileUpload Filter</filter-name>
-		<servlet-name>facesServlet</servlet-name>
-	</filter-mapping>
-	<filter>
-		<filter-name>characterEncodingFilter</filter-name>
-		<filter-class>org.omnifaces.filter.CharacterEncodingFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>characterEncodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter>
-		<filter-name>facesExceptionFilter</filter-name>
-		<filter-class>org.omnifaces.filter.FacesExceptionFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>facesExceptionFilter</filter-name>
-		<servlet-name>facesServlet</servlet-name>
-	</filter-mapping>
-	<filter>
-		<filter-name>NoCacheFilter</filter-name>
-		<filter-class>br.com.ichef.filter.NoCacheFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>NoCacheFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<listener>
-		<listener-class>br.com.ichef.listener.MyServletContextListener</listener-class>
-	</listener>
 
 	<session-config>
 		<session-timeout>30</session-timeout>
@@ -133,6 +15,36 @@
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
+
+
+
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>admin</param-value>
+	</context-param>
+
+
+
+
+	<servlet>
+		<servlet-name>facesServlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>facesServlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+
+
+
+	<servlet-mapping>
+		<servlet-name>facesServlet</servlet-name>
+		<url-pattern>/javax.faces.resource/*</url-pattern>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
 
 
 
