@@ -3,6 +3,8 @@ package br.com.ichef.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import org.apache.regexp.recompile;
 
 import br.com.ichef.dao.AbstractService;
@@ -12,6 +14,7 @@ import br.com.ichef.model.ClienteTelefone;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.ClienteVisitor;
 
+@Stateless
 public class ClienteService extends AbstractService<Cliente> {
 	private static final long serialVersionUID = 1L;
 

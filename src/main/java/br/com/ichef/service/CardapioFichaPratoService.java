@@ -1,11 +1,13 @@
 package br.com.ichef.service;
 
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.CardapioFichaPrato;
 
+@Stateless
 public class CardapioFichaPratoService extends AbstractService<CardapioFichaPrato> {
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +30,7 @@ public class CardapioFichaPratoService extends AbstractService<CardapioFichaPrat
 
 			}
 			if (result == 0)
-				return "Operação Não Realizada. Contact o ADM do sistema";
+				return "Operaï¿½ï¿½o Nï¿½o Realizada. Contact o ADM do sistema";
 			return null;
 		} catch (Exception e) {
 

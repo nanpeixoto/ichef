@@ -9,8 +9,8 @@
 		<jta-data-source>java:/jdbc/ichefDS</jta-data-source>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="none" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.use_sql_comments" value="false" />
 			<property name="hibernate.cache.use_second_level_cache" value="true" />

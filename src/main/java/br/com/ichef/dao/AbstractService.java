@@ -32,13 +32,13 @@ import br.com.ichef.util.Util;
  * @param <T>
  */
 @Stateless
+
+
 // @Interceptors(AppLogInterceptor.class)
+//@TransactionManagement(TransactionManagementType.CONTAINER)
 public abstract class AbstractService<T extends BaseEntity> extends AppService<T> {
 
-	/**
-	 */
-
-	@SuppressWarnings("unused")
+	
 	 
 	private static final long serialVersionUID = 297699908122496343L;
 

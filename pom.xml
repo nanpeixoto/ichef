@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>br.scmba</groupId>
+	<groupId>br.com</groupId>
 	<artifactId>ichef</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
@@ -69,7 +69,7 @@
 				<version>2.4.2</version>
 				<configuration>
 					<includes>
-						<include>br/scmba/**</include>
+						<include>br/com/**</include>
 					</includes>
 					<test>**/*Test</test>
 				</configuration>
@@ -290,14 +290,14 @@
 			<artifactId>omnifaces</artifactId>
 			<version>1.6.3</version>
 		</dependency>
-		
+
 		<!-- Admin Template -->
 		<dependency>
 			<groupId>com.github.adminfaces</groupId>
 			<artifactId>admin-template</artifactId>
 			<version>1.0.0-RC1</version>
 		</dependency>
-		
+
 
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -437,16 +437,17 @@
 			<version>1.6-1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>br.scmba</groupId>
-			<artifactId>boleto</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>net.sourceforge.jexcelapi</groupId>
 			<artifactId>jxl</artifactId>
 			<version>2.6.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>5.8.2</version>
 		</dependency>
 
 

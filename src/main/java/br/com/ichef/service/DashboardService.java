@@ -1,9 +1,12 @@
 package br.com.ichef.service;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Dashboard;
 
+@Stateless
 public class DashboardService extends AbstractService<Dashboard> {
 	private static final long serialVersionUID = 1L;
 

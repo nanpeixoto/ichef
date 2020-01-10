@@ -26,9 +26,7 @@
 		<phase-listener>br.com.ichef.listener.TimeListener</phase-listener>
 	</lifecycle>
 
-	<lifecycle>
-		<phase-listener>br.com.ichef.listener.AjaxListener</phase-listener>
-	</lifecycle>
+	 
 
 	<application>
 		<locale-config>
