@@ -9,13 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
 
 import org.hibernate.Criteria;
 
@@ -36,14 +32,8 @@ import br.com.ichef.util.Util;
  * @param <T>
  */
 @Stateless
-@TransactionManagement(TransactionManagementType.CONTAINER) 
 public abstract class AbstractService<T extends BaseEntity> extends AppService<T> {
 
-	
-	@Resource
-	UserTransaction tx;
-	
-	 
 	private static final long serialVersionUID = 297699908122496343L;
 
 	// @Inject
@@ -70,10 +60,8 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	// Implements methods
 	// =======================================================================================================
 
-	public List<T> listAll() {
-		return findAll();
-	}
-	
+ 
+
 	/**
 	 * Lista todas as entidades cadastradas na tabela que reprensenta a entidade
 	 * anotada nesta interface.
@@ -87,7 +75,7 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 * @throws IllegalAccessException
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<T> findAll() {
+	public List<T> listAll() {
 		String campoOrderBy = null;
 		try {
 			Method m = getTypeClass().getDeclaredMethod("getColumnOrderBy");
@@ -104,7 +92,8 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 			if (campoOrderBy == null)
 				return entityManager.createQuery(("FROM " + getTypeClass().getName())).getResultList();
 			else
-				return entityManager.createQuery(("FROM " + getTypeClass().getName()) + " ORDER BY " + campoOrderBy).getResultList();
+				return entityManager.createQuery(("FROM " + getTypeClass().getName()) + " ORDER BY " + campoOrderBy)
+						.getResultList();
 		} catch (Exception e) {
 			// logger.error(LogUtil.getMensagemPadraoLog(e.getMessage(),
 			// LogUtil.getNomeFuncionalidade(getTypeClass().getName()),
@@ -146,7 +135,8 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 			if (campoOrderBy == null)
 				return entityManagerPrd.createQuery(("FROM " + getTypeClass().getName())).getResultList();
 			else
-				return entityManagerPrd.createQuery(("FROM " + getTypeClass().getName()) + " ORDER BY " + campoOrderBy).getResultList();
+				return entityManagerPrd.createQuery(("FROM " + getTypeClass().getName()) + " ORDER BY " + campoOrderBy)
+						.getResultList();
 		} catch (Exception e) {
 			// logger.error(LogUtil.getMensagemPadraoLog(e.getMessage(),
 			// LogUtil.getNomeFuncionalidade(getTypeClass().getName()),
@@ -230,7 +220,7 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 *            Entidade a ser inserida.
 	 * @return A entidade que está persistida no banco.
 	 * @throws AppException
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public T saveOrUpdade(T entity) throws AppException, Exception {
@@ -306,11 +296,11 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 */
 	public void excluir(T entity) throws AppException {
 		try {
-			
-			//tx.begin();
+
+			// tx.begin();
 			processDeleteValidations(entity);
 			deleteImpl(entity);
-			//tx.commit();
+			// tx.commit();
 
 		} catch (Exception e) {
 			throw new AppException(e.getMessage());
@@ -355,14 +345,14 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	@SuppressWarnings("unchecked")
 	public List<T> findByParameters(T object, FilterVisitor visitor) throws AppException, Exception {
 		Criteria criteria = null;
-		if( visitor!=null )
+		if (visitor != null)
 			criteria = createCriteria(object, visitor);
-		else 
+		else
 			criteria = createCriteria(object);
-		
-		if(criteria!=null)
+
+		if (criteria != null)
 			return criteria.list();
-		else 
+		else
 			return null;
 	}
 
@@ -379,9 +369,9 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 */
 	protected T saveImpl(T entity) throws AppException {
 		try {
-			//tx.begin();
+			// tx.begin();
 			entityManager.persist(entity);
-			//tx.commit();
+			// tx.commit();
 		} catch (Exception e) {
 			mensagens.add(e.getMessage());
 			if (!Util.isNullOuVazio(mensagens))
@@ -415,21 +405,21 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	}
 
 	/**
-	 * Método que atualiza uma entidade. Se necessário, ele será sobrescrito
-	 * para realizar algo antes e/ou depois da operação de update.
+	 * Método que atualiza uma entidade. Se necessário, ele será sobrescrito para
+	 * realizar algo antes e/ou depois da operação de update.
 	 * 
 	 * @param entity
 	 * @return
 	 * @throws AppException
 	 */
-	
+
 	protected T updateImpl(T entity) throws AppException {
 
 		try {
-			//tx.begin();
+			// tx.begin();
 			entityManager.merge(entity);
 			entityManager.flush();
-			//tx.commit();
+			// tx.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -440,8 +430,8 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	}
 
 	/**
-	 * Método que atualiza uma entidade. Se necessário, ele será sobrescrito
-	 * para realizar algo antes e/ou depois da operação de update.
+	 * Método que atualiza uma entidade. Se necessário, ele será sobrescrito para
+	 * realizar algo antes e/ou depois da operação de update.
 	 * 
 	 * @param entity
 	 * @return
@@ -493,8 +483,8 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	}
 
 	/**
-	 * Processa todas as validações implementadas no validaCamposObrigatorios e
-	 * no validaRegras durante o save e o update.
+	 * Processa todas as validações implementadas no validaCamposObrigatorios e no
+	 * validaRegras durante o save e o update.
 	 * 
 	 * @param entity
 	 *            Entidade a ser validada.
@@ -520,8 +510,8 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	}
 
 	/**
-	 * Processa todas as validações implementadas no validaCamposObrigatorios e
-	 * no validaRegras durante o save e o update.
+	 * Processa todas as validações implementadas no validaCamposObrigatorios e no
+	 * validaRegras durante o save e o update.
 	 * 
 	 * @param listEntity
 	 *            lista da Entidade a ser validada.
@@ -532,7 +522,8 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	 * @throws BusinessException
 	 *             Quando alguma RN não foi atendida.
 	 */
-	protected void processValidations(Collection<T> listEntity, boolean editando) throws RequiredException, BusinessException {
+	protected void processValidations(Collection<T> listEntity, boolean editando)
+			throws RequiredException, BusinessException {
 		setEditando(editando);
 		mensagens = new ArrayList<String>();
 
@@ -579,7 +570,7 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	protected void setEditando(boolean editando) {
 		this.editando = editando;
 	}
-	
+
 	public List<T> mount(List<T> list) {
 		if (list != null && list.size() > 0) {
 			Map<Object, T> map = new HashMap<Object, T>();
@@ -600,5 +591,5 @@ public abstract class AbstractService<T extends BaseEntity> extends AppService<T
 	public void setMensagens(List<String> mensagens) {
 		this.mensagens = mensagens;
 	}
-	
+
 }

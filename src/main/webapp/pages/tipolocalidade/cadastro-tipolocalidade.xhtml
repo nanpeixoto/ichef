@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                xmlns:p="http://primefaces.org/ui"  
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">
@@ -14,8 +14,7 @@
         	<f:event listener="#{tipoLocalidadeController.inicializar()}" type="preRenderView"></f:event>
         </f:metadata>
 
-        <adm:breadcrumb title="Cadastro Tipo de Localidade #{tipoLocalidadeController.entity.id}" link="cadastro-tipolocalidade.xhtml?id=#{tipoLocalidadeController.entity.id}"/>
-        <h:form id="form" prependId="false">
+         <h:form id="form" prependId="false">
            <p:focus context="capaPanel"/>
 
 			

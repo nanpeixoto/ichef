@@ -2,10 +2,12 @@ package br.com.ichef.service;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.FormaPagamento;
-
+@Stateless
 public class FormaPagamentoService extends AbstractService<FormaPagamento> {
 	private static final long serialVersionUID = 1L;
 

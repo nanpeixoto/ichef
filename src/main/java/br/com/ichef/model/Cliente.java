@@ -80,12 +80,11 @@ public class Cliente extends BaseEntity {
 	private List<ClienteTelefone> telefones;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private Set<ClienteEndereco> enderecos;
+	private List<ClienteEndereco> enderecos;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private Set<ClienteCarteira> carteiras;
+	private List<ClienteCarteira> carteiras;
 
 	@Column(name = "DS_APELIDO")
 	private String apelido;
@@ -535,19 +534,23 @@ public class Cliente extends BaseEntity {
 
 	}
 
-	public Set<ClienteEndereco> getEnderecos() {
+	public List<ClienteEndereco> getEnderecos() {
 		return enderecos;
 	}
 
-	public void setEnderecos(Set<ClienteEndereco> enderecos) {
+	public void setEnderecos(List<ClienteEndereco> enderecos) {
 		this.enderecos = enderecos;
 	}
 
-	public Set<ClienteCarteira> getCarteiras() {
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public List<ClienteCarteira> getCarteiras() {
 		return carteiras;
 	}
 
-	public void setCarteiras(Set<ClienteCarteira> carteiras) {
+	public void setCarteiras(List<ClienteCarteira> carteiras) {
 		this.carteiras = carteiras;
 	}
 

@@ -135,7 +135,7 @@ public class FichaTecnicaPreparoController extends BaseConsultaCRUD<FichaTecnica
 			insumos = insumoService.findByParameters(filtroInsumo, visitor);
 
 			visitor = new FIchaTecnicaPreparoVisitor();
-			if (getEntity().getId() != null)
+			if (getEntity()!=null && getEntity().getId() != null)
 				visitor.setCodigoDiferenteDe((Long) getEntity().getId());
 			FichaTecnicaPreparo filtroPreparo = new FichaTecnicaPreparo();
 			filtroPreparo.setAtivo("S");

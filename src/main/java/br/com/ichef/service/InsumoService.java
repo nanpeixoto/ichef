@@ -2,12 +2,14 @@ package br.com.ichef.service;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Insumo;
 
-
+@Stateless
 public class InsumoService extends AbstractService<Insumo> {
 	private static final long serialVersionUID = 1L;
 	

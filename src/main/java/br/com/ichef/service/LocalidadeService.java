@@ -2,11 +2,13 @@ package br.com.ichef.service;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Localidade;
 import br.com.ichef.model.TipoLocalidade;
-
+@Stateless
 public class LocalidadeService extends AbstractService<Localidade> {
 	private static final long serialVersionUID = 1L;
 	

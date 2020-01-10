@@ -4,13 +4,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.FichaTecnicaPreparo;
 import br.com.ichef.model.FichaTecnicaPreparoInsumo;
-
+@Stateless
 public class FichaTecnicaPreparoService extends AbstractService<FichaTecnicaPreparo> {
 	private static final long serialVersionUID = 1L;
 

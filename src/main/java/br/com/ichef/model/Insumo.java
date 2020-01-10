@@ -68,13 +68,11 @@ public class Insumo extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(   mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<InsumoPreco> precos;
+	@OneToMany( fetch= FetchType.LAZY,  mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+	 private List<InsumoPreco> precos;
 
-	@OneToMany( mappedBy = "insumo")
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private Set<VwInsumoPreco> ultimoPreco;
+	@OneToMany( fetch= FetchType.EAGER,mappedBy = "insumo")
+	 private Set<VwInsumoPreco> ultimoPreco;
 
 	public boolean isAtivo() {
 		if (ativo != null) {

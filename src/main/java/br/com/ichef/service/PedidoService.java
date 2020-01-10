@@ -2,7 +2,7 @@ package br.com.ichef.service;
 
 import java.util.List;
 
-
+import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -11,7 +11,7 @@ import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Pedido;
 
-
+@Stateless
 public class PedidoService extends AbstractService<Pedido> {
 	private static final long serialVersionUID = 1L;
 	

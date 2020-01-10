@@ -3,12 +3,14 @@ package br.com.ichef.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Stateless;
+
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Usuario;
 import br.com.ichef.model.UsuarioEmpresa;
-
+@Stateless
 public class EmpresaService extends AbstractService<Empresa> {
 	private static final long serialVersionUID = 1L;
 

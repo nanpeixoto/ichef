@@ -3,6 +3,7 @@ package br.com.ichef.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.com.ichef.dao.AbstractService;
@@ -10,7 +11,7 @@ import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.model.FichaTecnicaPratoPreparo;
-
+@Stateless
 public class FichaTecnicaPratoService extends AbstractService<FichaTecnicaPrato> {
 	private static final long serialVersionUID = 1L;
 

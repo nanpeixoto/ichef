@@ -1,8 +1,6 @@
 package br.com.ichef.service;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 
 import br.com.ichef.dao.AbstractService;
 import br.com.ichef.exception.AppException;

@@ -78,7 +78,7 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	// bi-directional many-to-one association to FichaTecnicaPratoPreparo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private Set<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos;
+	private List<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos;
 
 	// bi-directional many-to-one association to FichaTecnicaPratoTipo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -291,8 +291,6 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	// this.precoVendaReceita = precoVendaReceita;
 	// }
 
-
-
 	public List<FichaTecnicaPratoTipo> getFichaTecnicaPratoTipos() {
 		return fichaTecnicaPratoTipos;
 	}
@@ -384,13 +382,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 
 	}
 
-	public Set<FichaTecnicaPratoPreparo> getFichaTecnicaPratoPreparos() {
+	public List<FichaTecnicaPratoPreparo> getFichaTecnicaPratoPreparos() {
 		return fichaTecnicaPratoPreparos;
 	}
 
-	public void setFichaTecnicaPratoPreparos(Set<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos) {
+	public void setFichaTecnicaPratoPreparos(List<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos) {
 		this.fichaTecnicaPratoPreparos = fichaTecnicaPratoPreparos;
 	}
-	
-	
+
 }

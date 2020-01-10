@@ -77,7 +77,7 @@ public class FichaTecnicaPratoController extends BaseConsultaCRUD<FichaTecnicaPr
 			setEntity(service.getById(id));
 			inicializarlistaTiposSelecionados(getEntity());
 		}
-		if (copia != null) {
+		if (copia != null && copia != 0) {
 			criarClone(copia);
 		}
 		obterListas();
@@ -288,7 +288,7 @@ public class FichaTecnicaPratoController extends BaseConsultaCRUD<FichaTecnicaPr
 
 	public String Salvar(boolean validarNome) throws Exception {
 
-		if (copia != null) {
+		if (copia != null && copia != 0) {
 			criarClone(getEntity());
 		}
 

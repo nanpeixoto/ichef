@@ -4,8 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:adm="http://github.com/adminfaces"
-	template="/WEB-INF/templates/template.xhtml">
+	 template="/WEB-INF/templates/template.xhtml">
 
 	<ui:define name="title">
         Cadastro Cardápio
@@ -19,9 +18,7 @@
 				type="preRenderView"></f:event>
 		</f:metadata>
 
-		<adm:breadcrumb
-			title="Cadastro Preparo #{cardapioController.entity.id}"
-			link="cadastro-cardapio.xhtml?id=#{cardapioController.entity.id}" />
+		 
 		<p:growl id="mensagemCardapio" showDetail="false" sticky="false"
 			escape="true" autoUpdate="false" />
 		<h:form id="formCardapio" prependId="false">

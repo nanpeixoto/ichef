@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.faces.bean.SessionScoped;
+import javax.ejb.Stateless;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -20,7 +20,7 @@ import br.com.ichef.dto.EmailDTO;
 import br.com.ichef.exception.AppException;
 import br.com.ichef.model.Email;
 
-@SessionScoped
+@Stateless
 public class EmailService extends AbstractService<Email> {
 
 	/**
@@ -33,7 +33,7 @@ public class EmailService extends AbstractService<Email> {
 	private Properties init() {
 		Properties props = new Properties();
 
-		/** Parâmetros de conexão com servidor Gmail */
+		/** Parï¿½metros de conexï¿½o com servidor Gmail */
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
@@ -52,7 +52,7 @@ public class EmailService extends AbstractService<Email> {
 			}
 		});
 
-		/** Ativa Debug para sessão */
+		/** Ativa Debug para sessï¿½o */
 		session.setDebug(true);
 
 		try {
@@ -69,7 +69,7 @@ public class EmailService extends AbstractService<Email> {
 			message.setSubject(email.getAssunto());// Assunto
 			message.setText(email.getTexto());
 
-			/** Método para enviar a mensagem criada */
+			/** Mï¿½todo para enviar a mensagem criada */
 			Transport.send(message);
 
 			email.setSituacao("S");

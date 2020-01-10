@@ -70,16 +70,15 @@ public class TipoPrato extends BaseEntity {
 	// bi-directional many-to-one association to TipPratoPreco
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-
 	private List<TipoPratoPreco> precos;
 
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private Set<TipoPratoInsumo> insumos;
+	private List<TipoPratoInsumo> insumos;
 
 	@OneToMany(mappedBy = "tipoPrato")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private Set<VwTipoPratoPreco> ultimoPreco;
+	private List<VwTipoPratoPreco> ultimoPreco;
 
 	@Override
 	public Object getId() {
@@ -246,22 +245,6 @@ public class TipoPrato extends BaseEntity {
 		return preco;
 	}
 
-	public Set<TipoPratoInsumo> getInsumos() {
-		return insumos;
-	}
-
-	public void setInsumos(Set<TipoPratoInsumo> insumos) {
-		this.insumos = insumos;
-	}
-
-	public Set<VwTipoPratoPreco> getUltimoPreco() {
-		return ultimoPreco;
-	}
-
-	public void setUltimoPreco(Set<VwTipoPratoPreco> ultimoPreco) {
-		this.ultimoPreco = ultimoPreco;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -272,6 +255,22 @@ public class TipoPrato extends BaseEntity {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public List<TipoPratoInsumo> getInsumos() {
+		return insumos;
+	}
+
+	public void setInsumos(List<TipoPratoInsumo> insumos) {
+		this.insumos = insumos;
+	}
+
+	public List<VwTipoPratoPreco> getUltimoPreco() {
+		return ultimoPreco;
+	}
+
+	public void setUltimoPreco(List<VwTipoPratoPreco> ultimoPreco) {
+		this.ultimoPreco = ultimoPreco;
 	}
 
 }
