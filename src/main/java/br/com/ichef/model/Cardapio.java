@@ -3,6 +3,7 @@ package br.com.ichef.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,8 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
@@ -40,7 +39,6 @@ public class Cardapio extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "DATA")
 	private Date data;
 
@@ -59,7 +57,7 @@ public class Cardapio extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(fetch =FetchType.EAGER,  mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CardapioFichaPrato> pratos;
 
 	public Usuario getUsuarioAlteracao() {
@@ -116,7 +114,7 @@ public class Cardapio extends BaseEntity {
 	@Override
 	public String getColumnOrderBy() {
 		// TODO Auto-generated method stub
-		return "data";
+		return null;
 	}
 
 	@Override
@@ -180,29 +178,28 @@ public class Cardapio extends BaseEntity {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao.toUpperCase();
 	}
-	
+
 	public String getSituacao() {
 		if (getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
 	}
 
-	
 	public String getDescricaoComDiaSemana() {
-		return getDataFormatada()+" - "+getDiaSemana();
+		return getDataFormatada() + " - " + getDiaSemana();
 	}
-
 
 	public String getDataFormatada() {
 		try {
-			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy");
+			Locale meuLocal = new Locale("pt", "BR");
+			SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy", meuLocal);
 			return sdate.format(getData());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public String getDiaSemana() {
 		try {
 

@@ -44,8 +44,7 @@
 									paginator="false" value="#{pedidoController.lista}" var="item"
 									rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
 									editable="true" emptyMessage="Nenhum item encontrado"
-									sortField="#{item.ordemEntrega}"
-									sortBy="#{item.entregador.nome}" expandableRowGroups="true"
+									 sortBy="#{item.entregador.nome}" expandableRowGroups="true"
 									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 									currentPageReportTemplate=""
 									rowsPerPageTemplate="5,10,15,20,30">

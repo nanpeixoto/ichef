@@ -1,5 +1,7 @@
 package br.com.ichef.service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.EntityTransaction;
@@ -18,13 +20,39 @@ public class PedidoService extends GenericDAO<Pedido> {
 	@Override
 	public List<Pedido> findByParameters(Pedido object, FilterVisitor visitor) throws Exception {
 
-		return mount(super.findByParameters(object, visitor));
+		List<Pedido>  pedidos = mount(super.findByParameters(object, visitor));
+		order(pedidos);
+		return  pedidos;
+		
+		
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void order(List<Pedido> persons) {
+
+	    Collections.sort(persons, new Comparator() {
+
+	        public int compare(Object o1, Object o2) {
+
+	            String x1 = ((Pedido) o1).getEntregador().getNome();
+	            String x2 = ((Pedido) o2).getEntregador().getNome();
+	            int sComp = x1.compareTo(x2);
+
+	            if (sComp != 0) {
+	               return sComp;
+	            } 
+
+	            Integer ordem1 = ((Pedido) o1).getOrdemEntrega();
+	            Integer ordem2 = ((Pedido) o2).getOrdemEntrega();
+	            return ordem1.compareTo(ordem2);
+	    }});
 	}
 	
 	@Override
 	public List<Pedido> findByParameters(Pedido object) throws Exception {
-
-		return mount(super.findByParameters(object));
+		List<Pedido>  pedidos = mount(super.findByParameters(object));
+		order(pedidos);
+		return  pedidos;
 	}
 
 	/*
@@ -44,11 +72,8 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 	public Integer findTotalPedidoPrato(Pedido pedido) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(" SELECT  sum(NR_QTD)   nr_total_pedido " + " fROM pedido p, cardapio c  "
-				+ " where p.CD_CARDAPIO = c.CD_CARDAPIO " + " and CD_CARDAPIO_PRATO = "
-				+ pedido.getCardapioFichaPrato().getId() + " and cd_empresa = " + pedido.getEmpresa().getId()
-				+ " and date_format( data, '%d/%m/%Y' ) =   '" + pedido.getCardapio().getDataFormatada() + "'  "
-				+ " group by c.DATA,  p.CD_EMPRESA, p.CD_CARDAPIO_PRATO ");
+		sb.append(" SELECT  sum(NR_QTD)   nr_total_pedido " + " fROM pedido p "
+				+ "WHERE   CD_CARDAPIO_PRATO = "+pedido.getCardapioFichaPrato().getId() );
 		try {
 			Query query = getManager().createNativeQuery(sb.toString());
 			int count = query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;

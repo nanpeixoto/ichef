@@ -8,10 +8,10 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>br.com.ichef.model.VwPrevisaoInsumo</class>
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/ichef?useSSL=true&amp;serverTimezone=UTC" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/ichef" />
 			<property name="javax.persistence.jdbc.user" value="ichef" />
 			<property name="javax.persistence.jdbc.password" value="ichef" />
-			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 
 			<!-- <property name="javax.persistence.schema-generation.database.action" 
 				value="update" /> <property name="javax.persistence.schema-generation.create-source" 
@@ -20,7 +20,8 @@
 			<!-- <property name="connection_provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/> -->
 			<property name="hibernate.connection.provider_class" value ="org.hibernate.c3p0.internal.C3P0ConnectionProvider"/>
         
-         	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+         	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+        
          
 			<property name="hibernate.c3p0.minPoolSize" value="5"/>
 			<property name="hibernate.c3p0.maxPoolSize" value="150"/>

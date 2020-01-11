@@ -71,6 +71,8 @@ public class FichaTecnicaPreparoController extends BaseController {
 	private String tipoItem;
 
 	private SelectOneRadio selectOneRadioMonstraPreparo;
+	
+	private boolean mostrarPrepato;
 
 	public void inicializar() {
 		if (id != null) {
@@ -365,6 +367,10 @@ public class FichaTecnicaPreparoController extends BaseController {
 		return "lista-ficha-tecnica-preparo.xhtml?faces-redirect=true";
 
 	}
+	
+	public void atualizarMostrarPepraro() {
+		 setMostrarPrepato( (boolean) getSelectButtonMonstraPreparo().getValue() );
+	}
 
 	public String Salvar() throws Exception {
 		return Salvar(true);
@@ -538,5 +544,15 @@ public class FichaTecnicaPreparoController extends BaseController {
 	public void setSelectOneRadioMonstraPreparo(SelectOneRadio selectOneRadioMonstraPreparo) {
 		this.selectOneRadioMonstraPreparo = selectOneRadioMonstraPreparo;
 	}
+
+	public boolean isMostrarPrepato() {
+		return mostrarPrepato;
+	}
+
+	public void setMostrarPrepato(boolean mostrarPrepato) {
+		this.mostrarPrepato = mostrarPrepato;
+	}
+	
+	
 
 }

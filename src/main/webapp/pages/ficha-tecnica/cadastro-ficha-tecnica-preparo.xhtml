@@ -104,22 +104,22 @@
 							<p:selectBooleanButton id="mostrarPreparo" value="#{fichaTecnicaPreparoController.entity.mostraPreparo}" 
 						        	onLabel="Inserir Preparo" offLabel="Inserir Insumo" onIcon="fa fa-cutlery" offIcon="fa fa-apple" 
 									binding="#{fichaTecnicaPreparoController.selectButtonMonstraPreparo}" >
-						        	 <p:ajax event="change" update="painelInsumos"  process="@this,mostrarPreparo"/>
+						        	 <p:ajax  update="painelInsumos, selectPreparo, selectInsumo, outselectPreparo,outinsumo"  process="@this" listener="#{fichaTecnicaPreparoController.atualizarMostrarPepraro()}"/>
 						</p:selectBooleanButton>
 						</p:panelGrid>
 						
 						<h:panelGroup>
 						<p:panelGrid  columns="8" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-12"  layout="grid" id="painelInsumos">
 						
-						<p:outputLabel value="Preparo" for="selectPreparo"  rendered="#{fichaTecnicaPreparoController.entity.mostraPreparo}"/>
+						<p:outputLabel value="Preparo" for="selectPreparo" id="outselectPreparo"  rendered="#{fichaTecnicaPreparoController.mostrarPrepato}"/>
                     		<p:selectOneMenu id="selectPreparo" value="#{fichaTecnicaPreparoController.preparo}" filter="true"  filterMatchMode="contains" 
-                    			converter= "omnifaces.SelectItemsConverter" rendered="#{fichaTecnicaPreparoController.entity.mostraPreparo}">
+                    			converter= "omnifaces.SelectItemsConverter" rendered="#{fichaTecnicaPreparoController.mostrarPrepato}">
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{fichaTecnicaPreparoController.preparos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>
-							<p:outputLabel value="Insumo" for="selectInsumo" rendered="#{!fichaTecnicaPreparoController.entity.mostraPreparo}"/>
+							<p:outputLabel value="Insumo" for="selectInsumo" id="outinsumo" rendered="#{!fichaTecnicaPreparoController.mostrarPrepato}"/>
                     		<p:selectOneMenu id="selectInsumo" value="#{fichaTecnicaPreparoController.insumo}" filter="true"  filterMatchMode="contains" 
-                    			converter= "omnifaces.SelectItemsConverter"  rendered="#{!fichaTecnicaPreparoController.entity.mostraPreparo}">
+                    			converter= "omnifaces.SelectItemsConverter"  rendered="#{!fichaTecnicaPreparoController.mostrarPrepato}">
                     			<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
 					            <f:selectItems value="#{fichaTecnicaPreparoController.insumos}" var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 					        </p:selectOneMenu>

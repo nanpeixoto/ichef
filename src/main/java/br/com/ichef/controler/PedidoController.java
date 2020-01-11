@@ -3,6 +3,8 @@ package br.com.ichef.controler;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -134,16 +136,12 @@ public class PedidoController extends BaseController {
 	@PostConstruct
 	public void init() {
 
-		verificarCardapio();
+		obterListas();
 
 		newInstance();
 
-		obterListas();
-
 		setEntregaDataCardapio(true);
 		setDataEntrega(new Date());
-
-		// obterPedidoDia();
 
 	}
 
@@ -157,7 +155,13 @@ public class PedidoController extends BaseController {
 
 	private void valoresDefault() {
 		getEntity().setQuantidade(1);
-		getEntity().setCardapio(cardapio);
+		if (listaCardapio != null && listaCardapio.size() > 0) {
+			getEntity().setCardapio(listaCardapio.get(0));
+			listaCardapioPrato = listaCardapio.get(0).getPratos();
+		} else {
+			FacesUtil.addErroMessage("Nenhum Cardapio encontrado, cadastre um cardapio para continuar");
+
+		}
 		getEntity().setFormaPagamento(config.getFormaPagamento());
 		getEntity().setDerivacao(config.getDerivacao());
 		getEntity().setEmpresa(userLogado.getEmpresaLogada());
@@ -175,29 +179,23 @@ public class PedidoController extends BaseController {
 
 	}
 
-	private String verificarCardapio() {
-
+	public Cardapio getCardapioDia() {
 		CardapioVisitor cardapioVisitor = new CardapioVisitor();
 		cardapioVisitor.setDataCardapio(new Date());
 		Cardapio filter = new Cardapio();
 		filter.setAtivo("S");
+
 		try {
-			cardapio = (cardapioService.findByParameters(filter, cardapioVisitor)).get(0);
-			listaCardapioPrato = cardapio.getPratos();
-
-			cardapioVisitor = new CardapioVisitor();
-			cardapioVisitor.setDataCardapioPossiveis(new Date());
-
-			listaCardapio = cardapioService.findByParameters(filter, cardapioVisitor);
-
+			List<Cardapio> CardHoje = (cardapioService.findByParameters(filter, cardapioVisitor));
+			if (CardHoje != null && CardHoje.size() > 0) {
+				cardapio = CardHoje.get(0);
+				return cardapio;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesUtil.addErroMessage("Nenhum Cardapio encontrado, cadastre um cardapio para continuar");
-			updateComponentes("growl");
-			return "cadastro-cardapio.xhtml?faces-redirect=true";
 		}
 
-		return "pedido.xhtml?faces-redirect=true";
+		return null;
 
 	}
 
@@ -208,10 +206,17 @@ public class PedidoController extends BaseController {
 		listaEmpresas = empresaService.listAll(true);
 		listaDerivacoes = derivacaoService.listAll(true);
 
+		Cardapio cardapiofilter = new Cardapio();
+		cardapiofilter.setAtivo("S");
+		CardapioVisitor cardapioVisitor = new CardapioVisitor();
+		cardapioVisitor.setDataCardapioPossiveis(new Date());
+
 		Entregador filter = new Entregador();
 		filter.setAtivo("S");
 		filter.setEmpresa(userLogado.getEmpresaLogada());
+
 		try {
+			listaCardapio = cardapioService.findByParameters(cardapiofilter, cardapioVisitor);
 			listaEntregadorCarregada = entregadorService.findByParameters(filter);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -646,6 +651,7 @@ public class PedidoController extends BaseController {
 	}
 
 	public void obterPedidoDia() {
+
 		Cardapio cardapioFilter = new Cardapio();
 		cardapioFilter.setAtivo("S");
 
@@ -688,6 +694,8 @@ public class PedidoController extends BaseController {
 	public void obterEntregasDia() {
 
 		obterEntrega(null);
+		
+		
 	}
 
 	private void obterEntrega(Date data) {
@@ -704,9 +712,32 @@ public class PedidoController extends BaseController {
 		try {
 			setLista(service.findByParameters(filter, pedidoVisitor));
 			// setLista(service.findByParameters(filter));
+			order(getLista());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void order(List<Pedido> persons) {
+
+	    Collections.sort(persons, new Comparator() {
+
+	        public int compare(Object o1, Object o2) {
+
+	            String x1 = ((Pedido) o1).getEntregador().getNome();
+	            String x2 = ((Pedido) o2).getEntregador().getNome();
+	            int sComp = x1.compareTo(x2);
+
+	            if (sComp != 0) {
+	               return sComp;
+	            } 
+
+	            Integer ordem1 = ((Pedido) o1).getOrdemEntrega();
+	            Integer ordem2 = ((Pedido) o2).getOrdemEntrega();
+	            return ordem1.compareTo(ordem2);
+	    }});
 	}
 
 	public void imprimir() {
@@ -730,6 +761,8 @@ public class PedidoController extends BaseController {
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
+				
+				order(pedidos);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -780,6 +813,8 @@ public class PedidoController extends BaseController {
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
+				
+				order(pedidos);
 
 			} catch (Exception e) {
 				e.printStackTrace();

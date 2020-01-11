@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.ichef.arquitetura.BaseEntity;
@@ -30,6 +32,7 @@ public class Pedido extends BaseEntity {
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastro;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "DT_ENTREGA")
 	private Date dataEntrega;
 
@@ -455,5 +458,7 @@ public class Pedido extends BaseEntity {
 	public void setValorPago(BigDecimal valorPago) {
 		this.valorPago = valorPago;
 	}
+	
+	
 
 }
