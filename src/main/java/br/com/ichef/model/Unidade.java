@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -27,7 +31,7 @@ public class Unidade extends BaseEntity {
 
 	@Column(name = "DS_UNIDADE")
 	private String descricao;
-	
+
 	@Column(name = "SIGLA_UNIDADE")
 	private String sigla;
 
@@ -41,10 +45,14 @@ public class Unidade extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
@@ -177,9 +185,9 @@ public class Unidade extends BaseEntity {
 	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
 		this.usuarioAlteracao = usuarioAlteracao;
 	}
-	
-	public String getSituacao () {
-		if(getAtivo().equals("S"))
+
+	public String getSituacao() {
+		if (getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
 	}
@@ -192,5 +200,4 @@ public class Unidade extends BaseEntity {
 		this.sigla = sigla.toUpperCase();
 	}
 
-	
 }

@@ -1,6 +1,5 @@
 package br.com.ichef.model;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -33,18 +34,15 @@ public class Usuario extends BaseEntity {
 	@Column(name = "CD_USUARIO")
 	private Long id;
 
-	@NotEmpty
 	@Column(name = "NM_USUARIO")
 	private String nome;
 
 	@Column(name = "DS_EMAIL")
 	private String email;
 
-	@NotEmpty
 	@Column(name = "SN_ATIVO")
 	private String ativo;
 
-	@NotEmpty
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastrado;
 
@@ -52,30 +50,30 @@ public class Usuario extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
-	@NotEmpty
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlterado;
 
-	@NotEmpty
 	@Column(name = "DS_LOGIN")
 	private String login;
 
-	@NotEmpty
 	@Column(name = "NM_USUARIO_ABREVIADO")
 	private String nomeAbreviado;
 
-	@NotEmpty
 	@Column(name = "DS_SENHA")
 	private String senha;
 
-	@OneToMany(mappedBy = "usuario",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<UsuarioEmpresa> usuarioEmpresas;
-	
+
 	@Transient
 	private Empresa empresaLogada;
 
@@ -222,7 +220,5 @@ public class Usuario extends BaseEntity {
 	public void setEmpresaLogada(Empresa empresaLogada) {
 		this.empresaLogada = empresaLogada;
 	}
-	
-	
 
 }

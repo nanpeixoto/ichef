@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -64,14 +67,20 @@ public class Cliente extends BaseEntity {
 	private String exibirSaldo;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CIDADE")
 	private Cidade cidade;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 

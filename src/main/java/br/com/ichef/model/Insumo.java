@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,8 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.JSFUtil;
@@ -50,29 +50,41 @@ public class Insumo extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_TIP_INSUMO")
 	private TipoInsumo tipoInsumo;
 
 	@ManyToOne
+	@BatchSize(size = 200)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_UNIDADE")
 	private Unidade unidade;
 
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany( fetch= FetchType.LAZY,  mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
-	 private List<InsumoPreco> precos;
+	@OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@BatchSize(size = 200)
+	@Fetch(FetchMode.JOIN)
+	private List<InsumoPreco> precos;
 
-	@OneToMany( fetch= FetchType.EAGER,mappedBy = "insumo")
-	 private Set<VwInsumoPreco> ultimoPreco;
+	@OneToMany(mappedBy = "insumo")
+	@BatchSize(size = 200)
+	@Fetch(FetchMode.JOIN)
+	private Set<VwInsumoPreco> ultimoPreco;
 
 	public boolean isAtivo() {
 		if (ativo != null) {
@@ -235,6 +247,7 @@ public class Insumo extends BaseEntity {
 		try {
 			Usuario usuario = (Usuario) JSFUtil.getSessionMapValue("usuario");
 			Empresa empresaLogada = usuario.getEmpresaLogada();
+			getUltimoPreco();
 			for (VwInsumoPreco insumoPreco : ultimoPreco) {
 				if (insumoPreco.getEmpresa().getId().equals(empresaLogada.getId())) {
 					return insumoPreco.getPreco();

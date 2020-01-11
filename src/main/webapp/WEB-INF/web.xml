@@ -134,11 +134,11 @@
 		<filter-name>NoCacheFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+
 	<listener>
 		<listener-class>br.com.ichef.listener.MyServletContextListener</listener-class>
 	</listener>
- 
-
 
 
 	<security-constraint>

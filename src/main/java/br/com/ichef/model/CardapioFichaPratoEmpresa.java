@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -28,10 +32,14 @@ public class CardapioFichaPratoEmpresa extends BaseEntity {
 	private Integer quantidade;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO_PRATO")
 	private CardapioFichaPrato cardapioFichaPrato;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_EMPRESA")
 	private Empresa empresa;
 
@@ -143,7 +151,7 @@ public class CardapioFichaPratoEmpresa extends BaseEntity {
 	
 	public String getSituacao() {
 		if (getVenderAcimaDoLimite().equals("S"))
-			return "Não Limitado".toUpperCase();
+			return "Nï¿½o Limitado".toUpperCase();
 		return "Limitado".toUpperCase();
 	}
 
