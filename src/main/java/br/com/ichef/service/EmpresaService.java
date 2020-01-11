@@ -31,7 +31,7 @@ public class EmpresaService extends AbstractService<Empresa> {
 	public List<Empresa> empresasUsuario(Usuario usuario) {
 		Empresa filterEmpresa = new Empresa();
 		List<Empresa> empresas = new ArrayList<Empresa>();
-		filterEmpresa.setUsuarioEmpresas(usuario.getUsuarioEmpresas());
+		//filterEmpresa.setUsuarioEmpresas(usuario.getUsuarioEmpresas());
 		
 		for (UsuarioEmpresa usuarioEmpresa : usuario.getUsuarioEmpresas()) {
 			empresas.add(usuarioEmpresa.getEmpresa());

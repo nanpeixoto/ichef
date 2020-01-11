@@ -8,7 +8,7 @@
 	<artifactId>ichef</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
-	<name>SAC</name>
+	<name>ichef</name>
 
 	<dependencyManagement>
 		<dependencies>

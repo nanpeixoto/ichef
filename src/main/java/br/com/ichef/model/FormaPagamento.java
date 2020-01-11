@@ -16,6 +16,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -45,10 +49,14 @@ public class FormaPagamento extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
@@ -264,13 +272,13 @@ public class FormaPagamento extends BaseEntity {
 	public String geteCarteira() {
 		if (getCarteira().equals("S"))
 			return "Sim".toUpperCase();
-		return "Não".toUpperCase();
+		return "Nï¿½o".toUpperCase();
 	}
 	
 	public String getDescricaoCortesia() {
 		if (getStatusCortesia().equals("S"))
 			return "Sim".toUpperCase();
-		return "Não".toUpperCase();
+		return "Nï¿½o".toUpperCase();
 	}
 
 	public String getCarteira() {

@@ -14,6 +14,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import org.hibernate.Criteria;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile.FetchOverride;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.FacesMensager;

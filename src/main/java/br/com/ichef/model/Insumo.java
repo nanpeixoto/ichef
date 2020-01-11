@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,27 +50,19 @@ public class Insumo extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@ManyToOne
-	@BatchSize(size = 100)
-	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@ManyToOne
-	@BatchSize(size = 100)
-	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@ManyToOne
-	@BatchSize(size = 100)
-	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CD_TIP_INSUMO")
 	private TipoInsumo tipoInsumo;
 
-	@ManyToOne
-	@BatchSize(size = 200)
-	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CD_UNIDADE")
 	private Unidade unidade;
 

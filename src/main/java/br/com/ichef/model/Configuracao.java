@@ -11,6 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -31,6 +35,8 @@ public class Configuracao extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
@@ -38,14 +44,20 @@ public class Configuracao extends BaseEntity {
 	private Integer custoMercadoriaVendida;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_TIPO_PRATO_CARRO_CHEF")
 	private TipoPrato tipoPrato;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FORMA_PAG_CARTEIRA")
 	private FormaPagamento formaPagamento;
 
 	@ManyToOne
+	@BatchSize(size = 100)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_DERIVACAO_PADRAO")
 	private Derivacao derivacao;
 

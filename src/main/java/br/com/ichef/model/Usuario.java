@@ -2,6 +2,7 @@ package br.com.ichef.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -71,8 +72,9 @@ public class Usuario extends BaseEntity {
 	private String senha;
 
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<UsuarioEmpresa> usuarioEmpresas;
+	@org.hibernate.annotations.Fetch(value = FetchMode.JOIN)
+
+	private Set<UsuarioEmpresa> usuarioEmpresas;
 
 	@Transient
 	private Empresa empresaLogada;
@@ -205,12 +207,20 @@ public class Usuario extends BaseEntity {
 		this.usuarioCadastro = usuarioCadastro;
 	}
 
-	public List<UsuarioEmpresa> getUsuarioEmpresas() {
+	public Set<UsuarioEmpresa> getUsuarioEmpresas() {
 		return usuarioEmpresas;
 	}
 
-	public void setUsuarioEmpresas(List<UsuarioEmpresa> usuarioEmpresas) {
+	public void setUsuarioEmpresas(Set<UsuarioEmpresa> usuarioEmpresas) {
 		this.usuarioEmpresas = usuarioEmpresas;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Empresa getEmpresaLogada() {

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import br.com.ichef.arquitetura.BaseEntity;
 
@@ -37,14 +41,11 @@ public class Derivacao extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@ManyToOne
+	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@ManyToOne
-	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
-	private Usuario usuarioAlteracao;
-
+ 
 	@Transient
 	private boolean isAtivo;
 
@@ -123,11 +124,7 @@ public class Derivacao extends BaseEntity {
 		return null;
 	}
 
-	@Override
-	public Usuario getUsuarioAlteracao() {
-		return usuarioAlteracao;
-	}
-
+	 
 	@Override
 	public Date getDataAlteracao() {
 		return dataAlteracao;
@@ -170,15 +167,18 @@ public class Derivacao extends BaseEntity {
 	public void setUsuarioCadastro(Usuario usuarioCadastro) {
 		this.usuarioCadastro = usuarioCadastro;
 	}
-
-	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
-		this.usuarioAlteracao = usuarioAlteracao;
-	}
+ 
 	
 	public String getSituacao () {
 		if(getAtivo().equals("S"))
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
+	}
+
+	@Override
+	public Usuario getUsuarioAlteracao() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
