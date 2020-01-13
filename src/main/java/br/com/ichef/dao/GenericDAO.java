@@ -84,8 +84,8 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 			if (tx != null)
 				tx.rollback();
 		} finally {
-			if(manager.isOpen())
-			manager.close();
+			if (manager.isOpen())
+				manager.close();
 		}
 
 		return entity;
@@ -152,6 +152,12 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 
 	public T getById(Object id) {
 		try {
+			if (!manager.isOpen()) {
+				// System.out.println("conecao fechada");
+				EntityManagerProducer producer = new EntityManagerProducer();
+				manager = producer.createEntityManager();
+			}
+
 			return (T) manager.find(getTypeClass(), id);
 		} catch (Exception e) {
 			e.printStackTrace();

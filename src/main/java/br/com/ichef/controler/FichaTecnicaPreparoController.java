@@ -97,12 +97,16 @@ public class FichaTecnicaPreparoController extends BaseController {
 		if (id != null) {
 			setEntity(service.getById(id));
 			getEntity().setMostraPreparo(true);
+
+			obterListas();
 		} else {
 			setEntity(new FichaTecnicaPreparo());
 			getEntity().setAtivo("S");
 			getEntity().setCopia("N");
 			getEntity().setMostraPreparo(true);
 			setAproveitamento(100l);
+
+			lista = service.listAll();
 			/*
 			 * getEntity().setPrecoCustoPorcao(new BigDecimal(0));
 			 * getEntity().setPrecoCustoReceita(new BigDecimal(0));
@@ -111,8 +115,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 			 */
 		}
 		// localidade = null;
-		lista = service.listAll();
-		obterListas();
+
 	}
 
 	private void obterListas() {
@@ -145,9 +148,16 @@ public class FichaTecnicaPreparoController extends BaseController {
 		}
 		entity.getInsumos().clear();
 		entity.getInsumos().addAll(temp);
-		//service.calcularPercos(entity, configuracao);
+		// service.calcularPercos(entity, configuracao);
 		updateComponentes("Stable");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+
+		try {
+			service.saveOrUpdade(entity);
+			FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public String copiar(FichaTecnicaPreparo perparo) {
@@ -179,7 +189,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 		clone.setId(null);
 		clone.setAtivo("S");
 		clone.setCopia("S");
-		clone.setTamanho( preparoClone.getTamanho() );
+		clone.setTamanho(preparoClone.getTamanho());
 		clone.setClassificacao("A");
 		// Integer qtd = obetrQuantidadeFichaByNome();
 		clone.setDescricao(preparoClone.getDescricao());
@@ -191,8 +201,8 @@ public class FichaTecnicaPreparoController extends BaseController {
 		for (FichaTecnicaPreparoInsumo fichaInsumoOld : preparoClone.getInsumos()) {
 			FichaTecnicaPreparoInsumo fichaInsumo = new FichaTecnicaPreparoInsumo();
 			fichaInsumo.setAtivo(fichaInsumoOld.getAtivo());
-			//fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
-			//fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
+			// fichaInsumo.setCustoBruto(fichaInsumoOld.getCustoBruto());
+			// fichaInsumo.setCustoTotal(fichaInsumoOld.getCustoTotal());
 			fichaInsumo.setInsumo(fichaInsumoOld.getInsumo());
 			fichaInsumo.setQuantidadeBruta(fichaInsumoOld.getQuantidadeBruta());
 			fichaInsumo.setQuantidadeLiquida(fichaInsumoOld.getQuantidadeLiquida());
@@ -218,7 +228,8 @@ public class FichaTecnicaPreparoController extends BaseController {
 		}
 		if (getPreparo() != null) {
 			for (FichaTecnicaPreparoInsumo fichaTecnicaPreparoInsumo : getPreparo().getInsumos()) {
-				Boolean erro = adicionarInsumo(fichaTecnicaPreparoInsumo.getInsumo(), false, getPreparo(), fichaTecnicaPreparoInsumo);
+				Boolean erro = adicionarInsumo(fichaTecnicaPreparoInsumo.getInsumo(), false, getPreparo(),
+						fichaTecnicaPreparoInsumo);
 				if (erro)
 					return;
 
@@ -229,18 +240,27 @@ public class FichaTecnicaPreparoController extends BaseController {
 		aproveitamento = 100l;
 		qtdLiquida = null;
 		setPreparo(null);
+		
+		try {
+			service.saveOrUpdade(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 
 	}
 
 	public void editarInsumo(FichaTecnicaPreparoInsumo fichaInsumo) {
-		calcularValores(fichaInsumo.getInsumo(), fichaInsumo, fichaInsumo.getAproveitamento(), fichaInsumo.getQuantidadeLiquida());
+		calcularValores(fichaInsumo.getInsumo(), fichaInsumo, fichaInsumo.getAproveitamento(),
+				fichaInsumo.getQuantidadeLiquida());
 
-		//service.calcularPercos(entity, configuracao);
+		// service.calcularPercos(entity, configuracao);
 
 	}
 
 	public Boolean adicionarInsumo(Insumo insumoParaAdicionar, Boolean adicionardoPorInsumo,
-			FichaTecnicaPreparo fichaTecnicaPreparoReferencia, FichaTecnicaPreparoInsumo fichaTecnicaPreparoInsumoReferencia) {
+			FichaTecnicaPreparo fichaTecnicaPreparoReferencia,
+			FichaTecnicaPreparoInsumo fichaTecnicaPreparoInsumoReferencia) {
 		boolean existe = false;
 
 		if (insumoParaAdicionar == null) {
@@ -274,26 +294,23 @@ public class FichaTecnicaPreparoController extends BaseController {
 			fichaInsumo.setInsumo(insumoParaAdicionar);
 			fichaInsumo.setQuantidadeLiquida(qtdLiquida);
 			fichaInsumo.setQuantidadeLiquidaInformada(qtdLiquida);
-			
+
 			fichaInsumo.setFichaTecnicaPreparoReferencia(fichaTecnicaPreparoReferencia);
-			
-			if(fichaTecnicaPreparoReferencia !=null ) {
-				BigDecimal quantidadeLiquiquidaCalculada = 
-							(fichaTecnicaPreparoInsumoReferencia.getQuantidadeLiquida()
-								.divide( new BigDecimal(fichaTecnicaPreparoReferencia.getTamanho()) ) ).multiply(getQtdLiquida());
+
+			if (fichaTecnicaPreparoReferencia != null) {
+				BigDecimal quantidadeLiquiquidaCalculada = (fichaTecnicaPreparoInsumoReferencia.getQuantidadeLiquida()
+						.divide(new BigDecimal(fichaTecnicaPreparoReferencia.getTamanho()))).multiply(getQtdLiquida());
 				fichaInsumo.setQuantidadeLiquida(quantidadeLiquiquidaCalculada);
 			}
 
 			calcularValores(insumoParaAdicionar, fichaInsumo, getAproveitamento(), fichaInsumo.getQuantidadeLiquida());
-
-			
 
 			if (getEntity().getInsumos() == null) {
 				getEntity().setInsumos(new ArrayList<FichaTecnicaPreparoInsumo>());
 			}
 			getEntity().getInsumos().add(fichaInsumo);
 
-			//service.calcularPercos(entity, configuracao);
+			// service.calcularPercos(entity, configuracao);
 
 		} else {
 			if (adicionardoPorInsumo)
@@ -305,12 +322,14 @@ public class FichaTecnicaPreparoController extends BaseController {
 	private void calcularValores(Insumo insumoParaAdicionar, FichaTecnicaPreparoInsumo fichaInsumo,
 			Long aproveitamentoInsumo, BigDecimal qtdLiquidaInsumo) {
 		fichaInsumo.setQuantidadeBruta(
-				(qtdLiquidaInsumo.divide(new BigDecimal(aproveitamentoInsumo).divide(new BigDecimal(100)), BigDecimal.ROUND_UP))
-						.setScale(2, RoundingMode.CEILING));
-		/*fichaInsumo.setCustoBruto(new BigDecimal(insumoParaAdicionar.getValor()));
-		fichaInsumo.setCustoTotal(
-				(fichaInsumo.getQuantidadeBruta().multiply(new BigDecimal(insumoParaAdicionar.getValor()))).setScale(2,
-						RoundingMode.CEILING)); */
+				(qtdLiquidaInsumo.divide(new BigDecimal(aproveitamentoInsumo).divide(new BigDecimal(100)),
+						BigDecimal.ROUND_UP)).setScale(2, RoundingMode.CEILING));
+		/*
+		 * fichaInsumo.setCustoBruto(new BigDecimal(insumoParaAdicionar.getValor()));
+		 * fichaInsumo.setCustoTotal( (fichaInsumo.getQuantidadeBruta().multiply(new
+		 * BigDecimal(insumoParaAdicionar.getValor()))).setScale(2,
+		 * RoundingMode.CEILING));
+		 */
 	}
 
 	public void excluirSelecionados() {
@@ -360,16 +379,16 @@ public class FichaTecnicaPreparoController extends BaseController {
 				}
 			}
 		}
-		//service.calcularPercos(entity, getConfiguracao());
+		// service.calcularPercos(entity, getConfiguracao());
 
 		service.saveOrUpdade(entity);
 
 		return "lista-ficha-tecnica-preparo.xhtml?faces-redirect=true";
 
 	}
-	
+
 	public void atualizarMostrarPepraro() {
-		 setMostrarPrepato( (boolean) getSelectButtonMonstraPreparo().getValue() );
+		setMostrarPrepato((boolean) getSelectButtonMonstraPreparo().getValue());
 	}
 
 	public String Salvar() throws Exception {
@@ -552,7 +571,5 @@ public class FichaTecnicaPreparoController extends BaseController {
 	public void setMostrarPrepato(boolean mostrarPrepato) {
 		this.mostrarPrepato = mostrarPrepato;
 	}
-	
-	
 
 }

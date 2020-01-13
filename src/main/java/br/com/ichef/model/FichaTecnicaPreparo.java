@@ -243,7 +243,7 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 			}
 			return custoTotal;
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 
 		return new BigDecimal(0);
