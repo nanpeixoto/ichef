@@ -3,6 +3,7 @@ package br.com.ichef.util;
 import java.util.TimeZone;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
@@ -19,7 +20,7 @@ public class EntityManagerProducer {
 		// System.out.println("CONEXAO ABERTA - EntityManagerProducer");
 	}
 
-	@Produces
+	@Produces @Dependent
 	public EntityManager createEntityManager() {
 		// System.out.println("CONEXAO ABERTA - createEntityManager");
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT-03:00"));

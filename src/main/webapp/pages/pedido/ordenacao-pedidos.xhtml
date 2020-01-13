@@ -10,10 +10,7 @@
 	<ui:define name="title">Pedido - Entrega Prevista</ui:define>
 
 	<ui:define name="body">
-		<f:metadata>
-			<f:event listener="#{pedidoController.obterEntregasDia()}"
-				type="preRenderView"></f:event>
-		</f:metadata>
+
 		<adm:breadcrumb title="Pedido-Entregador" />
 		<p:growl id="growl" showDetail="false" sticky="false" escape="true"
 			autoUpdate="false" />
@@ -30,18 +27,18 @@
 											id="btnImprimir" style="width: 31px;"
 											styleClass="btn btn-info"
 											title="Imprimir rota de entrega do dia" update="form,growl"
-											ajax="false" action="#{pedidoController.imprimirRotaHoje()}" />
+											ajax="false" action="#{pedidosOrdenacaoFinalizacaoController.imprimirRotaDia()}" />
 
 										<p:commandButton value="" icon="fa fa-gavel" id="btnFinalizar"
 											style="width: 31px;" styleClass="btn btn-danger"
 											title="Finalizar Lançamentos do dia" update="form,growl"
-											actionListener="#{pedidoController.finalizarListaPedidos()}" />
+											actionListener="#{pedidosOrdenacaoFinalizacaoController.finalizarListaPedidos()}" />
 									</p:panelGrid>
 								</div>
 
 
 								<p:dataTable id="tabListaPedidos" widgetVar="itens"
-									paginator="false" value="#{pedidoController.lista}" var="item"
+									paginator="false" value="#{pedidosOrdenacaoFinalizacaoController.lista}" var="item"
 									rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
 									editable="true" emptyMessage="Nenhum item encontrado"
 									 sortBy="#{item.entregador.nome}" expandableRowGroups="true"
@@ -55,10 +52,10 @@
 
 											<h:outputText value="Data Entrega:" escape="false" />
 											<p:calendar id="dtInicial"
-												value="#{pedidoController.dataEntrega}" pattern="dd/MM/yyyy"
+												value="#{pedidosOrdenacaoFinalizacaoController.dataEntrega}" pattern="dd/MM/yyyy"
 												size="10" mask="true" showOn="button" locale="pt_BR">
 												<p:ajax event="dateSelect"
-													listener="#{pedidoController.obterEntregasDia()}"
+													listener="#{pedidosOrdenacaoFinalizacaoController.obterEntregasDia()}"
 													update="tabListaPedidos"></p:ajax>
 											</p:calendar>
 											<h:outputText value="Pesquisar:" escape="false" />
@@ -83,7 +80,7 @@
 													value="Clique no campo para editar o entregador de todos os pedidos"
 													position="top" />
 												<p:ajax event="save" update="tabListaPedidos,growl"
-													listener="#{pedidoController.atualizarTodosEntregadores(item)}" />
+													listener="#{pedidosOrdenacaoFinalizacaoController.atualizarTodosEntregadores(item)}" />
 												<p:selectOneMenu id="selectEntregador"
 													value="#{item.entregador}" filter="true"
 													filterMatchMode="contains" disabled="#{item.confirmado}"
@@ -91,7 +88,7 @@
 													<f:selectItem itemLabel="Selecionar" itemValue=""
 														noSelectionOption="true" />
 													<f:selectItems
-														value="#{pedidoController.listaEntregadorCarregada}"
+														value="#{pedidosOrdenacaoFinalizacaoController.listaEntregadorCarregada}"
 														var="itemEntregador" itemLabel="#{itemEntregador.nome}"
 														itemValue="#{itemEntregador}"
 														itemDisabled="#{itemEntregador.valorDiaria eq null}" />
@@ -111,7 +108,7 @@
 										<p:inplace id="ajaxInplace" label="#{item.ordemEntrega}"
 											editor="true">
 											<p:ajax event="save" update="tabListaPedidos,growl"
-												listener="#{pedidoController.atualizarPedido(item, 'R')}" />
+												listener="#{pedidosOrdenacaoFinalizacaoController.atualizarPedido(item, 'R')}" />
 											<p:inputNumber value="#{item.ordemEntrega}" id="ordemEntrega"
 												symbol="" decimalSeparator="," thousandSeparator="."
 												decimalPlaces="0" disabled="#{item.confirmado}" />
@@ -159,7 +156,7 @@
 										<p:inplace label="#{item.formaPagamento.descricao}"
 											editor="true" id="inFormaPagamento">
 											<p:ajax event="save" update="tabListaPedidos,growl"
-												listener="#{pedidoController.atualizarPedido(item,'F')}" />
+												listener="#{pedidosOrdenacaoFinalizacaoController.atualizarPedido(item,'F')}" />
 											<p:inputNumber id="valor"
 												value="#{item.valorPago}"
 												symbol="R$ " decimalSeparator="," thousandSeparator="." />
@@ -170,7 +167,7 @@
 												<f:selectItem itemLabel="Selecionar" itemValue=""
 													noSelectionOption="true" />
 												<f:selectItems
-													value="#{pedidoController.listaFormasPagamento}"
+													value="#{pedidosOrdenacaoFinalizacaoController.listaFormasPagamento}"
 													var="itemFormaPg" itemLabel="#{itemFormaPg.descricao}"
 													itemValue="#{itemFormaPg}" />
 											</p:selectOneMenu>
@@ -205,7 +202,7 @@
 													<p:tooltip for="inobservacao"
 														value="Clique no campo para editar" position="top" />
 													<p:ajax event="save" update="tabListaPedidos,growl"
-														listener="#{pedidoController.atualizarPedido(item,'O')}" />
+														listener="#{pedidosOrdenacaoFinalizacaoController.atualizarPedido(item,'O')}" />
 													<p:inputTextarea id="observacao" value="#{item.observacao}"
 														rows="3" cols="30" maxlength="450" counter="display"
 														counterTemplate="Faltam {0} characteres"
@@ -219,7 +216,7 @@
 													<p:tooltip for="inquantidade"
 														value="Clique no campo para editar" position="top" />
 													<p:ajax event="save" update="tabListaPedidos,growl"
-														listener="#{pedidoController.atualizarPedido(item,'Q')}" />
+														listener="#{pedidosOrdenacaoFinalizacaoController.atualizarPedido(item,'Q')}" />
 													<p:inputNumber value="#{item.quantidade}" id="qtd"
 														disabled="#{item.confirmado}" symbol=""
 														decimalSeparator="," thousandSeparator="."
@@ -234,7 +231,7 @@
 													<p:tooltip for="inentregadorpedido"
 														value="Clique no campo para editar" position="top" />
 													<p:ajax event="save" update="tabListaPedidos,growl"
-														listener="#{pedidoController.atualizarPedido(item,'E')}" />
+														listener="#{pedidosOrdenacaoFinalizacaoController.atualizarPedido(item,'E')}" />
 													<p:selectOneMenu id="selectEntregadorPedido"
 														value="#{item.entregador}" filter="true"
 														filterMatchMode="contains" disabled="#{item.confirmado}"
@@ -242,7 +239,7 @@
 														<f:selectItem itemLabel="Selecionar" itemValue=""
 															noSelectionOption="true" />
 														<f:selectItems
-															value="#{pedidoController.listaEntregadorCarregada}"
+															value="#{pedidosOrdenacaoFinalizacaoController.listaEntregadorCarregada}"
 															var="itemEntregador" itemLabel="#{itemEntregador.nome}"
 															itemValue="#{itemEntregador}"
 															itemDisabled="#{itemEntregador.valorDiaria eq null}" />

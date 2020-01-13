@@ -428,11 +428,13 @@ public class Cliente extends BaseEntity {
 
 	public String getAllTelefones() {
 		String listaTelefones = "";
-		for (ClienteTelefone tel : telefones) {
-			if (listaTelefones != null && !listaTelefones.equalsIgnoreCase(""))
-				listaTelefones = listaTelefones + " / ";
-			listaTelefones = listaTelefones + tel.getTelefone().replace("-", "").replace("(", "").replace(")", "")
-					.replace("+", "").replace(" ", "").trim();
+		if (telefones != null) {
+			for (ClienteTelefone tel : telefones) {
+				if (listaTelefones != null && !listaTelefones.equalsIgnoreCase(""))
+					listaTelefones = listaTelefones + " / ";
+				listaTelefones = listaTelefones + tel.getTelefone().replace("-", "").replace("(", "").replace(")", "")
+						.replace("+", "").replace(" ", "").trim();
+			}
 		}
 
 		return listaTelefones;
@@ -525,11 +527,11 @@ public class Cliente extends BaseEntity {
 	public void setExibirSaldo(String exibirSaldo) {
 		this.exibirSaldo = exibirSaldo;
 	}
-	
+
 	public String getNomeComTelefonePrincipal() {
 		String telPrincipal = getTelefonePrincipal();
-		if(telPrincipal !=null)  {
-			return getNome()+"-"+getTelefonePrincipal();
+		if (telPrincipal != null) {
+			return getNome() + "-" + getTelefonePrincipal();
 		}
 		return getNome();
 	}
@@ -539,7 +541,7 @@ public class Cliente extends BaseEntity {
 			if (tel.isTelefonePrincipal())
 				return tel.getTelefone();
 		}
-		
+
 		return null;
 
 	}

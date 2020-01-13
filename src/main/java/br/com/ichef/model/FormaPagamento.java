@@ -44,14 +44,6 @@ public class FormaPagamento extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@ManyToOne
-	@JoinColumn(name = "CD_USUARIO_CADASTRO")
-	private Usuario usuarioCadastro;
-
-	@ManyToOne
-	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
-	private Usuario usuarioAlteracao;
-
 	@Column(name = "TAXA")
 	private Double taxa;
 
@@ -60,6 +52,14 @@ public class FormaPagamento extends BaseEntity {
 
 	@Column(name = "SN_CORTESIA")
 	private String statusCortesia;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_USUARIO_CADASTRO")
+	private Usuario usuarioCadastro;
+
+	@ManyToOne
+	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
+	private Usuario usuarioAlteracao;
 
 	@Transient
 	private boolean isAtivo;
@@ -135,14 +135,6 @@ public class FormaPagamento extends BaseEntity {
 			setCarteira("N");
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -184,7 +176,7 @@ public class FormaPagamento extends BaseEntity {
 
 	@Override
 	public String getColumnOrderBy() {
-		return null;
+		return "descricao";
 	}
 
 	@Override
@@ -266,7 +258,7 @@ public class FormaPagamento extends BaseEntity {
 			return "Sim".toUpperCase();
 		return "Não".toUpperCase();
 	}
-	
+
 	public String getDescricaoCortesia() {
 		if (getStatusCortesia().equals("S"))
 			return "Sim".toUpperCase();
@@ -354,6 +346,11 @@ public class FormaPagamento extends BaseEntity {
 			setStatusCortesia("S");
 		} else
 			setStatusCortesia("N");
+	}
+
+	@Override
+	public Object getId() {
+		return (Long) id;
 	}
 
 }

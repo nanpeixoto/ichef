@@ -60,6 +60,10 @@ public class Pedido extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_ENTREGADOR")
 	private Entregador entregador;
+	
+	@ManyToOne
+	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
+	private FormaPagamento formaPagamento;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_EMPRESA")
@@ -84,10 +88,6 @@ public class Pedido extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_TIP_PRATO")
 	private TipoPrato tipoPrato;
-
-	@ManyToOne
-	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
-	private FormaPagamento formaPagamento;
 
 	@ManyToOne
 	@JoinColumn(name = "CD_DERIVACAO")
@@ -458,7 +458,5 @@ public class Pedido extends BaseEntity {
 	public void setValorPago(BigDecimal valorPago) {
 		this.valorPago = valorPago;
 	}
-	
-	
 
 }
