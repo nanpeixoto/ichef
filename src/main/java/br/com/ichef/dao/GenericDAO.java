@@ -30,6 +30,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.FacesMensager;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.excepticon.NegocioExcepticon;
+import br.com.ichef.util.EntityManagerProducer;
 
 @SuppressWarnings("unchecked")
 public class GenericDAO<T extends BaseEntity> implements Serializable {
@@ -67,7 +68,11 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 		EntityTransaction tx = null;
 		try {
 
-			 
+			if (!manager.isOpen()) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				manager = producer.createEntityManager();
+
+			}
 			tx = manager.getTransaction();
 			tx.begin();
 			manager.merge(entity);
@@ -90,7 +95,10 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 		EntityTransaction tx = null;
 		try {
 
-			 
+			if (!manager.isOpen()) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				manager = producer.createEntityManager();
+			}
 			tx = manager.getTransaction();
 			tx.begin();
 			manager.persist(entity);
@@ -121,7 +129,10 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	public void excluir(BaseEntity entity) {
 		EntityTransaction tx = null;
 		try {
-			 
+			if (!manager.isOpen()) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				manager = producer.createEntityManager();
+			}
 			tx = manager.getTransaction();
 			tx.begin();
 			entity = getById(entity.getId());
@@ -178,7 +189,14 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	public List<T> findByParameters(T object) throws Exception {
-		 
+		if (!manager.isOpen()) {
+			// System.out.println("conecao fechada");
+			EntityManagerProducer producer = new EntityManagerProducer();
+			manager = producer.createEntityManager();
+		}
+
+		// System.out.println("conecao");
+
 		Criteria criteria = createCriteria(object);
 
 		return criteria.list();
@@ -198,7 +216,13 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	public List<T> findByParameters(T object, FilterVisitor visitor) throws Exception {
-		 
+		if (!manager.isOpen()) {
+			// System.out.println("conecao fechada");
+			EntityManagerProducer producer = new EntityManagerProducer();
+			manager = producer.createEntityManager();
+		} else {
+			manager.clear();
+		}
 		Criteria criteria = null;
 		if (visitor != null)
 			criteria = createCriteria(object, visitor);

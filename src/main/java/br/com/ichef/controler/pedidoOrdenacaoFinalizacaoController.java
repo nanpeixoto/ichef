@@ -3,8 +3,6 @@ package br.com.ichef.controler;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +47,7 @@ import br.com.ichef.visitor.PedidoVisitor;
 
 @Named
 @ViewScoped
-public class PedidoController extends BaseController {
+public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	private static final long serialVersionUID = 1L;
 
@@ -136,20 +134,10 @@ public class PedidoController extends BaseController {
 	@PostConstruct
 	public void init() {
 
-		obterListas();
-
-		newInstance();
-
 		setEntregaDataCardapio(true);
 		setDataEntrega(new Date());
 
-	}
-
-	private void newInstance() {
-		setEntity(new Pedido());
-		getEntity().setDataEntrega(new Date());
-
-		valoresDefault();
+		obterEntregasDia();
 
 	}
 
@@ -196,31 +184,6 @@ public class PedidoController extends BaseController {
 		}
 
 		return null;
-
-	}
-
-	private void obterListas() {
-		listaClientes = clienteService.listAll();
-
-		listaFormasPagamento = formaPagamentoService.listAll(true);
-		listaEmpresas = empresaService.listAll(true);
-		listaDerivacoes = derivacaoService.listAll(true);
-
-		Cardapio cardapiofilter = new Cardapio();
-		cardapiofilter.setAtivo("S");
-		CardapioVisitor cardapioVisitor = new CardapioVisitor();
-		cardapioVisitor.setDataCardapioPossiveis(new Date());
-
-		Entregador filter = new Entregador();
-		filter.setAtivo("S");
-		filter.setEmpresa(userLogado.getEmpresaLogada());
-
-		try {
-			listaCardapio = cardapioService.findByParameters(cardapiofilter, cardapioVisitor);
-			listaEntregadorCarregada = entregadorService.findByParameters(filter);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 	}
 
@@ -478,7 +441,6 @@ public class PedidoController extends BaseController {
 				facesMessager.error(getRequiredMessage("Preço"));
 				return;
 			} else {
-				getEntity().setValorPedido(getEntity().getValorPedido().multiply( new BigDecimal( getEntity().getQuantidade()) ));
 				getEntity().setValorPago(getEntity().getValorPedido());
 			}
 
@@ -695,8 +657,7 @@ public class PedidoController extends BaseController {
 	public void obterEntregasDia() {
 
 		obterEntrega(null);
-		
-		
+
 	}
 
 	private void obterEntrega(Date data) {
@@ -712,81 +673,13 @@ public class PedidoController extends BaseController {
 
 		try {
 			setLista(service.findByParameters(filter, pedidoVisitor));
-			// setLista(service.findByParameters(filter));
-			order(getLista());
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static void order(List<Pedido> persons) {
 
-	    Collections.sort(persons, new Comparator() {
-
-	        public int compare(Object o1, Object o2) {
-
-	            String x1 = ((Pedido) o1).getEntregador().getNome();
-	            String x2 = ((Pedido) o2).getEntregador().getNome();
-	            int sComp = x1.compareTo(x2);
-
-	            if (sComp != 0) {
-	               return sComp;
-	            } 
-
-	            Integer ordem1 = ((Pedido) o1).getOrdemEntrega();
-	            Integer ordem2 = ((Pedido) o2).getOrdemEntrega();
-	            return ordem1.compareTo(ordem2);
-	    }});
-	}
-
-	public void imprimir() {
-		if (getDataInicial() == null || getDataFinal() == null) {
-			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
-			return;
-		} else {
-
-			Cardapio cardapioFilter = new Cardapio();
-			cardapioFilter.setAtivo("S");
-
-			Pedido filter = new Pedido();
-			filter.setCardapio(cardapioFilter);
-			filter.setEmpresa(userLogado.getEmpresaLogada());
-
-			PedidoVisitor pedidoVisitor = new PedidoVisitor();
-			pedidoVisitor.setDataEntregaInicial(getDataInicial());
-			pedidoVisitor.setDataEntregaFinal(getDataFinal());
-
-			List<Pedido> pedidos = new ArrayList<>();
-
-			try {
-				pedidos = service.findByParameters(filter, pedidoVisitor);
-				
-				order(pedidos);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
-			}
-
-			if (pedidos.size() == 0) {
-				FacesUtil.addErroMessage("Nenhum dado encontrado");
-			} else {
-				try {
-					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
-					escreveRelatorioPDF("Pedidos", true, pedidos);
-				} catch (Exception e) {
-					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
-				}
-			}
-
-		}
-
-	}
-
-	public void imprimirRotaHoje() {
+	public void imprimirRotaDia() {
 		setDataInicial(new Date());
 		imprimirRota();
 
@@ -799,35 +692,19 @@ public class PedidoController extends BaseController {
 			return;
 		} else {
 
-			Cardapio cardapioFilter = new Cardapio();
-			cardapioFilter.setAtivo("S");
-
-			Pedido filter = new Pedido();
-			filter.setCardapio(cardapioFilter);
-			filter.setEmpresa(userLogado.getEmpresaLogada());
-
-			PedidoVisitor pedidoVisitor = new PedidoVisitor();
-			pedidoVisitor.setDataEntregaInicial(getDataInicial());
-			pedidoVisitor.setDataEntregaFinal(getDataFinal());
-
-			List<Pedido> pedidos = new ArrayList<>();
-
 			try {
-				pedidos = service.findByParameters(filter, pedidoVisitor);
-				
-				order(pedidos);
-
+				obterEntregasDia();
 			} catch (Exception e) {
 				e.printStackTrace();
 				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
 			}
 
-			if (pedidos.size() == 0) {
+			if (getLista().size() == 0) {
 				FacesUtil.addErroMessage("Nenhum dado encontrado");
 			} else {
 				try {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
-					escreveRelatorioPDF("Rota", true, pedidos);
+					escreveRelatorioPDF("Rota", true, getLista());
 				} catch (Exception e) {
 					e.printStackTrace();
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
@@ -877,13 +754,6 @@ public class PedidoController extends BaseController {
 			}
 
 		}
-
-	}
-
-	public void imprimirCardapioHoje() {
-		setDataFinal(new Date());
-		setDataInicial(new Date());
-		imprimir();
 
 	}
 

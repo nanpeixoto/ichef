@@ -32,19 +32,19 @@
 							<p:panelGrid>
 
 								<p:commandButton value="" icon="fa fa-file-pdf-o"
-									id="btnImprimir" styleClass="btn btn-info" style="width: 31px;"
-									title="Imprimir pedido do cardápio do dia" update="form,growl"
+									id="btnImprimir" styleClass="btn btn-info" style="width: 51px;"
+									title="Imprimir pedido do cardápio do dia" update="form"
 									ajax="false"
 									action="#{pedidoController.imprimirCardapioHoje()}" />
 								<p:commandButton value="" icon="fa fa-user-plus"
 									id="btnAdicionarMais" styleClass="btn-warning"
-									style="width: 31px;"
+									style="width: 51px;"
 									title="Adicionar mais pratos para o mesmo Cliente"
 									update="form,growl"
 									action="#{pedidoController.adicionarPedido(false)}" />
 
 								<p:commandButton value="" icon="fa fa-plus" id="btnAdicioanr"
-									styleClass="btn-primary" style="width: 31px;" title="Adicionar"
+									styleClass="btn-primary" style="width: 51px;" title="Adicionar"
 									update="form,growl"
 									action="#{pedidoController.adicionarPedido(true)}" />
 
