@@ -23,7 +23,7 @@ public class EntityManagerProducer {
 	@Produces @Dependent
 	public EntityManager createEntityManager() {
 		// System.out.println("CONEXAO ABERTA - createEntityManager");
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT-03:00"));
+		//TimeZone.setDefault(TimeZone.getTimeZone("GMT-03:00"));
 		return this.factory.createEntityManager();
 	}
 

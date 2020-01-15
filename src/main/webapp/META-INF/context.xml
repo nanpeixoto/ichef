@@ -5,14 +5,11 @@
 		factory="org.jboss.weld.resources.ManagerObjectFactory" />
 
 
-	<property name="hibernate.c3p0.minPoolSize" value="5" />
-	<property name="hibernate.c3p0.maxPoolSize" value="150" />
-	<property name="hibernate.c3p0.acquireIncrement" value="10" />
-	<property name="hibernate.c3p0.maxStatements" value="200" />
-	<property name="hibernate.c3p0.timeout" value="2000" />
-	<property name="hibernate.c3p0.max_size" value="200" />
-
-
-	<property name="hibernate.c3p0.idle_test_period" value="3000" />
+	<Resource name="jdbc/ichefDB" auth="Container"
+		factory="org.apache.naming.factory.BeanFactory"
+		type="com.mchange.v2.c3p0.ComboPooledDataSource"
+		driverClass="com.mysql.jdbc.Driver" 
+		jdbcUrl="jdbc:mysql://localhost:3306/ichef" user="ichef"
+		password="ichef" minPoolSize="2" maxPoolSize="150" />
 
 </Context>
