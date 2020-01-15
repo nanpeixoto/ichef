@@ -3,9 +3,9 @@ package br.com.ichef.service;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.CardapioFichaPrato;
-import br.com.ichef.util.EntityManagerProducer;
 
 public class CardapioFichaPratoService extends GenericDAO<CardapioFichaPrato> {
 	private static final long serialVersionUID = 1L;

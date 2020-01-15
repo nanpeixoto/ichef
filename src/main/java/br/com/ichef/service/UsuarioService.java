@@ -2,9 +2,9 @@ package br.com.ichef.service;
 
 import java.util.List;
 
+import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Usuario;
-import br.com.ichef.util.EntityManagerProducer;
 
 @SuppressWarnings("unchecked")
 public class UsuarioService extends GenericDAO<Usuario> {

@@ -1,4 +1,4 @@
-package br.com.ichef.util;
+package br.com.ichef.arquitetura.service;
 
 import java.util.TimeZone;
 
@@ -14,7 +14,7 @@ import javax.persistence.Persistence;
 public class EntityManagerProducer {
 
 	private EntityManagerFactory factory;
-
+	
 	public EntityManagerProducer() {
 		this.factory = Persistence.createEntityManagerFactory("PU");
 		// System.out.println("CONEXAO ABERTA - EntityManagerProducer");
@@ -28,8 +28,7 @@ public class EntityManagerProducer {
 	}
 
 	public void closeEntityManager(@Disposes EntityManager manager) {
-		// System.out.println("CONEXAO FECHADA");
-		if (manager.isOpen())
+			if (manager.isOpen())
 
 			manager.close();
 

@@ -28,9 +28,9 @@ import org.hibernate.criterion.Restrictions;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.FacesMensager;
+import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.excepticon.NegocioExcepticon;
-import br.com.ichef.util.EntityManagerProducer;
 
 @SuppressWarnings("unchecked")
 public class GenericDAO<T extends BaseEntity> implements Serializable {

@@ -1,4 +1,4 @@
-package br.com.ichef.util;
+package br.com.ichef.arquitetura.service;
 
 import java.io.Serializable;
 

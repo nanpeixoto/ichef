@@ -1,14 +1,19 @@
-package br.com.ichef.util;
+package br.com.ichef.arquitetura.service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.inject.Qualifier;
+import javax.interceptor.InterceptorBinding;
 
-@Qualifier
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER })
-public @interface GeralQualifier {
+@InterceptorBinding
+public @interface Transacional {
+	
+	
+	
+	
+
 }

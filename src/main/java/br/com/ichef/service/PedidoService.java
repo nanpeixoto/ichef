@@ -8,10 +8,10 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Pedido;
-import br.com.ichef.util.EntityManagerProducer;
 
 public class PedidoService extends GenericDAO<Pedido> {
 	private static final long serialVersionUID = 1L;
