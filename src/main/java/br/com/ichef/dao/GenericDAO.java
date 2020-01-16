@@ -72,6 +72,8 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 				EntityManagerProducer producer = new EntityManagerProducer();
 				manager = producer.createEntityManager();
 
+			}  else {
+				manager.clear();
 			}
 			tx = manager.getTransaction();
 			tx.begin();
@@ -98,6 +100,8 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 			if (!manager.isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
 				manager = producer.createEntityManager();
+			} else {
+				manager.clear();
 			}
 			tx = manager.getTransaction();
 			tx.begin();

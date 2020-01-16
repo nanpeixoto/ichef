@@ -1,7 +1,7 @@
 package br.com.ichef.job;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
+//import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -11,7 +11,7 @@ import br.com.ichef.service.EmailService;
 
 public class ListenerTaskExample implements ServletContextListener {
 	private Thread t = null;
-	private ServletContext context;
+	//private ServletContext context;
 
 	@Inject
 	private EmailService service;
@@ -23,7 +23,7 @@ public class ListenerTaskExample implements ServletContextListener {
 				try {
 					while (true) {
 						System.out.println("Thread running every second");
-						Thread.sleep(120000);
+						Thread.sleep(960000);
 						service.enviarEmails();
 					}
 				} catch (InterruptedException e) {
@@ -31,9 +31,9 @@ public class ListenerTaskExample implements ServletContextListener {
 			}
 		};
 		t.start();
-		context = contextEvent.getServletContext();
+	//	context = contextEvent.getServletContext();
 		// you can set a context variable just like this
-		context.setAttribute("TEST", "TEST_VALUE");
+		//context.setAttribute("TEST", "TEST_VALUE");
 		
 		
 	}

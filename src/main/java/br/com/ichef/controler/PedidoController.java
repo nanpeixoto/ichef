@@ -478,7 +478,8 @@ public class PedidoController extends BaseController {
 				facesMessager.error(getRequiredMessage("Preço"));
 				return;
 			} else {
-				getEntity().setValorPedido(getEntity().getValorPedido().multiply( new BigDecimal( getEntity().getQuantidade()) ));
+				getEntity().setValorPedido(
+						getEntity().getValorPedido().multiply(new BigDecimal(getEntity().getQuantidade())));
 				getEntity().setValorPago(getEntity().getValorPedido());
 			}
 
@@ -582,25 +583,28 @@ public class PedidoController extends BaseController {
 	}
 
 	private void limparCliente() {
-		getEntity().setCliente(null);
-		getEntity().setClienteEndereco(null);
-		getEntity().setEntregador(null);
-		getEntity().setOrdemEntrega(null);
-		getEntity().setValorDiariaEntregador(null);
+		newInstance();
 		setCodigoCliente(null);
 
 	}
 
 	private void limparPedido() {
-		getEntity().setId(null);
-		getEntity().setCardapioFichaPrato(null);
-		getEntity().setTipoPrato(null);
-		getEntity().setFichaTecnicaPratoTipo(null);
-		getEntity().setDerivacao(null);
-		getEntity().setFormaPagamento(null);
-		getEntity().setQuantidade(null);
-		getEntity().setObservacao(null);
-		valoresDefault();
+		ClienteEndereco enderecoAtual = getEntity().getClienteEndereco();
+		Cliente clienteAtual = getEntity().getCliente();
+		Long codigoClienteAtual = getCodigoCliente();
+		Entregador entregadorAtual = getEntity().getEntregador();
+		BigDecimal valorDiariaEntregadorAtual =  getEntity().getValorDiariaEntregador();
+		Integer  ordemEntregaAtual = getEntity().getOrdemEntrega();
+		
+		newInstance();
+		setCodigoCliente(null);
+		
+		getEntity().setClienteEndereco(enderecoAtual);
+		getEntity().setCliente(clienteAtual);
+		setCodigoCliente(codigoClienteAtual);
+		getEntity().setEntregador(entregadorAtual);
+		getEntity().setValorDiariaEntregador(valorDiariaEntregadorAtual);
+		getEntity().setOrdemEntrega(ordemEntregaAtual);
 	}
 
 	public void excluirItem(Pedido itemExcluir) {
@@ -695,8 +699,7 @@ public class PedidoController extends BaseController {
 	public void obterEntregasDia() {
 
 		obterEntrega(null);
-		
-		
+
 	}
 
 	private void obterEntrega(Date data) {
@@ -714,31 +717,32 @@ public class PedidoController extends BaseController {
 			setLista(service.findByParameters(filter, pedidoVisitor));
 			// setLista(service.findByParameters(filter));
 			order(getLista());
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void order(List<Pedido> persons) {
 
-	    Collections.sort(persons, new Comparator() {
+		Collections.sort(persons, new Comparator() {
 
-	        public int compare(Object o1, Object o2) {
+			public int compare(Object o1, Object o2) {
 
-	            String x1 = ((Pedido) o1).getEntregador().getNome();
-	            String x2 = ((Pedido) o2).getEntregador().getNome();
-	            int sComp = x1.compareTo(x2);
+				String x1 = ((Pedido) o1).getEntregador().getNome();
+				String x2 = ((Pedido) o2).getEntregador().getNome();
+				int sComp = x1.compareTo(x2);
 
-	            if (sComp != 0) {
-	               return sComp;
-	            } 
+				if (sComp != 0) {
+					return sComp;
+				}
 
-	            Integer ordem1 = ((Pedido) o1).getOrdemEntrega();
-	            Integer ordem2 = ((Pedido) o2).getOrdemEntrega();
-	            return ordem1.compareTo(ordem2);
-	    }});
+				Integer ordem1 = ((Pedido) o1).getOrdemEntrega();
+				Integer ordem2 = ((Pedido) o2).getOrdemEntrega();
+				return ordem1.compareTo(ordem2);
+			}
+		});
 	}
 
 	public void imprimir() {
@@ -762,7 +766,7 @@ public class PedidoController extends BaseController {
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
-				
+
 				order(pedidos);
 
 			} catch (Exception e) {
@@ -814,7 +818,7 @@ public class PedidoController extends BaseController {
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
-				
+
 				order(pedidos);
 
 			} catch (Exception e) {

@@ -187,7 +187,7 @@
 								<f:selectItems value="#{pedidoController.listaEnderecos}"
 									var="item" itemLabel="#{item.enderecoCompleto}"
 									itemValue="#{item}" />
-								<p:ajax event="change" update="selectTipoPrato,precoPrato"
+								<p:ajax event="change" update="selectTipoPrato,precoPrato,selectEntregador,ordemEntrega,valorDiaria"
 									listener="#{pedidoController.obterEntregador()}" />
 							</p:selectOneMenu>
 

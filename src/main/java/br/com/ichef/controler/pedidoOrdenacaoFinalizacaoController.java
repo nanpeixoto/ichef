@@ -136,8 +136,26 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 
 		setEntregaDataCardapio(true);
 		setDataEntrega(new Date());
+		
+		obterListas();
 
 		obterEntregasDia();
+
+	}
+	
+	private void obterListas() {
+		listaFormasPagamento = formaPagamentoService.listAll(true);
+		
+		
+		Entregador filter = new Entregador();
+		filter.setAtivo("S");
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+
+		try {
+			listaEntregadorCarregada = entregadorService.findByParameters(filter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
