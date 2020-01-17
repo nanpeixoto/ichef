@@ -20,6 +20,7 @@
 					<div class="ui-fluid">
 						<div align="right">
 							<p:panel>
+
 								<div align="right">
 									<p:panelGrid>
 
@@ -34,6 +35,44 @@
 											style="width: 31px;" styleClass="btn btn-danger"
 											title="Finalizar Lançamentos do dia" update="form,growl"
 											actionListener="#{pedidoOrdenacaoFinalizacaoController.finalizarListaPedidos()}" />
+
+										<p:panelGrid columns="7" layout="grid">
+
+											<p:outputLabel value="Data Entrega:" escape="false" />
+											<p:calendar id="dtInicial"
+												value="#{pedidoOrdenacaoFinalizacaoController.dataEntrega}"
+												pattern="dd/MM/yyyy" size="10" mask="true" showOn="button"
+												locale="pt_BR">
+												<p:ajax event="dateSelect"
+													listener="#{pedidoOrdenacaoFinalizacaoController.obterEntregasDia()}"
+													update="tabListaPedidos"></p:ajax>
+											</p:calendar>
+
+											<p:outputLabel value="Entregador" for="selectEntregador" />
+											<p:selectOneMenu id="selectEntregador"
+												value="#{pedidoOrdenacaoFinalizacaoController.entregador}"
+												filter="true" filterMatchMode="contains"
+												converter="omnifaces.SelectItemsConverter">
+												<f:selectItem itemLabel="Selecionar" itemValue=""
+													noSelectionOption="true" />
+												<f:selectItems
+													value="#{pedidoOrdenacaoFinalizacaoController.listaEntregador}"
+													var="item" itemLabel="#{item.nome}" itemValue="#{item}" />
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Cód. Cliente:" escape="false" />
+											<p:inputNumber id="codigoCliente"
+												value="#{pedidoOrdenacaoFinalizacaoController.codigoCliente}"
+												symbol="" decimalSeparator="," thousandSeparator="."
+												decimalPlaces="0">
+											</p:inputNumber>
+
+											<p:commandButton id="Search"
+												actionListener="#{pedidoOrdenacaoFinalizacaoController.filtrarPedidos()}"
+												icon="fa fa-search" update="growl,tabListaPedidos " styleClass="btn btn-warning" 
+												style="font-size: 0.8em; width: 100%;" />
+
+										</p:panelGrid>
 									</p:panelGrid>
 								</div>
 
@@ -44,62 +83,15 @@
 									var="item" rowKey="#{item.id}" reflow="true"
 									paginatorPosition="bottom" editable="true"
 									emptyMessage="Nenhum item encontrado"
-									sortBy="#{item.entregador.nome}" expandableRowGroups="true"
+									sortBy="#{item.entregador.nome}" expandableRowGroups="false"
 									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 									currentPageReportTemplate=""
 									rowsPerPageTemplate="5,10,15,20,30">
 
+									<!-- <f:facet name="header">
+										<h:outputText value="Entregador: #{pedidoOrdenacaoFinalizacaoController.entregador.nome}" /> 
+									</f:facet> -->
 
-									<f:facet name="header">
-										<p:panelGrid columns="5" layout="grid">
-
-											<h:outputText value="Data Entrega:" escape="false" />
-											<p:calendar id="dtInicial"
-												value="#{pedidoOrdenacaoFinalizacaoController.dataEntrega}"
-												pattern="dd/MM/yyyy" size="10" mask="true" showOn="button"
-												locale="pt_BR">
-												<p:ajax event="dateSelect"
-													listener="#{pedidoOrdenacaoFinalizacaoController.obterEntregasDia()}"
-													update="tabListaPedidos"></p:ajax>
-											</p:calendar>
-											<h:outputText value="Pesquisar:" escape="false" />
-											<p:inputText id="globalFilter"
-												onchange="PF('itens').filter();" style="width:150px;"
-												placeholder="Pesquisar"
-												styleClass="letras-maiusculas semClear" />
-
-											<p:commandButton id="Search" value="" icon="fa fa-search"
-												style="font-size: 0.8em;width:3%;" />
-
-										</p:panelGrid>
-									</f:facet>
-
-									<p:headerRow>
-										<p:column colspan="3">
-											<h:outputLabel value="#{item.entregador.nome}" />
-
-											<!--<p:inplace id="inentregador" label="#{item.entregador.nome}"
-												editor="true">
-												<p:tooltip for="inentregador"
-													value="Clique no campo para editar o entregador de todos os pedidos"
-													position="top" />
-												<p:ajax event="save" update="tabListaPedidos,growl"
-													listener="#{pedidoOrdenacaoFinalizacaoController.atualizarTodosEntregadores(item)}" />
-												<p:selectOneMenu id="selectEntregador"
-													value="#{item.entregador}" filter="true"
-													filterMatchMode="contains" disabled="#{item.confirmado}"
-													converter="omnifaces.SelectItemsConverter">
-													<f:selectItem itemLabel="Selecionar" itemValue=""
-														noSelectionOption="true" />
-													<f:selectItems
-														value="#{pedidoOrdenacaoFinalizacaoController.listaEntregadorCarregada}"
-														var="itemEntregador" itemLabel="#{itemEntregador.nome}"
-														itemValue="#{itemEntregador}"
-														itemDisabled="#{itemEntregador.valorDiaria eq null}" />
-												</p:selectOneMenu>
-											</p:inplace>  -->
-										</p:column>
-									</p:headerRow>
 
 									<p:column width="5%">
 										<p:rowToggler />
@@ -149,6 +141,32 @@
 											escape="false" />
 									</p:column>
 
+									<p:column headerText="Entregador"
+										filterBy="#{item.entregador.nome}" filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;">
+										<p:inplace id="inentregadorpedido"
+											label="#{item.entregador.nome}" editor="true">
+											<p:tooltip for="inentregadorpedido"
+												value="Clique no campo para editar" position="top" />
+											<p:ajax event="save" update="tabListaPedidos,growl"
+												listener="#{pedidoOrdenacaoFinalizacaoController.atualizarPedido(item,'E')}" />
+											<p:selectOneMenu id="selectEntregadorPedido"
+												value="#{item.entregador}" filter="true"
+												filterMatchMode="contains" disabled="#{item.confirmado}"
+												converter="omnifaces.SelectItemsConverter">
+												<f:selectItem itemLabel="Selecionar" itemValue=""
+													noSelectionOption="true" />
+												<f:selectItems
+													value="#{pedidoOrdenacaoFinalizacaoController.listaEntregadorCarregada}"
+													var="itemEntregador" itemLabel="#{itemEntregador.nome}"
+													itemValue="#{itemEntregador}"
+													itemDisabled="#{itemEntregador.valorDiaria eq null}" />
+											</p:selectOneMenu>
+										</p:inplace>
+
+
+									</p:column>
+
 									<p:column headerText="Forma Pagamento"
 										filterBy="#{item.formaPagamento.descricao}"
 										filterMatchMode="contains"
@@ -162,7 +180,8 @@
 											<p:ajax event="save" update="tabListaPedidos,growl"
 												listener="#{pedidoOrdenacaoFinalizacaoController.atualizarPedido(item,'F')}" />
 											<p:inputNumber id="valor" value="#{item.valorPago}"
-												symbol="R$ " decimalSeparator="," thousandSeparator="." />
+												symbol="R$ " decimalSeparator="," thousandSeparator="."
+												disabled="#{item.confirmado}" />
 											<p:selectOneMenu id="selectFormaPagamento"
 												value="#{item.formaPagamento}" filter="true"
 												filterMatchMode="contains" disabled="#{item.confirmado}"
@@ -228,26 +247,6 @@
 												<h:outputText value="Tipo:" />
 												<h:outputText
 													value="#{item.tipoPrato.descricao}-#{item.derivacao.descricao}" />
-												<h:outputText value="Entregador" />
-												<p:inplace id="inentregadorpedido"
-													label="#{item.entregador.nome}" editor="true">
-													<p:tooltip for="inentregadorpedido"
-														value="Clique no campo para editar" position="top" />
-													<p:ajax event="save" update="tabListaPedidos,growl"
-														listener="#{pedidoOrdenacaoFinalizacaoController.atualizarPedido(item,'E')}" />
-													<p:selectOneMenu id="selectEntregadorPedido"
-														value="#{item.entregador}" filter="true"
-														filterMatchMode="contains" disabled="#{item.confirmado}"
-														converter="omnifaces.SelectItemsConverter">
-														<f:selectItem itemLabel="Selecionar" itemValue=""
-															noSelectionOption="true" />
-														<f:selectItems
-															value="#{pedidoOrdenacaoFinalizacaoController.listaEntregadorCarregada}"
-															var="itemEntregador" itemLabel="#{itemEntregador.nome}"
-															itemValue="#{itemEntregador}"
-															itemDisabled="#{itemEntregador.valorDiaria eq null}" />
-													</p:selectOneMenu>
-												</p:inplace>
 
 												<h:outputText value="Valor Diária" />
 												<h:outputText value="#{item.valorDiariaEntregador}" />

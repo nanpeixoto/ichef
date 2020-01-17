@@ -42,12 +42,11 @@ import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.visitor.CardapioVisitor;
-import br.com.ichef.visitor.ClienteVisitor;
 import br.com.ichef.visitor.PedidoVisitor;
 
 @Named
 @ViewScoped
-public class pedidoOrdenacaoFinalizacaoController extends BaseController {
+public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	private static final long serialVersionUID = 1L;
 
@@ -84,6 +83,7 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 	// private FormaPagamento formaPagamento;
 
 	private List<Entregador> listaEntregador = new ArrayList<>();
+	private Entregador entregador;
 	// private Entregador entregador;
 
 	private List<FichaTecnicaPrato> listaPratos = new ArrayList<>();
@@ -131,46 +131,86 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	private boolean entregaDataCardapio;
 
+	private boolean listarApenasNaoConfirmados;
+
 	@PostConstruct
 	public void init() {
 
 		setEntregaDataCardapio(true);
 		setDataEntrega(new Date());
-		
+		setEntregador(null);
+
 		obterListas();
 
-		obterEntregasDia();
+		// obterEntregasDia();
 
 	}
-	
+
+	public void filtrarPedidos() {
+
+		if (getDataEntrega() == null) {
+			facesMessager.error("Informe a data de Entrega para continuar");
+			return;
+		}
+
+		if (getEntregador() == null && getCodigoCliente() == null) {
+			facesMessager.error("Informe um dos parâmetros para continuar");
+			return;
+		}
+		obterEntregasDia();
+	}
+
+	public void obterEntregasDia() {
+
+		obterEntrega(null);
+
+	}
+
+	private void obterEntrega(Date data) {
+
+		if (data != null) {
+			setDataEntrega(data);
+		}
+		Pedido filter = new Pedido();
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+
+		PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		pedidoVisitor.setDataEntrega(getDataEntrega());
+
+		if (listarApenasNaoConfirmados) {
+			filter.setConfirmado(false);
+		}
+
+		if (getEntregador() != null) {
+			filter.setEntregador(getEntregador());
+		}
+
+		if (getCodigoCliente() != null) {
+			pedidoVisitor.setCodigoCliente(getCodigoCliente());
+		}
+
+		try {
+			setLista(service.findByParameters(filter, pedidoVisitor));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void obterListas() {
 		listaFormasPagamento = formaPagamentoService.listAll(true);
-		
-		
+
 		Entregador filter = new Entregador();
 		filter.setAtivo("S");
 		filter.setEmpresa(userLogado.getEmpresaLogada());
 
 		try {
 			listaEntregadorCarregada = entregadorService.findByParameters(filter);
+			listaEntregador = getListaEntregadorCarregada();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-	}
-
-	private void valoresDefault() {
-		getEntity().setQuantidade(1);
-		if (listaCardapio != null && listaCardapio.size() > 0) {
-			getEntity().setCardapio(listaCardapio.get(0));
-			listaCardapioPrato = listaCardapio.get(0).getPratos();
-		} else {
-			FacesUtil.addErroMessage("Nenhum Cardapio encontrado, cadastre um cardapio para continuar");
-
-		}
-		getEntity().setFormaPagamento(config.getFormaPagamento());
-		getEntity().setDerivacao(config.getDerivacao());
-		getEntity().setEmpresa(userLogado.getEmpresaLogada());
 	}
 
 	public void obterPratosCardapio() {
@@ -205,23 +245,6 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	}
 
-	public List<Cliente> autoCompleteCliente(String query) {
-		List<Cliente> allThemes = new ArrayList<>();
-
-		ClienteVisitor visitor = new ClienteVisitor();
-		visitor.setLikeNomeTelefone(query);
-
-		try {
-			allThemes = clienteService.findByParameters(new Cliente(), visitor);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return allThemes;
-
-	}
-
 	public void alterarEntregador() {
 		getEntity().setOrdemEntrega(1);
 		ObterValorDiariaEntregador();
@@ -232,11 +255,6 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 		if (getEntity().getEntregador() != null) {
 			getEntity().setValorDiariaEntregador(getEntity().getEntregador().getValorDiaria());
 		}
-	}
-
-	public String getDataHojeFormatada() {
-
-		return formatarData.format(new Date());
 	}
 
 	public void obterEntregador() {
@@ -409,203 +427,9 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 		}
 	}
 
-	public void adicionarPedido(Boolean apagarCliente) {
-		try {
-
-			// CAMPOS OBRIGATORIOS
-
-			// CARDAPIO
-			if (getEntity().getCardapio() == null) {
-				facesMessager.error("Cardápio não encontrado, verifique o cadastro do cardápio");
-				return;
-			}
-
-			// CLIENTE
-			if (getEntity().getCliente() == null) {
-				facesMessager.error(getRequiredMessage("Cliente"));
-				return;
-			}
-
-			// ENDERECO
-			if (getEntity().getClienteEndereco() == null) {
-				facesMessager.error(getRequiredMessage("Endereço"));
-				return;
-			} else {
-				getEntity().setLocalidade(getEntity().getClienteEndereco().getLocalidade());
-			}
-
-			// PRATO
-			if (getEntity().getCardapioFichaPrato() == null) {
-				facesMessager.error(getRequiredMessage("Prato"));
-				return;
-			}
-
-			// QTD E MAIOR QUE 1
-			if (getEntity().getQuantidade() == null || getEntity().getQuantidade() < 0) {
-				facesMessager.error(getRequiredMessage("Quantidade"));
-				return;
-			}
-
-			// TIPO DE PRATO
-			if (getEntity().getFichaTecnicaPratoTipo() == null) {
-				facesMessager.error(getRequiredMessage("Tipo de Prato"));
-				return;
-			} else {
-				getEntity().setTipoPrato(getEntity().getFichaTecnicaPratoTipo().getTipoPrato());
-			}
-
-			// PRECO MAIOR QUE ZERO
-			if (getEntity().getValorPedido() == null) {
-				facesMessager.error(getRequiredMessage("Preço"));
-				return;
-			} else {
-				getEntity().setValorPago(getEntity().getValorPedido());
-			}
-
-			// valor da diaria do entregador
-			if (getEntity().getValorDiariaEntregador() == null) {
-				facesMessager.error(getRequiredMessage("Valor da Diária"));
-				return;
-			}
-
-			// DERIVACAO
-			if (getEntity().getDerivacao() == null) {
-				facesMessager.error(getRequiredMessage("Derivação"));
-				return;
-			}
-
-			// FORMA PAGAMENTO
-			if (getEntity().getFormaPagamento() == null) {
-				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
-				return;
-			}
-
-			// ENTREGADOR
-			if (getEntity().getEntregador() == null) {
-				facesMessager.error(getRequiredMessage("Entregador"));
-				return;
-			}
-
-			// ORDEM
-			if (getEntity().getOrdemEntrega() == null) {
-				facesMessager.error(getRequiredMessage("Ordem"));
-				return;
-			}
-
-			// VERFICO A QUANTIDADE
-			Long quantidadeJaPedida = getQuantidadeDisponivel();
-			CardapioFichaPratoEmpresa fichaEmpresaLogada = obterFichaEmpresaLogada();
-
-			if (!fichaEmpresaLogada.isPodeVenderAcimaDoLimite()
-					&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
-				facesMessager.error("Quantidade disponível menor que a quantidade solicitada");
-				return;
-			}
-
-			if ((quantidadeJaPedida - getEntity().getQuantidade()) <= 5) {
-				FacesUtil.addInfoMessage(
-						"Quantdade disponível para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
-			}
-
-			getEntity().setDataCadastro(new Date());
-			getEntity().setUsuarioCadastro(userLogado);
-
-			// setar os precos de venda e custo
-			getEntity().setPrecoCustoPorcao(
-					getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoCustoPorcao());
-			getEntity().setPrecoVendaReceita(
-					getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoVendaReceita());
-			getEntity().setPrecoVendaTipoPrato(getEntity().getCardapioFichaPrato().getFichaTecnicaPrato()
-					.getPercoPorTipoPrato(getEntity().getTipoPrato()));
-
-			if (getEntity().getPrecoCustoPorcao() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Custo da Porção");
-				return;
-			}
-
-			if (getEntity().getPrecoVendaReceita() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Venda da Receita");
-				return;
-			}
-
-			if (getEntity().getPrecoVendaTipoPrato() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Venda por Tipo de Prato");
-				return;
-			}
-
-			if (getEntity().getFormaPagamento().isCortesia()) {
-				getEntity().setValorPedido(new BigDecimal(0));
-			}
-
-			service.saveOrUpdade(getEntity());
-
-			if (getEntity().getId() != null) {
-				obterPedidoDia();
-			} else {
-				facesMessager.error("Houve um erro, entre em contato com o adminstrador do sistema");
-			}
-
-			updateComponentes("tabListaPedidos");
-
-			limparPedido();
-
-			if (apagarCliente)
-				limparCliente();
-
-		} catch (
-
-		Exception e) {
-			facesMessager.error("Não foi possível executar essa operação");
-			e.printStackTrace();
-		}
-
-	}
-
-	private void limparCliente() {
-		getEntity().setCliente(null);
-		getEntity().setClienteEndereco(null);
-		getEntity().setEntregador(null);
-		getEntity().setOrdemEntrega(null);
-		getEntity().setValorDiariaEntregador(null);
-		setCodigoCliente(null);
-
-	}
-
-	private void limparPedido() {
-		getEntity().setId(null);
-		getEntity().setCardapioFichaPrato(null);
-		getEntity().setTipoPrato(null);
-		getEntity().setFichaTecnicaPratoTipo(null);
-		getEntity().setDerivacao(null);
-		getEntity().setFormaPagamento(null);
-		getEntity().setQuantidade(null);
-		getEntity().setObservacao(null);
-		valoresDefault();
-	}
-
-	public void excluirItem(Pedido itemExcluir) {
-		try {
-			List<Pedido> temp = new ArrayList<Pedido>();
-			temp.addAll(lista);
-			for (Pedido item : lista) {
-				if (itemExcluir.getId().equals(item.getId()))
-					temp.remove(item);
-			}
-			service.excluir(itemExcluir);
-
-			lista.clear();
-			lista.addAll(temp);
-			// service.calcularPercos(entity, configuracao);
-			updateComponentes("tabListaPedidos");
-			FacesUtil.addInfoMessage("Itens excluídos com sucesso");
-		} catch (Exception e) {
-			FacesUtil.addErroMessage("Não foi possível executar essa operação:" + e.getMessage());
-		}
-
-	}
-
 	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
+
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
 					if (pedido.getEntregador().getValorDiaria() == null) {
@@ -614,9 +438,8 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 					}
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
 				}
-			}
-
-			if (tipoAlteracao.equals("F")) {
+			} else if (tipoAlteracao.equals("F")) {
+				setEntity(pedido);
 				obterPrecoPrato();
 			}
 			pedido.setDataAlteracao(new Date());
@@ -629,72 +452,6 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void obterPedidoDia() {
-
-		Cardapio cardapioFilter = new Cardapio();
-		cardapioFilter.setAtivo("S");
-
-		Pedido filter = new Pedido();
-		filter.setCardapio(cardapioFilter);
-		filter.setEmpresa(userLogado.getEmpresaLogada());
-
-		PedidoVisitor pedidoVisitor = new PedidoVisitor();
-		pedidoVisitor.setData(new Date());
-		pedidoVisitor.setDataCardapio(new Date());
-
-		try {
-			setLista(service.findByParameters(filter, pedidoVisitor));
-			// setLista(service.findByParameters(filter));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void obterCardapioPedidosDia() {
-		Cardapio cardapioFilter = new Cardapio();
-		cardapioFilter.setAtivo("S");
-
-		Pedido filter = new Pedido();
-		filter.setCardapio(cardapioFilter);
-		filter.setEmpresa(userLogado.getEmpresaLogada());
-
-		PedidoVisitor pedidoVisitor = new PedidoVisitor();
-		// pedidoVisitor.setData(new Date());
-		pedidoVisitor.setDataCardapio(new Date());
-
-		try {
-			setLista(service.findByParameters(filter, pedidoVisitor));
-			// setLista(service.findByParameters(filter));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void obterEntregasDia() {
-
-		obterEntrega(null);
-
-	}
-
-	private void obterEntrega(Date data) {
-
-		if (data != null) {
-			setDataEntrega(data);
-		}
-		Pedido filter = new Pedido();
-		filter.setEmpresa(userLogado.getEmpresaLogada());
-
-		PedidoVisitor pedidoVisitor = new PedidoVisitor();
-		pedidoVisitor.setDataEntrega(getDataEntrega());
-
-		try {
-			setLista(service.findByParameters(filter, pedidoVisitor));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void imprimirRotaDia() {
@@ -775,13 +532,44 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	}
 
+	private List<Pedido> obterPedidosFinalizacao() {
+
+		Pedido filter = new Pedido();
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+
+		PedidoVisitor pedidoVisitor = new PedidoVisitor();
+		pedidoVisitor.setDataEntrega(getDataEntrega());
+
+		filter.setConfirmado(false);
+
+		if (getEntregador() != null) {
+			filter.setEntregador(getEntregador());
+		}
+
+		try {
+			return service.findByParameters(filter, pedidoVisitor);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public void finalizarListaPedidos() {
 		try {
 
-			obterEntregasDia();
-			// List<ClienteCarteira> listaCarteiras = new ArrayList<>();
+			if (getDataEntrega() == null) {
+				facesMessager.error("Informe a data de Entrega para continuar");
+				return;
+			}
 
-			for (Pedido pedido : lista) {
+			if (getEntregador() == null  ) {
+				facesMessager.error("Selecione o Entregador para finalizar");
+				return;
+			}
+			List<Pedido> pedidosFinalizar = obterPedidosFinalizacao();
+
+			for (Pedido pedido : pedidosFinalizar) {
 				String log = null;
 
 				if (!pedido.isConfirmado()) {
@@ -1109,6 +897,54 @@ public class pedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	public void setDataEntrega(Date dataEntrega) {
 		this.dataEntrega = dataEntrega;
+	}
+
+	public Entregador getEntregador() {
+		return entregador;
+	}
+
+	public void setEntregador(Entregador entregador) {
+		this.entregador = entregador;
+	}
+
+	public EntregadorService getEntregadorService() {
+		return entregadorService;
+	}
+
+	public void setEntregadorService(EntregadorService entregadorService) {
+		this.entregadorService = entregadorService;
+	}
+
+	public ClienteCarteiraService getClienteCarteiraService() {
+		return clienteCarteiraService;
+	}
+
+	public void setClienteCarteiraService(ClienteCarteiraService clienteCarteiraService) {
+		this.clienteCarteiraService = clienteCarteiraService;
+	}
+
+	public Configuracao getConfig() {
+		return config;
+	}
+
+	public void setConfig(Configuracao config) {
+		this.config = config;
+	}
+
+	public SimpleDateFormat getFormatarData() {
+		return formatarData;
+	}
+
+	public void setFormatarData(SimpleDateFormat formatarData) {
+		this.formatarData = formatarData;
+	}
+
+	public boolean isListarApenasNaoConfirmados() {
+		return listarApenasNaoConfirmados;
+	}
+
+	public void setListarApenasNaoConfirmados(boolean listarApenasNaoConfirmados) {
+		this.listarApenasNaoConfirmados = listarApenasNaoConfirmados;
 	}
 
 }

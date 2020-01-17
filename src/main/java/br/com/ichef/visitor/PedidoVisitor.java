@@ -22,6 +22,8 @@ public class PedidoVisitor extends FilterVisitor {
 
 	private Date dataEntregaInicial;
 	private Date dataEntregaFinal;
+	
+	private Long codigoCliente;
 
 	@Override
 	public void visitCriteria(Criteria criteria) {
@@ -58,6 +60,10 @@ public class PedidoVisitor extends FilterVisitor {
 			criteria.add(Restrictions.sqlRestriction(" dt_entrega between STR_TO_DATE( '"
 					+ Util.dateToString(getDataEntregaInicial()) + "', '%d/%m/%Y' ) and  STR_TO_DATE('"
 					+ Util.dateToString(getDataEntregaFinal()) + "', '%d/%m/%Y' ) "));
+		
+		if(getCodigoCliente()!=null) {
+			criteria.add(Restrictions.eq("cliente.id", getCodigoCliente()));
+		}
 
 	}
 
@@ -115,6 +121,14 @@ public class PedidoVisitor extends FilterVisitor {
 
 	public void setDataEntregaInicial(Date dataEntregaInicial) {
 		this.dataEntregaInicial = dataEntregaInicial;
+	}
+
+	public Long getCodigoCliente() {
+		return codigoCliente;
+	}
+
+	public void setCodigoCliente(Long codigoCliente) {
+		this.codigoCliente = codigoCliente;
 	}
 
 }

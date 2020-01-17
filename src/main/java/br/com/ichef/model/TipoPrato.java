@@ -30,7 +30,7 @@ import br.com.ichef.arquitetura.BaseEntity;
 @Table(name = "tip_prato")
 public class TipoPrato extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final long TIPO_PRATO_CONGELADO = 5l;
 
 	@Id
@@ -60,8 +60,14 @@ public class TipoPrato extends BaseEntity {
 	@Column(name = "SN_ATIVO")
 	private String ativo;
 
+	@Column(name = "SN_PLUS")
+	private String snPlus;
+
 	@Transient
 	private boolean isAtivo;
+
+	@Transient
+	private boolean plus;
 
 	// bi-directional many-to-one association to TipPratoPreco
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -252,6 +258,32 @@ public class TipoPrato extends BaseEntity {
 
 	public void setUltimoPreco(List<VwTipoPratoPreco> ultimoPreco) {
 		this.ultimoPreco = ultimoPreco;
+	}
+
+	public String getSnPlus() {
+		return snPlus;
+	}
+
+	public void setSnPlus(String snPlus) {
+		this.snPlus = snPlus;
+	}
+
+	public boolean isPlus() {
+		if (snPlus != null) {
+			if (snPlus.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return plus;
+	}
+
+	public void setPlus(boolean isAtivo) {
+		this.plus = isAtivo;
+		if (isAtivo == Boolean.TRUE) {
+			setSnPlus("S");
+		} else
+			setSnPlus("N");
 	}
 
 }

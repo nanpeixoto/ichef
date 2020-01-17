@@ -72,8 +72,12 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 	public Integer findTotalPedidoPrato(Pedido pedido) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(" SELECT  sum(NR_QTD)   nr_total_pedido " + " fROM pedido p "
-				+ "WHERE   CD_CARDAPIO_PRATO = "+pedido.getCardapioFichaPrato().getId() );
+		sb.append(" SELECT   sum(case when COALESCE(tp.SN_PLUS,'N') = 'S'  THEN  NR_QTD*2  ELSE  NR_QTD END)   nr_total_pedido " 
+				+ " fROM pedido p, tip_prato tp "
+				+ " WHERE   CD_CARDAPIO_PRATO = "+pedido.getCardapioFichaPrato().getId() 
+				+ " and cd_empresa = "+pedido.getEmpresa().getId() 
+				+ " and p.CD_TIP_PRATO = tp.CD_TIP_PRATO "
+				);
 		try {
 			Query query = getManager().createNativeQuery(sb.toString());
 			int count = query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
