@@ -148,6 +148,7 @@ public class PedidoController extends BaseController {
 	private void newInstance() {
 		setEntity(new Pedido());
 		getEntity().setDataEntrega(new Date());
+		getEntity().setConfirmado(false);
 
 		valoresDefault();
 
@@ -432,6 +433,7 @@ public class PedidoController extends BaseController {
 		try {
 
 			// CAMPOS OBRIGATORIOS
+			getEntity().setConfirmado(false);
 
 			// CARDAPIO
 			if (getEntity().getCardapio() == null) {
@@ -560,10 +562,11 @@ public class PedidoController extends BaseController {
 
 			service.saveOrUpdade(getEntity());
 
-			if (getEntity().getId() != null) {
-				obterPedidoDia();
-			} else {
+			if (getEntity().getId() == null) {
 				facesMessager.error("Houve um erro, entre em contato com o adminstrador do sistema");
+			} else {
+				getLista().add(getEntity());
+				orderbyId(getLista());;
 			}
 
 			updateComponentes("tabListaPedidos");
@@ -593,12 +596,12 @@ public class PedidoController extends BaseController {
 		Cliente clienteAtual = getEntity().getCliente();
 		Long codigoClienteAtual = getCodigoCliente();
 		Entregador entregadorAtual = getEntity().getEntregador();
-		BigDecimal valorDiariaEntregadorAtual =  getEntity().getValorDiariaEntregador();
-		Integer  ordemEntregaAtual = getEntity().getOrdemEntrega();
-		
+		BigDecimal valorDiariaEntregadorAtual = getEntity().getValorDiariaEntregador();
+		Integer ordemEntregaAtual = getEntity().getOrdemEntrega();
+
 		newInstance();
 		setCodigoCliente(null);
-		
+
 		getEntity().setClienteEndereco(enderecoAtual);
 		getEntity().setCliente(clienteAtual);
 		setCodigoCliente(codigoClienteAtual);
@@ -669,11 +672,28 @@ public class PedidoController extends BaseController {
 		pedidoVisitor.setDataCardapio(new Date());
 
 		try {
-			setLista(service.findByParameters(filter, pedidoVisitor));
+			setLista(service.findByParameters(filter, pedidoVisitor) );
+			orderbyId(getLista());
 			// setLista(service.findByParameters(filter));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void orderbyId(List<Pedido> itens) {
+
+		Collections.sort(itens, new Comparator() {
+
+			public int compare(Object o1, Object o2) {
+
+				Long x1 = (Long) ((Pedido) o1).getId();
+				Long x2 = (Long) ((Pedido) o2).getId();
+				int sComp = x2.compareTo(x1);
+				return sComp;
+
+			}
+		});
 	}
 
 	public void obterCardapioPedidosDia() {

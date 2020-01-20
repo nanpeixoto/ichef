@@ -67,7 +67,7 @@
 								</p:column>
 
 
-								<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
+								<p:column headerText="Cliente" filterBy="#{item.cliente.id}-#{item.cliente.nome}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.cliente.nome}">

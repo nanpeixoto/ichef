@@ -1,9 +1,13 @@
 package br.com.ichef.job;
 
+import java.text.SimpleDateFormat;
+
 import javax.inject.Inject;
 //import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import org.exolab.castor.types.Date;
 
 import br.com.ichef.service.EmailService;
 
@@ -22,8 +26,11 @@ public class ListenerTaskExample implements ServletContextListener {
 			public void run() {
 				try {
 					while (true) {
-						System.out.println("Thread running every second");
-						Thread.sleep(960000);
+						SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+						
+						System.out.println("Thread:" + sdate.format(new java.util.Date()));
+						Thread.sleep(40000000);
 						service.enviarEmails();
 					}
 				} catch (InterruptedException e) {

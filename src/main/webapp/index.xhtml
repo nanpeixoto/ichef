@@ -1,64 +1,106 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
-                template="WEB-INF/templates/template.xhtml">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="WEB-INF/templates/template.xhtml">
 
-    <ui:define name="head-end">
-        <ui:param name="renderBreadCrumb" value="false"/>
-    </ui:define>
+	<ui:define name="head-end">
+		<ui:param name="renderBreadCrumb" value="false" />
+		<h:outputStylesheet library="css" name="estilo.css" />
+	</ui:define>
 
-    <ui:define name="title">
-        <p:growl autoUpdate="true" life="4000"/>
+	<ui:define name="title">
+		<p:growl autoUpdate="true" life="4000" />
 
 		<section class="content">
-	        <h2 class="align-center">
-		    
-	        
-	            Bem vindo ao <span class="text-aqua"> <i>
-	            	<a href="http://karanalpe.com.br/" target="_blank" style="text-transform: none;text-decoration: none"> Cozinha de Chefe</a></i></span>!
-	            <br/>
-	           <!--  <small>Utilizando <p:link value="Primefaces" href="http://primefaces.org" target="_blank"/>, <p:link value="Bootstrap"
+			<h2 class="align-center">
+
+
+				Bem vindo ao <span class="text-aqua"> <i> <a
+						href="http://karanalpe.com.br/" target="_blank"
+						style="text-transform: none; text-decoration: none"> Cozinha
+							de Chefe</a></i></span>! <br />
+				<!--  <small>Utilizando <p:link value="Primefaces" href="http://primefaces.org" target="_blank"/>, <p:link value="Bootstrap"
 	                                                                                                  href="http://getbootstrap.com/" target="_blank"/> e
 	                <p:link value="Admin LTE" href="https://almsaeedstudio.com/themes/AdminLTE/index2.html" target="_blank"/> com
 	                <p:link value="JSF" href="https://javaserverfaces.java.net/" target="_blank"/>.
 	            </small> -->
-	        </h2>
-	        
-	        
-	        <div class="row">
-	        	<div class="col-sm-6 col-xs-12">
-                	<div class="info-box bg-aqua">
-                    	<span class="info-box-icon"><i class="fa fa-list"></i></span>
-                    	<div class="info-box-content">
-                        	<span class="info-box-text">Fichas Técnicas de Prato</span>
-                        	<span class="info-box-number">#{dashboardController.entity.quantidadeFichaPratos}</span>
-                        	<div class="progress">
-                            	<div class="progress-bar" style="width: 100%"></div>
-                        	</div>
-                        	 <span class="progress-description">Total pratos diponíveis </span> 
-                    	</div><!-- /.info-box-content -->
-                	</div><!-- /.info-box -->
-            	</div>
-            	
-            	<div class="col-sm-6 col-xs-12">
-                	<div class="info-box bg-green">
-                    	<span class="info-box-icon"><i class="fa fa-user"></i></span>
-                    	<div class="info-box-content">
-                        	<span class="info-box-text">Clientes</span>
-                        	<span class="info-box-number">#{dashboardController.entity.quantidadeClientes}</span>
-                        	<div class="progress">
-                            	<div class="progress-bar" style="width: 100%"></div>
-                        	</div>
-                        	<span class="progress-description">Total de Clientes disponíveis  </span> 
-		               	</div><!-- /.info-box-content -->
-					</div><!-- /.info-box -->
+			</h2>
+
+
+			<div class="row">
+				<div class="col-sm-6 col-xs-12">
+					<div class="info-box bg-yellow">
+						<span class="info-box-icon"><i class="fa fa-list"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">Pedido</span> <span
+								class="info-box-number">#{dashboardController.entity.quantidadePedidos}</span>
+							<div class="progress">
+								<div class="progress-bar" style="width: 100%"></div>
+							</div>
+							<span class="progress-description">Pedidos com previsão de
+								entrega no dia de hoje </span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
 				</div>
-				
-				
-            
-	             <!-- <div class="col-sm-6 col-xs-12">
+
+				<div class="col-sm-6 col-xs-12">
+					<div class="info-box bg-red">
+						<span class="info-box-icon"><i class="fa fa-list"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">Pedidos não confirmados</span> <span
+								class="info-box-number">#{dashboardController.entity.quantidadePedidosNaoConfirmados}</span>
+							<div class="progress">
+								<div class="progress-bar" style="width: 100%"></div>
+							</div>
+							<span class="progress-description">Pedidos com entrega no
+								dia de hoje não confirmado </span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
+				</div>
+
+				<div class="col-sm-6 col-xs-12">
+					<div class="info-box bg-aqua">
+						<span class="info-box-icon"><i class="fa fa-list"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">Fichas Técnicas de Prato</span> <span
+								class="info-box-number">#{dashboardController.entity.quantidadeFichaPratos}</span>
+							<div class="progress">
+								<div class="progress-bar" style="width: 100%"></div>
+							</div>
+							<span class="progress-description">Total pratos diponíveis
+							</span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
+				</div>
+
+				<div class="col-sm-6 col-xs-12">
+					<div class="info-box bg-green">
+						<span class="info-box-icon"><i class="fa fa-user"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">Clientes</span> <span
+								class="info-box-number">#{dashboardController.entity.quantidadeClientes}</span>
+							<div class="progress">
+								<div class="progress-bar" style="width: 100%"></div>
+							</div>
+							<span class="progress-description">Total de Clientes
+								disponíveis </span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
+				</div>
+
+
+
+				<!-- <div class="col-sm-6 col-xs-12">
 	                <div class="info-box bg-yellow">
 	                    <span class="info-box-icon"><i class="fa fa-credit-card"></i></span>
 	                    <div class="info-box-content">
@@ -85,49 +127,68 @@
 	                    </div>
 	                </div>
 	            </div>-->
-	            
-	          <div class="col-sm-12 col-xs-12">
-              
-              <div class="box box-danger">
-                <div class="box-header with-border">
-                  <h3 class="box-title"></h3>
 
-                  <div class="box-tools pull-right">
-                    <span class="label label-danger">10 novos clientes</span>
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                    </button>
-                  </div>
-                </div>
-                
-                <div class="box-body no-padding">
-                	<p:carousel numVisible="5"  circular="true" 	 value="#{dashboardController.clientes}" headerText="Últimos Clientes" var="car" itemStyle="text-align:center" responsive="true" >
-                	    <p:panelGrid columns="1" style="width:100%;margin:10px 0px" columnClasses="users-list-name,users-list-date" layout="grid" styleClass="ui-panelgrid-blank">
-        					<a class="users-list-name" href="#"><h:link value="#{car.nmCliente}"
-								outcome="pages/cliente/cadastro-cliente.xhtml">
-								<f:param name="id" value="#{car.id}" />
-							</h:link></a>
-                      		<span class="users-list-date">#{car.id}</span>
-                      		<span class="users-list-date">#{car.dsTelefone}</span>
-						</p:panelGrid>
-                   </p:carousel>
-                  <!-- /.users-list -->
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer text-center">
-                  <a  href="/iChef/pages/cliente/lista-cliente.xhtml" class="uppercase">Ver todos os clientes</a>
-                </div>
-                <!-- /.box-footer -->
-              </div>
-              <!--/.box -->
-            </div>
-	           
-		        <!-- /.col -->
-		      </div>
+				<div class="col-sm-12 col-xs-12">
+
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title"></h3>
+
+							<div class="box-tools pull-right">
+								<span class="label label-danger">10 novos clientes</span>
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+								<button type="button" class="btn btn-box-tool"
+									data-widget="remove">
+									<i class="fa fa-times"></i>
+								</button>
+							</div>
+						</div>
+
+						<div class="box-body no-padding">
+							<p:carousel numVisible="5" circular="true"
+								value="#{dashboardController.clientes}"
+								headerText="Últimos Clientes" var="car"
+								itemStyle="text-align:center" responsive="true">
+								<p:panelGrid columns="1" style="width:100%;margin:10px 0px"
+									columnClasses="users-list-name,users-list-date" layout="grid"
+									styleClass="ui-panelgrid-blank">
+									<a class="users-list-name" href="#"><h:link
+											value="#{car.nmCliente}"
+											outcome="pages/cliente/cadastro-cliente.xhtml">
+											<f:param name="id" value="#{car.id}" />
+										</h:link></a>
+									<span class="users-list-date">#{car.id}</span>
+									<span class="users-list-date">#{car.dsTelefone}</span>
+								</p:panelGrid>
+							</p:carousel>
+							<!-- /.users-list -->
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer text-center">
+							<a href="/iChef/pages/cliente/lista-cliente.xhtml"
+								class="uppercase">Ver todos os clientes</a>
+						</div>
+						<!-- /.box-footer -->
+					</div>
+					<!--/.box -->
+				</div>
+
+				<!-- /.col -->
+			</div>
+			<div class="col-sm-12 col-xs-12">
+				<div style=" font-size: 12px;">
+					<p:schedule id="schedule" value="#{dashboardController.eventModel}"
+						widgetVar="myschedule" />
+
+				</div>
+			</div>
+
 		</section>
 
-    </ui:define>
+	</ui:define>
 
 
 </ui:composition>

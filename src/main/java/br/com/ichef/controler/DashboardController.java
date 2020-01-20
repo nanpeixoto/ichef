@@ -8,9 +8,15 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleModel;
+
 import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.model.CalendarioPedidos;
 import br.com.ichef.model.Dashboard;
 import br.com.ichef.model.VwUltimosClientes;
+import br.com.ichef.service.CalendarioPedidosService;
 import br.com.ichef.service.DashboardService;
 import br.com.ichef.service.VwUltimosClientesService;
 
@@ -24,16 +30,57 @@ public class DashboardController extends BaseController {
 	private DashboardService service;
 
 	@Inject
+	private CalendarioPedidosService calendarioPedidosService;
+
+	@Inject
 	private VwUltimosClientesService vwUltimosClientesService;
 
 	private Dashboard entity;
 
 	private List<VwUltimosClientes> clientes = new ArrayList<>();
+	private List<CalendarioPedidos> calendario = new ArrayList<>();
+
+	private ScheduleModel eventModel;
 
 	@PostConstruct
 	public void init() {
-		setEntity(service.getById(1));
-		setClientes(vwUltimosClientesService.listAll());
+		Dashboard filter = new Dashboard();
+		filter.setCodigoEmpresa(getUserLogado().getEmpresaLogada().getId());
+		try {
+			setEntity((service.findByParameters(filter)).get(0));
+
+			setCalendario(calendarioPedidosService.listAll());
+
+			montarCalendario(getCalendario());
+
+			setClientes(vwUltimosClientesService.listAll());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void montarCalendario(List<CalendarioPedidos> calendarioMontagem) {
+		eventModel = new DefaultScheduleModel();
+		if (calendarioMontagem != null) {
+
+			for (CalendarioPedidos calendarioPedidos : calendarioMontagem) {
+				DefaultScheduleEvent event = new DefaultScheduleEvent();
+
+				event.setDescription(calendarioPedidos.getDescricaoCardapdioFicha());
+				event.setAllDay(true);
+				event.setData(calendarioPedidos.getDataEntrega());
+				event.setStartDate(calendarioPedidos.getDataEntrega());
+				event.setEndDate(calendarioPedidos.getDataEntrega());
+				event.setTitle(
+						calendarioPedidos.getDescricaoCardapdioFicha() + "(" + calendarioPedidos.getQuantidade() + ")");
+				
+
+				eventModel.addEvent(event);
+			}
+
+		}
 
 	}
 
@@ -67,6 +114,22 @@ public class DashboardController extends BaseController {
 
 	public void setClientes(List<VwUltimosClientes> clientes) {
 		this.clientes = clientes;
+	}
+
+	public ScheduleModel getEventModel() {
+		return eventModel;
+	}
+
+	public void setEventModel(ScheduleModel eventModel) {
+		this.eventModel = eventModel;
+	}
+
+	public List<CalendarioPedidos> getCalendario() {
+		return calendario;
+	}
+
+	public void setCalendario(List<CalendarioPedidos> calendario) {
+		this.calendario = calendario;
 	}
 
 }

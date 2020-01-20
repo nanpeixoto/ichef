@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import br.com.ichef.arquitetura.service.EntityManagerProducer;
+import br.com.ichef.arquitetura.service.Transacional;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Pedido;
@@ -70,6 +71,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	 * query.getResultList(); }
 	 */
 
+	@Transacional
 	public Integer findTotalPedidoPrato(Pedido pedido) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" SELECT   sum(case when COALESCE(tp.SN_PLUS,'N') = 'S'  THEN  NR_QTD*2  ELSE  NR_QTD END)   nr_total_pedido " 
@@ -79,6 +81,13 @@ public class PedidoService extends GenericDAO<Pedido> {
 				+ " and p.CD_TIP_PRATO = tp.CD_TIP_PRATO "
 				);
 		try {
+			if (!getManager().isOpen()) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				setManager(producer.createEntityManager());
+			} else {
+				getManager().clear();
+			}
+			
 			Query query = getManager().createNativeQuery(sb.toString());
 			int count = query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
 			return count;

@@ -10,10 +10,10 @@
 	<ui:define name="title">Pedido</ui:define>
 
 	<ui:define name="body">
-		<f:metadata>
+		<!-- <f:metadata>
 			<f:event listener="#{pedidoController.obterPedidoDia()}"
 				type="preRenderView"></f:event>
-		</f:metadata>
+		</f:metadata> -->
 		<adm:breadcrumb title="Lançamento de Carteira" />
 		<p:growl id="growl" showDetail="false" sticky="false" escape="true"
 			autoUpdate="false" />
@@ -63,8 +63,9 @@
 							</p:selectOneMenu>
 						</p:panelGrid>
 
-						<p:panelGrid columns="7" layout="grid" columnClasses="ui-g-6 ui-md-1, ui-g-6 ui-md-3,ui-g-6 ui-md-1, ui-g-6 ui-md-2,ui-g-6 ui-md-1">
-							
+						<p:panelGrid columns="7" layout="grid"
+							columnClasses="ui-g-6 ui-md-1, ui-g-6 ui-md-3,ui-g-6 ui-md-1, ui-g-6 ui-md-2,ui-g-6 ui-md-1">
+
 							<p:outputLabel value="Cardápio" for="selectCardapio" />
 							<p:selectOneMenu id="selectCardapio"
 								value="#{pedidoController.entity.cardapio}"
@@ -72,34 +73,35 @@
 								filterMatchMode="contains">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
-								<f:selectItems value="#{pedidoController.listaCardapio}" 
+								<f:selectItems value="#{pedidoController.listaCardapio}"
 									var="item" itemLabel="#{item.descricaoComDiaSemana}"
 									itemValue="#{item}" />
 
-								<p:ajax event="itemSelect"  process="@this"
+								<p:ajax event="itemSelect" process="@this"
 									listener="#{pedidoController.obterPratosCardapio()}"
 									update="prato,selectTipoPrato,linkCardadpio,data" />
 							</p:selectOneMenu>
-							
+
 							<p:outputLabel value="Data Entrega" for="data" />
-							<p:calendar id="data" binding="#{pedidoController.componenteDataEntrega}"
+							<p:calendar id="data"
+								binding="#{pedidoController.componenteDataEntrega}"
 								value="#{pedidoController.entity.dataEntrega}"
 								pattern="dd/MM/yyyy" size="10" mask="99/99/9999">
 								<p:ajax event="blur" process="@this"
 									update="selectTipoPrato,precoPrato,txtQtdDisponivel"
 									listener="#{pedidoController.mudarDataPrato()}" />
-								</p:calendar>
+							</p:calendar>
 							<p:link id="linkCardadpio"
 								href="/pages/cardapio/cadastro-cardapio.xhtml?id=#{pedidoController.entity.cardapio.id}"
 								target="_blank" title="Clique para abrir o cardápio">
 								<i class="fa fa-cutlery"
 									style="color: #{pedidoController.entity.cardapio.id eq null?'red' : 'black'} "></i>
 							</p:link>
-								
+
 							<!-- <p:selectBooleanButton id="entregaData" value="#{pedidoController.entregaDataCardapio}" onLabel="Entrega no dia do Cardápio"
 									 offLabel="Entrega Dia Marcado"   /> -->
 
-							
+
 						</p:panelGrid>
 						<p:panelGrid columns="5" layout="grid"
 							columnClasses="ui-g-6 ui-md-1,ui-g-6 ui-md-1,ui-g-6 ui-md-4,ui-g-6 ui-md-1,ui-g-6 ui-md-5">
@@ -187,7 +189,8 @@
 								<f:selectItems value="#{pedidoController.listaEnderecos}"
 									var="item" itemLabel="#{item.enderecoCompleto}"
 									itemValue="#{item}" />
-								<p:ajax event="change" update="selectTipoPrato,precoPrato,selectEntregador,ordemEntrega,valorDiaria"
+								<p:ajax event="change"
+									update="selectTipoPrato,precoPrato,selectEntregador,ordemEntrega,valorDiaria"
 									listener="#{pedidoController.obterEntregador()}" />
 							</p:selectOneMenu>
 
@@ -202,8 +205,9 @@
 								filterMatchMode="contains">
 								<f:selectItem itemLabel="Selecionar" itemValue=""
 									noSelectionOption="true" />
-								<f:selectItems value="#{pedidoController.entity.cardapio.pratos}"
-									var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
+								<f:selectItems
+									value="#{pedidoController.entity.cardapio.pratos}" var="item"
+									itemLabel="#{item.descricao}" itemValue="#{item}" />
 								<p:ajax event="change" process="@form"
 									update="selectTipoPrato,precoPrato,txtQtdDisponivel"
 									listener="#{pedidoController.obterTiposDePratos()}" />
@@ -277,7 +281,7 @@
 								<f:selectItems value="#{pedidoController.listaFormasPagamento}"
 									var="item" itemLabel="#{item.descricao}" itemValue="#{item}" />
 								<p:ajax event="change" update="precoPrato"
-									listener="#{pedidoController.obterPrecoPrato()}" />							
+									listener="#{pedidoController.obterPrecoPrato()}" />
 							</p:selectOneMenu>
 						</p:panelGrid>
 						<p:panelGrid columns="6" layout="grid"
@@ -337,7 +341,7 @@
 									<p:outputPanel style="text-align:right; margin-right:-10px"
 										styleClass="ui-widget-auxiliar">
 
-										<h:outputText value="Pesquisar: " escape="false" />
+
 
 										<p:inputText id="globalFilter"
 											onchange="PF('itens').filter();" style="width:150px;"
@@ -346,6 +350,15 @@
 										<h:outputText value=" " escape="false" />
 										<p:commandButton id="Search" value="" icon="fa fa-search"
 											style="font-size: 0.8em;width:3%;" />
+
+										<h:outputLabel value="&#160;&#160;&#160;" />
+
+										<p:commandButton value="Listar" icon="fa fa-refresh"
+											id="btnListarTodos" styleClass="btn btn-success"
+											style="width: 10%;" title="Listar todos os pedidos"
+											update="form,growl"
+											action="#{pedidoController.obterPedidoDia()}" />
+
 									</p:outputPanel>
 								</f:facet>
 
@@ -368,11 +381,12 @@
 										escape="false" />
 								</p:column> -->
 
-								<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
+								<p:column headerText="Cliente" filterBy="#{item.cliente.id}-#{item.cliente.nome}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.cliente.nome}">
-									<h:outputLabel value="#{item.cliente.id}-#{item.cliente.nome}" escape="false" />
+									<h:outputLabel value="#{item.cliente.id}-#{item.cliente.nome}"
+										escape="false" />
 								</p:column>
 
 								<p:column headerText="Localidade"
@@ -438,7 +452,8 @@
 											<p:inplace id="inplaceObservacao" label="#{item.observacao}"
 												editor="true" toggleable="true" emptyLabel="Vazio"
 												saveLabel="Salvar" cancelLabel="Cancelar">
-												<p:ajax event="save" update="tabListaPedidos,growl" listener="#{pedidoController.atualizarPedido(item,'O')}" />
+												<p:ajax event="save" update="tabListaPedidos,growl"
+													listener="#{pedidoController.atualizarPedido(item,'O')}" />
 												<p:inputTextarea id="observacao" value="#{item.observacao}"
 													rows="3" cols="30" maxlength="450" counter="display"
 													counterTemplate="Faltam {0} characteres" autoResize="false" />

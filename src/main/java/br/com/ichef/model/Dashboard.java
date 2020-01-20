@@ -24,8 +24,14 @@ public class Dashboard extends BaseEntity {
 	@Column(name = "QTD_FICHA")
 	private Long quantidadeFichaPratos;
 
-	@Column(name = "QTD_ENTREGADOR")
-	private Long quantidadeEntregadores;
+	@Column(name = "QTD_PEDIDOS")
+	private Long quantidadePedidos;
+
+	@Column(name = "QTD_PEDIDOS_NAO_CONFIRMADOS")
+	private Long quantidadePedidosNaoConfirmados;
+
+	@Column(name = "CD_EMPRESA")
+	private Long codigoEmpresa;
 
 	@Override
 	public Object getId() {
@@ -96,12 +102,36 @@ public class Dashboard extends BaseEntity {
 		this.quantidadeFichaPratos = quantidadeFichaPratos;
 	}
 
-	public Long getQuantidadeEntregadores() {
-		return quantidadeEntregadores;
+	public Long getQuantidadePedidos() {
+		return quantidadePedidos;
 	}
 
-	public void setQuantidadeEntregadores(Long quantidadeEntregadores) {
-		this.quantidadeEntregadores = quantidadeEntregadores;
+	public void setQuantidadePedidos(Long quantidadePedidos) {
+		this.quantidadePedidos = quantidadePedidos;
+	}
+
+	public Long getQuantidadePedidosNaoConfirmados() {
+		return quantidadePedidosNaoConfirmados;
+	}
+
+	public void setQuantidadePedidosNaoConfirmados(Long quantidadePedidosNaoConfirmados) {
+		this.quantidadePedidosNaoConfirmados = quantidadePedidosNaoConfirmados;
+	}
+
+	public Long getCodigoEmpresa() {
+		return codigoEmpresa;
+	}
+
+	public void setCodigoEmpresa(Long codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }

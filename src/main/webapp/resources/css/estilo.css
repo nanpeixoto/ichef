@@ -1,3 +1,15 @@
+.fc-content {
+	 font-size: 12px  !important;
+}
+
+.fc-event-container {
+	font-size: 12px !important;
+}
+
+.fc {
+	font-size: 12px  !important;
+}
+
 .letras-maiusculas {
 	text-transform: uppercase;
 }
@@ -8,15 +20,14 @@
 	color: #000000 !important;
 }
 
-.ui-inplace-save  {
+.ui-inplace-save {
 	width: 10% !important;
 }
 
-.ui-inplace-cancel  {
+.ui-inplace-cancel {
 	width: 10% !important;
 }
 
-
-.ui-rowgroup-toggler-icon{
-	    display: none;
+.ui-rowgroup-toggler-icon {
+	display: none;
 }

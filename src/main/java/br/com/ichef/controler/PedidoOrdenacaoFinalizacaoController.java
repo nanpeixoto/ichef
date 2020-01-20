@@ -568,12 +568,15 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 				return;
 			}
 			List<Pedido> pedidosFinalizar = obterPedidosFinalizacao();
+			
+			int countPedidoConfirmado = 0;
 
 			for (Pedido pedido : pedidosFinalizar) {
 				String log = null;
 
 				if (!pedido.isConfirmado()) {
 					try {
+						
 						// if (pedido.getFormaPagamento().isCarteira()) {
 						ClienteCarteira carteira = new ClienteCarteira();
 						carteira.setCardapio(pedido.getCardapio());
@@ -600,6 +603,8 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 						pedido.setUsuarioFinalizacao(userLogado);
 						pedido.setDataFinalizacao(new Date());
 						pedido.setSnConfirmado("S");
+						
+						countPedidoConfirmado++;
 
 						clienteCarteiraService.saveOrUpdade(carteira);
 						service.finalizarPedido(pedido);
@@ -613,6 +618,11 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 				}
 
 			}
+			
+			if(countPedidoConfirmado > 0 ) {
+				obterEntregasDia();
+			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

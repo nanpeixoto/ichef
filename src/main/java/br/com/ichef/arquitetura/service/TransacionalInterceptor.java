@@ -26,6 +26,14 @@ public class TransacionalInterceptor implements Serializable {
 		boolean criador = false;
 
 		try {
+			if (!manager.isOpen()) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				manager = producer.createEntityManager();
+			} else {
+				manager.clear();
+			}
+			
+			
 			if (!trx.isActive()) {
 				// truque para fazer rollback no que já passou
 				// (senão, um futuro commit confirmaria até mesmo operações sem transação)
