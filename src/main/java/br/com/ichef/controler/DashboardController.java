@@ -14,6 +14,7 @@ import org.primefaces.model.ScheduleModel;
 
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.CalendarioPedidos;
+import br.com.ichef.model.CalendarioPedidosID;
 import br.com.ichef.model.Dashboard;
 import br.com.ichef.model.VwUltimosClientes;
 import br.com.ichef.service.CalendarioPedidosService;
@@ -68,13 +69,15 @@ public class DashboardController extends BaseController {
 			for (CalendarioPedidos calendarioPedidos : calendarioMontagem) {
 				DefaultScheduleEvent event = new DefaultScheduleEvent();
 
-				event.setDescription(calendarioPedidos.getDescricaoCardapdioFicha());
+				event.setDescription( calendarioPedidos.getDescricaoCardapdioFicha() + "(" + calendarioPedidos.getQuantidade() + ")" );
 				event.setAllDay(true);
-				event.setData(calendarioPedidos.getDataEntrega());
-				event.setStartDate(calendarioPedidos.getDataEntrega());
-				event.setEndDate(calendarioPedidos.getDataEntrega());
+				event.setData( ((CalendarioPedidosID) calendarioPedidos.getId()).getDataEntrega() );
+				event.setStartDate( ((CalendarioPedidosID) calendarioPedidos.getId()).getDataEntrega()  );
+				event.setEndDate( ((CalendarioPedidosID) calendarioPedidos.getId()).getDataEntrega()  );
 				event.setTitle(
 						calendarioPedidos.getDescricaoCardapdioFicha() + "(" + calendarioPedidos.getQuantidade() + ")");
+				event.setEditable(true);
+				
 				
 
 				eventModel.addEvent(event);

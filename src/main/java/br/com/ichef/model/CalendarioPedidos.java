@@ -3,8 +3,8 @@ package br.com.ichef.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.ichef.arquitetura.BaseEntity;
@@ -14,21 +14,14 @@ import br.com.ichef.arquitetura.BaseEntity;
 public class CalendarioPedidos extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "id")
-	private Long id;
-
-	@Column(name = "CD_CARDAPIO_PRATO")
-	private Long codigoCardapioPrato;
+	@EmbeddedId
+	private CalendarioPedidosID id;
 
 	@Column(name = "NR_QTD")
 	private Long quantidade;
 
 	@Column(name = "DS_CARDAPIO_FICHA")
 	private String descricaoCardapdioFicha;
-
-	@Column(name = "DT_ENTREGA")
-	private Date dataEntrega;
 
 	@Override
 	public Object getId() {
@@ -37,7 +30,7 @@ public class CalendarioPedidos extends BaseEntity {
 
 	@Override
 	public void setId(Object id) {
-		this.id = (Long) id;
+		this.id = (CalendarioPedidosID) id;
 
 	}
 
@@ -83,14 +76,6 @@ public class CalendarioPedidos extends BaseEntity {
 		return false;
 	}
 
-	public Long getCodigoCardapioPrato() {
-		return codigoCardapioPrato;
-	}
-
-	public void setCodigoCardapioPrato(Long codigoCardapioPrato) {
-		this.codigoCardapioPrato = codigoCardapioPrato;
-	}
-
 	public Long getQuantidade() {
 		return quantidade;
 	}
@@ -107,19 +92,11 @@ public class CalendarioPedidos extends BaseEntity {
 		this.descricaoCardapdioFicha = descricaoCardapdioFicha;
 	}
 
-	public Date getDataEntrega() {
-		return dataEntrega;
-	}
-
-	public void setDataEntrega(Date dataEntrega) {
-		this.dataEntrega = dataEntrega;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	public void setId(Long id) {
+	public void setId(CalendarioPedidosID id) {
 		this.id = id;
 	}
 
