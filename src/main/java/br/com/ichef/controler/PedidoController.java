@@ -31,6 +31,8 @@ import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.model.FichaTecnicaPratoTipo;
 import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
+import br.com.ichef.model.PedidoDerivacaoContagem;
+import br.com.ichef.model.PedidoDerivacaoContagemID;
 import br.com.ichef.model.TipoPrato;
 import br.com.ichef.service.CardapioService;
 import br.com.ichef.service.ClienteCarteiraService;
@@ -39,6 +41,7 @@ import br.com.ichef.service.DerivacaoService;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.EntregadorService;
 import br.com.ichef.service.FormaPagamentoService;
+import br.com.ichef.service.PedidoDerivacaoContagemService;
 import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
@@ -55,6 +58,9 @@ public class PedidoController extends BaseController {
 
 	@Inject
 	private PedidoService service;
+	
+	@Inject
+	private PedidoDerivacaoContagemService pedidoDerivacaoContagemService;
 
 	@Inject
 	private ClienteService clienteService;
@@ -829,17 +835,30 @@ public class PedidoController extends BaseController {
 			Pedido filter = new Pedido();
 			filter.setCardapio(cardapioFilter);
 			filter.setEmpresa(userLogado.getEmpresaLogada());
+			
+			PedidoDerivacaoContagemID pedidoDerivacaoContagemID = new PedidoDerivacaoContagemID();
+			pedidoDerivacaoContagemID.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
+			PedidoDerivacaoContagem pedidoDerivacaoContagemfilter = new PedidoDerivacaoContagem();
+			pedidoDerivacaoContagemfilter.setId(pedidoDerivacaoContagemID);
 
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
 			List<Pedido> pedidos = new ArrayList<>();
+			
+			List<PedidoDerivacaoContagem> pedidoDerivacaoContagem = new ArrayList<>();
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
 
 				order(pedidos);
+				
+				pedidoDerivacaoContagem = pedidoDerivacaoContagemService.findByParameters(pedidoDerivacaoContagemfilter, pedidoVisitor );
+				
+				System.out.println(pedidoDerivacaoContagem);
+				
+				
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -892,7 +911,7 @@ public class PedidoController extends BaseController {
 				FacesUtil.addErroMessage("Nenhum dado encontrado");
 			} else {
 				try {
-					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					setParametroReport("logoEtiqtea", getImagem(LOGO_ETIQUETA));
 					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();

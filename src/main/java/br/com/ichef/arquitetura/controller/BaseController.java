@@ -39,6 +39,8 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	protected static String DIALOG_CADASTRAR = "cadastrarForm";
 	
 	public static String LOGO = "logo.jpg";
+	
+	public static String LOGO_ETIQUETA = "logo_etiqueta.jpg";
 
 	protected static String ERRO_GENERICO = "Erro ao gerar relatório, por favor entre em contato com o Administrator do Sistema.";
 

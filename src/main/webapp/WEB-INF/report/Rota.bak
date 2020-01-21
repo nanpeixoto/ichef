@@ -296,7 +296,7 @@
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="20"  isSplitAllowed="true" >
+			<band height="107"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="731"
@@ -323,6 +323,19 @@
 					</textElement>
 				<text><![CDATA[Total do Entregador:]]></text>
 				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="40"
+						y="42"
+						width="729"
+						height="55"
+						key="subreport-1"
+						positionType="Float"/>
+					<subreportParameter  name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/RotaPorDerivacao.jasper"]]></subreportExpression>
+				</subreport>
 			</band>
 			</groupFooter>
 		</group>
@@ -347,7 +360,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Rota de Entrega]]></text>
+				<text><![CDATA[Rota de Entrega 1]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -500,7 +513,8 @@
 					<textElement verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricaoPratoOrdem()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricaoPratoOrdem()+"-"+$F{derivacao}.getDescricao()
++ (  $F{observacao}.equals( "-" ) ? "" : "("+ $F{observacao}+")" )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
