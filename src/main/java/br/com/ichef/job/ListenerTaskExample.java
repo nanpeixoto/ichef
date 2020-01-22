@@ -29,7 +29,7 @@ public class ListenerTaskExample implements ServletContextListener {
 						SimpleDateFormat sdate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 						
-						System.out.println("Thread:" + sdate.format(new java.util.Date()));
+						System.out.println("Rotina de Envio de E-mail ListenerTaskExample.java:" + sdate.format(new java.util.Date()));
 						Thread.sleep(40000000);
 						service.enviarEmails();
 					}
