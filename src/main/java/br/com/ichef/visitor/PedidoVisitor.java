@@ -24,6 +24,8 @@ public class PedidoVisitor extends FilterVisitor {
 	private Date dataEntregaFinal;
 	
 	private Long codigoCliente;
+	
+	private Long codigoEmpresa;
 
 	@Override
 	public void visitCriteria(Criteria criteria) {
@@ -64,8 +66,26 @@ public class PedidoVisitor extends FilterVisitor {
 		if(getCodigoCliente()!=null) {
 			criteria.add(Restrictions.eq("cliente.id", getCodigoCliente()));
 		}
+		
+		if(getCodigoEmpresa()!=null) {
+			criteria.add(Restrictions.eq("id.codigoEmpresa", getCodigoEmpresa()));
+		}
 
 	}
+	
+	
+
+	public Long getCodigoEmpresa() {
+		return codigoEmpresa;
+	}
+
+
+
+	public void setCodigoEmpresa(Long codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
+	}
+
+
 
 	public Date getData() {
 		return data;

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -58,7 +60,7 @@ public class PedidoController extends BaseController {
 
 	@Inject
 	private PedidoService service;
-	
+
 	@Inject
 	private PedidoDerivacaoContagemService pedidoDerivacaoContagemService;
 
@@ -572,7 +574,8 @@ public class PedidoController extends BaseController {
 				facesMessager.error("Houve um erro, entre em contato com o adminstrador do sistema");
 			} else {
 				getLista().add(getEntity());
-				orderbyId(getLista());;
+				orderbyId(getLista());
+				;
 			}
 
 			updateComponentes("tabListaPedidos");
@@ -624,7 +627,7 @@ public class PedidoController extends BaseController {
 				if (itemExcluir.getId().equals(item.getId()))
 					temp.remove(item);
 			}
-			service.excluir(itemExcluir);
+			service.excluirPedido(itemExcluir);
 
 			lista.clear();
 			lista.addAll(temp);
@@ -678,7 +681,7 @@ public class PedidoController extends BaseController {
 		pedidoVisitor.setDataCardapio(new Date());
 
 		try {
-			setLista(service.findByParameters(filter, pedidoVisitor) );
+			setLista(service.findByParameters(filter, pedidoVisitor));
 			orderbyId(getLista());
 			// setLista(service.findByParameters(filter));
 		} catch (Exception e) {
@@ -835,30 +838,31 @@ public class PedidoController extends BaseController {
 			Pedido filter = new Pedido();
 			filter.setCardapio(cardapioFilter);
 			filter.setEmpresa(userLogado.getEmpresaLogada());
-			
-			PedidoDerivacaoContagemID pedidoDerivacaoContagemID = new PedidoDerivacaoContagemID();
-			pedidoDerivacaoContagemID.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
-			PedidoDerivacaoContagem pedidoDerivacaoContagemfilter = new PedidoDerivacaoContagem();
-			pedidoDerivacaoContagemfilter.setId(pedidoDerivacaoContagemID);
 
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
 			List<Pedido> pedidos = new ArrayList<>();
-			
+
 			List<PedidoDerivacaoContagem> pedidoDerivacaoContagem = new ArrayList<>();
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
 
 				order(pedidos);
+
+				pedidoVisitor.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
+
+				pedidoDerivacaoContagem = pedidoDerivacaoContagemService.findByParameters(new PedidoDerivacaoContagem(),
+						pedidoVisitor);
+
+				Map<Long, List<PedidoDerivacaoContagem>> mapContagem = mountDerivacoes(pedidoDerivacaoContagem);
 				
-				pedidoDerivacaoContagem = pedidoDerivacaoContagemService.findByParameters(pedidoDerivacaoContagemfilter, pedidoVisitor );
-				
-				System.out.println(pedidoDerivacaoContagem);
-				
-				
+				for (Pedido pedido: pedidos) {
+					pedido.setPedidoDerivacaoContagem( mapContagem.get( pedido.getEntregador().getId() ) );
+				}
+
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -877,6 +881,24 @@ public class PedidoController extends BaseController {
 				}
 			}
 		}
+	}
+
+	public Map<Long, List<PedidoDerivacaoContagem>> mountDerivacoes(List<PedidoDerivacaoContagem> list) {
+		if (list != null && list.size() > 0) {
+			Map<Long, List<PedidoDerivacaoContagem>> map = new HashMap<Long, List<PedidoDerivacaoContagem>>();
+			for (PedidoDerivacaoContagem item : list) {
+				Long codigoEntregador = ((PedidoDerivacaoContagemID) item.getId()).getCodigoEntregador();
+				if (!map.containsKey(codigoEntregador)) {
+					List<PedidoDerivacaoContagem> listaDerivacao = new ArrayList<>();
+					listaDerivacao.add(item);
+					map.put(codigoEntregador, listaDerivacao);
+				} else {
+					map.get(codigoEntregador).add(item);
+				}
+			}
+			return map;
+		}
+		return null;
 	}
 
 	public void imprimirEtiquetaEntrega() {

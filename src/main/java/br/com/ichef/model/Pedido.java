@@ -3,6 +3,7 @@ package br.com.ichef.model;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,7 +61,7 @@ public class Pedido extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CD_ENTREGADOR")
 	private Entregador entregador;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
 	private FormaPagamento formaPagamento;
@@ -133,6 +134,9 @@ public class Pedido extends BaseEntity {
 
 	@Transient
 	private boolean confirmado;
+
+	@Transient
+	private List<PedidoDerivacaoContagem> pedidoDerivacaoContagem;
 
 	public boolean isConfirmado() {
 		if (snConfirmado != null) {
@@ -457,6 +461,14 @@ public class Pedido extends BaseEntity {
 
 	public void setValorPago(BigDecimal valorPago) {
 		this.valorPago = valorPago;
+	}
+
+	public List<PedidoDerivacaoContagem> getPedidoDerivacaoContagem() {
+		return pedidoDerivacaoContagem;
+	}
+
+	public void setPedidoDerivacaoContagem(List<PedidoDerivacaoContagem> pedidoDerivacaoContagem) {
+		this.pedidoDerivacaoContagem = pedidoDerivacaoContagem;
 	}
 
 }

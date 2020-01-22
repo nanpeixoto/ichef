@@ -146,5 +146,50 @@ public class PedidoService extends GenericDAO<Pedido> {
 			 */
 
 	}
+	
+	
+	public String excluirPedido(Pedido entity) {
+		EntityTransaction tx = null;
+		try {
+
+			StringBuilder hql = null;
+			int result = -1;
+
+			hql = new StringBuilder();
+
+			hql.append("delete from  Pedido  where id = " + entity.getId());
+
+			if (hql != null) {
+
+				if (!getManager().isOpen()) {
+					EntityManagerProducer producer = new EntityManagerProducer();
+					setManager(producer.createEntityManager());
+				} else {
+					getManager().clear();
+				}
+
+				tx = getManager().getTransaction();
+				tx.begin();
+
+				Query query = getManager().createQuery(hql.toString());
+				result = query.executeUpdate();
+				tx.commit();
+
+			}
+			if (result == 0) {
+
+				return "Operação Não Realizada. Contact o ADM do sistema";
+			}
+
+			return null;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return e.getMessage();
+		} /*
+			 * finally { if (getManager().isOpen()) getManager().close(); }
+			 */
+
+	}
 
 }
