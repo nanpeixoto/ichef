@@ -23,7 +23,7 @@ import br.com.ichef.util.Util;
 
 @Entity
 @Table(name = "cardapio")
-public class Cardapio extends BaseEntity {
+public class Cardapio extends BaseEntity implements Comparable<Cardapio> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -114,7 +114,7 @@ public class Cardapio extends BaseEntity {
 	@Override
 	public String getColumnOrderBy() {
 		// TODO Auto-generated method stub
-		return null;
+		return "data";
 	}
 
 	@Override
@@ -210,5 +210,11 @@ public class Cardapio extends BaseEntity {
 
 		return "";
 	}
+	
+	@Override
+	public int compareTo(Cardapio o) {
+		return this.getData().compareTo(o.getData());
+	}
+
 
 }

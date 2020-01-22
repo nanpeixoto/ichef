@@ -36,6 +36,7 @@ import br.com.ichef.model.Pedido;
 import br.com.ichef.model.PedidoDerivacaoContagem;
 import br.com.ichef.model.PedidoDerivacaoContagemID;
 import br.com.ichef.model.TipoPrato;
+import br.com.ichef.model.VwTipoPratoPreco;
 import br.com.ichef.service.CardapioService;
 import br.com.ichef.service.ClienteCarteiraService;
 import br.com.ichef.service.ClienteService;
@@ -46,6 +47,7 @@ import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.PedidoDerivacaoContagemService;
 import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
+import br.com.ichef.service.VwTipoPratoPrecoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.visitor.CardapioVisitor;
@@ -60,6 +62,9 @@ public class PedidoController extends BaseController {
 
 	@Inject
 	private PedidoService service;
+
+	@Inject
+	private VwTipoPratoPrecoService vwTipoPratoPrecoService;
 
 	@Inject
 	private PedidoDerivacaoContagemService pedidoDerivacaoContagemService;
@@ -165,6 +170,7 @@ public class PedidoController extends BaseController {
 	private void valoresDefault() {
 		getEntity().setQuantidade(1);
 		if (listaCardapio != null && listaCardapio.size() > 0) {
+			Collections.sort(listaCardapio);
 			getEntity().setCardapio(listaCardapio.get(0));
 			listaCardapioPrato = listaCardapio.get(0).getPratos();
 		} else {
@@ -300,16 +306,33 @@ public class PedidoController extends BaseController {
 		}
 	}
 
+	public BigDecimal obterValorPratoBytipo() {
+		try {
+			VwTipoPratoPreco filterPrecoPrato = new VwTipoPratoPreco();
+			TipoPrato tp = new TipoPrato();
+			tp.setId(getEntity().getFichaTecnicaPratoTipo().getTipoPrato().getId());
+			filterPrecoPrato.setTipoPrato(tp);
+			return ((List<VwTipoPratoPreco>) vwTipoPratoPrecoService.findByParameters(filterPrecoPrato)).get(0)
+					.getPreco();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			facesMessager.error("Nenhum Valor encontrado");
+		}
+		return null;
+
+	}
+
 	public void obterPrecoPrato() {
 		try {
 			if (getEntity().getFormaPagamento() != null) {
 				if (!getEntity().getFormaPagamento().isCortesia()) {
 					if (getEntity().getFichaTecnicaPratoTipo() != null) {
-						getEntity().setValorPedido(new BigDecimal(getEntity().getFichaTecnicaPratoTipo().getTipoPrato()
-								.getUltimoPreco().get(0).getPreco()));
+
+						getEntity().setValorUnitarioPedido(obterValorPratoBytipo());
 					}
 				} else {
-					getEntity().setValorPedido(new BigDecimal(0));
+					getEntity().setValorUnitarioPedido(new BigDecimal(0));
 				}
 			}
 		} catch (Exception e) {
@@ -484,13 +507,20 @@ public class PedidoController extends BaseController {
 			}
 
 			// PRECO MAIOR QUE ZERO
-			if (getEntity().getValorPedido() == null) {
-				facesMessager.error(getRequiredMessage("Preço"));
+			if (getEntity().getValorUnitarioPedido() == null) {
+				facesMessager.error(getRequiredMessage("Preço Unitário"));
 				return;
 			} else {
-				getEntity().setValorPedido(
-						getEntity().getValorPedido().multiply(new BigDecimal(getEntity().getQuantidade())));
-				getEntity().setValorPago(getEntity().getValorPedido());
+				BigDecimal valorTotalPedido = getEntity().getValorUnitarioPedido()
+						.multiply(new BigDecimal(getEntity().getQuantidade()));
+				getEntity().setValorPedido(valorTotalPedido);
+				getEntity().setValorPago(valorTotalPedido);
+			}
+
+			// PRECO MAIOR QUE ZERO
+			if (getEntity().getValorPedido() == null) {
+				facesMessager.error(getRequiredMessage("Valor Pedido"));
+				return;
 			}
 
 			// valor da diaria do entregador
@@ -565,7 +595,7 @@ public class PedidoController extends BaseController {
 			}
 
 			if (getEntity().getFormaPagamento().isCortesia()) {
-				getEntity().setValorPedido(new BigDecimal(0));
+				getEntity().setValorUnitarioPedido(new BigDecimal(0));
 			}
 
 			service.saveOrUpdade(getEntity());
@@ -642,6 +672,7 @@ public class PedidoController extends BaseController {
 
 	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
+
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
 					if (pedido.getEntregador().getValorDiaria() == null) {
@@ -652,9 +683,22 @@ public class PedidoController extends BaseController {
 				}
 			}
 
-			if (tipoAlteracao.equals("F")) {
-				obterPrecoPrato();
+			if (tipoAlteracao.equals("F") ||  tipoAlteracao.equals("Q")  ) {
+				if (pedido.getValorUnitarioPedido() == null) {
+					facesMessager.error(getRequiredMessage("Preço Unitário"));
+					return;
+				} else {
+					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido().multiply(new BigDecimal(pedido.getQuantidade()));
+					pedido.setValorPedido(valorTotalPedido);
+					pedido.setValorPago(valorTotalPedido);
+				}
 			}
+
+			
+			
+			
+
+
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
 
@@ -858,11 +902,10 @@ public class PedidoController extends BaseController {
 						pedidoVisitor);
 
 				Map<Long, List<PedidoDerivacaoContagem>> mapContagem = mountDerivacoes(pedidoDerivacaoContagem);
-				
-				for (Pedido pedido: pedidos) {
-					pedido.setPedidoDerivacaoContagem( mapContagem.get( pedido.getEntregador().getId() ) );
-				}
 
+				for (Pedido pedido : pedidos) {
+					pedido.setPedidoDerivacaoContagem(mapContagem.get(pedido.getEntregador().getId()));
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -76,8 +76,8 @@ public class TipoPrato extends BaseEntity {
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TipoPratoInsumo> insumos;
 
-	@OneToMany(mappedBy = "tipoPrato")
-	private List<VwTipoPratoPreco> ultimoPreco;
+	//@OneToMany(mappedBy = "tipoPrato")
+	//private List<VwTipoPratoPreco> ultimoPreco;
 
 	@Override
 	public Object getId() {
@@ -252,13 +252,13 @@ public class TipoPrato extends BaseEntity {
 		return preco;
 	}
 
-	public List<VwTipoPratoPreco> getUltimoPreco() {
-		return ultimoPreco;
-	}
+	//public List<VwTipoPratoPreco> getUltimoPreco() {
+	//	return ultimoPreco;
+	//}
 
-	public void setUltimoPreco(List<VwTipoPratoPreco> ultimoPreco) {
-		this.ultimoPreco = ultimoPreco;
-	}
+	//public void setUltimoPreco(List<VwTipoPratoPreco> ultimoPreco) {
+	//	this.ultimoPreco = ultimoPreco;
+	//}
 
 	public String getSnPlus() {
 		return snPlus;

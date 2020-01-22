@@ -27,6 +27,12 @@ public class PedidoDerivacaoContagem extends BaseEntity {
 	@Column(name = "NR_QTD")
 	private Integer quantidade;
 
+	@Column(name = "NR_ORDEM")
+	private Integer ordem;
+
+	@Column(name = "DS_CARDAPIO_PRATO")
+	private String descricaoPrato;
+
 	@Override
 	public Object getId() {
 		// TODO Auto-generated method stub
@@ -103,6 +109,22 @@ public class PedidoDerivacaoContagem extends BaseEntity {
 
 	public void setId(PedidoDerivacaoContagemID id) {
 		this.id = id;
+	}
+
+	public Integer getOrdem() {
+		return ordem;
+	}
+
+	public void setOrdem(Integer ordem) {
+		this.ordem = ordem;
+	}
+
+	public String getDescricaoPrato() {
+		return "("+getOrdem()+")"+descricaoPrato;
+	}
+
+	public void setDescricaoPrato(String descricaoPrato) {
+		this.descricaoPrato = descricaoPrato;
 	}
 
 }

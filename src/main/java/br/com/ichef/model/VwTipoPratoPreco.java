@@ -1,5 +1,6 @@
 package br.com.ichef.model;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,7 +26,7 @@ public class VwTipoPratoPreco extends BaseEntity implements Comparable<VwTipoPra
 	private Long id;
 
 	@Column(name = "VL_PRECO")
-	private Double preco;
+	private BigDecimal preco;
 
 	@Column(name = "DT_VIGENCIA")
 	private Date dataVigencia;
@@ -98,11 +99,11 @@ public class VwTipoPratoPreco extends BaseEntity implements Comparable<VwTipoPra
 		return !isInclusao();
 	}
 
-	public Double getPreco() {
+	public BigDecimal getPreco() {
 		return preco;
 	}
 
-	public void setPreco(Double preco) {
+	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
 	}
 

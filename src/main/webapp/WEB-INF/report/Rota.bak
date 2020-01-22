@@ -299,7 +299,7 @@
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="33"  isSplitAllowed="true" >
+			<band height="26"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="731"
@@ -328,10 +328,10 @@
 				</staticText>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="4"
+						x="1"
 						y="21"
 						width="780"
-						height="12"
+						height="5"
 						key="subreport-1"/>
 					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource( $F{pedidoDerivacaoContagem} )]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/RotaEntregaDerivacao.jasper"]]></subreportExpression>

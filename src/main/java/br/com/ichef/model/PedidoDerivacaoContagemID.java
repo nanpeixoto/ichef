@@ -22,6 +22,9 @@ public class PedidoDerivacaoContagemID implements Serializable {
 	@Column(name = "CD_ENTREGADOR")
 	private Long codigoEntregador;
 
+	@Column(name = "CD_CARDAPIO_PRATO")
+	private Long codigoCardapioPrato;
+
 	public Long getId() {
 		return id;
 	}
@@ -58,10 +61,19 @@ public class PedidoDerivacaoContagemID implements Serializable {
 		this.codigoEntregador = codigoEntregador;
 	}
 
+	public Long getCodigoCardapioPrato() {
+		return codigoCardapioPrato;
+	}
+
+	public void setCodigoCardapioPrato(Long codigoCardapioPrato) {
+		this.codigoCardapioPrato = codigoCardapioPrato;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((codigoCardapioPrato == null) ? 0 : codigoCardapioPrato.hashCode());
 		result = prime * result + ((codigoEmpresa == null) ? 0 : codigoEmpresa.hashCode());
 		result = prime * result + ((codigoEntregador == null) ? 0 : codigoEntregador.hashCode());
 		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
@@ -78,6 +90,11 @@ public class PedidoDerivacaoContagemID implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		PedidoDerivacaoContagemID other = (PedidoDerivacaoContagemID) obj;
+		if (codigoCardapioPrato == null) {
+			if (other.codigoCardapioPrato != null)
+				return false;
+		} else if (!codigoCardapioPrato.equals(other.codigoCardapioPrato))
+			return false;
 		if (codigoEmpresa == null) {
 			if (other.codigoEmpresa != null)
 				return false;

@@ -1,7 +1,6 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 
 import javax.persistence.Column;

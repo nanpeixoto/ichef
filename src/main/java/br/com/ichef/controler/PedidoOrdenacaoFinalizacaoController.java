@@ -30,6 +30,7 @@ import br.com.ichef.model.FichaTecnicaPratoTipo;
 import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
 import br.com.ichef.model.TipoPrato;
+import br.com.ichef.model.VwTipoPratoPreco;
 import br.com.ichef.service.CardapioService;
 import br.com.ichef.service.ClienteCarteiraService;
 import br.com.ichef.service.ClienteService;
@@ -39,6 +40,7 @@ import br.com.ichef.service.EntregadorService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
+import br.com.ichef.service.VwTipoPratoPrecoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.visitor.CardapioVisitor;
@@ -70,6 +72,9 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	@Inject
 	private DerivacaoService derivacaoService;
+
+	@Inject
+	private VwTipoPratoPrecoService vwTipoPratoPrecoService;
 
 	@Inject
 	private ClienteCarteiraService clienteCarteiraService;
@@ -290,16 +295,33 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 		}
 	}
 
+	public BigDecimal obterValorPratoBytipo() {
+		try {
+			VwTipoPratoPreco filterPrecoPrato = new VwTipoPratoPreco();
+			TipoPrato tp = new TipoPrato();
+			tp.setId(getEntity().getFichaTecnicaPratoTipo().getTipoPrato().getId());
+			filterPrecoPrato.setTipoPrato(tp);
+			return ((List<VwTipoPratoPreco>) vwTipoPratoPrecoService.findByParameters(filterPrecoPrato)).get(0)
+					.getPreco();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			facesMessager.error("Nenhum Valor encontrado");
+		}
+		return null;
+
+	}
+
 	public void obterPrecoPrato() {
 		try {
 			if (getEntity().getFormaPagamento() != null) {
 				if (!getEntity().getFormaPagamento().isCortesia()) {
 					if (getEntity().getFichaTecnicaPratoTipo() != null) {
-						getEntity().setValorPedido(new BigDecimal(getEntity().getFichaTecnicaPratoTipo().getTipoPrato()
-								.getUltimoPreco().get(0).getPreco()));
+
+						getEntity().setValorUnitarioPedido(obterValorPratoBytipo());
 					}
 				} else {
-					getEntity().setValorPedido(new BigDecimal(0));
+					getEntity().setValorUnitarioPedido(new BigDecimal(0));
 				}
 			}
 		} catch (Exception e) {
@@ -438,10 +460,18 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 					}
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
 				}
-			} else if (tipoAlteracao.equals("F")) {
-				setEntity(pedido);
-				obterPrecoPrato();
+			} else if (tipoAlteracao.equals("F") || tipoAlteracao.equals("Q")) {
+				if (pedido.getValorUnitarioPedido() == null) {
+					facesMessager.error(getRequiredMessage("Preço Unitário"));
+					return;
+				} else {
+					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
+							.multiply(new BigDecimal(pedido.getQuantidade()));
+					pedido.setValorPedido(valorTotalPedido);
+					pedido.setValorPago(valorTotalPedido);
+				}
 			}
+
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
 
@@ -563,12 +593,12 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 				return;
 			}
 
-			if (getEntregador() == null  ) {
+			if (getEntregador() == null) {
 				facesMessager.error("Selecione o Entregador para finalizar");
 				return;
 			}
 			List<Pedido> pedidosFinalizar = obterPedidosFinalizacao();
-			
+
 			int countPedidoConfirmado = 0;
 
 			for (Pedido pedido : pedidosFinalizar) {
@@ -576,7 +606,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 				if (!pedido.isConfirmado()) {
 					try {
-						
+
 						// if (pedido.getFormaPagamento().isCarteira()) {
 						ClienteCarteira carteira = new ClienteCarteira();
 						carteira.setCardapio(pedido.getCardapio());
@@ -603,7 +633,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 						pedido.setUsuarioFinalizacao(userLogado);
 						pedido.setDataFinalizacao(new Date());
 						pedido.setSnConfirmado("S");
-						
+
 						countPedidoConfirmado++;
 
 						clienteCarteiraService.saveOrUpdade(carteira);
@@ -618,11 +648,10 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 				}
 
 			}
-			
-			if(countPedidoConfirmado > 0 ) {
+
+			if (countPedidoConfirmado > 0) {
 				obterEntregasDia();
 			}
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();

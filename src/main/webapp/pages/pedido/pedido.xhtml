@@ -245,9 +245,9 @@
 									listener="#{pedidoController.obterPrecoPrato()}" />
 							</p:selectOneMenu>
 
-							<p:outputLabel value="Preço" for="precoPrato" />
+							<p:outputLabel value="Preço Unitário" for="precoPrato" />
 							<p:inputNumber id="precoPrato"
-								value="#{pedidoController.entity.valorPedido}"
+								value="#{pedidoController.entity.valorUnitarioPedido}"
 								disabled="#{pedidoController.entity.tipoPrato eq null}"
 								symbol="R$ " decimalSeparator="," thousandSeparator="." />
 
@@ -381,7 +381,8 @@
 										escape="false" />
 								</p:column> -->
 
-								<p:column headerText="Cliente" filterBy="#{item.cliente.id}-#{item.cliente.nome}"
+								<p:column headerText="Cliente"
+									filterBy="#{item.cliente.id}-#{item.cliente.nome}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.cliente.nome}">
@@ -426,7 +427,7 @@
 										<p:ajax event="save" update="tabListaPedidos,growl"
 											listener="#{pedidoController.atualizarPedido(item,'Q')}" />
 										<p:inputText value="#{item.quantidade}" maxlength="3"
-											style="width: 20%;" />
+											style="width: 100%;" />
 									</p:inplace>
 								</p:column>
 
@@ -460,12 +461,23 @@
 												<h:outputText id="display" />
 											</p:inplace>
 
+											<h:outputText value="Preço Unitário(Base de Cálculo):" />
+											<h:outputLabel value="#{item.valorUnitarioPedido}"
+												id="outvalorunitario">
+												<f:convertNumber currencySymbol="R$" type="currency"
+													locale="pt_br" maxFractionDigits="2" />
+											</h:outputLabel>
+
+
 											<h:outputText value="Valor Pedido:" />
-											<h:outputText value="#{item.valorPedido}" id="outvalorpedido" />
+											<h:outputLabel value="#{item.valorPedido}"
+												id="outvalorpedido">
+												<f:convertNumber currencySymbol="R$" type="currency"
+													locale="pt_br" maxFractionDigits="2" />
+											</h:outputLabel>
 
 											<h:outputText value="Endereço:" />
 											<h:outputText value="#{item.clienteEndereco.endereco}" />
-
 
 											<h:outputText value="Entregador:" />
 											<!-- <p:inplace id="inplaceEntregador"
@@ -488,9 +500,12 @@
 											</p:inplace>   -->
 											<h:outputText value="#{item.entregador.nome}" />
 
-											<h:outputText value="valorDiaria" />
-											<h:outputText value="#{item.valorDiariaEntregador}"
-												id="outValorDiaria" />
+											<h:outputText value="Valor diária" />
+											<h:outputLabel value="#{item.valorDiariaEntregador}"
+												id="outValorDiaria">
+												<f:convertNumber currencySymbol="R$" type="currency"
+													locale="pt_br" maxFractionDigits="2" />
+											</h:outputLabel>
 
 											<h:outputText value="Ordem de Entrega:" />
 											<h:outputText value="#{item.ordemEntrega}" />

@@ -77,6 +77,9 @@ public class Pedido extends BaseEntity {
 	@Column(name = "VL_DIARIA_ENTREGADOR")
 	private BigDecimal valorDiariaEntregador;
 
+	@Column(name = "VL_PRECO_UNITARIO")
+	private BigDecimal valorUnitarioPedido;
+
 	@Column(name = "VL_PEDIDO")
 	private BigDecimal valorPedido;
 
@@ -469,6 +472,14 @@ public class Pedido extends BaseEntity {
 
 	public void setPedidoDerivacaoContagem(List<PedidoDerivacaoContagem> pedidoDerivacaoContagem) {
 		this.pedidoDerivacaoContagem = pedidoDerivacaoContagem;
+	}
+
+	public BigDecimal getValorUnitarioPedido() {
+		return valorUnitarioPedido;
+	}
+
+	public void setValorUnitarioPedido(BigDecimal valorUnitarioPedido) {
+		this.valorUnitarioPedido = valorUnitarioPedido;
 	}
 
 }

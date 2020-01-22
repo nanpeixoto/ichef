@@ -69,7 +69,8 @@
 
 											<p:commandButton id="Search"
 												actionListener="#{pedidoOrdenacaoFinalizacaoController.filtrarPedidos()}"
-												icon="fa fa-search" update="growl,tabListaPedidos " styleClass="btn btn-warning" 
+												icon="fa fa-search" update="growl,tabListaPedidos "
+												styleClass="btn btn-warning"
 												style="font-size: 0.8em; width: 100%;" />
 
 										</p:panelGrid>
@@ -244,6 +245,23 @@
 														decimalSeparator="," thousandSeparator="."
 														decimalPlaces="0" />
 												</p:inplace>
+
+
+												<h:outputText value="Preço Unitário(Base de Cálculo):" />
+												<h:outputLabel value="#{item.valorUnitarioPedido}"
+													id="outvalorunitario">
+													<f:convertNumber currencySymbol="R$" type="currency"
+														locale="pt_br" maxFractionDigits="2" />
+												</h:outputLabel>
+
+
+												<h:outputText value="Valor Pedido:" />
+												<h:outputLabel value="#{item.valorPedido}"
+													id="outvalorpedido">
+													<f:convertNumber currencySymbol="R$" type="currency"
+														locale="pt_br" maxFractionDigits="2" />
+												</h:outputLabel>
+
 												<h:outputText value="Tipo:" />
 												<h:outputText
 													value="#{item.tipoPrato.descricao}-#{item.derivacao.descricao}" />

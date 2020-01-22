@@ -44,11 +44,17 @@
 	<field name="dataEntrega" class="java.util.Date">
 		<fieldDescription><![CDATA[dataEntrega]]></fieldDescription>
 	</field>
+	<field name="descricaoPrato" class="java.lang.String">
+		<fieldDescription><![CDATA[descricaoPrato]]></fieldDescription>
+	</field>
 	<field name="edicao" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[edicao]]></fieldDescription>
 	</field>
 	<field name="id" class="br.com.ichef.model.PedidoDerivacaoContagemID">
 		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="ordem" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ordem]]></fieldDescription>
 	</field>
 	<field name="quantidade" class="java.lang.Integer">
 		<fieldDescription><![CDATA[quantidade]]></fieldDescription>
@@ -64,6 +70,42 @@
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
 	</variable>
 
+		<group  name="prato" >
+			<groupExpression><![CDATA[$F{id}.getCodigoCardapioPrato()]]></groupExpression>
+			<groupHeader>
+			<band height="18"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="55"
+						y="0"
+						width="537"
+						height="18"
+						forecolor="#FFFFFF"
+						backcolor="#999999"
+						key="rectangle-2"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="68"
+						y="0"
+						width="508"
+						height="18"
+						key="textField-2"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoPrato}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
 		<group  name="derivacao" >
 			<groupExpression><![CDATA[$F{id}.getDescricao()]]></groupExpression>
 			<groupHeader>
@@ -95,8 +137,19 @@
 			<band height="19"  isSplitAllowed="false" >
 				<rectangle>
 					<reportElement
+						x="55"
+						y="0"
+						width="537"
+						height="18"
+						forecolor="#FFFFFF"
+						backcolor="#999999"
+						key="rectangle-3"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<rectangle>
+					<reportElement
 						x="68"
-						y="1"
+						y="0"
 						width="516"
 						height="18"
 						forecolor="#FFFFFF"
