@@ -25,7 +25,6 @@
 
 	<parameter name="pLogo" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="pListaContagem" isForPrompting="false" class="java.util.List"/>
 
 	<field name="auditoria" class="java.lang.String">
 		<fieldDescription><![CDATA[auditoria]]></fieldDescription>
@@ -138,6 +137,9 @@
 	<field name="valorPedido" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[valorPedido]]></fieldDescription>
 	</field>
+	<field name="pedidoDerivacaoContagem" class="java.util.List">
+		<fieldDescription><![CDATA[pedidoDerivacaoContagem]]></fieldDescription>
+	</field>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
@@ -149,7 +151,7 @@
 			<band height="26"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
-						x="1"
+						x="2"
 						y="3"
 						width="782"
 						height="23"
@@ -181,13 +183,13 @@
 		<group  name="Entregador" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
 			<groupExpression><![CDATA[$F{entregador}.getId()]]></groupExpression>
 			<groupHeader>
-			<band height="28"  isSplitAllowed="true" >
+			<band height="38"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						x="1"
-						y="0"
+						y="2"
 						width="782"
-						height="11"
+						height="18"
 						forecolor="#FFFFFF"
 						backcolor="#CCCCCC"
 						key="rectangle-1"/>
@@ -196,20 +198,20 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
-						y="0"
-						width="768"
-						height="11"
+						y="2"
+						width="769"
+						height="14"
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="11" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{entregador}.getNome()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="1"
-						y="10"
+						y="20"
 						width="155"
 						height="18"
 						key="textField-6"
@@ -217,29 +219,29 @@
 						positionType="Float"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Cliente"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="156"
-						y="10"
-						width="132"
+						y="20"
+						width="102"
 						height="18"
 						key="textField-7"
 						stretchType="RelativeToTallestObject"
 						positionType="Float"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Prato"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="288"
-						y="10"
+						x="257"
+						y="20"
 						width="142"
 						height="18"
 						key="textField-8"
@@ -247,14 +249,14 @@
 						positionType="Float"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Endereço"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="428"
-						y="10"
+						x="398"
+						y="20"
 						width="183"
 						height="18"
 						key="textField-9"
@@ -262,27 +264,27 @@
 						positionType="Float"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Localidade"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="647"
-						y="10"
-						width="135"
+						x="617"
+						y="20"
+						width="165"
 						height="18"
 						key="textField-10"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Forma Pag."]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="609"
-						y="10"
+						x="578"
+						y="20"
 						width="39"
 						height="18"
 						key="textField-11"
@@ -290,24 +292,24 @@
 						positionType="Float"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Qtd"]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="14"  isSplitAllowed="true" >
+			<band height="26"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="731"
 						y="2"
 						width="49"
-						height="12"
+						height="18"
 						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" rightPadding="2" bottomBorder="None" bottomBorderColor="#000000"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
+						<font/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{COUNT_PEDIDOS}]]></textFieldExpression>
 				</textField>
@@ -316,14 +318,24 @@
 						x="507"
 						y="2"
 						width="224"
-						height="12"
+						height="18"
 						key="staticText-8"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" rightPadding="2" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="11" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Total do Entregador:]]></text>
 				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="1"
+						y="21"
+						width="780"
+						height="5"
+						key="subreport-1"/>
+					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource( $F{pedidoDerivacaoContagem} )]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/RotaEntregaDerivacao.jasper"]]></subreportExpression>
+				</subreport>
 			</band>
 			</groupFooter>
 		</group>
@@ -348,7 +360,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Rota de Entrega]]></text>
+				<text><![CDATA[Rota de Entrega 1]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -484,7 +496,7 @@
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font size="7"/>
+						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cliente}.getId()+"-"+$F{cliente}.getNomeComTelefonePrincipal()]]></textFieldExpression>
 				</textField>
@@ -492,21 +504,21 @@
 					<reportElement
 						x="156"
 						y="0"
-						width="132"
+						width="102"
 						height="18"
 						key="textField"
 						stretchType="RelativeToTallestObject"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font size="7"/>
+						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getOrdem()+" - "+ $F{tipoPrato}. getDescricao() +" - "+$F{derivacao}.getDescricao()
 + (  $F{observacao}.equals( "-" ) ? "" : " ("+ $F{observacao}+")" )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="609"
+						x="578"
 						y="0"
 						width="39"
 						height="18"
@@ -515,13 +527,13 @@
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="7"/>
+						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{quantidade}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="428"
+						x="398"
 						y="0"
 						width="183"
 						height="18"
@@ -530,13 +542,13 @@
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font size="7"/>
+						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{localidade}.getDescricao()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="288"
+						x="257"
 						y="0"
 						width="142"
 						height="18"
@@ -545,21 +557,21 @@
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font size="7"/>
+						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getEndereco()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="647"
+						x="617"
 						y="0"
-						width="135"
+						width="165"
 						height="18"
 						key="textField"
 						stretchType="RelativeToTallestObject"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font size="7"/>
+						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[""]]></textFieldExpression>
 				</textField>
@@ -613,34 +625,7 @@
 			</band>
 		</pageFooter>
 		<summary>
-			<band height="36"  isSplitAllowed="true" >
-				<subreport  isUsingCache="true">
-					<reportElement
-						x="-31"
-						y="15"
-						width="838"
-						height="12"
-						key="subreport-2"/>
-					<subreportParameter  name="pLogo">
-						<subreportParameterExpression><![CDATA[$P{pLogo}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter  name="SUBREPORT_DIR">
-						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter  name="pListaContagem">
-						<subreportParameterExpression><![CDATA[$P{pListaContagem}]]></subreportParameterExpression>
-					</subreportParameter>
-					<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource( $P{pListaContagem} )]]></dataSourceExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/RotaEntregaContagem.jasper"]]></subreportExpression>
-				</subreport>
-				<break>
-					<reportElement
-						x="0"
-						y="6"
-						width="782"
-						height="0"
-						key="element-1"/>
-				</break>
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</summary>
 </jasperReport>

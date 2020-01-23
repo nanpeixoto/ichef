@@ -73,13 +73,13 @@
 		<group  name="prato" >
 			<groupExpression><![CDATA[$F{id}.getCodigoCardapioPrato()]]></groupExpression>
 			<groupHeader>
-			<band height="11"  isSplitAllowed="false" >
+			<band height="18"  isSplitAllowed="false" >
 				<rectangle>
 					<reportElement
 						x="205"
 						y="0"
 						width="391"
-						height="11"
+						height="18"
 						key="rectangle-4"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
@@ -88,12 +88,12 @@
 						x="205"
 						y="0"
 						width="354"
-						height="11"
+						height="18"
 						key="textField-2"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" topPadding="2" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoPrato}]]></textFieldExpression>
 				</textField>
@@ -116,7 +116,7 @@
 			</groupFooter>
 		</group>
 		<background>
-			<band height="1"  isSplitAllowed="true" >
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</background>
 		<title>
@@ -132,13 +132,13 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="11"  isSplitAllowed="false" >
+			<band height="18"  isSplitAllowed="false" >
 				<rectangle>
 					<reportElement
 						x="205"
 						y="0"
 						width="387"
-						height="11"
+						height="18"
 						forecolor="#FFFFFF"
 						backcolor="#999999"
 						key="rectangle-3"/>
@@ -149,7 +149,7 @@
 						x="241"
 						y="0"
 						width="352"
-						height="11"
+						height="18"
 						forecolor="#FFFFFF"
 						backcolor="#CCCCCC"
 						key="rectangle-1"
@@ -161,11 +161,11 @@
 						x="204"
 						y="0"
 						width="37"
-						height="11"
+						height="18"
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{quantidade}]]></textFieldExpression>
 				</textField>
@@ -174,12 +174,12 @@
 						x="240"
 						y="0"
 						width="347"
-						height="11"
+						height="18"
 						key="textField-1"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="3" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="7"/>
+						<font/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[""+$F{id}.getDescricao()]]></textFieldExpression>
 				</textField>

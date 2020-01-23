@@ -904,12 +904,12 @@ public class PedidoController extends BaseController {
 				pedidoDerivacaoContagem = pedidoDerivacaoContagemService.findByParameters(new PedidoDerivacaoContagem(),
 						pedidoVisitor);
 
-				Map<Long, List<PedidoDerivacaoContagem>> mapContagem = mountDerivacoes(pedidoDerivacaoContagem);
+				/*Map<Long, List<PedidoDerivacaoContagem>> mapContagem = mountDerivacoes(pedidoDerivacaoContagem);
 
 				if(mapContagem!=null )
 					for (Pedido pedido : pedidos) {
 						pedido.setPedidoDerivacaoContagem(mapContagem.get(pedido.getEntregador().getId()));
-					}
+					}*/
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -921,6 +921,7 @@ public class PedidoController extends BaseController {
 			} else {
 				try {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
+					setParametroReport("pListaContagem", pedidoDerivacaoContagem);
 					escreveRelatorioPDF("Rota", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();

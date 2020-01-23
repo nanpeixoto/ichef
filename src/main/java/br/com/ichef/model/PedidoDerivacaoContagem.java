@@ -26,6 +26,9 @@ public class PedidoDerivacaoContagem extends BaseEntity {
 
 	@Column(name = "NR_QTD")
 	private Integer quantidade;
+	
+	@Column(name = "NM_ENTREGADOR")
+	private String nomeEntregador;
 
 	@Column(name = "NR_ORDEM")
 	private Integer ordem;
@@ -126,5 +129,15 @@ public class PedidoDerivacaoContagem extends BaseEntity {
 	public void setDescricaoPrato(String descricaoPrato) {
 		this.descricaoPrato = descricaoPrato;
 	}
+
+	public String getNomeEntregador() {
+		return nomeEntregador;
+	}
+
+	public void setNomeEntregador(String nomeEntregador) {
+		this.nomeEntregador = nomeEntregador;
+	}
+	
+	
 
 }
