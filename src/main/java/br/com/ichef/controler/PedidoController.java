@@ -99,7 +99,7 @@ public class PedidoController extends BaseController {
 	// private FormaPagamento formaPagamento;
 
 	private List<Entregador> listaEntregador = new ArrayList<>();
-	// private Entregador entregador;
+	private Entregador entregador;
 
 	private List<FichaTecnicaPrato> listaPratos = new ArrayList<>();
 	// private FichaTecnicaPrato prato;
@@ -683,21 +683,17 @@ public class PedidoController extends BaseController {
 				}
 			}
 
-			if (tipoAlteracao.equals("F") ||  tipoAlteracao.equals("Q")  ) {
+			if (tipoAlteracao.equals("F") || tipoAlteracao.equals("Q")) {
 				if (pedido.getValorUnitarioPedido() == null) {
 					facesMessager.error(getRequiredMessage("Preço Unitário"));
 					return;
 				} else {
-					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido().multiply(new BigDecimal(pedido.getQuantidade()));
+					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
+							.multiply(new BigDecimal(pedido.getQuantidade()));
 					pedido.setValorPedido(valorTotalPedido);
 					pedido.setValorPago(valorTotalPedido);
 				}
 			}
-
-			
-			
-			
-
 
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
@@ -883,6 +879,10 @@ public class PedidoController extends BaseController {
 			filter.setCardapio(cardapioFilter);
 			filter.setEmpresa(userLogado.getEmpresaLogada());
 
+			if (getEntregador() != null) {
+				filter.setEntregador(getEntregador());
+			}
+
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
@@ -897,15 +897,19 @@ public class PedidoController extends BaseController {
 				order(pedidos);
 
 				pedidoVisitor.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
+				if (getEntregador() != null) {
+					pedidoVisitor.setCodigoEntregador((Long)getEntregador().getId());
+				}
 
 				pedidoDerivacaoContagem = pedidoDerivacaoContagemService.findByParameters(new PedidoDerivacaoContagem(),
 						pedidoVisitor);
 
 				Map<Long, List<PedidoDerivacaoContagem>> mapContagem = mountDerivacoes(pedidoDerivacaoContagem);
 
-				for (Pedido pedido : pedidos) {
-					pedido.setPedidoDerivacaoContagem(mapContagem.get(pedido.getEntregador().getId()));
-				}
+				if(mapContagem!=null )
+					for (Pedido pedido : pedidos) {
+						pedido.setPedidoDerivacaoContagem(mapContagem.get(pedido.getEntregador().getId()));
+					}
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1329,6 +1333,14 @@ public class PedidoController extends BaseController {
 
 	public void setDataEntrega(Date dataEntrega) {
 		this.dataEntrega = dataEntrega;
+	}
+
+	public Entregador getEntregador() {
+		return entregador;
+	}
+
+	public void setEntregador(Entregador entregador) {
+		this.entregador = entregador;
 	}
 
 }

@@ -22,10 +22,12 @@ public class PedidoVisitor extends FilterVisitor {
 
 	private Date dataEntregaInicial;
 	private Date dataEntregaFinal;
-	
+
 	private Long codigoCliente;
-	
+
 	private Long codigoEmpresa;
+
+	private Long codigoEntregador;
 
 	@Override
 	public void visitCriteria(Criteria criteria) {
@@ -55,37 +57,35 @@ public class PedidoVisitor extends FilterVisitor {
 					+ Util.dateToString(getDataFinal()) + "', '%d/%m/%Y' ) "));
 
 		if (getDataEntrega() != null)
-			criteria.add(Restrictions
-					.sqlRestriction(" date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEntrega()) + "'"));
+			criteria.add(Restrictions.sqlRestriction(
+					" date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEntrega()) + "'"));
 
 		if (getDataEntregaInicial() != null && getDataEntregaFinal() != null)
 			criteria.add(Restrictions.sqlRestriction(" dt_entrega between STR_TO_DATE( '"
 					+ Util.dateToString(getDataEntregaInicial()) + "', '%d/%m/%Y' ) and  STR_TO_DATE('"
 					+ Util.dateToString(getDataEntregaFinal()) + "', '%d/%m/%Y' ) "));
-		
-		if(getCodigoCliente()!=null) {
+
+		if (getCodigoCliente() != null) {
 			criteria.add(Restrictions.eq("cliente.id", getCodigoCliente()));
 		}
-		
-		if(getCodigoEmpresa()!=null) {
+
+		if (getCodigoEmpresa() != null) {
 			criteria.add(Restrictions.eq("id.codigoEmpresa", getCodigoEmpresa()));
 		}
 
+		if (getCodigoEntregador() != null) {
+			criteria.add(Restrictions.eq("id.codigoEntregador", getCodigoEntregador()));
+		}
+
 	}
-	
-	
 
 	public Long getCodigoEmpresa() {
 		return codigoEmpresa;
 	}
 
-
-
 	public void setCodigoEmpresa(Long codigoEmpresa) {
 		this.codigoEmpresa = codigoEmpresa;
 	}
-
-
 
 	public Date getData() {
 		return data;
@@ -149,6 +149,14 @@ public class PedidoVisitor extends FilterVisitor {
 
 	public void setCodigoCliente(Long codigoCliente) {
 		this.codigoCliente = codigoCliente;
+	}
+
+	public Long getCodigoEntregador() {
+		return codigoEntregador;
+	}
+
+	public void setCodigoEntregador(Long codigoEntregador) {
+		this.codigoEntregador = codigoEntregador;
 	}
 
 }

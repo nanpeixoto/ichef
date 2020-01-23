@@ -637,11 +637,11 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 						countPedidoConfirmado++;
 
 						clienteCarteiraService.saveOrUpdade(carteira);
-						service.finalizarPedido(pedido);
+					//	service.finalizarPedido(pedido);
 					} catch (Exception e) {
-						pedido.setSnConfirmado("N");
-						pedido.setLogLancamentoCarteira(e.getMessage());
-						service.finalizarPedido(pedido);
+						//pedido.setSnConfirmado("N");
+						//pedido.setLogLancamentoCarteira(e.getMessage());
+						//service.finalizarPedido(pedido);
 						e.printStackTrace();
 						return;
 					}
