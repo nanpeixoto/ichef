@@ -146,11 +146,11 @@
 		<group  name="Entrega" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
 			<groupExpression><![CDATA[ $F{dataEntrega}]]></groupExpression>
 			<groupHeader>
-			<band height="26"  isSplitAllowed="true" >
+			<band height="22"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						x="1"
-						y="3"
+						y="-1"
 						width="782"
 						height="23"
 						forecolor="#FFFFFF"
@@ -161,7 +161,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="1"
-						y="5"
+						y="2"
 						width="768"
 						height="18"
 						key="textField"/>
@@ -238,7 +238,7 @@
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="288"
+						x="325"
 						y="10"
 						width="142"
 						height="18"
@@ -253,7 +253,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="428"
+						x="465"
 						y="10"
 						width="183"
 						height="18"
@@ -281,11 +281,11 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="609"
+						x="288"
 						y="10"
 						width="39"
 						height="18"
-						key="textField-11"
+						key="textField-13"
 						stretchType="RelativeToTallestObject"
 						positionType="Float"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
@@ -488,7 +488,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cliente}.getId()+"-"+$F{cliente}.getNomeComTelefonePrincipal()]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="156"
 						y="0"
@@ -498,30 +498,18 @@
 						stretchType="RelativeToTallestObject"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Middle" isStyledText="true">
 						<font size="7"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getOrdem()+" - "+ $F{tipoPrato}. getDescricao() +" - "+$F{derivacao}.getDescricao()
-+ (  $F{observacao}.equals( "-" ) ? "" : " ("+ $F{observacao}+")" )]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getOrdem()+" - "+ $F{tipoPrato}. getDescricao() 
++" - "+$F{derivacao}.getDescricao()
++ (  $F{observacao}.equals( "-" ) ? "" : " ("+ $F{observacao}+")" )
++ ( !$F{cardapio}.getDataFormatada().equals(  $F{dataEntregaFormatada}) 
+? "<br></br>Cardapio:"+$F{cardapio}.getDescricaoComDiaSemana() : "")]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="609"
-						y="0"
-						width="39"
-						height="18"
-						key="textField"
-						stretchType="RelativeToTallestObject"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="7"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{quantidade}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="428"
+						x="465"
 						y="0"
 						width="183"
 						height="18"
@@ -536,7 +524,7 @@
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="288"
+						x="325"
 						y="0"
 						width="142"
 						height="18"
@@ -562,6 +550,21 @@
 						<font size="7"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="288"
+						y="0"
+						width="39"
+						height="18"
+						key="textField-14"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{quantidade}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
