@@ -18,7 +18,6 @@ import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
 import br.com.ichef.model.CardapioFichaPratoEmpresa;
 import br.com.ichef.model.Cliente;
-import br.com.ichef.model.ClienteCarteira;
 import br.com.ichef.model.ClienteEndereco;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Derivacao;
@@ -562,6 +561,22 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	}
 
+	private Pedido criarFiltroPedidosFinalizar() {
+
+		Pedido filter = new Pedido();
+		filter.setEmpresa(userLogado.getEmpresaLogada());
+
+		filter.setDataEntrega(getDataEntrega());
+
+		filter.setConfirmado(false);
+
+		if (getEntregador() != null) {
+			filter.setEntregador(getEntregador());
+		}
+
+		return filter;
+	}
+
 	private List<Pedido> obterPedidosFinalizacao() {
 
 		Pedido filter = new Pedido();
@@ -597,7 +612,16 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 				facesMessager.error("Selecione o Entregador para finalizar");
 				return;
 			}
-			List<Pedido> pedidosFinalizar = obterPedidosFinalizacao();
+			
+			String listaPedidos = service.findPedidosFinalizacao(criarFiltroPedidosFinalizar());
+			
+			if(listaPedidos!=null) {
+				service.finalizarPedido(listaPedidos, getUserLogado());
+				obterEntregasDia();
+			}
+			
+			
+			/*List<Pedido> pedidosFinalizar = obterPedidosFinalizacao();
 
 			int countPedidoConfirmado = 0;
 
@@ -651,7 +675,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 			if (countPedidoConfirmado > 0) {
 				obterEntregasDia();
-			}
+			}*/
 
 		} catch (Exception e) {
 			e.printStackTrace();

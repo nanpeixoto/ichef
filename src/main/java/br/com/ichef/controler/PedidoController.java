@@ -1000,61 +1000,7 @@ public class PedidoController extends BaseController {
 
 	}
 
-	public void finalizarListaPedidos() {
-		try {
-
-			obterEntregasDia();
-			// List<ClienteCarteira> listaCarteiras = new ArrayList<>();
-
-			for (Pedido pedido : lista) {
-				String log = null;
-
-				if (!pedido.isConfirmado()) {
-					try {
-						// if (pedido.getFormaPagamento().isCarteira()) {
-						ClienteCarteira carteira = new ClienteCarteira();
-						carteira.setCardapio(pedido.getCardapio());
-						carteira.setCliente(pedido.getCliente());
-						carteira.setData(pedido.getDataEntrega());
-						carteira.setDataCadastrado(new Date());
-						carteira.setDerivacao(pedido.getDerivacao());
-						carteira.setDescricao("Pedido REALIZADO em: " + formatarData.format(pedido.getDataCadastro()));
-						carteira.setEmpresa(pedido.getEmpresa());
-						carteira.setEmpresaLogada(userLogado.getEmpresaLogada());
-						carteira.setFichaTecnicaPrato(pedido.getCardapioFichaPrato().getFichaTecnicaPrato());
-						carteira.setFormaPagamento(pedido.getFormaPagamento());
-						carteira.setTipoCarteira("P");
-						carteira.setTipoPrato(pedido.getTipoPrato());
-						carteira.setUsuarioCadastro(userLogado);
-						carteira.setValorDevido(pedido.getValorPedido());
-						if (!pedido.getFormaPagamento().isCarteira() && !pedido.getFormaPagamento().isCortesia()) {
-							carteira.setValorPago(pedido.getValorPago());
-						}
-						carteira.setPedido(pedido);
-						log = "Lançamento Efetuado em Carteira";
-						pedido.setLogLancamentoCarteira(log);
-
-						pedido.setUsuarioFinalizacao(userLogado);
-						pedido.setDataFinalizacao(new Date());
-						pedido.setSnConfirmado("S");
-
-						clienteCarteiraService.saveOrUpdade(carteira);
-						service.finalizarPedido(pedido);
-					} catch (Exception e) {
-						pedido.setSnConfirmado("N");
-						pedido.setLogLancamentoCarteira(e.getMessage());
-						service.finalizarPedido(pedido);
-						e.printStackTrace();
-						return;
-					}
-				}
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	public void atualizarTodosEntregadores(Pedido pedido) {
 

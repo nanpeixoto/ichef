@@ -1,5 +1,6 @@
 package br.com.ichef.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,6 +33,12 @@ public class Dashboard extends BaseEntity {
 
 	@Column(name = "CD_EMPRESA")
 	private Long codigoEmpresa;
+
+	@Column(name = "VALOR_DEVIDO")
+	private BigDecimal valorRecebido;
+
+	@Column(name = "VALOR_PAGO")
+	private BigDecimal valorPago;
 
 	@Override
 	public Object getId() {
@@ -133,5 +140,23 @@ public class Dashboard extends BaseEntity {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public BigDecimal getValorRecebido() {
+		return valorRecebido;
+	}
+
+	public void setValorRecebido(BigDecimal valorRecebido) {
+		this.valorRecebido = valorRecebido;
+	}
+
+	public BigDecimal getValorPago() {
+		return valorPago;
+	}
+
+	public void setValorPago(BigDecimal valorPago) {
+		this.valorPago = valorPago;
+	}
+	
+	
 
 }
