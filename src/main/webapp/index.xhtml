@@ -19,68 +19,137 @@
 
 				Bem vindo ao <span class="text-aqua"> <i> <a
 						href="http://142.93.185.193:8080/iChef" target="_blank"
-						style="text-transform: none; text-decoration: none"> Cozinha de Chefe</a></i></span>! <br />
+						style="text-transform: none; text-decoration: none"> Cozinha
+							de Chefe</a></i></span>! <br />
 				<!--  <small>Utilizando <p:link value="Primefaces" href="http://primefaces.org" target="_blank"/>, <p:link value="Bootstrap"
 	                                                                                                  href="http://getbootstrap.com/" target="_blank"/> e
 	                <p:link value="Admin LTE" href="https://almsaeedstudio.com/themes/AdminLTE/index2.html" target="_blank"/> com
 	                <p:link value="JSF" href="https://javaserverfaces.java.net/" target="_blank"/>.
 	            </small> -->
 			</h2>
-			
-			
+
 
 
 			<div class="row">
-			
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<span class="info-box-icon bg-aqua"><i
+							class="fa fa-phone-volume"></i></span>
+
+						<div class="info-box-content">
+							<span class="info-box-text">Pedidos</span> <span
+								class="info-box-number">#{dashboardController.entity.quantidadeTotalPedidos}</span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
+				</div>
+				<!-- /.col -->
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<span class="info-box-icon bg-red"><i
+							class="fa fa-gift"></i></span>
+
+						<div class="info-box-content">
+							<span class="info-box-text">Cortesias</span> <span
+								class="info-box-number">#{dashboardController.entity.quantidadeTotalCortesias}</span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
+				</div>
+				<!-- /.col -->
+
+				<!-- fix for small devices only -->
+				<div class="clearfix visible-sm-block"></div>
+
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<span class="info-box-icon bg-green"><i
+							class="fa fa-google-wallet"></i></span>
+
+						<div class="info-box-content">
+							<span class="info-box-text">Total em Carteira</span> <span
+								class="info-box-number"> <h:outputLabel
+									value="#{dashboardController.entity.valorTotalRecebido}">
+									<f:convertNumber currencySymbol="R$" type="currency"
+										locale="pt_br" maxFractionDigits="2" /></h:outputLabel></span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
+				</div>
+				<!-- /.col -->
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<span class="info-box-icon bg-yellow"><i
+							class="fa fa-money"></i></span>
+
+						<div class="info-box-content">
+							<span class="info-box-text">Total Recebido</span> <span
+								class="info-box-number"> <h:outputLabel
+									value="#{dashboardController.entity.valorTotalPago}">
+									<f:convertNumber currencySymbol="R$" type="currency"
+										locale="pt_br" maxFractionDigits="2" /></h:outputLabel></span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+				</div>	
+				</div>
+				
+			<div class="row">
+
 				<div class="col-sm-6 col-xs-12">
 					<div class="info-box bg-yellow">
 						<span class="info-box-icon"><i class="fa fa-thumbs-o-down"></i></span>
 						<div class="info-box-content">
 							<span class="info-box-text">Lançamento em Carteira</span> <span
-								class="info-box-number">
-									<h:outputLabel value="#{dashboardController.entity.valorRecebido}"  >
-										<f:convertNumber  currencySymbol="R$" type="currency" locale="pt_br" maxFractionDigits="2"/>
-									</h:outputLabel>
-								</span>
+								class="info-box-number"> <h:outputLabel
+									value="#{dashboardController.entity.valorRecebido}">
+									<f:convertNumber currencySymbol="R$" type="currency"
+										locale="pt_br" maxFractionDigits="2" />
+								</h:outputLabel>
+							</span>
 							<div class="progress">
 								<div class="progress-bar" style="width: 100%"></div>
 							</div>
-							<span class="progress-description">Valor total lançado em carteira na data de hoje
-							</span>
+							<span class="progress-description">Valor total lançado em
+								carteira na data de hoje </span>
 						</div>
 						<!-- /.info-box-content -->
 					</div>
 					<!-- /.info-box -->
 				</div>
-				
+
 				<div class="col-sm-6 col-xs-12">
 					<div class="info-box bg-orange">
 						<span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 						<div class="info-box-content">
 							<span class="info-box-text">Valor Pago</span> <span
-								class="info-box-number">
-									<h:outputLabel value="#{dashboardController.entity.valorPago}"  >
-										<f:convertNumber  currencySymbol="R$" type="currency" locale="pt_br" maxFractionDigits="2"/>
-									</h:outputLabel>
-								</span>
+								class="info-box-number"> <h:outputLabel
+									value="#{dashboardController.entity.valorPago}">
+									<f:convertNumber currencySymbol="R$" type="currency"
+										locale="pt_br" maxFractionDigits="2" />
+								</h:outputLabel>
+							</span>
 							<div class="progress">
 								<div class="progress-bar" style="width: 100%"></div>
 							</div>
-							<span class="progress-description">Valor total pago em carteira na data de hoje
-							</span>
+							<span class="progress-description">Valor total pago em
+								carteira na data de hoje </span>
 						</div>
 						<!-- /.info-box-content -->
 					</div>
 					<!-- /.info-box -->
 				</div>
-				
-				
+
+
 				<div class="col-sm-6 col-xs-12">
 					<div class="info-box bg-aqua">
 						<span class="info-box-icon"><i class="fa fa-list"></i></span>
 						<div class="info-box-content">
 							<span class="info-box-text">Pedido</span> <span
-								class="info-box-number">#{dashboardController.entity.quantidadePedidos}</span>
+								class="info-box-number">#{dashboardController.entity.quantidadePedidos} (#{dashboardController.entity.quantidadeCortesias} cortesias)</span>
 							<div class="progress">
 								<div class="progress-bar" style="width: 100%"></div>
 							</div>
@@ -108,11 +177,11 @@
 					</div>
 					<!-- /.info-box -->
 				</div>
-				
-				
+
+
 				<div class="col-sm-6 col-xs-12">
 					<div class="info-box bg-olive">
-						<span class="info-box-icon"><i class="fa fa-list"></i></span>
+						<span class="info-box-icon"><i class="fa fa-server"></i></span>
 						<div class="info-box-content">
 							<span class="info-box-text">Fichas Técnicas de Prato</span> <span
 								class="info-box-number">#{dashboardController.entity.quantidadeFichaPratos}</span>
@@ -225,7 +294,7 @@
 				<!-- /.col -->
 			</div>
 			<div class="col-sm-12 col-xs-12">
-				<div style=" font-size: 10px;">
+				<div style="font-size: 10px;">
 					<p:schedule id="schedule" value="#{dashboardController.eventModel}"
 						widgetVar="myschedule" />
 

@@ -71,7 +71,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 	private String tipoItem;
 
 	private SelectOneRadio selectOneRadioMonstraPreparo;
-	
+
 	private boolean mostrarPrepato;
 
 	public void inicializar() {
@@ -240,13 +240,14 @@ public class FichaTecnicaPreparoController extends BaseController {
 		aproveitamento = 100l;
 		qtdLiquida = null;
 		setPreparo(null);
-		
+
 		try {
-			service.saveOrUpdade(entity);
+			if (entity.getId() != null) {
+				service.saveOrUpdade(entity);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 
@@ -299,7 +300,7 @@ public class FichaTecnicaPreparoController extends BaseController {
 
 			if (fichaTecnicaPreparoReferencia != null) {
 				BigDecimal quantidadeLiquiquidaCalculada = (fichaTecnicaPreparoInsumoReferencia.getQuantidadeLiquida()
-						.divide(new BigDecimal(fichaTecnicaPreparoReferencia.getTamanho()))).multiply(getQtdLiquida());
+						.divide(new BigDecimal(fichaTecnicaPreparoReferencia.getTamanho()), 2, RoundingMode.HALF_EVEN ) ).multiply(getQtdLiquida());
 				fichaInsumo.setQuantidadeLiquida(quantidadeLiquiquidaCalculada);
 			}
 

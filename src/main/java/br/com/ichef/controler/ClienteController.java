@@ -513,33 +513,37 @@ public class ClienteController extends BaseController {
 	public void adicionarEndereco() {
 		// if (!existeTelefonePrincipal(null)) {
 		ClienteEndereco endereco = new ClienteEndereco();
-		if (!existeLocalidade(getLocalidade())) {
-			if (!existeEnderecoPrincipal(null)) {
-				endereco.setDataCadastro(new Date());
+		if (getLocalidade() != null) {
+			if (!existeLocalidade(getLocalidade())) {
+				if (!existeEnderecoPrincipal(null)) {
+					endereco.setDataCadastro(new Date());
 
-				if (stsEnderecoPrincipal)
-					endereco.setPrincipal("S");
-				else
-					endereco.setPrincipal("N");
-				endereco.setEndereco(getEndereco());
-				endereco.setLocalidade(getLocalidade());
-				endereco.setUsuarioCadastro(getUserLogado());
-				endereco.setCliente(getEntity());
-				endereco.setUsuarioCadastro(getUserLogado());
-				endereco.setDataCadastro(new Date());
+					if (stsEnderecoPrincipal)
+						endereco.setPrincipal("S");
+					else
+						endereco.setPrincipal("N");
+					endereco.setEndereco(getEndereco());
+					endereco.setLocalidade(getLocalidade());
+					endereco.setUsuarioCadastro(getUserLogado());
+					endereco.setCliente(getEntity());
+					endereco.setUsuarioCadastro(getUserLogado());
+					endereco.setDataCadastro(new Date());
 
-				if (getEntity().getEnderecos() == null)
-					getEntity().setEnderecos(new ArrayList<ClienteEndereco>());
-				getEntity().getEnderecos().add(endereco);
+					if (getEntity().getEnderecos() == null)
+						getEntity().setEnderecos(new ArrayList<ClienteEndereco>());
+					getEntity().getEnderecos().add(endereco);
 
-				setStsEnderecoPrincipal(false);
-				setEndereco(null);
-				setLocalidade(null);
+					setStsEnderecoPrincipal(false);
+					setEndereco(null);
+					setLocalidade(null);
+				} else {
+					facesMessager.error("Já existe um endereco principal para esse cliente");
+				}
 			} else {
-				facesMessager.error("Já existe um endereco principal para esse cliente");
+				facesMessager.error("Endereco já adicionado para essa cliente");
 			}
 		} else {
-			facesMessager.error("Endereco já adicionado para essa cliente");
+			facesMessager.error("Nenhuma localidade Informada");
 		}
 
 	}
@@ -553,8 +557,10 @@ public class ClienteController extends BaseController {
 		}
 
 		ClienteVisitor visitor = new ClienteVisitor();
-		visitor.setTelefone(telefone.replace(" ", "").replace("(", "").replace(")", "").replace("+", "").replace("-", ""));
-		List<ClienteTelefone> telefonesClientes = clienteTelefoneService.findByParameters(new ClienteTelefone(), visitor);
+		visitor.setTelefone(
+				telefone.replace(" ", "").replace("(", "").replace(")", "").replace("+", "").replace("-", ""));
+		List<ClienteTelefone> telefonesClientes = clienteTelefoneService.findByParameters(new ClienteTelefone(),
+				visitor);
 		if (telefonesClientes != null && telefonesClientes.size() > 0) {
 			id = telefonesClientes.get(0).getCliente().getId();
 			return "cadastro-cliente.xhtml?faces-redirect=true&id=" + id;

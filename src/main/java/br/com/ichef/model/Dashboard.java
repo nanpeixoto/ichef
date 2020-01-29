@@ -33,12 +33,27 @@ public class Dashboard extends BaseEntity {
 
 	@Column(name = "CD_EMPRESA")
 	private Long codigoEmpresa;
+	
+	@Column(name = "QTD_CORTESIAS")
+	private Long quantidadeCortesias;
 
 	@Column(name = "VALOR_DEVIDO")
 	private BigDecimal valorRecebido;
 
 	@Column(name = "VALOR_PAGO")
 	private BigDecimal valorPago;
+
+	@Column(name = "VALOR_TOTAL_PAGO")
+	private BigDecimal valorTotalPago;
+
+	@Column(name = "VALOR_TOTAL_DEVIDO")
+	private BigDecimal valorTotalRecebido;
+
+	@Column(name = "QTD_TOTAL_CORTESIAS")
+	private Long quantidadeTotalCortesias;
+
+	@Column(name = "QTD_TOTAL_PEDIDOS")
+	private Long quantidadeTotalPedidos;
 
 	@Override
 	public Object getId() {
@@ -155,6 +170,46 @@ public class Dashboard extends BaseEntity {
 
 	public void setValorPago(BigDecimal valorPago) {
 		this.valorPago = valorPago;
+	}
+
+	public BigDecimal getValorTotalPago() {
+		return valorTotalPago;
+	}
+
+	public void setValorTotalPago(BigDecimal valorTotalPago) {
+		this.valorTotalPago = valorTotalPago;
+	}
+
+	public BigDecimal getValorTotalRecebido() {
+		return valorTotalRecebido;
+	}
+
+	public void setValorTotalRecebido(BigDecimal valorTotalRecebido) {
+		this.valorTotalRecebido = valorTotalRecebido;
+	}
+
+	public Long getQuantidadeTotalCortesias() {
+		return quantidadeTotalCortesias;
+	}
+
+	public void setQuantidadeTotalCortesias(Long quantidadeTotalCortesias) {
+		this.quantidadeTotalCortesias = quantidadeTotalCortesias;
+	}
+
+	public Long getQuantidadeTotalPedidos() {
+		return quantidadeTotalPedidos;
+	}
+
+	public void setQuantidadeTotalPedidos(Long quantidadeTotalPedidos) {
+		this.quantidadeTotalPedidos = quantidadeTotalPedidos;
+	}
+
+	public Long getQuantidadeCortesias() {
+		return quantidadeCortesias;
+	}
+
+	public void setQuantidadeCortesias(Long quantidadeCortesias) {
+		this.quantidadeCortesias = quantidadeCortesias;
 	}
 	
 	
