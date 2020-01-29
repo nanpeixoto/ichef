@@ -15,6 +15,8 @@ import br.com.ichef.model.Area;
 import br.com.ichef.model.AreaLocalidade;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.Localidade;
+import br.com.ichef.model.TipoPratoInsumo;
+import br.com.ichef.service.AreaLocalidadeService;
 import br.com.ichef.service.AreaService;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.LocalidadeService;
@@ -29,6 +31,9 @@ public class AreaController extends BaseController {
 
 	@Inject
 	private AreaService service;
+
+	@Inject
+	private AreaLocalidadeService areaLocalidadeService;
 
 	@Inject
 	private LocalidadeService localidadeService;
@@ -76,7 +81,7 @@ public class AreaController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		obterListas();
 	}
 
@@ -84,14 +89,14 @@ public class AreaController extends BaseController {
 
 		Localidade filter = new Localidade();
 		filter.setEmpresa(getUserLogado().getEmpresaLogada());
-		
+
 		filter.setAtivo(true);
-		
+
 		LocalidadeVisitor visitor = new LocalidadeVisitor();
 		visitor.setListaDesvinculadosDasAreas(true);
-		
+
 		empresas = empresaService.listAll(true);
-		
+
 		try {
 			localidades = localidadeService.findByParameters(filter, visitor);
 		} catch (Exception e) {
@@ -99,7 +104,7 @@ public class AreaController extends BaseController {
 		}
 
 	}
-	
+
 	public void adicionarLocalidade() {
 		boolean existe = false;
 		ArrayList<Localidade> listaLocal = new ArrayList<>();
@@ -152,15 +157,19 @@ public class AreaController extends BaseController {
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
-	public void excluirLocalidadesSelecionadas(AreaLocalidade local) {
-		List<AreaLocalidade> temp = new ArrayList<>();
+	public void excluirLocalidadesSelecionadas(AreaLocalidade itemExcluido) {
+		List<AreaLocalidade> temp = new ArrayList<AreaLocalidade>();
 		temp.addAll(entity.getLocalidades());
-		for (AreaLocalidade arealoc : entity.getLocalidades()) {
-			if (local.getLocalidade().getId().equals(arealoc.getLocalidade().getId()))
-				temp.remove(arealoc);
+		for (AreaLocalidade item : entity.getLocalidades()) {
+			if (itemExcluido.getLocalidade().getId().equals(item.getLocalidade().getId())) {
+				temp.remove(item);
+				areaLocalidadeService.excluir(item);
+			}
+
 		}
 		entity.getLocalidades().clear();
 		entity.getLocalidades().addAll(temp);
+		// service.calcularPercos(entity, configuracao);
 		updateComponentes("Stable");
 		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}

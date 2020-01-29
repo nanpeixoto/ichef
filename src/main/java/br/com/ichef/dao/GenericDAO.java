@@ -72,8 +72,8 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 				EntityManagerProducer producer = new EntityManagerProducer();
 				manager = producer.createEntityManager();
 
-			}  else {
-				manager.clear();
+			//}  else {
+			//	manager.clear();
 			}
 			tx = manager.getTransaction();
 			tx.begin();
