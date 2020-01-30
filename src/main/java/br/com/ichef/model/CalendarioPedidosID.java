@@ -15,6 +15,7 @@ public class CalendarioPedidosID implements Serializable {
 
 	@Column(name = "DT_ENTREGA")
 	private Date dataEntrega;
+ 
 
 	@Override
 	public int hashCode() {

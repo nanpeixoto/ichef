@@ -262,4 +262,13 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 	}
 
+	@Override
+	protected Pedido updateImpl(Pedido entity) throws Exception {
+
+		if (getManager().isOpen()) {
+			getManager().clear();
+		}
+		return super.updateImpl(entity);
+	}
+
 }

@@ -50,7 +50,10 @@ public class DashboardController extends BaseController {
 		try {
 			setEntity((service.findByParameters(filter)).get(0));
 
-			setCalendario(calendarioPedidosService.listAll());
+			CalendarioPedidos calendarioFilter = new CalendarioPedidos();
+			calendarioFilter.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
+			
+			setCalendario( calendarioPedidosService.findByParameters(calendarioFilter) );
 
 			montarCalendario(getCalendario());
 

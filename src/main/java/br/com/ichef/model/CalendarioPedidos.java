@@ -23,6 +23,9 @@ public class CalendarioPedidos extends BaseEntity {
 	@Column(name = "DS_CARDAPIO_FICHA")
 	private String descricaoCardapdioFicha;
 
+	@Column(name = "CD_EMPRESA")
+	private Long codigoEmpresa;
+
 	@Override
 	public Object getId() {
 		return id;
@@ -98,6 +101,14 @@ public class CalendarioPedidos extends BaseEntity {
 
 	public void setId(CalendarioPedidosID id) {
 		this.id = id;
+	}
+
+	public Long getCodigoEmpresa() {
+		return codigoEmpresa;
+	}
+
+	public void setCodigoEmpresa(Long codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
 	}
 
 }

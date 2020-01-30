@@ -28,10 +28,11 @@ public class AuthorizationListener implements PhaseListener {
 		String currentPage = facesContext.getViewRoot().getViewId();
 
 		boolean isLoginPage = (currentPage.lastIndexOf("login.xhtml") > -1);
+		boolean isPainel = ( currentPage.contains("painel_empresa")  );
 
 		HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
 
-		if (session == null)
+		if (session == null )
 
 		{
 			NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
@@ -39,7 +40,11 @@ public class AuthorizationListener implements PhaseListener {
 		} else {
 			Object currentUser = session.getAttribute("loggedUser");
 
-			if (!isLoginPage && (currentUser == null || currentUser == "")) {
+			if(isPainel) {
+				return;
+			}
+			
+			if ( !isLoginPage && (currentUser == null || currentUser == "")) {
 				NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
 				nh.handleNavigation(facesContext, null, "loginPage");
 

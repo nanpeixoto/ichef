@@ -79,7 +79,7 @@
 
 
 								<p:dataTable id="tabListaPedidos" widgetVar="itens"
-									paginator="false"
+									paginator="true" rows="10"
 									value="#{pedidoOrdenacaoFinalizacaoController.lista}"
 									var="item" rowKey="#{item.id}" reflow="true"
 									paginatorPosition="bottom" editable="true"
@@ -92,6 +92,27 @@
 									<!-- <f:facet name="header">
 										<h:outputText value="Entregador: #{pedidoOrdenacaoFinalizacaoController.entregador.nome}" /> 
 									</f:facet> -->
+									
+									<f:facet name="header">
+										<p:outputPanel style="text-align:right; margin-right:-10px"
+											styleClass="ui-widget-auxiliar">
+			
+											<h:outputText value="Pesquisar " escape="false" />
+			
+											<p:inputText id="globalFilter" onchange="PF('itens').filter();"
+												style="width:150px;" placeholder="Pesquisar"
+												styleClass="letras-maiusculas semClear" />
+											<h:outputText value=" " escape="false" />
+											<p:commandButton id="Search" value="" icon="fa fa-search"
+												style="font-size: 0.8em;width:3%;" />
+			
+			
+											<h:commandLink>
+						                    	<h:graphicImage value="#{resource['images/excel_icon.png']}" style="WIDTH: 29px;" /> 
+						                    	<p:dataExporter type="xls" target="TarefaTable" fileName="iChef - Lista Areas" />
+						               		</h:commandLink>
+										</p:outputPanel>
+									</f:facet>
 
 
 									<p:column width="5%">

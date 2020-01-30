@@ -450,6 +450,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
+			System.out.println("atualizarPedido1");
 
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
@@ -460,22 +461,31 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
 				}
 			} else if (tipoAlteracao.equals("F") || tipoAlteracao.equals("Q")) {
+				System.out.println("atualizarPedido1.1");
 				if (pedido.getValorUnitarioPedido() == null) {
 					facesMessager.error(getRequiredMessage("Preço Unitário"));
+					System.out.println("atualizarPedido1.2");
 					return;
+					
 				} else {
+					System.out.println("atualizarPedido1.3");
 					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
 							.multiply(new BigDecimal(pedido.getQuantidade()));
 					pedido.setValorPedido(valorTotalPedido);
 					pedido.setValorPago(valorTotalPedido);
+					System.out.println("atualizarPedido1.4");
 				}
 			}
+			
+			System.out.println("atualizarPedido2");
 
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
 
 			service.saveOrUpdade(pedido);
 
+			System.out.println("atualizarPedido3");
+			
 		} catch (Exception e) {
 			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
 			e.printStackTrace();

@@ -17,6 +17,6 @@
 		type="com.mchange.v2.c3p0.ComboPooledDataSource"
 		driverClass="com.mysql.jdbc.Driver" 
 		jdbcUrl="jdbc:mysql://64.227.53.17:3306/ichef" user="ichef"
-		password="ichef3440265" minPoolSize="2" maxPoolSize="350" />-->
-
+		password="ichef3440265" minPoolSize="2" maxPoolSize="350" />
+-->
 </Context>
