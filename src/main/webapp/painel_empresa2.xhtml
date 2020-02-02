@@ -6,17 +6,25 @@
 	xmlns:adm="http://github.com/adminfaces"
 	xmlns:p="http://primefaces.org/ui">
 
-	<h:head>
-	</h:head>
-	
-	<h:body>
-	
-	
-		<h:outputLabel value="#{painelController.obterDadosEmpresa2}"
-			escape="false" />
-	
-	
-	
-	
-	</h:body>
+<h:head>
+</h:head>
+
+<h:body>
+
+	<h:form>
+		<p:poll interval="600" update="painelempresa2" />
+
+
+		<h:outputLabel id="painelempresa2"
+			value="#{painelController.obterDadosEmpresa2}" escape="false" />
+
+	</h:form>
+
+
+
+
+
+
+
+</h:body>
 </html>
