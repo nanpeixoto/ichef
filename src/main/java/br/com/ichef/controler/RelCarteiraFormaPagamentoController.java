@@ -12,7 +12,6 @@ import javax.inject.Named;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.model.Empresa;
 import br.com.ichef.model.VwCarteiraFormaPagamento;
-import br.com.ichef.model.VwCarteiraFormaPagamentoID;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.VwCarteiraFormaPagamentoService;
 import br.com.ichef.util.FacesUtil;
@@ -47,22 +46,12 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 			return;
 		} else {
 
-			VwCarteiraFormaPagamentoVisitor visitor = new VwCarteiraFormaPagamentoVisitor();
-			visitor.setDataInicio(getDataInicial());
-			visitor.setDataFim(getDataFinal());
-
-			VwCarteiraFormaPagamentoID id = null;
-
-			if (empresa != null) {
-				id = new VwCarteiraFormaPagamentoID();
-				id.setCodigoEmpresa(getEmpresa().getId());
-			}
-
-			VwCarteiraFormaPagamento filter = new VwCarteiraFormaPagamento();
-			filter.setId(id);
+		 
+ 
 
 			try {
-				lista = service.findByParameters(filter, visitor);
+				lista = /*service.findByParameters(new VwCarteiraFormaPagamento(), visitor);*/
+						service.findByParameters( getDataInicial(), getDataFinal(), empresa.getId());
 
 			} catch (Exception e) {
 				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
@@ -73,8 +62,8 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 			} else {
 				try {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
-					setParametroReport("pDataInicio",getDataInicial());
-					setParametroReport("pDataFinal", getDataFinal() );
+					setParametroReport("pDataInicio", getDataInicial());
+					setParametroReport("pDataFinal", getDataFinal());
 					escreveRelatorioPDF("CarteiraFormaPagamento", true, lista);
 				} catch (Exception e) {
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
@@ -92,7 +81,7 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 	@PostConstruct
 	public void init() {
 		obterListas();
-		
+
 		empresa = userLogado.getEmpresaLogada();
 
 	}
@@ -100,7 +89,7 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 	private void obterListas() {
 		try {
 
-			setEmpresas( empresaService.empresasUsuario(userLogado) );
+			setEmpresas(empresaService.empresasUsuario(userLogado));
 
 		} catch (Exception e) {
 			e.printStackTrace();

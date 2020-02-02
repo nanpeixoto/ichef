@@ -605,7 +605,6 @@ public class PedidoController extends BaseController {
 			} else {
 				getLista().add(getEntity());
 				orderbyId(getLista());
-				;
 			}
 
 			updateComponentes("tabListaPedidos");
@@ -898,18 +897,20 @@ public class PedidoController extends BaseController {
 
 				pedidoVisitor.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
 				if (getEntregador() != null) {
-					pedidoVisitor.setCodigoEntregador((Long)getEntregador().getId());
+					pedidoVisitor.setCodigoEntregador((Long) getEntregador().getId());
 				}
 
 				pedidoDerivacaoContagem = pedidoDerivacaoContagemService.findByParameters(new PedidoDerivacaoContagem(),
 						pedidoVisitor);
 
-				/*Map<Long, List<PedidoDerivacaoContagem>> mapContagem = mountDerivacoes(pedidoDerivacaoContagem);
-
-				if(mapContagem!=null )
-					for (Pedido pedido : pedidos) {
-						pedido.setPedidoDerivacaoContagem(mapContagem.get(pedido.getEntregador().getId()));
-					}*/
+				/*
+				 * Map<Long, List<PedidoDerivacaoContagem>> mapContagem =
+				 * mountDerivacoes(pedidoDerivacaoContagem);
+				 * 
+				 * if(mapContagem!=null ) for (Pedido pedido : pedidos) {
+				 * pedido.setPedidoDerivacaoContagem(mapContagem.get(pedido.getEntregador().
+				 * getId())); }
+				 */
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -949,6 +950,28 @@ public class PedidoController extends BaseController {
 		return null;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void orderBrOrdemPedido(List<Pedido> pedido) {
+
+		Collections.sort(pedido, new Comparator() {
+
+			public int compare(Object o1, Object o2) {
+
+				String x1 = ((Pedido) o1).getEntregador().getNome();
+				String x2 = ((Pedido) o2).getEntregador().getNome();
+				int sComp = x1.compareTo(x2);
+
+				if (sComp != 0) {
+					return sComp;
+				}
+
+				Integer ordem1 = ((Pedido) o1).getCardapioFichaPrato().getOrdem();
+				Integer ordem2 = ((Pedido) o2).getCardapioFichaPrato().getOrdem();
+				return ordem1.compareTo(ordem2);
+			}
+		});
+	}
+
 	public void imprimirEtiquetaEntrega() {
 		setDataFinal(getDataInicial());
 		if (getDataInicial() == null || getDataFinal() == null) {
@@ -967,11 +990,21 @@ public class PedidoController extends BaseController {
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
+			if (getEntregador() != null) {
+				filter.setEntregador(getEntregador());
+			}
+
+			if (getCodigoCliente() != null) {
+				Cliente cliente = new Cliente();
+				cliente.setId(getCodigoCliente());
+
+				filter.setCliente(cliente);
+			}
+
 			List<Pedido> pedidos = new ArrayList<>();
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);
-
 			} catch (Exception e) {
 				e.printStackTrace();
 				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
@@ -982,6 +1015,7 @@ public class PedidoController extends BaseController {
 			} else {
 				try {
 					setParametroReport("logoEtiqtea", getImagem(LOGO_ETIQUETA));
+					orderBrOrdemPedido(pedidos);
 					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -999,8 +1033,6 @@ public class PedidoController extends BaseController {
 		imprimir();
 
 	}
-
-	
 
 	public void atualizarTodosEntregadores(Pedido pedido) {
 

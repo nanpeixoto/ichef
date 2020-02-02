@@ -218,6 +218,12 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 		return ordem;
 	}
 
+	public String setMarcacao(Integer ordem) {
+		if (this.getOrdem().equals(ordem))
+			return "X";
+		return "";
+	}
+
 	public void setOrdem(Integer ordem) {
 		this.ordem = ordem;
 	}
@@ -234,9 +240,9 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 	public void setDataAlteracao(Date dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
 	}
-	
+
 	public String getDescricaoPratoOrdem() {
-		return getOrdem()+"-"+getDescricao();
+		return getOrdem() + "-" + getDescricao();
 	}
 
 }

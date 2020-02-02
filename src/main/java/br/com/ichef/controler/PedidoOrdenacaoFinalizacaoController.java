@@ -119,6 +119,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 	private List<Entregador> listaEntregadorCarregada = new ArrayList<>();
 
 	SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
+	SimpleDateFormat formatarDataHora = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 	private Calendar componenteDataEntrega = new Calendar();
 
@@ -450,7 +451,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
-			System.out.println("atualizarPedido1");
+			System.out.println("atualizarPedido1 "+formatarDataHora.format(new Date()));
 
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
@@ -461,30 +462,29 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
 				}
 			} else if (tipoAlteracao.equals("F") || tipoAlteracao.equals("Q")) {
-				System.out.println("atualizarPedido1.1");
+				System.out.println("atualizarPedido1.1 "+formatarDataHora.format(new Date()));
 				if (pedido.getValorUnitarioPedido() == null) {
 					facesMessager.error(getRequiredMessage("Preço Unitário"));
-					System.out.println("atualizarPedido1.2");
+					System.out.println("atualizarPedido1.2 "+formatarDataHora.format(new Date()));
 					return;
 					
 				} else {
-					System.out.println("atualizarPedido1.3");
-					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
-							.multiply(new BigDecimal(pedido.getQuantidade()));
+					System.out.println("atualizarPedido1.3 "+formatarDataHora.format(new Date()));
+					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido().multiply(new BigDecimal(pedido.getQuantidade()));
 					pedido.setValorPedido(valorTotalPedido);
 					pedido.setValorPago(valorTotalPedido);
-					System.out.println("atualizarPedido1.4");
+					System.out.println("atualizarPedido1.4 " +formatarDataHora.format(new Date()));
 				}
 			}
 			
-			System.out.println("atualizarPedido2");
+			System.out.println("atualizarPedido2 "+formatarDataHora.format(new Date()));
 
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
 
 			service.saveOrUpdade(pedido);
 
-			System.out.println("atualizarPedido3");
+			System.out.println("atualizarPedido3 "+formatarDataHora.format(new Date()));
 			
 		} catch (Exception e) {
 			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
