@@ -54,6 +54,9 @@ public class Entregador extends BaseEntity {
 
 	@Column(name = "VL_DIARIA")
 	private BigDecimal valorDiaria;
+	
+	@Column(name = "NR_QTD_QUENTINHAS")
+	private Integer quantiadadeQuentinha;
 
 	@Transient
 	private boolean isAtivo;
@@ -146,11 +149,13 @@ public class Entregador extends BaseEntity {
 	}
 
 	public String getNome() {
-		return nome;
+		if (nome == null)
+			return nome;
+		return nome.toUpperCase();
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.nome = nome.toUpperCase();
 	}
 
 	public String getAtivo() {
@@ -206,5 +211,15 @@ public class Entregador extends BaseEntity {
 			return "Ativo".toUpperCase();
 		return "Inativo".toUpperCase();
 	}
+
+	public Integer getQuantiadadeQuentinha() {
+		return quantiadadeQuentinha;
+	}
+
+	public void setQuantiadadeQuentinha(Integer quantiadadeQuentinha) {
+		this.quantiadadeQuentinha = quantiadadeQuentinha;
+	}
+	
+	
 
 }

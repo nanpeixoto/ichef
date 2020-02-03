@@ -3,6 +3,7 @@ package br.com.ichef.controler;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -173,6 +174,7 @@ public class PedidoController extends BaseController {
 			Collections.sort(listaCardapio);
 			getEntity().setCardapio(listaCardapio.get(0));
 			listaCardapioPrato = listaCardapio.get(0).getPratos();
+			Collections.sort(listaCardapioPrato);
 		} else {
 			FacesUtil.addErroMessage("Nenhum Cardapio encontrado, cadastre um cardapio para continuar");
 
@@ -189,6 +191,7 @@ public class PedidoController extends BaseController {
 		cardapio = getEntity().getCardapio();
 		listaCardapioPrato = cardapio.getPratos();
 
+		Collections.sort(listaCardapioPrato);
 		if (isEntregaDataCardapio())
 			getEntity().setDataEntrega(cardapio.getData());
 
@@ -433,6 +436,11 @@ public class PedidoController extends BaseController {
 		if (!getEntity().getCliente().isDesabilitado()) {
 			if (getEntity().getCliente() != null) {
 				for (ClienteEndereco endCliente : getEntity().getCliente().getEnderecos()) {
+					if (endCliente.getLocalidade() == null) {
+						facesMessager
+								.error("Nenhuma localidade cadastradado para esse cliente, favor revisar o cadastro");
+						return;
+					}
 					if (endCliente.getLocalidade().getEmpresa().getId().equals(userLogado.getEmpresaLogada().getId()))
 						listaEnderecos.add(endCliente);
 					if (endCliente.isEndPrincipal() && endCliente.getLocalidade().getEmpresa().getId()
@@ -545,6 +553,8 @@ public class PedidoController extends BaseController {
 			if (getEntity().getEntregador() == null) {
 				facesMessager.error(getRequiredMessage("Entregador"));
 				return;
+			} else {
+
 			}
 
 			// ORDEM
@@ -556,6 +566,19 @@ public class PedidoController extends BaseController {
 			// VERFICO A QUANTIDADE
 			Long quantidadeJaPedida = getQuantidadeDisponivel();
 			CardapioFichaPratoEmpresa fichaEmpresaLogada = obterFichaEmpresaLogada();
+
+			// ENTREGADOR
+			if (getEntity().getEntregador() == null) {
+				facesMessager.error(getRequiredMessage("Entregador"));
+				return;
+			} else {
+				if (getEntity().getEntregador().getQuantiadadeQuentinha() != null
+						&& ((quantidadeJaPedida + getEntity().getQuantidade()) > getEntity().getEntregador()
+								.getQuantiadadeQuentinha())) {
+					facesMessager.error("Quantidade máxima do Entregador já atingida");
+					return;
+				}
+			}
 
 			if (!fichaEmpresaLogada.isPodeVenderAcimaDoLimite()
 					&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
@@ -1219,6 +1242,7 @@ public class PedidoController extends BaseController {
 	}
 
 	public List<CardapioFichaPrato> getListaCardapioPrato() {
+		// Collections.sort(listaCardapioPrato);
 		return listaCardapioPrato;
 	}
 
