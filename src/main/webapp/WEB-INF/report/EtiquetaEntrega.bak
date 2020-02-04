@@ -30,9 +30,6 @@
 	<field name="auditoria" class="java.lang.String">
 		<fieldDescription><![CDATA[auditoria]]></fieldDescription>
 	</field>
-	<field name="cardapio" class="br.com.ichef.model.Cardapio">
-		<fieldDescription><![CDATA[cardapio]]></fieldDescription>
-	</field>
 	<field name="cardapioFichaPrato" class="br.com.ichef.model.CardapioFichaPrato">
 		<fieldDescription><![CDATA[cardapioFichaPrato]]></fieldDescription>
 	</field>
@@ -45,26 +42,20 @@
 	<field name="clienteEndereco" class="br.com.ichef.model.ClienteEndereco">
 		<fieldDescription><![CDATA[clienteEndereco]]></fieldDescription>
 	</field>
+	<field name="codigoPedido" class="java.lang.Long">
+		<fieldDescription><![CDATA[codigoPedido]]></fieldDescription>
+	</field>
 	<field name="columnOrderBy" class="java.lang.String">
 		<fieldDescription><![CDATA[columnOrderBy]]></fieldDescription>
 	</field>
 	<field name="confirmado" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[confirmado]]></fieldDescription>
 	</field>
-	<field name="dataAlteracao" class="java.util.Date">
-		<fieldDescription><![CDATA[dataAlteracao]]></fieldDescription>
-	</field>
-	<field name="dataCadastro" class="java.util.Date">
-		<fieldDescription><![CDATA[dataCadastro]]></fieldDescription>
-	</field>
 	<field name="dataEntrega" class="java.util.Date">
 		<fieldDescription><![CDATA[dataEntrega]]></fieldDescription>
 	</field>
 	<field name="dataEntregaFormatada" class="java.lang.String">
 		<fieldDescription><![CDATA[dataEntregaFormatada]]></fieldDescription>
-	</field>
-	<field name="dataFinalizacao" class="java.util.Date">
-		<fieldDescription><![CDATA[dataFinalizacao]]></fieldDescription>
 	</field>
 	<field name="dataFormatadaPedido" class="java.lang.String">
 		<fieldDescription><![CDATA[dataFormatadaPedido]]></fieldDescription>
@@ -84,9 +75,6 @@
 	<field name="fichaTecnicaPratoTipo" class="br.com.ichef.model.FichaTecnicaPratoTipo">
 		<fieldDescription><![CDATA[fichaTecnicaPratoTipo]]></fieldDescription>
 	</field>
-	<field name="formaPagamento" class="br.com.ichef.model.FormaPagamento">
-		<fieldDescription><![CDATA[formaPagamento]]></fieldDescription>
-	</field>
 	<field name="id" class="java.lang.Object">
 		<fieldDescription><![CDATA[id]]></fieldDescription>
 	</field>
@@ -105,14 +93,8 @@
 	<field name="ordemEntrega" class="java.lang.Integer">
 		<fieldDescription><![CDATA[ordemEntrega]]></fieldDescription>
 	</field>
-	<field name="precoCustoPorcao" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[precoCustoPorcao]]></fieldDescription>
-	</field>
-	<field name="precoVendaReceita" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[precoVendaReceita]]></fieldDescription>
-	</field>
-	<field name="precoVendaTipoPrato" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[precoVendaTipoPrato]]></fieldDescription>
+	<field name="pedidoDerivacaoContagem" class="java.util.List">
+		<fieldDescription><![CDATA[pedidoDerivacaoContagem]]></fieldDescription>
 	</field>
 	<field name="quantidade" class="java.lang.Integer">
 		<fieldDescription><![CDATA[quantidade]]></fieldDescription>
@@ -123,28 +105,13 @@
 	<field name="tipoPrato" class="br.com.ichef.model.TipoPrato">
 		<fieldDescription><![CDATA[tipoPrato]]></fieldDescription>
 	</field>
-	<field name="usuarioAlteracao" class="br.com.ichef.model.Usuario">
-		<fieldDescription><![CDATA[usuarioAlteracao]]></fieldDescription>
-	</field>
-	<field name="usuarioCadastro" class="br.com.ichef.model.Usuario">
-		<fieldDescription><![CDATA[usuarioCadastro]]></fieldDescription>
-	</field>
-	<field name="usuarioFinalizacao" class="br.com.ichef.model.Usuario">
-		<fieldDescription><![CDATA[usuarioFinalizacao]]></fieldDescription>
-	</field>
-	<field name="valorDiariaEntregador" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[valorDiariaEntregador]]></fieldDescription>
-	</field>
-	<field name="valorPedido" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[valorPedido]]></fieldDescription>
-	</field>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
 	</variable>
 
-		<group  name="Entregador" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
-			<groupExpression><![CDATA[$F{entregador}.getId()]]></groupExpression>
+		<group  name="ordemPrato" >
+			<groupExpression><![CDATA[$F{cardapioFichaPrato}.getOrdem()]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -154,8 +121,8 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="ordemPrato" >
-			<groupExpression><![CDATA[$F{cardapioFichaPrato}.getOrdem()]]></groupExpression>
+		<group  name="Entregador" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
+			<groupExpression><![CDATA[$F{entregador}.getId()]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -260,7 +227,7 @@
 					<textElement>
 						<font fontName="Arial" pdfFontName="Helvetica" size="9" isBold="false" isItalic="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{derivacao}.getDescricao()+
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{tipoPrato}.getDescricaoSemQuentinha()+$F{derivacao}.getDescricao()+
 ( $F{observacao}!=null && !$F{observacao}.equals("-" ) ? " obs:"+$F{observacao} : "" )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
@@ -312,7 +279,7 @@
 					<textElement textAlignment="Left">
 						<font fontName="Arial" size="9"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["@cozinhadechefe"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["@cozinhadechef"]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

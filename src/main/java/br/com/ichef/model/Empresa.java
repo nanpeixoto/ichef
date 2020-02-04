@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -54,17 +57,21 @@ public class Empresa extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
 	@OneToMany(mappedBy = "empresa",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CIDADE")
 	private Cidade cidade;
 
@@ -75,6 +82,7 @@ public class Empresa extends BaseEntity {
 	private String nomeFantasia;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_LOCALIDADE")
 	private Localidade localidade;
 

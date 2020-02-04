@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -24,6 +27,7 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Id
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CLIENTE")
 	private Cliente cliente;
 
@@ -32,6 +36,7 @@ public class VwClienteSaldo extends BaseEntity {
 
 	// bi-directional many-to-one association to AreaLocalidade
 	@OneToMany(mappedBy = "cliente")
+	@Fetch(FetchMode.SUBSELECT)
 	private List<VwClienteCarteiraSaldo> saldos;
 
 	@Override

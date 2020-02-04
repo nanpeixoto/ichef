@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 /**
@@ -32,6 +35,7 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	private Long id;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_INSUMO")
 	private Insumo insumo;
 
@@ -57,10 +61,12 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	private String ativo;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TECNICA_PREPATO")
 	private FichaTecnicaPreparo fichaTecnicaPreparo;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TEC_PERPARO_REFERENCIA")
 	private FichaTecnicaPreparo fichaTecnicaPreparoReferencia;
 

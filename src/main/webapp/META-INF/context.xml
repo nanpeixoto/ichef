@@ -9,7 +9,7 @@
 		factory="org.apache.naming.factory.BeanFactory"
 		type="com.mchange.v2.c3p0.ComboPooledDataSource"
 		driverClass="com.mysql.jdbc.Driver" 
-		jdbcUrl="jdbc:mysql://localhost:3306/ichef" user="ichef"
+		jdbcUrl="jdbc:mysql://localhost:3306/ichef?autoReconnect=true" user="ichef"
 		password="ichef" minPoolSize="2" maxPoolSize="350" />
 
 	<!-- PRD <Resource name="jdbc/ichefDB" auth="Container"

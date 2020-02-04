@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.ichef.arquitetura.BaseEntity;
@@ -50,11 +52,12 @@ public class Usuario extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
-	@NotEmpty
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlterado;
 
@@ -71,6 +74,7 @@ public class Usuario extends BaseEntity {
 	private String senha;
 
 	@OneToMany(mappedBy = "usuario",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 	
 	@Transient

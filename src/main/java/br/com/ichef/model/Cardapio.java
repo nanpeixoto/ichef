@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.Util;
 
@@ -32,10 +35,12 @@ public class Cardapio extends BaseEntity implements Comparable<Cardapio> {
 	private Long id;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
@@ -58,6 +63,7 @@ public class Cardapio extends BaseEntity implements Comparable<Cardapio> {
 	private boolean isAtivo;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.JOIN)
 	private List<CardapioFichaPrato> pratos;
 
 	public Usuario getUsuarioAlteracao() {

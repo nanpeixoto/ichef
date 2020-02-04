@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.primefaces.model.SelectableDataModel;
 
 import br.com.ichef.arquitetura.BaseEntity;
@@ -27,6 +29,7 @@ public class AreaLocalidade extends BaseEntity  implements  SelectableDataModel<
 	private Long id;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_LOCALIDADE")
 	private Localidade localidade;
 
@@ -37,10 +40,12 @@ public class AreaLocalidade extends BaseEntity  implements  SelectableDataModel<
 	private Date dataAlteracao;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
@@ -48,6 +53,7 @@ public class AreaLocalidade extends BaseEntity  implements  SelectableDataModel<
 	private String ativo;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_AREA")
 	private Area area;
 

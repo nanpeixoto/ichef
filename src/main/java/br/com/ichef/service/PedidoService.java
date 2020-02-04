@@ -14,6 +14,7 @@ import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Pedido;
 import br.com.ichef.model.Usuario;
+import br.com.ichef.util.Util;
 
 public class PedidoService extends GenericDAO<Pedido> {
 	private static final long serialVersionUID = 1L;
@@ -79,6 +80,30 @@ public class PedidoService extends GenericDAO<Pedido> {
 						+ " fROM pedido p, tip_prato tp " + " WHERE   CD_CARDAPIO_PRATO = "
 						+ pedido.getCardapioFichaPrato().getId() + " and cd_empresa = " + pedido.getEmpresa().getId()
 						+ " and p.CD_TIP_PRATO = tp.CD_TIP_PRATO ");
+		try {
+			if (!getManager().isOpen()) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				setManager(producer.createEntityManager());
+			} else {
+				getManager().clear();
+			}
+
+			Query query = getManager().createNativeQuery(sb.toString());
+			int count = query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
+			return count;
+		} catch (NoResultException e) {
+			return 0;
+		}
+
+	}
+	
+	@Transacional
+	public Integer findQtdPedidoPratoEntregador(Pedido pedido) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(
+				" SELECT   sum( NR_QTD )   nr_total_pedido "
+						+ " fROM pedido p " + " WHERE    cd_entregador = " + pedido.getEntregador().getId()
+						+ " and date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(pedido.getDataEntrega()) + "'");
 		try {
 			if (!getManager().isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();

@@ -3,7 +3,6 @@ package br.com.ichef.controler;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -23,7 +22,6 @@ import br.com.ichef.model.Cardapio;
 import br.com.ichef.model.CardapioFichaPrato;
 import br.com.ichef.model.CardapioFichaPratoEmpresa;
 import br.com.ichef.model.Cliente;
-import br.com.ichef.model.ClienteCarteira;
 import br.com.ichef.model.ClienteEndereco;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Derivacao;
@@ -36,6 +34,7 @@ import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
 import br.com.ichef.model.PedidoDerivacaoContagem;
 import br.com.ichef.model.PedidoDerivacaoContagemID;
+import br.com.ichef.model.PedidoEtiqueta;
 import br.com.ichef.model.TipoPrato;
 import br.com.ichef.model.VwTipoPratoPreco;
 import br.com.ichef.service.CardapioService;
@@ -46,6 +45,7 @@ import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.EntregadorService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.PedidoDerivacaoContagemService;
+import br.com.ichef.service.PedidoEtiquetaService;
 import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.service.VwTipoPratoPrecoService;
@@ -63,6 +63,9 @@ public class PedidoController extends BaseController {
 
 	@Inject
 	private PedidoService service;
+
+	@Inject
+	private PedidoEtiquetaService pedidoEtiquetaService;
 
 	@Inject
 	private VwTipoPratoPrecoService vwTipoPratoPrecoService;
@@ -146,6 +149,7 @@ public class PedidoController extends BaseController {
 	private Date dataEntrega;
 
 	private boolean entregaDataCardapio;
+	private boolean antesNoveEMeia;
 
 	@PostConstruct
 	public void init() {
@@ -156,6 +160,8 @@ public class PedidoController extends BaseController {
 
 		setEntregaDataCardapio(true);
 		setDataEntrega(new Date());
+		
+		setAntesNoveEMeia(true);
 
 	}
 
@@ -406,6 +412,22 @@ public class PedidoController extends BaseController {
 
 	}
 
+	public int getQuantidadePedidoEntregador() {
+		try {
+			int totalPedido;
+
+			totalPedido = service.findQtdPedidoPratoEntregador(entity);
+
+			return totalPedido;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return 0;
+
+	}
+
 	private CardapioFichaPratoEmpresa obterFichaEmpresaLogada() {
 		CardapioFichaPratoEmpresa fichaEmpresaLoga = null;
 		for (CardapioFichaPratoEmpresa fichaEmpresa : getEntity().getCardapioFichaPrato().getFichaPratoEmpresa()) {
@@ -566,6 +588,8 @@ public class PedidoController extends BaseController {
 			// VERFICO A QUANTIDADE
 			Long quantidadeJaPedida = getQuantidadeDisponivel();
 			CardapioFichaPratoEmpresa fichaEmpresaLogada = obterFichaEmpresaLogada();
+			
+			int qtdPedidoPratoEntregador =  getQuantidadePedidoEntregador();
 
 			// ENTREGADOR
 			if (getEntity().getEntregador() == null) {
@@ -573,9 +597,9 @@ public class PedidoController extends BaseController {
 				return;
 			} else {
 				if (getEntity().getEntregador().getQuantiadadeQuentinha() != null
-						&& ((quantidadeJaPedida + getEntity().getQuantidade()) > getEntity().getEntregador()
-								.getQuantiadadeQuentinha())) {
-					facesMessager.error("Quantidade máxima do Entregador já atingida");
+						&& ((qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity().getEntregador().getQuantiadadeQuentinha())
+						) {
+					facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "+ (getEntity().getEntregador().getQuantiadadeQuentinha()-qtdPedidoPratoEntregador));
 					return;
 				}
 			}
@@ -995,6 +1019,28 @@ public class PedidoController extends BaseController {
 		});
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void orderBrOrdemPedidoEtiqueta(List<PedidoEtiqueta> pedido) {
+
+		Collections.sort(pedido, new Comparator() {
+
+			public int compare(Object o1, Object o2) {
+
+				String x1 = ((PedidoEtiqueta) o1).getEntregador().getNome();
+				String x2 = ((PedidoEtiqueta) o2).getEntregador().getNome();
+				int sComp = x1.compareTo(x2);
+
+				if (sComp != 0) {
+					return sComp;
+				}
+
+				Integer ordem1 = ((PedidoEtiqueta) o1).getCardapioFichaPrato().getOrdem();
+				Integer ordem2 = ((PedidoEtiqueta) o2).getCardapioFichaPrato().getOrdem();
+				return ordem1.compareTo(ordem2);
+			}
+		});
+	}
+
 	public void imprimirEtiquetaEntrega() {
 		setDataFinal(getDataInicial());
 		if (getDataInicial() == null || getDataFinal() == null) {
@@ -1005,13 +1051,15 @@ public class PedidoController extends BaseController {
 			Cardapio cardapioFilter = new Cardapio();
 			cardapioFilter.setAtivo("S");
 
-			Pedido filter = new Pedido();
-			filter.setCardapio(cardapioFilter);
+			PedidoEtiqueta filter = new PedidoEtiqueta();
 			filter.setEmpresa(userLogado.getEmpresaLogada());
 
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
 			pedidoVisitor.setDataEntregaInicial(getDataInicial());
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
+			pedidoVisitor.setLimitarImpressaoPorHorarioExtra(true);
+			pedidoVisitor.setAntesNoveeTrinta(isAntesNoveEMeia());
+			
 
 			if (getEntregador() != null) {
 				filter.setEntregador(getEntregador());
@@ -1022,12 +1070,13 @@ public class PedidoController extends BaseController {
 				cliente.setId(getCodigoCliente());
 
 				filter.setCliente(cliente);
+				pedidoVisitor.setLimitarImpressaoPorHorarioExtra(false);
 			}
 
-			List<Pedido> pedidos = new ArrayList<>();
+			List<PedidoEtiqueta> pedidos = new ArrayList<>();
 
 			try {
-				pedidos = service.findByParameters(filter, pedidoVisitor);
+				pedidos = pedidoEtiquetaService.findByParameters(filter, pedidoVisitor);
 			} catch (Exception e) {
 				e.printStackTrace();
 				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
@@ -1038,7 +1087,7 @@ public class PedidoController extends BaseController {
 			} else {
 				try {
 					setParametroReport("logoEtiqtea", getImagem(LOGO_ETIQUETA));
-					orderBrOrdemPedido(pedidos);
+					orderBrOrdemPedidoEtiqueta(pedidos);
 					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -1344,6 +1393,14 @@ public class PedidoController extends BaseController {
 
 	public void setEntregador(Entregador entregador) {
 		this.entregador = entregador;
+	}
+
+	public boolean isAntesNoveEMeia() {
+		return antesNoveEMeia;
+	}
+
+	public void setAntesNoveEMeia(boolean antesNoveEMeia) {
+		this.antesNoveEMeia = antesNoveEMeia;
 	}
 
 }

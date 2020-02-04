@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.JSFUtil;
 
@@ -31,10 +34,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	private Long id;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
@@ -73,10 +78,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 
 	// bi-directional many-to-one association to FichaTecnicaPratoPreparo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos;
 
 	// bi-directional many-to-one association to FichaTecnicaPratoTipo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<FichaTecnicaPratoTipo> fichaTecnicaPratoTipos;
 
 	@Transient

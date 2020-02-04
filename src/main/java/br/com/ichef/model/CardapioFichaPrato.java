@@ -15,6 +15,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
@@ -43,16 +46,19 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 	private Integer ordem;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	// bi-directional many-to-one association to Cardapio
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO")
 	private Cardapio cardapio;
 
 	// bi-directional many-to-one association to FichaTecnicaPrato
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TECNICA_PRATO")
 	private FichaTecnicaPrato fichaTecnicaPrato;
 
@@ -60,6 +66,7 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 	private String venderAcimaDoLimite;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
@@ -71,6 +78,7 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 
 	// bi-directional many-to-one association to AreaLocalidade
 	@OneToMany(mappedBy = "cardapioFichaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SELECT)
 	private List<CardapioFichaPratoEmpresa> fichaPratoEmpresa;
 
 	public boolean isPodeVenderAcimaDoLimite() {

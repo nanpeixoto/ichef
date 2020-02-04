@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 
 
@@ -32,11 +35,13 @@ public class UsuarioEmpresa extends BaseEntity {
 
 	//bi-directional many-to-one association to Empresa
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name="CD_EMPRESA")
 	private Empresa empresa;
 
 	//bi-directional many-to-one association to Usuario
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name="CD_USUARIO")
 	private Usuario usuario;
 

@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.JSFUtil;
 
@@ -47,18 +50,22 @@ public class Insumo extends BaseEntity {
 	private Date dataAlteracao;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_TIP_INSUMO")
 	private TipoInsumo tipoInsumo;
 
 	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_UNIDADE")
 	private Unidade unidade;
 
@@ -66,9 +73,11 @@ public class Insumo extends BaseEntity {
 	private boolean isAtivo;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<InsumoPreco> precos;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo")
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<VwInsumoPreco> ultimoPreco;
 
 	public boolean isAtivo() {

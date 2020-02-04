@@ -29,6 +29,10 @@ public class PedidoVisitor extends FilterVisitor {
 
 	private Long codigoEntregador;
 
+	private boolean limitarImpressaoPorHorarioExtra;
+
+	private boolean antesNoveeTrinta;
+
 	@Override
 	public void visitCriteria(Criteria criteria) {
 		if (getData() != null && getDataCardapio() == null)
@@ -75,6 +79,14 @@ public class PedidoVisitor extends FilterVisitor {
 
 		if (getCodigoEntregador() != null) {
 			criteria.add(Restrictions.eq("id.codigoEntregador", getCodigoEntregador()));
+		}
+
+		if (limitarImpressaoPorHorarioExtra) {
+			if (getAntesNoveeTrinta())
+				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  <= STR_TO_DATE('" + Util.dateToString(getDataEntregaInicial()) + " 09:30','%d/%m/%Y %h:%i')"));
+			else {
+				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro > STR_TO_DATE('" + Util.dateToString(getDataEntregaInicial()) + " 09:30','%d/%m/%Y %h:%i')"));
+			}
 		}
 
 	}
@@ -157,6 +169,22 @@ public class PedidoVisitor extends FilterVisitor {
 
 	public void setCodigoEntregador(Long codigoEntregador) {
 		this.codigoEntregador = codigoEntregador;
+	}
+
+	public Boolean getAntesNoveeTrinta() {
+		return antesNoveeTrinta;
+	}
+
+	public void setAntesNoveeTrinta(Boolean antesNoveeTrinta) {
+		this.antesNoveeTrinta = antesNoveeTrinta;
+	}
+
+	public Boolean getLimitarImpressaoPorHorarioExtra() {
+		return limitarImpressaoPorHorarioExtra;
+	}
+
+	public void setLimitarImpressaoPorHorarioExtra(Boolean limitarImpressaoPorHorarioExtra) {
+		this.limitarImpressaoPorHorarioExtra = limitarImpressaoPorHorarioExtra;
 	}
 
 }

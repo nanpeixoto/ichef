@@ -23,15 +23,18 @@ import org.hibernate.annotations.FetchMode;
 import br.com.ichef.arquitetura.BaseEntity;
 
 @Entity
-@Table(name = "pedido")
-public class Pedido extends BaseEntity {
+@Table(name = "vw_pedido_etiqueta")
+public class PedidoEtiqueta extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CD_PEDIDO")
+	@Column(name = "cd_pedido_id")
 	private Long id;
+
+	@Column(name = "CD_PEDIDO")
+	private Long codigoPedido;
 
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastro;
@@ -51,16 +54,6 @@ public class Pedido extends BaseEntity {
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_USUARIO_CADASTRO")
-	private Usuario usuarioCadastro;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_CARDAPIO")
-	private Cardapio cardapio;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO_PRATO")
 	private CardapioFichaPrato cardapioFichaPrato;
 
@@ -69,10 +62,8 @@ public class Pedido extends BaseEntity {
 	@JoinColumn(name = "CD_ENTREGADOR")
 	private Entregador entregador;
 
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
-	private FormaPagamento formaPagamento;
+	@Column(name = "NR_ORDEM_ENTREGA")
+	private Integer ordemEntrega;
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
@@ -83,21 +74,6 @@ public class Pedido extends BaseEntity {
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_LOCALIDADE")
 	private Localidade localidade;
-
-	@Column(name = "VL_DIARIA_ENTREGADOR")
-	private BigDecimal valorDiariaEntregador;
-
-	@Column(name = "VL_PRECO_UNITARIO")
-	private BigDecimal valorUnitarioPedido;
-
-	@Column(name = "VL_PEDIDO")
-	private BigDecimal valorPedido;
-
-	@Column(name = "VL_PAGO")
-	private BigDecimal valorPago;
-
-	@Column(name = "NR_ORDEM_ENTREGA")
-	private Integer ordemEntrega;
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
@@ -113,14 +89,6 @@ public class Pedido extends BaseEntity {
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CLIENTE")
 	private Cliente cliente;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_USUARIO_FINALIZACAO")
-	private Usuario usuarioFinalizacao;
-
-	@Column(name = "DT_FINALIZACAO")
-	private Date dataFinalizacao;
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
@@ -210,11 +178,6 @@ public class Pedido extends BaseEntity {
 	}
 
 	@Override
-	public Usuario getUsuarioCadastro() {
-		return usuarioCadastro;
-	}
-
-	@Override
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
@@ -255,14 +218,6 @@ public class Pedido extends BaseEntity {
 
 	}
 
-	public Cardapio getCardapio() {
-		return cardapio;
-	}
-
-	public void setCardapio(Cardapio cardapio) {
-		this.cardapio = cardapio;
-	}
-
 	public CardapioFichaPrato getCardapioFichaPrato() {
 		return cardapioFichaPrato;
 	}
@@ -285,14 +240,6 @@ public class Pedido extends BaseEntity {
 
 	public void setTipoPrato(TipoPrato tipoPrato) {
 		this.tipoPrato = tipoPrato;
-	}
-
-	public FormaPagamento getFormaPagamento() {
-		return formaPagamento;
-	}
-
-	public void setFormaPagamento(FormaPagamento formaPagamento) {
-		this.formaPagamento = formaPagamento;
 	}
 
 	public Derivacao getDerivacao() {
@@ -351,20 +298,8 @@ public class Pedido extends BaseEntity {
 		this.dataAlteracao = dataAlteracao;
 	}
 
-	public void setUsuarioCadastro(Usuario usuarioCadastro) {
-		this.usuarioCadastro = usuarioCadastro;
-	}
-
 	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
 		this.usuarioAlteracao = usuarioAlteracao;
-	}
-
-	public Integer getOrdemEntrega() {
-		return ordemEntrega;
-	}
-
-	public void setOrdemEntrega(Integer ordemEntrega) {
-		this.ordemEntrega = ordemEntrega;
 	}
 
 	public Localidade getLocalidade() {
@@ -373,22 +308,6 @@ public class Pedido extends BaseEntity {
 
 	public void setLocalidade(Localidade localidade) {
 		this.localidade = localidade;
-	}
-
-	public BigDecimal getValorDiariaEntregador() {
-		return valorDiariaEntregador;
-	}
-
-	public void setValorDiariaEntregador(BigDecimal valorDiariaEntregador) {
-		this.valorDiariaEntregador = valorDiariaEntregador;
-	}
-
-	public BigDecimal getValorPedido() {
-		return valorPedido;
-	}
-
-	public void setValorPedido(BigDecimal valorPedido) {
-		this.valorPedido = valorPedido;
 	}
 
 	public BigDecimal getPrecoVendaReceita() {
@@ -459,30 +378,6 @@ public class Pedido extends BaseEntity {
 		this.logLancamentoCarteira = logLancamentoCarteira;
 	}
 
-	public Usuario getUsuarioFinalizacao() {
-		return usuarioFinalizacao;
-	}
-
-	public void setUsuarioFinalizacao(Usuario usuarioFinalizacao) {
-		this.usuarioFinalizacao = usuarioFinalizacao;
-	}
-
-	public Date getDataFinalizacao() {
-		return dataFinalizacao;
-	}
-
-	public void setDataFinalizacao(Date dataFinalizacao) {
-		this.dataFinalizacao = dataFinalizacao;
-	}
-
-	public BigDecimal getValorPago() {
-		return valorPago;
-	}
-
-	public void setValorPago(BigDecimal valorPago) {
-		this.valorPago = valorPago;
-	}
-
 	public List<PedidoDerivacaoContagem> getPedidoDerivacaoContagem() {
 		return pedidoDerivacaoContagem;
 	}
@@ -491,12 +386,26 @@ public class Pedido extends BaseEntity {
 		this.pedidoDerivacaoContagem = pedidoDerivacaoContagem;
 	}
 
-	public BigDecimal getValorUnitarioPedido() {
-		return valorUnitarioPedido;
+	public Long getCodigoPedido() {
+		return codigoPedido;
 	}
 
-	public void setValorUnitarioPedido(BigDecimal valorUnitarioPedido) {
-		this.valorUnitarioPedido = valorUnitarioPedido;
+	public void setCodigoPedido(Long codigoPedido) {
+		this.codigoPedido = codigoPedido;
+	}
+
+	@Override
+	public Usuario getUsuarioCadastro() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Integer getOrdemEntrega() {
+		return ordemEntrega;
+	}
+
+	public void setOrdemEntrega(Integer ordemEntrega) {
+		this.ordemEntrega = ordemEntrega;
 	}
 
 }
