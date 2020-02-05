@@ -26,9 +26,11 @@ public class VwResumoDiarioPedidosService extends GenericDAO<VwResumoDiarioPedid
 		if(codigoEmpresa!=null )
 			criteria.add(Restrictions.eq("id.codigoEmpresa", codigoEmpresa));
 		
-		/*criteria.addOrder( Order.asc("id.codigoEmpresa")  );
+		 criteria.addOrder( Order.asc("id.codigoEmpresa")  );
 		criteria.addOrder( Order.asc("id.data")  );
-		criteria.addOrder( Order.asc("descricaoFormaPagamento")  );*/
+		criteria.addOrder( Order.asc("ordem")  ); 
+		criteria.addOrder( Order.asc("descricaoCardapioFicha")  ); 
+		criteria.addOrder( Order.asc("descricaoFormaPagamento")  ); 
 		
 		return criteria.list();
 	}
