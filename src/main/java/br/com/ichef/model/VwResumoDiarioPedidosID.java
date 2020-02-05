@@ -22,6 +22,9 @@ public class VwResumoDiarioPedidosID implements Serializable {
 	@Column(name = "CD_CARDAPIO_PRATO")
 	private Long codigoCardapioFicha;
 
+	@Column(name = "DS_FORMA_PAGAMENTO")
+	private String descricaoFormaPagamento;
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -30,6 +33,7 @@ public class VwResumoDiarioPedidosID implements Serializable {
 		result = prime * result + ((codigoEmpresa == null) ? 0 : codigoEmpresa.hashCode());
 		result = prime * result + ((codigoFormaPagamento == null) ? 0 : codigoFormaPagamento.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((descricaoFormaPagamento == null) ? 0 : descricaoFormaPagamento.hashCode());
 		return result;
 	}
 
@@ -62,7 +66,20 @@ public class VwResumoDiarioPedidosID implements Serializable {
 				return false;
 		} else if (!data.equals(other.data))
 			return false;
+		if (descricaoFormaPagamento == null) {
+			if (other.descricaoFormaPagamento != null)
+				return false;
+		} else if (!descricaoFormaPagamento.equals(other.descricaoFormaPagamento))
+			return false;
 		return true;
+	}
+
+	public String getDescricaoFormaPagamento() {
+		return descricaoFormaPagamento;
+	}
+
+	public void setDescricaoFormaPagamento(String descricaoFormaPagamento) {
+		this.descricaoFormaPagamento = descricaoFormaPagamento;
 	}
 
 	public Long getCodigoCardapioFicha() {

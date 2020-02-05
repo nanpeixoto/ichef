@@ -23,16 +23,12 @@ public class VwResumoDiarioPedidos extends BaseEntity {
 
 	@Column(name = "NR_ORDEM")
 	private int ordem;
-	
+
 	@Column(name = "NR_QTD")
 	private int quantidade;
 
-
 	@Column(name = "DS_CARDAPIO_FICHA")
 	private String descricaoCardapioFicha;
-
-	@Column(name = "DS_FORMA_PAGAMENTO")
-	private String descricaoFormaPagamento;
 
 	@Column(name = "NM_FANTASIA")
 	private String nomeFantasia;
@@ -92,12 +88,12 @@ public class VwResumoDiarioPedidos extends BaseEntity {
 		this.valorPago = valorPago;
 	}
 
-	public String getDescricaoFormaPagamento() {
-		return descricaoFormaPagamento;
+	public String getDescricaoCardapioFicha() {
+		return descricaoCardapioFicha;
 	}
 
-	public void setDescricaoFormaPagamento(String descricaoFormaPagamento) {
-		this.descricaoFormaPagamento = descricaoFormaPagamento;
+	public void setDescricaoCardapioFicha(String descricaoCardapioFicha) {
+		this.descricaoCardapioFicha = descricaoCardapioFicha;
 	}
 
 	public static long getSerialversionuid() {
@@ -124,14 +120,6 @@ public class VwResumoDiarioPedidos extends BaseEntity {
 		this.ordem = ordem;
 	}
 
-	public String getDescricaoCardapioFicha() {
-		return descricaoCardapioFicha;
-	}
-
-	public void setDescricaoCardapioFicha(String descricaoCardapioFicha) {
-		this.descricaoCardapioFicha = descricaoCardapioFicha;
-	}
-
 	public int getQuantidade() {
 		return quantidade;
 	}
@@ -139,7 +127,5 @@ public class VwResumoDiarioPedidos extends BaseEntity {
 	public void setQuantidade(int quantidade) {
 		this.quantidade = quantidade;
 	}
-	
-	
 
 }

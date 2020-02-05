@@ -1055,8 +1055,7 @@ public class PedidoController extends BaseController {
 			filter.setEmpresa(userLogado.getEmpresaLogada());
 
 			PedidoVisitor pedidoVisitor = new PedidoVisitor();
-			pedidoVisitor.setDataEntregaInicial(getDataInicial());
-			pedidoVisitor.setDataEntregaFinal(getDataFinal());
+			pedidoVisitor.setDataEtiqueta(getDataInicial());
 			pedidoVisitor.setLimitarImpressaoPorHorarioExtra(true);
 			pedidoVisitor.setAntesNoveeTrinta(isAntesNoveEMeia());
 			

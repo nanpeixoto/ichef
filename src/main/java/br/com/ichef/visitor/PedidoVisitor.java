@@ -32,6 +32,9 @@ public class PedidoVisitor extends FilterVisitor {
 	private boolean limitarImpressaoPorHorarioExtra;
 
 	private boolean antesNoveeTrinta;
+	
+	private Date dataEtiqueta;
+
 
 	@Override
 	public void visitCriteria(Criteria criteria) {
@@ -83,11 +86,15 @@ public class PedidoVisitor extends FilterVisitor {
 
 		if (limitarImpressaoPorHorarioExtra) {
 			if (getAntesNoveeTrinta())
-				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  <= STR_TO_DATE('" + Util.dateToString(getDataEntregaInicial()) + " 09:30','%d/%m/%Y %h:%i')"));
+				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  <= STR_TO_DATE('" + Util.dateToString(getDataEtiqueta()) + " 09:30','%d/%m/%Y %h:%i')"));
 			else {
-				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro > STR_TO_DATE('" + Util.dateToString(getDataEntregaInicial()) + " 09:30','%d/%m/%Y %h:%i')"));
+				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro > STR_TO_DATE('" + Util.dateToString(getDataEtiqueta()) + " 09:30','%d/%m/%Y %h:%i')"));
 			}
 		}
+		
+		if (getDataEtiqueta() != null)
+			criteria.add(Restrictions.sqlRestriction(
+					" date_format( data_filtro, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEtiqueta()) + "'"));
 
 	}
 
@@ -185,6 +192,14 @@ public class PedidoVisitor extends FilterVisitor {
 
 	public void setLimitarImpressaoPorHorarioExtra(Boolean limitarImpressaoPorHorarioExtra) {
 		this.limitarImpressaoPorHorarioExtra = limitarImpressaoPorHorarioExtra;
+	}
+
+	public Date getDataEtiqueta() {
+		return dataEtiqueta;
+	}
+
+	public void setDataEtiqueta(Date dataEtiqueta) {
+		this.dataEtiqueta = dataEtiqueta;
 	}
 
 }

@@ -43,6 +43,10 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Column(name = "DT_ENTREGA")
 	private Date dataEntrega;
 
+	@Temporal(TemporalType.DATE)
+	@Column(name = "DATA_FILTRO")
+	private Date datafiltro;
+
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
@@ -406,6 +410,14 @@ public class PedidoEtiqueta extends BaseEntity {
 
 	public void setOrdemEntrega(Integer ordemEntrega) {
 		this.ordemEntrega = ordemEntrega;
+	}
+
+	public Date getDatafiltro() {
+		return datafiltro;
+	}
+
+	public void setDatafiltro(Date datafiltro) {
+		this.datafiltro = datafiltro;
 	}
 
 }

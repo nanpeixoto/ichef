@@ -43,9 +43,6 @@
 	<field name="dataCadastro" class="java.util.Date">
 		<fieldDescription><![CDATA[dataCadastro]]></fieldDescription>
 	</field>
-	<field name="descricaoFormaPagamento" class="java.lang.String">
-		<fieldDescription><![CDATA[descricaoFormaPagamento]]></fieldDescription>
-	</field>
 	<field name="edicao" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[edicao]]></fieldDescription>
 	</field>
@@ -64,23 +61,23 @@
 	<field name="valorPago" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[valorPago]]></fieldDescription>
 	</field>
-	<field name="descricaoCardapioFicha" class="java.lang.String">
-		<fieldDescription><![CDATA[descricaoCardapioFicha]]></fieldDescription>
-	</field>
 	<field name="ordem" class="java.lang.Integer">
 		<fieldDescription><![CDATA[ordem]]></fieldDescription>
 	</field>
 	<field name="quantidade" class="java.lang.Integer">
 		<fieldDescription><![CDATA[quantidade]]></fieldDescription>
 	</field>
+	<field name="descricaoCardapioFicha" class="java.lang.String">
+		<fieldDescription><![CDATA[descricaoCardapioFicha]]></fieldDescription>
+	</field>
 
-	<variable name="valorPago" class="java.math.BigDecimal" resetType="Group" resetGroup="CodigoFormaPagamento" calculation="Sum">
+	<variable name="valorPago" class="java.math.BigDecimal" resetType="Group" resetGroup="descricaoFormaPagamento" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorPago}]]></variableExpression>
 	</variable>
 	<variable name="valorPagoPorData" class="java.math.BigDecimal" resetType="Group" resetGroup="data" calculation="Sum">
 		<variableExpression><![CDATA[$F{valorPago}]]></variableExpression>
 	</variable>
-	<variable name="quantidadePorFormaPagamento" class="java.lang.Integer" resetType="Group" resetGroup="CodigoFormaPagamento" calculation="Sum">
+	<variable name="quantidadePorFormaPagamento" class="java.lang.Integer" resetType="Group" resetGroup="descricaoFormaPagamento" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
 	</variable>
 	<variable name="valorPagoPorEmpresa" class="java.math.BigDecimal" resetType="Group" resetGroup="empresa" calculation="Sum">
@@ -401,8 +398,8 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="CodigoFormaPagamento" >
-			<groupExpression><![CDATA[$F{id}.getCodigoFormaPagamento()]]></groupExpression>
+		<group  name="descricaoFormaPagamento" >
+			<groupExpression><![CDATA[$F{id}.getDescricaoFormaPagamento()]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -582,7 +579,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoFormaPagamento}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{id}.getDescricaoFormaPagamento()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

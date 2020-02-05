@@ -30,7 +30,7 @@ public class VwResumoDiarioPedidosService extends GenericDAO<VwResumoDiarioPedid
 		criteria.addOrder( Order.asc("id.data")  );
 		criteria.addOrder( Order.asc("ordem")  ); 
 		criteria.addOrder( Order.asc("descricaoCardapioFicha")  ); 
-		criteria.addOrder( Order.asc("descricaoFormaPagamento")  ); 
+		criteria.addOrder( Order.asc("id.descricaoFormaPagamento")  ); 
 		
 		return criteria.list();
 	}
