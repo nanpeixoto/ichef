@@ -34,6 +34,8 @@ public class PedidoVisitor extends FilterVisitor {
 	private boolean antesNoveeTrinta;
 	
 	private Date dataEtiqueta;
+	
+	private String horarioCorte;
 
 
 	@Override
@@ -84,14 +86,10 @@ public class PedidoVisitor extends FilterVisitor {
 			criteria.add(Restrictions.eq("id.codigoEntregador", getCodigoEntregador()));
 		}
 
-		if (limitarImpressaoPorHorarioExtra) {
-			if (getAntesNoveeTrinta())
-				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  <= STR_TO_DATE('" + Util.dateToString(getDataEtiqueta()) + " 09:30','%d/%m/%Y %h:%i')"));
-			else {
-				criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro > STR_TO_DATE('" + Util.dateToString(getDataEtiqueta()) + " 09:30','%d/%m/%Y %h:%i')"));
-			}
-		}
-		
+		if (getHorarioCorte()!=null) 
+			 criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  > STR_TO_DATE('" + Util.dateToString(getDataEtiqueta()) + " " +getHorarioCorte()+"','%d/%m/%Y %H:%i')"));
+	
+		 
 		if (getDataEtiqueta() != null)
 			criteria.add(Restrictions.sqlRestriction(
 					" date_format( data_filtro, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEtiqueta()) + "'"));
@@ -200,6 +198,14 @@ public class PedidoVisitor extends FilterVisitor {
 
 	public void setDataEtiqueta(Date dataEtiqueta) {
 		this.dataEtiqueta = dataEtiqueta;
+	}
+
+	public String getHorarioCorte() {
+		return horarioCorte;
+	}
+
+	public void setHorarioCorte(String horarioCorte) {
+		this.horarioCorte = horarioCorte;
 	}
 
 }
