@@ -1,5 +1,6 @@
 package br.com.ichef.service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -12,6 +13,7 @@ import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.arquitetura.service.Transacional;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
 import br.com.ichef.model.Usuario;
 import br.com.ichef.util.Util;
@@ -254,6 +256,55 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 			hql.append(", usuarioFinalizacao.id = " + usuarioLogado.getId() + ", dataFinalizacao = now() where id  in( "
 					+ listaPedidos + ")");
+
+			if (hql != null) {
+
+				if (!getManager().isOpen()) {
+					EntityManagerProducer producer = new EntityManagerProducer();
+					setManager(producer.createEntityManager());
+				} else {
+					getManager().clear();
+				}
+
+				tx = getManager().getTransaction();
+				tx.begin();
+
+				Query query = getManager().createQuery(hql.toString());
+				result = query.executeUpdate();
+				tx.commit();
+
+			}
+			if (result == 0) {
+				return "Operação Não Realizada. Contact o ADM do sistema";
+			}
+
+			return null;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return e.getMessage();
+		} /*
+			 * finally { if (getManager().isOpen()) getManager().close(); }
+			 */
+
+	}
+	
+	
+	public String atualizarFormaPagamentoValorPago(Pedido pedido) {
+		EntityTransaction tx = null;
+		try {
+
+			StringBuilder hql = null;
+			int result = -1;
+
+			hql = new StringBuilder();
+
+			hql.append("UPDATE Pedido SET formaPagamento.id = "+pedido.getFormaPagamento().getId());
+			hql.append(" , valorPago = "+pedido.getValorPago());
+			hql.append(" , dataAlteracao = now()");
+			hql.append(" , usuarioAlteracao.id = "+pedido.getUsuarioAlteracao().getId());
+			hql.append(" where  id = "+pedido.getId());
+			
 
 			if (hql != null) {
 

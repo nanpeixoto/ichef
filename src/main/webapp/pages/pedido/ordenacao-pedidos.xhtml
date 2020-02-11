@@ -43,9 +43,9 @@
 												value="#{pedidoOrdenacaoFinalizacaoController.dataEntrega}"
 												pattern="dd/MM/yyyy" size="10" mask="true" showOn="button"
 												locale="pt_BR">
-												<p:ajax event="dateSelect"
+												<!-- <p:ajax event="dateSelect"
 													listener="#{pedidoOrdenacaoFinalizacaoController.obterEntregasDia()}"
-													update="tabListaPedidos"></p:ajax>
+													update="tabListaPedidos"></p:ajax> -->
 											</p:calendar>
 
 											<p:outputLabel value="Entregador" for="selectEntregador" />
@@ -79,10 +79,10 @@
 
 
 								<p:dataTable id="tabListaPedidos" widgetVar="itens"
-									paginator="true" rows="10"
+									paginator="true" rows="10" 
 									value="#{pedidoOrdenacaoFinalizacaoController.lista}"
 									var="item" rowKey="#{item.id}" reflow="true"
-									paginatorPosition="bottom" editable="true"
+									paginatorPosition="bottom"  editable="true" editMode="cell"
 									emptyMessage="Nenhum item encontrado"
 									sortBy="#{item.entregador.nome}" expandableRowGroups="false"
 									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -188,6 +188,11 @@
 
 
 									</p:column>
+									
+									
+									
+									
+									
 
 									<p:column headerText="Forma Pagamento"
 										filterBy="#{item.formaPagamento.descricao}"
@@ -204,7 +209,7 @@
 											<p:inputNumber id="valor" value="#{item.valorPago}"
 												symbol="R$ " decimalSeparator="," thousandSeparator="."
 												disabled="#{item.confirmado}" />
-											<p:selectOneMenu id="selectFormaPagamento"
+											<p:selectOneMenu id="selectFormaPagamento" autoWidth="false"
 												value="#{item.formaPagamento}" filter="true"
 												filterMatchMode="contains" disabled="#{item.confirmado}"
 												converter="omnifaces.SelectItemsConverter">
@@ -217,6 +222,31 @@
 											</p:selectOneMenu>
 										</p:inplace>
 									</p:column>
+									
+									
+									<!-- <p:column headerText="Forma Pagamento"
+										filterBy="#{item.formaPagamento.descricao}"
+										filterMatchMode="contains"
+										filterStyle="display:none; visibility:hidden;">
+										 <p:cellEditor>
+						                <f:facet name="output"><h:outputLabel value="#{item.formaPagamento.descricao}" /></f:facet>
+						                <f:facet name="input">	
+						               <p:selectOneMenu id="selectFormaPagamento2"
+												value="#{item.formaPagamento}" filter="true"
+												filterMatchMode="contains" disabled="#{item.confirmado}"
+												converter="omnifaces.SelectItemsConverter">
+												<f:selectItem itemLabel="Selecionar" itemValue=""
+													noSelectionOption="true" />
+												<f:selectItems
+													value="#{pedidoOrdenacaoFinalizacaoController.listaFormasPagamento}"
+													var="itemFormaPg" itemLabel="#{itemFormaPg.descricao}"
+													itemValue="#{itemFormaPg}" />
+											</p:selectOneMenu>
+						                		 
+						                </f:facet>
+						             </p:cellEditor>
+
+									</p:column> -->
 
 									<p:column headerText="" width="5%"
 										filterStyle="display:none; visibility:hidden;">

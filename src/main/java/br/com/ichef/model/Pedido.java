@@ -49,6 +49,9 @@ public class Pedido extends BaseEntity {
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
 
+	@Column(name = "DS_OBSERVACAO_ENTREGA")
+	private String observacaoEntrega;
+
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -253,6 +256,25 @@ public class Pedido extends BaseEntity {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void setObservacaoEntrega(String observacaoEntrega) {
+		try {
+
+			if (observacao != null)
+				this.observacaoEntrega = observacaoEntrega.toUpperCase();
+			else
+				this.observacaoEntrega = observacaoEntrega;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public String getObservacaoEntrega() {
+		if (observacaoEntrega == null || observacaoEntrega.equalsIgnoreCase(""))
+			return "-";
+		return observacaoEntrega;
 	}
 
 	public Cardapio getCardapio() {

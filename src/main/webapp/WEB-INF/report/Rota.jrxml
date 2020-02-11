@@ -138,6 +138,9 @@
 	<field name="valorPedido" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[valorPedido]]></fieldDescription>
 	</field>
+	<field name="observacaoEntrega" class="java.lang.String">
+		<fieldDescription><![CDATA[observacaoEntrega]]></fieldDescription>
+	</field>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
@@ -591,10 +594,10 @@
 						stretchType="RelativeToTallestObject"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Middle" isStyledText="true">
 						<font size="7"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getEndereco()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getEndereco()+  (  $F{observacaoEntrega}.equals( "-" ) ? "" : "<br></br> OBS: ("+ $F{observacaoEntrega}+")" )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -638,7 +641,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" isStyledText="true">
 						<font size="7"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[ $F{cardapioFichaPrato}.setMarcacao(  new Integer(1) )]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.setMarcacao(  new Integer(1) )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -653,7 +656,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" isStyledText="true">
 						<font size="7"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[ $F{cardapioFichaPrato}.setMarcacao(  new Integer(2) )]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.setMarcacao(  new Integer(2) )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -668,7 +671,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" isStyledText="true">
 						<font size="7"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[ $F{cardapioFichaPrato}.setMarcacao(  new Integer(3) )]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.setMarcacao(  new Integer(3) )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -683,7 +686,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" isStyledText="true">
 						<font size="7"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[ $F{cardapioFichaPrato}.setMarcacao(  new Integer(4) )]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.setMarcacao(  new Integer(4) )]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

@@ -94,6 +94,16 @@
 		                    		<p:inputText value="#{clienteController.entity.email}" id="email" styleClass="letras-maiusculas"
 		                    			required="false" requiredMessage="#{configuracaoController.getRequiredMessage('E-mail')}"/>
 							   </p:panelGrid>
+							   
+							   <p:panelGrid columns="1" layout="grid">
+								<p:outputLabel for="observacao" value="Observação" />
+								<p:inputTextarea id="observacao"
+									value="#{clienteController.entity.observacao}" rows="3" cols="30"
+									maxlength="450" counter="display"
+									counterTemplate="Faltam {0} characteres" autoResize="false" />
+								<h:outputText id="display" />
+							</p:panelGrid>
+						
 							   <p:panelGrid columnClasses="ui-g-12 ui-md-6 ui-lg-12"  columns="1" layout="grid">
 		                    	  
 							        	

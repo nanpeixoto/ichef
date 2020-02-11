@@ -62,6 +62,9 @@ public class Cliente extends BaseEntity {
 	@Column(name = "SN_EXIBIR_SALDO")
 	private String exibirSaldo;
 
+	@Column(name = "DS_OBSERVACAO")
+	private String observacao;
+
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
@@ -553,6 +556,14 @@ public class Cliente extends BaseEntity {
 
 		return null;
 
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao.toUpperCase();
 	}
 
 }

@@ -160,7 +160,7 @@ public class PedidoController extends BaseController {
 
 		setEntregaDataCardapio(true);
 		setDataEntrega(new Date());
-		
+
 		setAntesNoveEMeia(true);
 
 	}
@@ -588,8 +588,8 @@ public class PedidoController extends BaseController {
 			// VERFICO A QUANTIDADE
 			Long quantidadeJaPedida = getQuantidadeDisponivel();
 			CardapioFichaPratoEmpresa fichaEmpresaLogada = obterFichaEmpresaLogada();
-			
-			int qtdPedidoPratoEntregador =  getQuantidadePedidoEntregador();
+
+			int qtdPedidoPratoEntregador = getQuantidadePedidoEntregador();
 
 			// ENTREGADOR
 			if (getEntity().getEntregador() == null) {
@@ -597,9 +597,10 @@ public class PedidoController extends BaseController {
 				return;
 			} else {
 				if (getEntity().getEntregador().getQuantiadadeQuentinha() != null
-						&& ((qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity().getEntregador().getQuantiadadeQuentinha())
-						) {
-					facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "+ (getEntity().getEntregador().getQuantiadadeQuentinha()-qtdPedidoPratoEntregador));
+						&& ((qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity().getEntregador()
+								.getQuantiadadeQuentinha())) {
+					facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "
+							+ (getEntity().getEntregador().getQuantiadadeQuentinha() - qtdPedidoPratoEntregador));
 					return;
 				}
 			}
@@ -734,10 +735,11 @@ public class PedidoController extends BaseController {
 					facesMessager.error(getRequiredMessage("Preço Unitário"));
 					return;
 				} else {
-					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
-							.multiply(new BigDecimal(pedido.getQuantidade()));
+					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido().multiply(new BigDecimal(pedido.getQuantidade()));
 					pedido.setValorPedido(valorTotalPedido);
-					pedido.setValorPago(valorTotalPedido);
+					if (tipoAlteracao.equals("Q")) {
+						pedido.setValorPago(valorTotalPedido);
+					}
 				}
 			}
 

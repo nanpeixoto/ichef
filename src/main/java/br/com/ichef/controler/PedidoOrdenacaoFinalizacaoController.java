@@ -451,7 +451,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
-			System.out.println("atualizarPedido1 "+formatarDataHora.format(new Date()));
+			System.out.println("atualizarPedido1 " + formatarDataHora.format(new Date()));
 
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
@@ -462,30 +462,40 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
 				}
 			} else if (tipoAlteracao.equals("F") || tipoAlteracao.equals("Q")) {
-				System.out.println("atualizarPedido1.1 "+formatarDataHora.format(new Date()));
+				System.out.println("atualizarPedido1.1 " + formatarDataHora.format(new Date()));
 				if (pedido.getValorUnitarioPedido() == null) {
 					facesMessager.error(getRequiredMessage("Preço Unitário"));
-					System.out.println("atualizarPedido1.2 "+formatarDataHora.format(new Date()));
+					System.out.println("atualizarPedido1.2 " + formatarDataHora.format(new Date()));
 					return;
-					
+
 				} else {
-					System.out.println("atualizarPedido1.3 "+formatarDataHora.format(new Date()));
-					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido().multiply(new BigDecimal(pedido.getQuantidade()));
+					System.out.println("atualizarPedido1.3 " + formatarDataHora.format(new Date()));
+
+					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
+							.multiply(new BigDecimal(pedido.getQuantidade()));
 					pedido.setValorPedido(valorTotalPedido);
-					pedido.setValorPago(valorTotalPedido);
-					System.out.println("atualizarPedido1.4 " +formatarDataHora.format(new Date()));
+					if (tipoAlteracao.equals("Q")) {
+						pedido.setValorPago(valorTotalPedido);
+					}
+					System.out.println("atualizarPedido1.4 " + formatarDataHora.format(new Date()));
+
 				}
 			}
-			
-			System.out.println("atualizarPedido2 "+formatarDataHora.format(new Date()));
+
+			System.out.println("atualizarPedido2 " + formatarDataHora.format(new Date()));
 
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
 
-			service.saveOrUpdade(pedido);
+			if (tipoAlteracao.equals("F")) {
+				service.atualizarFormaPagamentoValorPago(pedido);
+			} else {
 
-			System.out.println("atualizarPedido3 "+formatarDataHora.format(new Date()));
-			
+				service.saveOrUpdade(pedido);
+			}
+
+			System.out.println("atualizarPedido3 " + formatarDataHora.format(new Date()));
+
 		} catch (Exception e) {
 			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
 			e.printStackTrace();
@@ -609,6 +619,40 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 		}
 		return null;
 	}
+
+	/*
+	 * public void finalizarListaPedidos() { try {
+	 * 
+	 * if (getDataEntrega() == null) {
+	 * facesMessager.error("Informe a data de Entrega para continuar"); return; }
+	 * 
+	 * if (getEntregador() == null) {
+	 * facesMessager.error("Selecione o Entregador para finalizar"); return; }
+	 * 
+	 * List<Pedido> pedidosFinalizar = getLista();
+	 * 
+	 * int countPedidoConfirmado = 0;
+	 * 
+	 * for (Pedido pedido : pedidosFinalizar) { String log = null;
+	 * 
+	 * if (!pedido.isConfirmado()) { try {
+	 * 
+	 * pedido.setUsuarioFinalizacao(userLogado); pedido.setDataFinalizacao(new
+	 * Date()); pedido.setSnConfirmado("S");
+	 * 
+	 * countPedidoConfirmado++;
+	 * 
+	 * // service.finalizarPedido(pedido); service.saveOrUpdade(pedido); } catch
+	 * (Exception e) { // pedido.setSnConfirmado("N"); //
+	 * pedido.setLogLancamentoCarteira(e.getMessage()); //
+	 * service.finalizarPedido(pedido); e.printStackTrace(); return; } }
+	 * 
+	 * }
+	 * 
+	 * if (countPedidoConfirmado > 0) { obterEntregasDia(); }
+	 * 
+	 * } catch (Exception e) { e.printStackTrace(); } }
+	 */
 
 	public void finalizarListaPedidos() {
 		try {
