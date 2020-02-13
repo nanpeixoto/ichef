@@ -19,8 +19,7 @@
 
 				Bem vindo ao <span class="text-aqua"> <i> <a
 						href="http://142.93.185.193:8080/iChef" target="_blank"
-						style="text-transform: none; text-decoration: none"> Cozinha
-							de Chefe</a></i></span>! <br />
+						style="text-transform: none; text-decoration: none">#{dashboardController.userLogado.empresaLogada.nomeFantasia}</a></i></span>! <br />
 				<!--  <small>Utilizando <p:link value="Primefaces" href="http://primefaces.org" target="_blank"/>, <p:link value="Bootstrap"
 	                                                                                                  href="http://getbootstrap.com/" target="_blank"/> e
 	                <p:link value="Admin LTE" href="https://almsaeedstudio.com/themes/AdminLTE/index2.html" target="_blank"/> com
@@ -31,7 +30,22 @@
 
 
 			<div class="row">
-				<div class="col-md-3 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<span class="info-box-icon bg-yellow"><i
+							class="fa fa-lightbulb-o"></i></span>
+
+						<div class="info-box-content">
+							<span class="info-box-text">Média de pedidos/dia</span> <span
+								class="info-box-number">#{dashboardController.entity.mediaPedidosDiaMes}</span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
+				</div>
+				
+			
+				<div class="col-md-4 col-sm-6 col-xs-12">
 					<div class="info-box">
 						<span class="info-box-icon bg-aqua"><i
 							class="fa fa-phone-volume"></i></span>
@@ -45,9 +59,9 @@
 					<!-- /.info-box -->
 				</div>
 				<!-- /.col -->
-				<div class="col-md-3 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-6 col-xs-12">
 					<div class="info-box">
-						<span class="info-box-icon bg-red"><i
+						<span class="info-box-icon bg-purple"><i
 							class="fa fa-gift"></i></span>
 
 						<div class="info-box-content">
@@ -63,9 +77,17 @@
 				<!-- fix for small devices only -->
 				<div class="clearfix visible-sm-block"></div>
 
-				<div class="col-md-3 col-sm-6 col-xs-12">
+				
+		</div>
+				
+			
+			
+			<div class="row">
+			
+				
+				<div class="col-md-4 col-sm-6 col-xs-12">
 					<div class="info-box">
-						<span class="info-box-icon bg-green"><i
+						<span class="info-box-icon bg-maroon"><i
 							class="fa fa-google-wallet"></i></span>
 
 						<div class="info-box-content">
@@ -80,9 +102,9 @@
 					<!-- /.info-box -->
 				</div>
 				<!-- /.col -->
-				<div class="col-md-3 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-6 col-xs-12">
 					<div class="info-box">
-						<span class="info-box-icon bg-yellow"><i
+						<span class="info-box-icon bg-olive"><i
 							class="fa fa-money"></i></span>
 
 						<div class="info-box-content">
@@ -95,7 +117,25 @@
 						<!-- /.info-box-content -->
 					</div>
 				</div>	
+				<h:form>
+				<p:commandLink  icon="fa fa-print" ajax="false" action="#{dashboardController.imprimirPedidosNaoConfirmados()}">
+				<div class="col-md-4 col-sm-6 col-xs-12">
+					<div class="info-box">
+					
+					 
+						<span class="info-box-icon bg-#{dashboardController.cor}"><i
+							class="fa fa-exclamation"></i></span>
+
+						<div class="info-box-content">
+							<span class="info-box-text">Total Não confirmado</span> <span
+								class="info-box-number" style="color: #{dashboardController.cor};">#{dashboardController.entity.qtdTotalPedisoNaoConfirmados}</span>
+						</div>
+						<!-- /.info-box-content -->
+					</div>
+					<!-- /.info-box -->
 				</div>
+				</p:commandLink></h:form>
+			</div>
 				
 			<div class="row">
 

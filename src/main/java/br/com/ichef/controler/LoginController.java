@@ -47,12 +47,44 @@ public class LoginController extends BaseController {
 	private Usuario usuario = new Usuario();
 
 	private String senha;
+	private String senhaNova;
+	private String senhaNovaConfirmacao;
 	private Empresa empresa;
 	private List<Empresa> empresas;
 	private String login;
 
 	@PostConstruct
 	public void init() {
+
+	}
+
+	public void alterarSenha() {
+
+		if (getSenha() != null && getSenhaNova() != null)
+			if (!getSenhaNova().equalsIgnoreCase(getSenhaNovaConfirmacao())) {
+				facesMessager.error("As senhas digitadas não conferem");
+				return;
+			
+			}
+			if (getSenhaNova().equalsIgnoreCase(getSenha())) {
+				facesMessager.error("A nova senha corresponde a senha atual");
+			} else {
+				Usuario usuario = service.getById(getUserLogado().getId());
+				if (usuario.getSenha().equalsIgnoreCase(StringUtil.criptografa(getSenha()))) {
+					try {
+						usuario.setSenha(StringUtil.criptografa(getSenhaNova()));
+						service.alterarSenha(usuario);
+						facesMessager.info("Senha sucesso");
+					} catch (Exception e) {
+						e.printStackTrace();
+						facesMessager.error("Não foi possível efetuar a operação");
+					}
+
+				} else {
+					facesMessager.error("Senha Atual não confere");
+				}
+
+			}
 
 	}
 
@@ -175,6 +207,66 @@ public class LoginController extends BaseController {
 
 	public void setEmpresas(List<Empresa> empresas) {
 		this.empresas = empresas;
+	}
+
+	public UsuarioService getService() {
+		return service;
+	}
+
+	public void setService(UsuarioService service) {
+		this.service = service;
+	}
+
+	public LogAcessoService getLogAcessoService() {
+		return logAcessoService;
+	}
+
+	public void setLogAcessoService(LogAcessoService logAcessoService) {
+		this.logAcessoService = logAcessoService;
+	}
+
+	public EmpresaService getEmpresaService() {
+		return empresaService;
+	}
+
+	public void setEmpresaService(EmpresaService empresaService) {
+		this.empresaService = empresaService;
+	}
+
+	public ConfiguracaoService getConfiguracaoService() {
+		return configuracaoService;
+	}
+
+	public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
+		this.configuracaoService = configuracaoService;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getSenhaNova() {
+		return senhaNova;
+	}
+
+	public void setSenhaNova(String senhaNova) {
+		this.senhaNova = senhaNova;
+	}
+
+	public String getSenhaNovaConfirmacao() {
+		return senhaNovaConfirmacao;
+	}
+
+	public void setSenhaNovaConfirmacao(String senhaNovaConfirmacao) {
+		this.senhaNovaConfirmacao = senhaNovaConfirmacao;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

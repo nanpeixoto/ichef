@@ -33,7 +33,7 @@ public class Dashboard extends BaseEntity {
 
 	@Column(name = "CD_EMPRESA")
 	private Long codigoEmpresa;
-	
+
 	@Column(name = "QTD_CORTESIAS")
 	private Long quantidadeCortesias;
 
@@ -42,6 +42,12 @@ public class Dashboard extends BaseEntity {
 
 	@Column(name = "VALOR_PAGO")
 	private BigDecimal valorPago;
+
+	@Column(name = "MEDIA_PEDIDOS_DIA")
+	private Long mediaPedidosDiaMes;
+
+	@Column(name = "QTD_TOTAL_PEDIDOS_NAO_CONFIRMADOS")
+	private Long qtdTotalPedisoNaoConfirmados;
 
 	@Column(name = "VALOR_TOTAL_PAGO")
 	private BigDecimal valorTotalPago;
@@ -210,6 +216,22 @@ public class Dashboard extends BaseEntity {
 
 	public void setQuantidadeCortesias(Long quantidadeCortesias) {
 		this.quantidadeCortesias = quantidadeCortesias;
+	}
+
+	public Long getMediaPedidosDiaMes() {
+		return mediaPedidosDiaMes;
+	}
+
+	public void setMediaPedidosDiaMes(Long mediaPedidosDiaMes) {
+		this.mediaPedidosDiaMes = mediaPedidosDiaMes;
+	}
+
+	public Long getQtdTotalPedisoNaoConfirmados() {
+		return qtdTotalPedisoNaoConfirmados;
+	}
+
+	public void setQtdTotalPedisoNaoConfirmados(Long qtdTotalPedisoNaoConfirmados) {
+		this.qtdTotalPedisoNaoConfirmados = qtdTotalPedisoNaoConfirmados;
 	}
 	
 	

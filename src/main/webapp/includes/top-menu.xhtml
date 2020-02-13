@@ -1,64 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
-    <ul class="nav navbar-nav">
-      
-      
-      <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <pe:gravatar id="userImage"
-                             value="nonexisting"/>
-                <span class="hidden-xs"> #{loginController.usuarioLogado.nomeAbreviado}</span>
-            </a>
-            <ul class="dropdown-menu">
-                <li class="user-header">
-                    <div class="hidden-xs">
-                        <pe:gravatar style="border-radius: 50%"
-                                     value="#{loginController.usuarioLogado.email}"/>
-                    </div>
-                    <p>
-                        #{loginController.usuarioLogado.nome}
-                        <small>  #{loginController.usuarioLogado.empresaLogada.nomeFantasia} </small>
-                    </p>
-                </li>
-                <li class="user-footer">
-                    <h:form prependId="false">
-                        <div class="pull-left">
-                            <p:commandButton  styleClass="btn btn-danger"  value="Trocar Senha" onclick="PF('trocarSenha').show()"  />
-                        </div>
-                        <div class="pull-right">
-                            <p:commandLink id="logout" action="#{loginController.logout()}"  title="Logoff">
-                                <i class="fa fa-sign-out fa-2x"></i>
-                            </p:commandLink>
-                        </div>
-                    </h:form>
-                </li>
-            </ul>
-        </li>
-    </ul>
-    
-    <p:dialog header="Trocar Senha" widgetVar="trocarSenha" height="120" minWidth="200" width="220" responsive="true"
-    	 styleClass="box-success" modal="true" resizable="false" >
+	<ul class="nav navbar-nav">
+
+
+		<li class="dropdown user user-menu"><a href="#"
+			class="dropdown-toggle" data-toggle="dropdown"> <pe:gravatar
+					id="userImage" value="nonexisting" /> <span class="hidden-xs">
+					#{loginController.usuarioLogado.nomeAbreviado}</span>
+		</a>
+			<ul class="dropdown-menu">
+				<li class="user-header">
+					<div class="hidden-xs">
+						<pe:gravatar style="border-radius: 50%"
+							value="#{loginController.usuarioLogado.email}" />
+					</div>
+					<p>
+						#{loginController.usuarioLogado.nome} <small>
+							#{loginController.usuarioLogado.empresaLogada.nomeFantasia} </small>
+					</p>
+				</li>
+				<li class="user-footer"><h:form prependId="false">
+						<div class="pull-left">
+							<p:commandButton styleClass="btn btn-danger" value="Trocar Senha"
+								onclick="PF('trocarSenha').show()" />
+						</div>
+						<div class="pull-right">
+							<p:commandLink id="logout" action="#{loginController.logout()}"
+								title="Logoff">
+								<i class="fa fa-sign-out fa-2x"></i>
+							</p:commandLink>
+						</div>
+					</h:form></li>
+			</ul></li>
+	</ul>
+
+	<p:dialog header="Trocar Senha" widgetVar="trocarSenha" height="230"
+		minWidth="280" width="280" responsive="true" appendTo="@(body)"
+		resizable="false" modal="true">
 		<h:form>
 			Senha Atual:
-			<p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
-                                     placeholder="Senha Atual" required="true" autocomplete="off" id="password"
-                                     requiredMessage="Password is required."/>
+			<p:inputText value="#{loginController.senha}" type="password"
+				styleClass="form-control" placeholder="Senha Atual" required="true"
+				autocomplete="off" id="password"
+				requiredMessage="Password is required." />
             Senha Nova:
-            <p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
-                                     placeholder="Senha Nova" required="true" autocomplete="off" id="passwordnew"
-                                     requiredMessage="Password is required."/>
+            <p:inputText value="#{loginController.senhaNova}"
+				type="password" styleClass="form-control" placeholder="Senha Nova"
+				required="true" autocomplete="off" id="passwordnew"
+				requiredMessage="Password is required." />
 			Confirme Senha:
-			<p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
-                                     placeholder="Confirme Senha" required="true" autocomplete="off" id="passwordconfirme"
-                                     requiredMessage="Password is required."/>
-	  	</h:form>
+			<p:inputText value="#{loginController.senhaNovaConfirmacao}"
+				type="password" styleClass="form-control"
+				placeholder="Confirme Senha" required="true" autocomplete="off"
+				id="passwordconfirme" requiredMessage="Password is required." />
+			<Br />
+			<div style="text-align: right;">
+				<p:commandLink id="Alterar"
+					action="#{loginController.alterarSenha()}" title="Logoff">
+					<i class="fa fa-check-square fa-2x"></i>
+				</p:commandLink>
+			</div>
+		</h:form>
 	</p:dialog>
-    
+
 
 
 </ui:composition>
