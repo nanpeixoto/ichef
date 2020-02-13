@@ -66,7 +66,7 @@ public class Empresa extends BaseEntity {
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@OneToMany(mappedBy = "empresa",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 
@@ -319,7 +319,7 @@ public class Empresa extends BaseEntity {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	
+
 	public String getNomeFantasiaAbreviado() {
 		try {
 			return getNomeFantasia().replace("COZINHA DE CHEF -", "");
@@ -328,6 +328,14 @@ public class Empresa extends BaseEntity {
 		}
 		return getNomeFantasia();
 	}
-	
+
+	public String getTelefoneSemPrefixo() {
+		try {
+			return getTelefone().replace("+55 (71) ", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return getTelefone();
+	}
 
 }

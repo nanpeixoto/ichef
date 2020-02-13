@@ -68,11 +68,17 @@ public class TipoPrato extends BaseEntity {
 	@Column(name = "SN_PLUS")
 	private String snPlus;
 
+	@Column(name = "SN_CONTAGEM")
+	private String snContagem;
+
 	@Transient
 	private boolean isAtivo;
 
 	@Transient
 	private boolean plus;
+
+	@Transient
+	private boolean contagem;
 
 	// bi-directional many-to-one association to TipPratoPreco
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -306,6 +312,33 @@ public class TipoPrato extends BaseEntity {
 			setSnPlus("S");
 		} else
 			setSnPlus("N");
+	}
+
+	public String getSnContagem() {
+		return snContagem;
+	}
+
+	public void setSnContagem(String snContagem) {
+		this.snContagem = snContagem;
+	}
+
+	public boolean isContagem() {
+		if (snContagem != null) {
+			if (snContagem.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return contagem;
+	}
+
+	public void setContagem(boolean contagem) {
+		this.contagem = isAtivo;
+		if (contagem == Boolean.TRUE) {
+			setSnContagem("S");
+		} else
+			setSnContagem("N");
+
 	}
 
 }

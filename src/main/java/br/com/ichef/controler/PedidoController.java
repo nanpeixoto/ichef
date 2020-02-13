@@ -597,8 +597,9 @@ public class PedidoController extends BaseController {
 				return;
 			} else {
 				if (getEntity().getEntregador().getQuantiadadeQuentinha() != null
-						&& ((qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity().getEntregador()
-								.getQuantiadadeQuentinha())) {
+						&& ( 
+								getEntity().getTipoPrato().isContagem() &&
+								 ( (qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity().getEntregador().getQuantiadadeQuentinha()))) {
 					facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "
 							+ (getEntity().getEntregador().getQuantiadadeQuentinha() - qtdPedidoPratoEntregador));
 					return;

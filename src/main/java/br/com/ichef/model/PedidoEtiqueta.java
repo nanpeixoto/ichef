@@ -56,6 +56,9 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
 
+	@Column(name = "ORDEM_DERIVACAO")
+	private Integer ordemDerivacao;
+
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO_PRATO")
@@ -162,7 +165,7 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Override
 	public String getColumnOrderBy() {
 		// TODO Auto-generated method stub
-		return "dataEntrega,entregador.nome,ordemEntrega,cliente.nome";
+		return "dataEntrega,entregador.nome,ordemDerivacao,ordemEntrega,cliente.nome";
 	}
 
 	@Override
@@ -418,6 +421,14 @@ public class PedidoEtiqueta extends BaseEntity {
 
 	public void setDatafiltro(Date datafiltro) {
 		this.datafiltro = datafiltro;
+	}
+
+	public Integer getOrdemDerivacao() {
+		return ordemDerivacao;
+	}
+
+	public void setOrdemDerivacao(Integer ordemDerivacao) {
+		this.ordemDerivacao = ordemDerivacao;
 	}
 
 }

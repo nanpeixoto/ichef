@@ -104,8 +104,8 @@ public class PedidoService extends GenericDAO<Pedido> {
 		StringBuilder sb = new StringBuilder();
 		sb.append(
 				" SELECT   sum( NR_QTD )   nr_total_pedido "
-						+ " fROM pedido p " + " WHERE    cd_entregador = " + pedido.getEntregador().getId()
-						+ " and date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(pedido.getDataEntrega()) + "'");
+						+ " fROM pedido p , tip_prato t   WHERE    p.cd_tip_prato = t.CD_TIP_PRATO  AND   cd_entregador = " + pedido.getEntregador().getId()
+						+ " and   coalesce(t.SN_CONTAGEM, 'N')  = 'S' and date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(pedido.getDataEntrega()) + "'");
 		try {
 			if (!getManager().isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
