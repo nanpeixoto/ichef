@@ -185,51 +185,38 @@
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="24"  isSplitAllowed="true" >
+			<band height="12"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="317"
+						x="191"
 						y="0"
-						width="152"
+						width="100"
 						height="12"
 						key="staticText-10"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Valor Total por Empresa:]]></text>
+				<text><![CDATA[Total por Empresa:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="R$ ##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="468"
+						x="291"
 						y="0"
-						width="66"
+						width="80"
 						height="12"
 						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorPagoPorEmpresa}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement
-						x="317"
-						y="12"
-						width="152"
-						height="12"
-						key="staticText-14"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica" size="9" isBold="false"/>
-					</textElement>
-				<text><![CDATA[Quantidade Total por Empresa:]]></text>
-				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="468"
-						y="12"
-						width="66"
+						x="371"
+						y="0"
+						width="42"
 						height="12"
 						key="textField-13"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
@@ -270,28 +257,28 @@
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="24"  isSplitAllowed="true" >
+			<band height="12"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="317"
+						x="223"
 						y="0"
-						width="152"
+						width="68"
 						height="12"
 						key="staticText-11"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica" size="9" isBold="false"/>
 					</textElement>
-				<text><![CDATA[Valor Total por Data:]]></text>
+				<text><![CDATA[Total por Data:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="R$ ##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="469"
+						x="291"
 						y="0"
-						width="65"
+						width="80"
 						height="12"
 						key="textField-9"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
@@ -299,9 +286,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="468"
-						y="12"
-						width="66"
+						x="371"
+						y="0"
+						width="42"
 						height="12"
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
@@ -310,19 +297,6 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{quantidadePorData}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement
-						x="317"
-						y="12"
-						width="152"
-						height="12"
-						key="staticText-13"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica" size="9" isBold="false"/>
-					</textElement>
-				<text><![CDATA[Quantidade Total por Data:]]></text>
-				</staticText>
 			</band>
 			</groupFooter>
 		</group>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="ControleQuantitativoVendas_subreport2_subreport1"
+		 columnCount="5"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="260"
+		 pageHeight="200"
+		 columnWidth="52"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.0" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="pDataFinal" isForPrompting="true" class="java.util.Date"/>
+	<parameter name="pDataInicio" isForPrompting="true" class="java.util.Date"/>
+	<parameter name="PARAM_EMPRESA" isForPrompting="true" class="java.lang.Integer"/>
+	<parameter name="PARAM_FORMA_PAGAMENTO" isForPrompting="true" class="java.lang.Integer"/>
+	<parameter name="param_cd_cardapio_prato" isForPrompting="true" class="java.lang.Integer"/>
+	<queryString><![CDATA[select  CD_TIP_PRATO, case when DS_TIP_PRATO = 'QUENTINHA - PLUS' THEN 'Q. PLUS'
+ ELSE DS_TIP_PRATO END DS_TIP_PRATO  , sum(nr_qtd) nr_qtd
+  from  vw_controle_quantitativo
+ where   cd_cardapio_prato =  $P{param_cd_cardapio_prato}
+  and CD_EMPRESA =  $P{PARAM_EMPRESA}
+and cd_forma_pagamento =  $P{PARAM_FORMA_PAGAMENTO}
+and   date_format( data,'%d-%m-%Y')
+   group by  CD_TIP_PRATO, case when DS_TIP_PRATO = 'QUENTINHA - PLUS' THEN 'Q. PLUS'  ELSE DS_TIP_PRATO END 
+ORDER by case when DS_TIP_PRATO  = 'QUENTINHA' then 1 
+when DS_TIP_PRATO  = 'QUENTINHA - PLUS' then 2
+when DS_TIP_PRATO  = 'CONGELADO' then 3
+when DS_TIP_PRATO  = 'CONGELADO - PLUS' then 4
+ELSE 5 END]]></queryString>
+
+	<field name="CD_TIP_PRATO" class="java.lang.Integer"/>
+	<field name="DS_TIP_PRATO" class="java.lang.String"/>
+	<field name="nr_qtd" class="java.math.BigDecimal"/>
+
+
+		<group  name="DS_TIP_PRATO" >
+			<groupExpression><![CDATA[$F{DS_TIP_PRATO}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="24"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="52"
+						height="12"
+						key="textField"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DS_TIP_PRATO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="12"
+						width="52"
+						height="12"
+						key="textField"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{nr_qtd}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -37,9 +38,9 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	private static final long serialVersionUID = 1L;
 
 	protected static String DIALOG_CADASTRAR = "cadastrarForm";
-	
+
 	public static String LOGO = "logo.jpg";
-	
+
 	public static String LOGO_ETIQUETA = "logo_etiqueta.jpg";
 
 	protected static String ERRO_GENERICO = "Erro ao gerar relatório, por favor entre em contato com o Administrator do Sistema.";
@@ -55,8 +56,8 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	public static final String REPORT_PARAM_SUBREPORT_DIR = "SUBREPORT_DIR";
 
 	public static final String RELATORIO = "resources.properties";
-	
-	public static final String REPORT_PARAM_LOGO ="pLogo";
+
+	public static final String REPORT_PARAM_LOGO = "pLogo";
 
 	public static final String DIR_DEFAULT = "resources/";
 
@@ -96,6 +97,26 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		ServletContext scontext = (ServletContext) facesContext.getExternalContext().getContext();
 
 		return scontext.getRealPath(pArquivo);
+	}
+
+	protected void escreveRelatorioPDF(String nome, boolean download, Connection connection, boolean temSubreport)
+			throws Exception {
+
+		setParametroReport(REPORT_PARAM_SUBREPORT_DIR, getRealPath(getProperties().getProperty("dir.relatorio")));
+		escreveRelatorioPDF(nome, download, connection);
+
+	}
+
+	protected void escreveRelatorioPDF(String nome, boolean download, Connection connection) throws Exception {
+
+		byte[] lReportData = null;
+
+		setParametroReport(REPORT_PARAM_SUBREPORT_DIR, getRealPath(getProperties().getProperty("dir.relatorio")));
+
+		lReportData = JasperRunManager.runReportToPdf(
+				getInputStream(getProperties().getProperty("dir.relatorio") + nome + ".jasper"), parametros,
+				connection);
+		escreveRelatorio(lReportData, nome, download);
 	}
 
 	@SuppressWarnings("rawtypes")

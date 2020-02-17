@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="ControleQuantitativoVendas_subreport2"
+		 columnCount="3"
+		 printOrder="Horizontal"
+		 orientation="Landscape"
+		 pageWidth="812"
+		 pageHeight="595"
+		 columnWidth="270"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.0" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="PARAM_FORMA_PAGAMENTO" isForPrompting="true" class="java.lang.Integer"/>
+	<parameter name="PARAM_EMPRESA" isForPrompting="true" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["D:\\Desenvolvimento\\Projetos\\ichef\\ichefTomCat\\src\\main\\webapp\\WEB-INF\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pDataInicio" isForPrompting="true" class="java.util.Date"/>
+	<parameter name="pDataFinal" isForPrompting="true" class="java.util.Date"/>
+	<queryString><![CDATA[select   DS_DESCRICAO as ficha, DS_CARDAPIO_FICHA ds_cardapio, cd_cardapio_prato
+ from  vw_controle_quantitativo where CD_FORMA_PAGAMENTO =  $P{PARAM_FORMA_PAGAMENTO} and  CD_EMPRESA =  $P{PARAM_EMPRESA}
+and   date_format( data,'%d-%m-%Y')
+ between  date_format( $P{pDataInicio},'%d-%m-%Y')  and  date_format( $P{pDataFinal},'%d-%m-%Y')
+ group by DS_DESCRICAO , DS_CARDAPIO_FICHA]]></queryString>
+
+	<field name="ficha" class="java.lang.String"/>
+	<field name="ds_cardapio" class="java.lang.String"/>
+	<field name="CD_CARDAPIO_PRATO" class="java.lang.Integer"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="50"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="0"
+						width="268"
+						height="46"
+						key="rectangle-1"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<graphicElement stretchType="RelativeToTallestObject"/>
+				</rectangle>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="2"
+						width="262"
+						height="12"
+						key="textField"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ds_cardapio}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="16"
+						width="262"
+						height="12"
+						key="textField"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ficha}]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="2"
+						y="30"
+						width="262"
+						height="10"
+						key="subreport"
+						stretchType="RelativeToBandHeight"
+						positionType="Float"/>
+					<subreportParameter  name="param_cd_cardapio_prato">
+						<subreportParameterExpression><![CDATA[$F{CD_CARDAPIO_PRATO}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="PARAM_FORMA_PAGAMENTO">
+						<subreportParameterExpression><![CDATA[$P{PARAM_FORMA_PAGAMENTO}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="PARAM_EMPRESA">
+						<subreportParameterExpression><![CDATA[$P{PARAM_EMPRESA}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "ControleQuantitativoVendas_subreport2_subreport1.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>
