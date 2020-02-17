@@ -36,8 +36,10 @@
 							class="fa fa-lightbulb-o"></i></span>
 
 						<div class="info-box-content">
-							<span class="info-box-text">Média de pedidos/dia</span> <span
+							<span class="info-box-text"><p:outputLabel id="explicacao1">Média de pedidos/dia</p:outputLabel></span> <span
 								class="info-box-number">#{dashboardController.entity.mediaPedidosDiaMes}</span>
+								<p:tooltip id="toolTipexplicacao1" for="explicacao1"
+										value="Média de pedidos do mês confirmados, sem sobremesas" position="top" />
 						</div>
 						<!-- /.info-box-content -->
 					</div>
@@ -188,13 +190,14 @@
 					<div class="info-box bg-aqua">
 						<span class="info-box-icon"><i class="fa fa-list"></i></span>
 						<div class="info-box-content">
-							<span class="info-box-text">Pedido</span> <span
+							<span class="info-box-text"><h:outputLabel  id="explicacao2" />Pedido</span> <span
 								class="info-box-number">#{dashboardController.entity.quantidadePedidos} (#{dashboardController.entity.quantidadeCortesias} cortesias)</span>
 							<div class="progress">
 								<div class="progress-bar" style="width: 100%"></div>
 							</div>
-							<span class="progress-description">Pedidos com previsão de
-								entrega no dia de hoje </span>
+							 <span class="progress-description"><p:outputLabel id="explicacao3"> Cardápio do dia, não conta sobremesas, com e sem confirmação</p:outputLabel> </span>
+							<p:tooltip id="toolTipexplicacao2" for="explicacao3"
+										value="Pedidos do cardápio do dia, não conta sobremesas, com e sem confirmação" position="top" />
 						</div>
 						<!-- /.info-box-content -->
 					</div>

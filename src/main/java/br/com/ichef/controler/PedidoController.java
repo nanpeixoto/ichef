@@ -447,8 +447,11 @@ public class PedidoController extends BaseController {
 				return;
 			} else {
 				getEntity().setCliente(cliente);
+				limparDadosEntregador(null, null, null);
 				obterEnderecoCliente();
 			}
+			
+		
 		}
 	}
 
@@ -461,6 +464,7 @@ public class PedidoController extends BaseController {
 					if (endCliente.getLocalidade() == null) {
 						facesMessager
 								.error("Nenhuma localidade cadastradado para esse cliente, favor revisar o cadastro");
+						limparDadosEntregador(null, null, null);
 						return;
 					}
 					if (endCliente.getLocalidade().getEmpresa().getId().equals(userLogado.getEmpresaLogada().getId()))
@@ -478,6 +482,7 @@ public class PedidoController extends BaseController {
 				getEntity().setClienteEndereco(null);
 				if (listaEnderecos == null || listaEnderecos.size() == 0) {
 					facesMessager.error("Nenhum endereço cadastradado para essa empresa, revise o cadastro do cliente");
+					limparDadosEntregador(null, null, null);
 				}
 			}
 
@@ -677,6 +682,7 @@ public class PedidoController extends BaseController {
 		setCodigoCliente(null);
 
 	}
+	
 
 	private void limparPedido() {
 		ClienteEndereco enderecoAtual = getEntity().getClienteEndereco();
@@ -692,6 +698,12 @@ public class PedidoController extends BaseController {
 		getEntity().setClienteEndereco(enderecoAtual);
 		getEntity().setCliente(clienteAtual);
 		setCodigoCliente(codigoClienteAtual);
+		
+		limparDadosEntregador(entregadorAtual, valorDiariaEntregadorAtual, ordemEntregaAtual);
+	}
+
+	private void limparDadosEntregador(Entregador entregadorAtual, BigDecimal valorDiariaEntregadorAtual,
+			Integer ordemEntregaAtual) {
 		getEntity().setEntregador(entregadorAtual);
 		getEntity().setValorDiariaEntregador(valorDiariaEntregadorAtual);
 		getEntity().setOrdemEntrega(ordemEntregaAtual);
