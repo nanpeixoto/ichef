@@ -558,6 +558,7 @@ public class PedidoController extends BaseController {
 				return;
 			}
 
+			
 			// valor da diaria do entregador
 			if (getEntity().getValorDiariaEntregador() == null) {
 				facesMessager.error(getRequiredMessage("Valor da Diária"));
@@ -574,6 +575,11 @@ public class PedidoController extends BaseController {
 			if (getEntity().getFormaPagamento() == null) {
 				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
 				return;
+			} else {
+				if( getEntity().getFormaPagamento().isCortesia() ) {
+					getEntity().setValorPedido(null);
+					getEntity().setValorPago(null);
+				}
 			}
 
 			// ENTREGADOR

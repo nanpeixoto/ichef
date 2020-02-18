@@ -65,13 +65,20 @@
 								<p:column width="6%" exportable="false">
 									<p:rowToggler />
 								</p:column>
+								
+								<p:column headerText="Cód Cliente" filterBy="#{item.cliente.id}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.cliente.id}">
+									<h:outputLabel value="#{item.cliente.id}" escape="false" />
+								</p:column>
 
 
-								<p:column headerText="Cliente" filterBy="#{item.cliente.id}-#{item.cliente.nome}"
+								<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.cliente.nome}">
-									<h:outputLabel value="#{item.cliente.id} - #{item.cliente.nome}" escape="false" />
+									<h:outputLabel value="#{item.cliente.nome}" escape="false" />
 								</p:column>
 
 								<p:column headerText="Saldo" filterBy="#{item.valorSaldo}"
