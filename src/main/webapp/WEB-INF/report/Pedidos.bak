@@ -392,7 +392,7 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="48"  isSplitAllowed="false" >
+			<band height="18"  isSplitAllowed="false" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="1"
@@ -418,10 +418,13 @@
 						stretchType="RelativeToTallestObject"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Middle" isStyledText="true">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricaoPratoOrdem()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricaoPratoOrdem()
++"<br></br>Cardapio:"+$F{cardapio}.getDescricaoComDiaSemana() 
++ ( !$F{cardapio}.getDataFormatada().equals(  $F{dataEntregaFormatada}) 
+? "<br></br>Cardapio:"+$F{cardapio}.getDescricaoComDiaSemana() : "")]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

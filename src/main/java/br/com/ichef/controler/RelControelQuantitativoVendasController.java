@@ -39,7 +39,8 @@ public class RelControelQuantitativoVendasController extends BaseController {
 	private Date dataInicial;
 	private Date dataFinal;
 	private Empresa empresa;
-
+	private Boolean analitico;
+	
 	public void imprimir() {
 		if (getDataInicial() == null || getDataFinal() == null) {
 			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
@@ -68,7 +69,10 @@ public class RelControelQuantitativoVendasController extends BaseController {
 					setParametroReport("pDataFinal", formatarData.format(getDataFinal()));
 					setParametroReport("pCodigoEmpresa",getEmpresa().getId());
 					//escreveRelatorioPDF("ResumoDiarioPedidos", true, lista);
-					escreveRelatorioPDF("ControleQuantitativoVendas", true, service.getConnection());
+					if(!analitico)
+						escreveRelatorioPDF("ControleQuantitativoVendas", true, service.getConnection());
+					else 
+						escreveRelatorioPDF("ControleQuantitativoVendasAnalitico", true, service.getConnection());
 				} catch (Exception e) {
 					e.printStackTrace();
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
@@ -174,6 +178,14 @@ public class RelControelQuantitativoVendasController extends BaseController {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Boolean getAnalitico() {
+		return analitico;
+	}
+
+	public void setAnalitico(Boolean analitico) {
+		this.analitico = analitico;
 	}
 
 }

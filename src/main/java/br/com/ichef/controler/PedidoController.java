@@ -577,8 +577,8 @@ public class PedidoController extends BaseController {
 				return;
 			} else {
 				if( getEntity().getFormaPagamento().isCortesia() ) {
-					getEntity().setValorPedido(null);
-					getEntity().setValorPago(null);
+					getEntity().setValorPedido(new BigDecimal(0));
+					getEntity().setValorPago( new BigDecimal(0) );
 				}
 			}
 

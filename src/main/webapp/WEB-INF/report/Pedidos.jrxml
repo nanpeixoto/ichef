@@ -408,7 +408,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cliente}.getId()+"-"+$F{cliente}.getNome()]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="168"
 						y="0"
@@ -418,10 +418,12 @@
 						stretchType="RelativeToTallestObject"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Middle" isStyledText="true">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricaoPratoOrdem()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricaoPratoOrdem()
++ ( !$F{cardapio}.getDataFormatada().equals(  $F{dataEntregaFormatada}) 
+? "<br></br>Cardapio:"+$F{cardapio}.getDescricaoComDiaSemana() : "")]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

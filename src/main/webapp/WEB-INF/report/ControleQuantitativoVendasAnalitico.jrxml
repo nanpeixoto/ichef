@@ -242,14 +242,15 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 		<group  name="cardapio" >
 			<groupExpression><![CDATA[$F{CD_CARDAPIO_PRATO}]]></groupExpression>
 			<groupHeader>
-			<band height="24"  isSplitAllowed="true" >
+			<band height="13"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						x="1"
 						y="1"
 						width="533"
 						height="12"
-						key="rectangle-2"/>
+						key="rectangle-2"
+						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
@@ -258,162 +259,14 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 						y="2"
 						width="528"
 						height="11"
-						key="textField-10"/>
+						key="textField-10"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NR_ORDEM}+" - "+$F{DS_CARDAPIO_FICHA}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement
-						x="1"
-						y="13"
-						width="112"
-						height="11"
-						key="staticText-13"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Cliente]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="222"
-						y="13"
-						width="70"
-						height="11"
-						key="staticText-15"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Forma Pag.]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="357"
-						y="13"
-						width="26"
-						height="11"
-						key="staticText-16"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Taxa]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="315"
-						y="13"
-						width="42"
-						height="11"
-						key="staticText-17"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Vl. Pedido]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="381"
-						y="13"
-						width="42"
-						height="11"
-						key="staticText-19"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Vl. Real*]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="291"
-						y="13"
-						width="24"
-						height="11"
-						key="staticText-21"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Qtd.]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="113"
-						y="13"
-						width="50"
-						height="11"
-						key="staticText-22"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Dt. Cardápio]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="162"
-						y="13"
-						width="60"
-						height="11"
-						key="staticText-26"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Tipo Prato]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="423"
-						y="13"
-						width="25"
-						height="11"
-						backcolor="#CCCCCC"
-						key="staticText-33"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Conf.**]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="448"
-						y="13"
-						width="43"
-						height="11"
-						backcolor="#CCCCCC"
-						key="staticText-34"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Vl. Devido***]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="491"
-						y="13"
-						width="43"
-						height="11"
-						backcolor="#CCCCCC"
-						key="staticText-35"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Vl. Pago***]]></text>
-				</staticText>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -424,7 +277,8 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 						y="1"
 						width="42"
 						height="12"
-						key="textField-12"/>
+						key="textField-12"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
@@ -437,7 +291,8 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 						y="1"
 						width="36"
 						height="12"
-						key="staticText-12"/>
+						key="staticText-12"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
@@ -450,7 +305,8 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 						y="1"
 						width="80"
 						height="12"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
@@ -605,12 +461,172 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="85"  isSplitAllowed="false" >
+			<band height="106"  isSplitAllowed="false" >
+				<staticText>
+					<reportElement
+						x="1"
+						y="0"
+						width="112"
+						height="11"
+						key="staticText-13"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Cliente]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="222"
+						y="0"
+						width="70"
+						height="11"
+						key="staticText-15"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Forma Pag.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="357"
+						y="0"
+						width="26"
+						height="11"
+						key="staticText-16"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Taxa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="315"
+						y="0"
+						width="42"
+						height="11"
+						key="staticText-17"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Vl. Pedido]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="381"
+						y="0"
+						width="42"
+						height="11"
+						key="staticText-19"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Vl. Real*]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="291"
+						y="0"
+						width="24"
+						height="11"
+						key="staticText-21"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Qtd.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="113"
+						y="0"
+						width="50"
+						height="11"
+						key="staticText-22"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Dt. Cardápio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="162"
+						y="0"
+						width="60"
+						height="11"
+						key="staticText-26"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Tipo Prato]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="423"
+						y="0"
+						width="25"
+						height="11"
+						backcolor="#CCCCCC"
+						key="staticText-33"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Conf.**]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="448"
+						y="0"
+						width="43"
+						height="11"
+						backcolor="#CCCCCC"
+						key="staticText-34"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Vl. Devido***]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="491"
+						y="0"
+						width="43"
+						height="11"
+						backcolor="#CCCCCC"
+						key="staticText-35"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Vl. Pago***]]></text>
+				</staticText>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
 						x="348"
-						y="12"
+						y="23"
 						width="44"
 						height="11"
 						backcolor="#CCCCCC"
@@ -626,7 +642,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="304"
-						y="12"
+						y="23"
 						width="44"
 						height="11"
 						backcolor="#CCCCCC"
@@ -641,9 +657,9 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<rectangle>
 					<reportElement
 						x="1"
-						y="10"
+						y="21"
 						width="533"
-						height="73"
+						height="85"
 						key="rectangle-3"
 						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
@@ -652,7 +668,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="348"
-						y="12"
+						y="23"
 						width="44"
 						height="11"
 						backcolor="#CCCCCC"
@@ -667,7 +683,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<staticText>
 					<reportElement
 						x="5"
-						y="12"
+						y="23"
 						width="50"
 						height="11"
 						key="staticText-14"
@@ -681,7 +697,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<staticText>
 					<reportElement
 						x="5"
-						y="33"
+						y="44"
 						width="50"
 						height="11"
 						key="staticText-23"
@@ -695,7 +711,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<staticText>
 					<reportElement
 						x="5"
-						y="43"
+						y="54"
 						width="50"
 						height="11"
 						key="staticText-24"
@@ -709,7 +725,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<staticText>
 					<reportElement
 						x="5"
-						y="23"
+						y="34"
 						width="50"
 						height="11"
 						key="staticText-25"
@@ -724,7 +740,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="396"
-						y="12"
+						y="23"
 						width="44"
 						height="11"
 						backcolor="#CCCCCC"
@@ -740,7 +756,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="305"
-						y="12"
+						y="23"
 						width="44"
 						height="11"
 						backcolor="#CCCCCC"
@@ -755,7 +771,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<staticText>
 					<reportElement
 						x="5"
-						y="53"
+						y="64"
 						width="50"
 						height="11"
 						key="staticText-30"
@@ -769,7 +785,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<staticText>
 					<reportElement
 						x="5"
-						y="63"
+						y="74"
 						width="50"
 						height="11"
 						key="staticText-31"
@@ -783,7 +799,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<staticText>
 					<reportElement
 						x="5"
-						y="73"
+						y="84"
 						width="50"
 						height="11"
 						key="staticText-32"
@@ -797,10 +813,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="1"
-						y="0"
+						y="11"
 						width="112"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement>
 						<font size="8"/>
@@ -810,10 +827,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="113"
-						y="0"
+						y="11"
 						width="50"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement>
 						<font size="8"/>
@@ -823,10 +841,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="162"
-						y="0"
+						y="11"
 						width="60"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement>
 						<font size="8"/>
@@ -836,10 +855,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="222"
-						y="0"
+						y="11"
 						width="70"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement>
 						<font size="8"/>
@@ -849,10 +869,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="291"
-						y="0"
+						y="11"
 						width="24"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
@@ -862,10 +883,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="315"
-						y="0"
+						y="11"
 						width="42"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
@@ -875,10 +897,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="357"
-						y="0"
+						y="11"
 						width="26"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
@@ -888,10 +911,11 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="true" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="381"
-						y="0"
+						y="11"
 						width="42"
 						height="11"
-						key="textField"/>
+						key="textField"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font size="8"/>
@@ -902,11 +926,12 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="423"
-						y="0"
+						y="11"
 						width="25"
 						height="11"
 						backcolor="#CCCCCC"
-						key="textField-15"/>
+						key="textField-15"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
@@ -917,11 +942,12 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="448"
-						y="0"
+						y="11"
 						width="43"
 						height="11"
 						backcolor="#CCCCCC"
-						key="textField-16"/>
+						key="textField-16"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
@@ -932,11 +958,12 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="491"
-						y="0"
+						y="11"
 						width="43"
 						height="11"
 						backcolor="#CCCCCC"
-						key="textField-17"/>
+						key="textField-17"
+						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
@@ -946,7 +973,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="56"
-						y="12"
+						y="23"
 						width="66"
 						height="12"
 						key="textField"
@@ -960,7 +987,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="56"
-						y="23"
+						y="34"
 						width="474"
 						height="12"
 						key="textField"
@@ -974,7 +1001,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="56"
-						y="33"
+						y="44"
 						width="475"
 						height="12"
 						key="textField"
@@ -988,7 +1015,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="56"
-						y="43"
+						y="54"
 						width="475"
 						height="12"
 						key="textField"
@@ -1002,7 +1029,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="56"
-						y="53"
+						y="64"
 						width="473"
 						height="12"
 						key="textField"
@@ -1016,9 +1043,9 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="56"
-						y="73"
+						y="84"
 						width="473"
-						height="12"
+						height="11"
 						key="textField"
 						positionType="Float"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -1030,7 +1057,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="56"
-						y="63"
+						y="74"
 						width="473"
 						height="12"
 						key="textField"
@@ -1045,7 +1072,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					<reportElement
 						mode="Opaque"
 						x="440"
-						y="12"
+						y="23"
 						width="44"
 						height="11"
 						backcolor="#CCCCCC"

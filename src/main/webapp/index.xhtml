@@ -53,8 +53,10 @@
 							class="fa fa-phone-volume"></i></span>
 
 						<div class="info-box-content">
-							<span class="info-box-text">Pedidos</span> <span
+							<span class="info-box-text"><h:outputLabel id="quadro2" > Pedidos</h:outputLabel></span> <span
 								class="info-box-number">#{dashboardController.entity.quantidadeTotalPedidos}</span>
+								<p:tooltip id="toolTipexplicacao3" for="quadro2"
+										value="Pedidos, sem contar sobremesas, confirmados ou não, inclusive para datas futuras, dentro do cardápio do mês" position="top" />
 						</div>
 						<!-- /.info-box-content -->
 					</div>
@@ -67,8 +69,11 @@
 							class="fa fa-gift"></i></span>
 
 						<div class="info-box-content">
-							<span class="info-box-text">Cortesias</span> <span
+							<span class="info-box-text"><h:outputLabel id="quadro3" > Cortesias</h:outputLabel></span> <span
 								class="info-box-number">#{dashboardController.entity.quantidadeTotalCortesias}</span>
+								<p:tooltip id="toolTipexplicacao4" for="quadro3"
+										value="Cortesias, sem contar sobremesas, confirmados, inclusive para datas futuras, dentro do cardápio do mês" position="top" />
+								
 						</div>
 						<!-- /.info-box-content -->
 					</div>
