@@ -1,8 +1,8 @@
 .fc-content {
-	 font-size: 10px  !important;
+	font-size: 10px !important;
 }
 
-.info-box-number{
+.info-box-number {
 	font-size: 30px !important;
 }
 
@@ -11,7 +11,7 @@
 }
 
 .fc {
-	font-size: 10px  !important;
+	font-size: 10px !important;
 }
 
 .letras-maiusculas {
@@ -34,4 +34,38 @@
 
 .ui-rowgroup-toggler-icon {
 	display: none;
+}
+
+.ui-datatable .ui-datatable-data .even-row td {
+	background-color: #d9e1f4 !important;
+	color: rgb(0, 0, 0) !important;
+}
+
+/*.ui-datatable .ui-datatable-data .even-row td:hover {	background-color: #ffcc99 !important;	color: rgb(0, 0, 0) !important;}*/
+
+/*.ui-datatable .ui-datatable-data .odd-row td:hover  {	background-color: #ffcc99 !important;	color: rgb(0, 0, 0) !important;}*/
+.ui-datatable .ui-datatable-data .odd-row td {
+	background-color: #F4FCFE !important;
+	color: rgb(0, 0, 0) !important;
+}
+
+.ui-datatable .ui-datatable-data .even-row-center td {
+	background-color: #d9e1f4 !important;
+	color: rgb(0, 0, 0) !important;
+}
+
+.ui-datatable .ui-datatable-data .odd-row-center td {
+	background-color: #F4FCFE !important;
+	color: rgb(0, 0, 0) !important;
+}
+
+.ui-datatable .ui-datatable-data .even-row-center span {
+	background-color: #d9e1f4 !important;
+	text-align: left !important;
+	color: rgb(0, 0, 0) !important;
+}
+
+.ui-datatable .ui-datatable-data .odd-row-center span {
+	background-color: #F4FCFE !important;
+	color: rgb(0, 0, 0) !important;
 }

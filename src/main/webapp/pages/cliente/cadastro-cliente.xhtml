@@ -220,7 +220,7 @@
 		          							</p:cellEditor>
 										</p:column>
 										
-										<p:column headerText="Endereço" width="30%" >
+										<p:column headerText="Endereço" width="15%" >
 										 	<p:cellEditor>
 												<f:facet name="output"><h:outputLabel value="#{itemEndreco.endereco}" /></f:facet>
 												<f:facet name="input">
@@ -230,7 +230,7 @@
 											
 										</p:column>
 										
-										<p:column headerText="Localidade" width="30%" >
+										<p:column headerText="Localidade" width="20%" >
 										 	<p:cellEditor>
 												<f:facet name="output"><h:outputLabel value="#{itemEndreco.localidade.descricao}" /></f:facet>
 												<f:facet name="input">
@@ -243,7 +243,11 @@
 											
 										</p:column>
 										
-										<p:column style="width:5px">
+										<p:column headerText="Empresa" width="20%" >
+												<h:outputLabel value="#{itemEndreco.localidade.empresa.nomeFantasia}" />
+										</p:column>
+										
+										<p:column style="width:10px">
 								            <p:rowEditor />
 								        </p:column>
 								        

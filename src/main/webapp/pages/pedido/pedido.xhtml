@@ -339,7 +339,8 @@
 							<p:dataTable id="tabListaPedidos" widgetVar="itens"
 								paginator="false" value="#{pedidoController.lista}" var="item"
 								rowKey="#{item.id}" reflow="true" paginatorPosition="bottom"
-								editable="false" emptyMessage="Nenhum item encontrado"
+								editable="false" emptyMessage="Nenhum item encontrado" 
+ 						rowStyleClass="#{item.confirmado ? 'even-row' : 'odd-row'}"
 								sortBy="#{item.dataEntrega}" expandableRowGroups="true"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
@@ -405,9 +406,9 @@
 								<p:column headerText="Tipo" filterBy="#{item.tipoPrato.descricao}" filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;" sortBy="#{item.tipoPrato.descricao}">								
 									<p:tooltip id="toolInplaceDerivacao" for="ajaxInplaceDericavao" value="Clique no campo para editar a Derivação" position="top" />
-									<p:inplace id="ajaxInplaceDericavao" label="#{item.tipoPrato.descricao}/#{item.derivacao.descricao}" 	editor="true">
+									<p:inplace id="ajaxInplaceDericavao" label="#{item.tipoPrato.descricao}/#{item.derivacao.descricao}" disabled="#{item.confirmado}"	editor="#{item.confirmado}" >
 										<p:ajax event="save" update="tabListaPedidos,growl" listener="#{pedidoController.atualizarPedido(item,'D')}" />	
-										<p:selectOneMenu id="selectderivacao"  value="#{item.derivacao}" filter="true" filterMatchMode="contains" autoWidth="false"  converter="omnifaces.SelectItemsConverter">
+										<p:selectOneMenu id="selectderivacao" disabled="#{item.confirmado}"  value="#{item.derivacao}" filter="true" filterMatchMode="contains" autoWidth="false"  converter="omnifaces.SelectItemsConverter">
 											<f:selectItem itemLabel="Selecionar" itemValue="" noSelectionOption="true" />
 											<f:selectItems value="#{pedidoController.listaDerivacoes}" var="itemDerivacao" itemLabel="#{itemDerivacao.descricao}" itemValue="#{itemDerivacao}" />
 										</p:selectOneMenu>
@@ -417,7 +418,7 @@
 								<p:column headerText="Qtd" filterBy="#{item.quantidade}" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.quantidade}" width="6%">
 									
-										 <p:inplace id="ajaxInplace" label="#{item.quantidade}" editor="true">
+										 <p:inplace id="ajaxInplace" label="#{item.quantidade}" editor="true"  disabled="#{item.confirmado}">
 										<p:ajax event="save" update="tabListaPedidos,growl" listener="#{pedidoController.atualizarPedido(item,'Q')}" />
 										<p:inputText value="#{item.quantidade}" maxlength="3" style="width: 100%;" />
 									</p:inplace>  
@@ -426,7 +427,7 @@
 								
 
 								<p:column headerText=" " filterStyle="display:none; visibility:hidden;" width="5%">
-									<p:commandButton process="tabListaPedidos"
+									<p:commandButton process="tabListaPedidos" id="btnExcluir"  disabled="#{item.confirmado}"
 										update="tabListaPedidos" icon="fa fa-trash-o" value=" "
 										styleClass="btn btn-danger"	actionListener="#{pedidoController.excluirItem( item )}" />
 								</p:column>
@@ -441,7 +442,7 @@
 											</f:facet>
 											<h:outputText value="Observação do Pedido:" />
 											<p:inplace id="inplaceObservacao" label="#{item.observacao}"
-												editor="true" toggleable="true" emptyLabel="Vazio"
+												editor="true" toggleable="true" emptyLabel="Vazio"  disabled="#{item.confirmado}"
 												saveLabel="Salvar" cancelLabel="Cancelar">
 												<p:ajax event="save" update="tabListaPedidos,growl" listener="#{pedidoController.atualizarPedido(item,'O')}" />
 												<p:inputTextarea id="observacao" value="#{item.observacao}"
@@ -452,7 +453,7 @@
 											
 											<h:outputText value="Observação da Entrega" />
 											<p:inplace id="inplaceObservacaoEntrega" label="#{item.observacaoEntrega}"
-												editor="true" toggleable="true" emptyLabel="Vazio"
+												editor="true" toggleable="true" emptyLabel="Vazio"  disabled="#{item.confirmado}"
 												saveLabel="Salvar" cancelLabel="Cancelar">
 												<p:ajax event="save" update="tabListaPedidos,growl"
 													listener="#{pedidoController.atualizarPedido(item,'O')}" />

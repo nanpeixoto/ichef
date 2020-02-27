@@ -32,11 +32,10 @@ public class PedidoVisitor extends FilterVisitor {
 	private boolean limitarImpressaoPorHorarioExtra;
 
 	private boolean antesNoveeTrinta;
-	
-	private Date dataEtiqueta;
-	
-	private String horarioCorte;
 
+	private Date dataEtiqueta;
+
+	private String horarioCorte;
 
 	@Override
 	public void visitCriteria(Criteria criteria) {
@@ -50,7 +49,8 @@ public class PedidoVisitor extends FilterVisitor {
 		if (getDataCardapio() != null && getData() != null)
 			criteria.add(Restrictions.or(
 					Restrictions.sqlRestriction(
-							" date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEntrega()) + "'"),
+							"  STR_TO_DATE(date_format( dt_entrega, '%d/%m/%Y' ), '%d/%m/%Y' ) >=	 STR_TO_DATE( '"
+									+ Util.dateToString(getData()) + "', '%d/%m/%Y' )"),
 					Restrictions.sqlRestriction(" date_format(cardapio1_.data, '%d/%m/%Y' ) ='"
 							+ Util.dateToString(getDataCardapio()) + "'"),
 					Restrictions.sqlRestriction(
@@ -86,10 +86,10 @@ public class PedidoVisitor extends FilterVisitor {
 			criteria.add(Restrictions.eq("id.codigoEntregador", getCodigoEntregador()));
 		}
 
-		if (getHorarioCorte()!=null) 
-			 criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  > STR_TO_DATE('" + Util.dateToString(getDataEtiqueta()) + " " +getHorarioCorte()+"','%d/%m/%Y %H:%i')"));
-	
-		 
+		if (getHorarioCorte() != null)
+			criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  > STR_TO_DATE('"
+					+ Util.dateToString(getDataEtiqueta()) + " " + getHorarioCorte() + "','%d/%m/%Y %H:%i')"));
+
 		if (getDataEtiqueta() != null)
 			criteria.add(Restrictions.sqlRestriction(
 					" date_format( data_filtro, '%d/%m/%Y' ) ='" + Util.dateToString(getDataEtiqueta()) + "'"));

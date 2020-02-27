@@ -708,11 +708,11 @@ public class PedidoController extends BaseController {
 		limparDadosEntregador(entregadorAtual, valorDiariaEntregadorAtual, ordemEntregaAtual);
 	}
 
-	private void limparDadosEntregador(Entregador entregadorAtual, BigDecimal valorDiariaEntregadorAtual,
-			Integer ordemEntregaAtual) {
+	private void limparDadosEntregador(Entregador entregadorAtual, BigDecimal valorDiariaEntregadorAtual,Integer ordemEntregaAtual) {
 		getEntity().setEntregador(entregadorAtual);
 		getEntity().setValorDiariaEntregador(valorDiariaEntregadorAtual);
 		getEntity().setOrdemEntrega(ordemEntregaAtual);
+		getEntity().setQuantidade(1);
 	}
 
 	public void excluirItem(Pedido itemExcluir) {
