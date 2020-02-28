@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -44,6 +45,14 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
+	@JoinColumns({
+
+			@JoinColumn(name = "CD_CLIENTE", referencedColumnName = "CD_CLIENTE"),
+			@JoinColumn(name = "CD_EMPRESA", referencedColumnName = "CD_EMPRESA") })
+	private VwClienteSaldo vwClienteSaldo;
+
+	@ManyToOne
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_DERIVACAO")
 	private Derivacao derivacao;
 
@@ -54,7 +63,7 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_EMPRESA")
+	@JoinColumn(name = "CD_EMPRESA", insertable=false, updatable = false)
 	private Empresa empresa;
 
 	@ManyToOne
@@ -77,7 +86,7 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_CLIENTE")
+	@JoinColumn(name = "CD_CLIENTE", insertable=false, updatable = false)
 	private Cliente cliente;
 
 	@ManyToOne
@@ -253,12 +262,13 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 	}
 
 	public String getDescricaoOuPrato() {
-		if (getDescricao() != null && getFichaTecnicaPrato()==null)
+		if (getDescricao() != null && getFichaTecnicaPrato() == null)
 			return getDescricao();
-		if(getFichaTecnicaPrato()!=null  && getDescricao()!=null  )
-			return getDescricao()+" <br>"+getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "-"
+		if (getFichaTecnicaPrato() != null && getDescricao() != null)
+			return getDescricao() + " <br>" + getFichaTecnicaPrato().getDescricao() + "<br>"
+					+ getTipoPrato().getDescricao() + "-"
 					+ (getDerivacao() != null ? getDerivacao().getDescricao() : "");
-		if(getFichaTecnicaPrato()!=null  && getDescricao()==null  )
+		if (getFichaTecnicaPrato() != null && getDescricao() == null)
 			return getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "-"
 					+ (getDerivacao() != null ? getDerivacao().getDescricao() : "");
 		return getDescricao();
@@ -310,6 +320,14 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
+	}
+
+	public VwClienteSaldo getVwClienteSaldo() {
+		return vwClienteSaldo;
+	}
+
+	public void setVwClienteSaldo(VwClienteSaldo vwClienteSaldo) {
+		this.vwClienteSaldo = vwClienteSaldo;
 	}
 
 }

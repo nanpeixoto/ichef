@@ -40,8 +40,9 @@
  and STR_TO_DATE( date_format( data,'%d-%m-%Y'),'%d-%m-%Y')
  between  STR_TO_DATE( '$P!{pDataInicio}','%d-%m-%Y')  
  and  STR_TO_DATE( '$P!{pDataFinal}','%d-%m-%Y')
+and cd_cliente = coalesce($P!{pCodigoCliente}, cd_cliente )
 group by data, nm_fantasia, ds_forma_pagamento, nr_ordem, ds_cardapio_ficha , CD_EMPRESA, CD_CARDAPIO_PRATO
-order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento	]]></queryString>
+order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento]]></queryString>
 
 	<field name="NM_FANTASIA" class="java.lang.String"/>
 	<field name="DS_FORMA_PAGAMENTO" class="java.lang.String"/>
@@ -68,7 +69,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento	]]></
 	<variable name="quantidadePorPrato" class="java.lang.Integer" resetType="Group" resetGroup="cardapio" calculation="Sum">
 		<variableExpression><![CDATA[$F{NR_QTD}]]></variableExpression>
 	</variable>
-	<variable name="quantidadePorData" class="java.lang.Integer" resetType="Report" calculation="Sum">
+	<variable name="quantidadePorData" class="java.lang.Integer" resetType="Group" resetGroup="DATA" calculation="Sum">
 		<variableExpression><![CDATA[$F{NR_QTD}]]></variableExpression>
 	</variable>
 	<variable name="valorPagoPorPrato" class="java.lang.Double" resetType="Group" resetGroup="cardapio" calculation="Sum">
@@ -243,7 +244,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento	]]></
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="50"  isSplitAllowed="true" >
+			<band height="12"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="371"
@@ -255,7 +256,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento	]]></
 					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{quantidadePorPrato}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{quantidadePorData}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -386,7 +387,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento	]]></
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Controle Quantitativo de Vendas]]></text>
+				<text><![CDATA[Controle Quantitativo de Vendas Sintético]]></text>
 				</staticText>
 				<staticText>
 					<reportElement

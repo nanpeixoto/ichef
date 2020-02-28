@@ -10,6 +10,7 @@ import javax.inject.Named;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
+import br.com.ichef.arquitetura.util.RelatorioUtil;
 import br.com.ichef.model.VwClienteSaldo;
 import br.com.ichef.service.ClienteSaldoService;
 import br.com.ichef.util.FacesUtil;
@@ -31,10 +32,21 @@ public class ClienteSaldoController extends BaseController {
 	private List<VwClienteSaldo> listaFiltro = new ArrayList<VwClienteSaldo>();
 
 	private List<VwClienteSaldo> listaSelecionadas = new ArrayList<VwClienteSaldo>();
+	
+	
 
 	@PostConstruct
 	public void init() {
-		lista = service.listAll();
+		VwClienteSaldo saldo = new VwClienteSaldo();
+		saldo.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
+		saldo.setId(id);
+		try {
+			lista = service.findByParameters(saldo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema");
+		}
+
 	}
 
 	public void excluirSelecionados() {
@@ -44,6 +56,17 @@ public class ClienteSaldoController extends BaseController {
 		}
 		FacesUtil.addInfoMessage("VwClienteSaldos excluídas com sucesso");
 	}
+	
+	public void preExportar(Object document) {
+		RelatorioUtil relatorio = new RelatorioUtil("Carteira de Clientes", document);
+		relatorio.preExportar();
+	}
+	
+	public void preExportarAnalitico(Object document) {
+		RelatorioUtil relatorio = new RelatorioUtil("Carteira de Clientes", document);
+		relatorio.preExportar();
+	}
+
 
 	public ClienteSaldoService getService() {
 		return service;
@@ -92,5 +115,6 @@ public class ClienteSaldoController extends BaseController {
 	public void setListaFiltro(List<VwClienteSaldo> listaFiltro) {
 		this.listaFiltro = listaFiltro;
 	}
+	
 
 }

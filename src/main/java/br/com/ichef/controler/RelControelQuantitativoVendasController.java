@@ -41,6 +41,8 @@ public class RelControelQuantitativoVendasController extends BaseController {
 	private Empresa empresa;
 	private Boolean analitico;
 	
+	private Long codigoCliente;
+	
 	public void imprimir() {
 		if (getDataInicial() == null || getDataFinal() == null) {
 			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
@@ -66,6 +68,9 @@ public class RelControelQuantitativoVendasController extends BaseController {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
 					SimpleDateFormat formatarData = new SimpleDateFormat("dd-MM-yyyy");
 					setParametroReport("pDataInicio", formatarData.format(getDataInicial()));
+					if(getCodigoCliente()!=null) {
+						setParametroReport("pCodigoCliente",  getCodigoCliente());
+					}
 					setParametroReport("pDataFinal", formatarData.format(getDataFinal()));
 					setParametroReport("pCodigoEmpresa",getEmpresa().getId());
 					//escreveRelatorioPDF("ResumoDiarioPedidos", true, lista);
@@ -186,6 +191,14 @@ public class RelControelQuantitativoVendasController extends BaseController {
 
 	public void setAnalitico(Boolean analitico) {
 		this.analitico = analitico;
+	}
+
+	public Long getCodigoCliente() {
+		return codigoCliente;
+	}
+
+	public void setCodigoCliente(Long codigoCliente) {
+		this.codigoCliente = codigoCliente;
 	}
 
 }

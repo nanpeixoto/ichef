@@ -34,14 +34,18 @@
 	<parameter name="pCodigoEmpresa" isForPrompting="false" class="java.lang.Long">
 		<defaultValueExpression ><![CDATA[new Long("2")]]></defaultValueExpression>
 	</parameter>
+	<parameter name="pCodigoCliente" isForPrompting="false" class="java.lang.Long">
+		<defaultValueExpression ><![CDATA[new Long("1")]]></defaultValueExpression>
+	</parameter>
 	<queryString><![CDATA[select     data, nm_fantasia, ds_forma_pagamento, nr_ordem, ds_cardapio_ficha, sum(nr_qtd) NR_QTD
 , sum(vl_lucro) VL_LUCRO, CD_EMPRESA, CD_CARDAPIO_PRATO
  from  vw_controle_quantitativo where cd_empresa = $P!{pCodigoEmpresa}
  and STR_TO_DATE( date_format( data,'%d-%m-%Y'),'%d-%m-%Y')
  between  STR_TO_DATE( '$P!{pDataInicio}','%d-%m-%Y')  
  and  STR_TO_DATE( '$P!{pDataFinal}','%d-%m-%Y')
+and cd_cliente = coalesce($P!{pCodigoCliente}, cd_cliente )
 group by data, nm_fantasia, ds_forma_pagamento, nr_ordem, ds_cardapio_ficha , CD_EMPRESA, CD_CARDAPIO_PRATO
-order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento	]]></queryString>
+order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento]]></queryString>
 
 	<field name="NM_FANTASIA" class="java.lang.String"/>
 	<field name="DS_FORMA_PAGAMENTO" class="java.lang.String"/>
@@ -386,7 +390,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO, ds_forma_pagamento	]]></
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Controle Quantitativo de Vendas]]></text>
+				<text><![CDATA[Controle Quantitativo de Vendas Sintético]]></text>
 				</staticText>
 				<staticText>
 					<reportElement

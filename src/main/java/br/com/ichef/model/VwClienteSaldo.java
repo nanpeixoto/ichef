@@ -6,11 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -26,34 +22,59 @@ public class VwClienteSaldo extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_CLIENTE")
-	private Cliente cliente;
+	private VwClienteSaldoID id;
 
 	@Column(name = "SALDO")
 	private BigDecimal valorSaldo;
 
+	@Column(name = "CD_LOCALIDADE")
+	private Long codigoLocalidade;
+
+	@Column(name = "CD_EMPRESA", insertable = false, updatable = false)
+	private Long codigoEmpresa;
+
+	@Column(name = "CD_TIP_LOCALIDADE")
+	private Long codigoTipoLocalidade;
+
+	@Column(name = "DS_LOCALIDADE")
+	private String descricaoLocalidade;
+
+	@Column(name = "NM_CLIENTE")
+	private String nome;
+
+	@Column(name = "DS_TIP_LOCALIDADE")
+	private String descricaoTipoLocalidade;
+
+	@Column(name = "NM_FANTASIA")
+	private String nomeFantasia;
+
+	@Column(name = "DATA_CARTEIRA")
+	private Date dataCarteira;
+
 	// bi-directional many-to-one association to AreaLocalidade
-	@OneToMany(mappedBy = "cliente")
-	@Fetch(FetchMode.SUBSELECT)
+	@OneToMany(mappedBy = "vwClienteSaldo")
+	@Fetch(FetchMode.SELECT)
 	private List<VwClienteCarteiraSaldo> saldos;
+
+	@Column(name = "SALDO_OUTRA_EMPRESA")
+	private BigDecimal valorSaldoOutraEmpresa;
 
 	@Override
 	public Object getId() {
-		return this.cliente;
+		return this.id;
 	}
 
 	@Override
 	public void setId(Object id) {
-		this.cliente = (Cliente) id;
+		this.id = (VwClienteSaldoID) id;
 
 	}
 
 	@Override
 	public String getColumnOrderBy() {
 		// TODO Auto-generated method stub
-		return "cliente.nome";
+		return "nome";
+		// return null;
 	}
 
 	@Override
@@ -94,14 +115,6 @@ public class VwClienteSaldo extends BaseEntity {
 		return null;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -120,6 +133,82 @@ public class VwClienteSaldo extends BaseEntity {
 
 	public void setValorSaldo(BigDecimal valorSaldo) {
 		this.valorSaldo = valorSaldo;
+	}
+
+	public Long getCodigoLocalidade() {
+		return codigoLocalidade;
+	}
+
+	public void setCodigoLocalidade(Long codigoLocalidade) {
+		this.codigoLocalidade = codigoLocalidade;
+	}
+
+	public Long getCodigoTipoLocalidade() {
+		return codigoTipoLocalidade;
+	}
+
+	public void setCodigoTipoLocalidade(Long codigoTipoLocalidade) {
+		this.codigoTipoLocalidade = codigoTipoLocalidade;
+	}
+
+	public String getDescricaoLocalidade() {
+		return descricaoLocalidade;
+	}
+
+	public void setDescricaoLocalidade(String descricaoLocalidade) {
+		this.descricaoLocalidade = descricaoLocalidade;
+	}
+
+	public String getDescricaoTipoLocalidade() {
+		return descricaoTipoLocalidade;
+	}
+
+	public void setDescricaoTipoLocalidade(String descricaoTipoLocalidade) {
+		this.descricaoTipoLocalidade = descricaoTipoLocalidade;
+	}
+
+	public String getNomeFantasia() {
+		return nomeFantasia;
+	}
+
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia;
+	}
+
+	public Date getDataCarteira() {
+		return dataCarteira;
+	}
+
+	public void setDataCarteira(Date dataCarteira) {
+		this.dataCarteira = dataCarteira;
+	}
+
+	public Long getCodigoEmpresa() {
+		return codigoEmpresa;
+	}
+
+	public void setCodigoEmpresa(Long codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public BigDecimal getValorSaldoOutraEmpresa() {
+		return valorSaldoOutraEmpresa;
+	}
+
+	public void setValorSaldoOutraEmpresa(BigDecimal valorSaldoOutraEmpresa) {
+		this.valorSaldoOutraEmpresa = valorSaldoOutraEmpresa;
+	}
+
+	public void setId(VwClienteSaldoID id) {
+		this.id = id;
 	}
 
 }

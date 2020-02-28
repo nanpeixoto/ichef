@@ -7,7 +7,7 @@
 	xmlns:adm="http://github.com/adminfaces"
 	template="/WEB-INF/templates/template.xhtml">
 
-	<ui:define name="title">Saldo de Clientes</ui:define>
+	<ui:define name="title">Carteira de Clientes</ui:define>
 
 	<ui:define name="body">
 		<adm:breadcrumb title="Saldo de Clientes" />
@@ -30,14 +30,15 @@
 						</div>
 
 						<p:panel>
+
 							<p:dataTable id="tabListaPedidos" widgetVar="itens"
-								paginator="false" value="#{clienteSaldoController.lista}"
-								var="item" rowKey="#{item.id}" reflow="true"
-								paginatorPosition="bottom" editable="false"
-								emptyMessage="Nenhum item encontrado"
-								sortBy="#{item.cliente.nome}" expandableRowGroups="true"
+								value="#{clienteSaldoController.lista}" var="item"
+								rowKey="#{item.id}" reflow="true" sortBy="#{item.nome}"
+								expandableRowGroups="true" paginator="true" rows="50"
+								paginatorPosition="bottom" emptyMessage="Nenhum item encontrado"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-								currentPageReportTemplate="" rowsPerPageTemplate="5,10,15,20,30">
+								currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+								rowsPerPageTemplate="25,50,75,100,125">
 
 								<f:facet name="header">
 									<p:outputPanel style="text-align:right; margin-right:-10px"
@@ -56,7 +57,8 @@
 											<h:graphicImage value="#{resource['images/excel_icon.png']}"
 												style="WIDTH: 29px;" />
 											<p:dataExporter type="xls" target="tabListaPedidos"
-												fileName="iChef - Lista Cliente com Saldo" />
+												fileName="iChef_Carteira_Clientes" 
+												 postProcessor="#{clienteSaldoController.preExportar}" />
 										</h:commandLink>
 									</p:outputPanel>
 
@@ -65,24 +67,44 @@
 								<p:column width="6%" exportable="false">
 									<p:rowToggler />
 								</p:column>
+
+								<p:column headerText="Cód Cliente" 
+									filterBy="#{item.id.codigoCliente}" filterMatchMode="exact"
+									width="10%" filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.id.codigoCliente}">
+									<h:outputLabel value="#{item.id.codigoCliente}" escape="false" />
+									<f:facet name="filter">
+										<p:inputText id="globalFilter1"
+											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
+											maxlength="255" styleClass="letras-maiusculas semClear">
+											<p:tooltip id="toolTipFade" for="globalFilter1"
+												value="Digite o Código do Cliente para pesquisar"
+												position="top" />
+										</p:inputText>
+
+									</f:facet>
+								</p:column>
+
+
+								<p:column headerText="Cliente" filterBy="#{item.nome}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.nome}">
+									<h:outputLabel value="#{item.nome}" escape="false" />
+
+									<f:facet name="filter">
+										<p:inputText id="globalFilterNome"
+											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
+											maxlength="255" styleClass="letras-maiusculas semClear">
+											<p:tooltip id="toolTipFadeNome" for="globalFilterNome"
+												value="Digite o Nome para pesquisar" position="top" />
+										</p:inputText>
+									</f:facet>
+								</p:column>
 								
-								<p:column headerText="Cód Cliente" filterBy="#{item.cliente.id}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.cliente.id}">
-									<h:outputLabel value="#{item.cliente.id}" escape="false" />
-								</p:column>
-
-
-								<p:column headerText="Cliente" filterBy="#{item.cliente.nome}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.cliente.nome}">
-									<h:outputLabel value="#{item.cliente.nome}" escape="false" />
-								</p:column>
-
+								
 								<p:column headerText="Saldo" filterBy="#{item.valorSaldo}"
-									filterMatchMode="contains"
+									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.valorSaldo}">
 									<h:outputLabel value="#{item.valorSaldo}" escape="false">
@@ -90,7 +112,85 @@
 											locale="pt_br" maxFractionDigits="2" />
 									</h:outputLabel>
 								</p:column>
+								
+									<p:column headerText="Outros Saldos"
+									filterBy="#{item.valorSaldoOutraEmpresa}"
+									filterMatchMode="contains" width="8%"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.valorSaldoOutraEmpresa}">
+									<h:outputLabel value="#{item.valorSaldoOutraEmpresa}"
+										escape="false"
+										rendered="#{ (item.valorSaldoOutraEmpresa > 0) }">
+										<f:convertNumber currencySymbol="R$" type="currency"
+											locale="pt_br" maxFractionDigits="2" />
+									</h:outputLabel>
+								</p:column>
 
+								<p:column headerText="Localidade"
+									filterBy="#{item.descricaoLocalidade}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.descricaoLocalidade}">
+									<h:outputLabel value="#{item.descricaoLocalidade}"
+										escape="false" />
+
+									<f:facet name="filter">
+										<p:inputText id="globalFilterLoc"
+											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
+											maxlength="255" styleClass="letras-maiusculas semClear">
+											<p:tooltip id="toolTipFadeLoc" for="globalFilterLoc"
+												value="Digite a Localidade para pesquisar" position="top" />
+										</p:inputText>
+									</f:facet>
+								</p:column>
+
+								<p:column headerText="Tipo Localidade"
+									filterBy="#{item.descricaoTipoLocalidade}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.descricaoTipoLocalidade}">
+									<h:outputLabel value="#{item.descricaoTipoLocalidade}"
+										escape="false" />
+
+									<f:facet name="filter">
+										<p:inputText id="globalFilterTipo"
+											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
+											maxlength="255" styleClass="letras-maiusculas semClear">
+											<p:tooltip id="toolTipFadetipo" for="globalFilterTipo"
+												value="Digite o Tipo de Localidade para pesquisar"
+												position="top" />
+										</p:inputText>
+									</f:facet>
+								</p:column>
+
+								<p:column headerText="Empresa" filterBy="#{item.nomeFantasia}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.nomeFantasia}">
+									<h:outputLabel value="#{item.nomeFantasia}" escape="false" />
+
+									<f:facet name="filter">
+										<p:inputText id="filtroEmpresa"
+											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
+											maxlength="255" styleClass="letras-maiusculas semClear">
+											<p:tooltip for="filtroEmpresa"
+												value="Digite o Nome da empresa" position="top" />
+										</p:inputText>
+									</f:facet>
+								</p:column>
+
+
+								<p:column headerText="Data" filterBy="#{item.dataCarteira}"
+									filterMatchMode="contains" width="8%"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.dataCarteira}">
+									<h:outputLabel value="#{item.dataCarteira}" escape="false">
+										<f:convertDateTime pattern="dd/MM/yyyy"
+											timeZone="America/Sao_Paulo" />
+									</h:outputLabel>
+								</p:column>
+
+							
 
 								<p:rowExpansion id="expanded">
 
@@ -102,29 +202,31 @@
 										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 										currentPageReportTemplate=""
 										rowsPerPageTemplate="5,10,15,20,30">
-										
+
 										<f:facet name="header">
-									<p:outputPanel style="text-align:right; margin-right:-10px"
-										styleClass="ui-widget-auxiliar">
+											<p:outputPanel style="text-align:right; margin-right:-10px"
+												styleClass="ui-widget-auxiliar">
 
-										<h:outputText value="Pesquisar " escape="false" />
+												<h:outputText value="Pesquisar " escape="false" />
 
-										<p:inputText id="globalFilter"
-											onchange="PF('saldos').filter();" style="width:150px;"
-											placeholder="Pesquisar"
-											styleClass="letras-maiusculas semClear" />
-										<h:outputText value=" " escape="false" />
-										<p:commandButton id="Search" value="" icon="fa fa-search"
-											style="font-size: 0.8em;width:3%;" />
-										<h:commandLink>
-											<h:graphicImage value="#{resource['images/excel_icon.png']}"
-												style="WIDTH: 29px;" />
-											<p:dataExporter type="xls" target="tabListaSaldos"
-												fileName="iChef -  Saldo Cliente ##{item.cliente.nome}" />
-										</h:commandLink>
-									</p:outputPanel>
+												<p:inputText id="globalFilter"
+													onchange="PF('saldos').filter();" style="width:150px;"
+													placeholder="Pesquisar"
+													styleClass="letras-maiusculas semClear" />
+												<h:outputText value=" " escape="false" />
+												<p:commandButton id="Search" value="" icon="fa fa-search"
+													style="font-size: 0.8em;width:3%;" />
+												<h:commandLink>
+													<h:graphicImage
+														value="#{resource['images/excel_icon.png']}"
+														style="WIDTH: 29px;" />
+													<p:dataExporter type="xls" target="tabListaSaldos" 
+														fileName="iChef_Carteira_Cliente_#{item.id.codigoCliente}_#{item.nome}" 
+														postProcessor="#{clienteSaldoController.preExportarAnalitico" />
+												</h:commandLink>
+											</p:outputPanel>
 
-								</f:facet>
+										</f:facet>
 
 										<p:column headerText="Item"
 											filterBy="#{saldo.descricaoOuPrato}" style="width:10%"

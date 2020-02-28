@@ -865,10 +865,18 @@ public class PedidoController extends BaseController {
 		Collections.sort(persons, new Comparator() {
 
 			public int compare(Object o1, Object o2) {
+				
+				Date d1 = ((Pedido) o1).getDataEntrega();
+				Date d2 = ((Pedido) o2).getDataEntrega();
+				int sComp = d1.compareTo(d2);
+				
+				if (sComp != 0) {
+					return sComp;
+				}
 
 				String x1 = ((Pedido) o1).getEntregador().getNome();
 				String x2 = ((Pedido) o2).getEntregador().getNome();
-				int sComp = x1.compareTo(x2);
+				sComp = x1.compareTo(x2);
 
 				if (sComp != 0) {
 					return sComp;
@@ -899,6 +907,13 @@ public class PedidoController extends BaseController {
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
 			List<Pedido> pedidos = new ArrayList<>();
+			
+			if (getCodigoCliente() != null) {
+				Cliente cliente = new Cliente();
+				cliente.setId(getCodigoCliente());
+
+				filter.setCliente(cliente);
+			}
 
 			try {
 				pedidos = service.findByParameters(filter, pedidoVisitor);

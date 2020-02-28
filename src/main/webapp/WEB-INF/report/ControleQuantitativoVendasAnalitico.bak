@@ -39,6 +39,7 @@
  and STR_TO_DATE( date_format( data,'%d-%m-%Y'),'%d-%m-%Y')
  between  STR_TO_DATE( '$P!{pDataInicio}','%d-%m-%Y')  
  and  STR_TO_DATE( '$P!{pDataFinal}','%d-%m-%Y')
+and cd_cliente = coalesce($P!{pCodigoCliente}, cd_cliente )
 order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDAPIO_PRATO]]></queryString>
 
 	<field name="CD_CLIENTE" class="java.lang.Integer"/>
@@ -461,7 +462,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="95"  isSplitAllowed="false" >
+			<band height="106"  isSplitAllowed="false" >
 				<staticText>
 					<reportElement
 						x="1"
@@ -659,7 +660,7 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 						x="1"
 						y="21"
 						width="533"
-						height="73"
+						height="85"
 						key="rectangle-3"
 						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
