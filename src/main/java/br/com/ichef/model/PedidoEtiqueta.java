@@ -36,9 +36,6 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Column(name = "CD_PEDIDO")
 	private Long codigoPedido;
 
-	@Column(name = "DT_CADASTRO")
-	private Date dataCadastro;
-
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DT_ENTREGA")
 	private Date dataEntrega;
@@ -46,9 +43,6 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DATA_FILTRO")
 	private Date datafiltro;
-
-	@Column(name = "DT_ALTERACAO")
-	private Date dataAlteracao;
 
 	@Column(name = "NR_QTD")
 	private Integer quantidade;
@@ -99,11 +93,6 @@ public class PedidoEtiqueta extends BaseEntity {
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
-	private Usuario usuarioAlteracao;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TEC_PRATO_TIPO")
 	private FichaTecnicaPratoTipo fichaTecnicaPratoTipo;
 
@@ -112,44 +101,11 @@ public class PedidoEtiqueta extends BaseEntity {
 	@JoinColumn(name = "CD_CLIENTE_ENDERECO")
 	private ClienteEndereco clienteEndereco;
 
-	@Column(name = "NR_PRECO_VENDA_RECEITA")
-	private BigDecimal precoVendaReceita;
-
-	@Column(name = "NR_PRECO_CUSTO_PORCAO")
-	private BigDecimal precoCustoPorcao;
-
-	@Column(name = "NR_PRECO_CUSTO_TIPO_PRATO")
-	private BigDecimal precoVendaTipoPrato;
-
-	@Column(name = "SN_CONFIRMADO")
-	private String snConfirmado;
-
-	@Column(name = "LOG_LANCAMENTO_CARTEIRA")
-	private String logLancamentoCarteira;
-
-	@Transient
-	private boolean confirmado;
-
 	@Transient
 	private List<PedidoDerivacaoContagem> pedidoDerivacaoContagem;
-
-	public boolean isConfirmado() {
-		if (snConfirmado != null) {
-			if (snConfirmado.equalsIgnoreCase("S"))
-				return true;
-			else
-				return false;
-		}
-		return confirmado;
-	}
-
-	public void setConfirmado(boolean confirmado) {
-		this.confirmado = confirmado;
-		if (confirmado == Boolean.TRUE) {
-			setSnConfirmado("S");
-		} else
-			setSnConfirmado("N");
-	}
+	
+	@Column(name = "VL_SALDO")
+	private BigDecimal saldo;
 
 	@Override
 	public Object getId() {
@@ -176,17 +132,17 @@ public class PedidoEtiqueta extends BaseEntity {
 
 	@Override
 	public Usuario getUsuarioAlteracao() {
-		return usuarioAlteracao;
+		return null;
 	}
 
 	@Override
 	public Date getDataAlteracao() {
-		return dataAlteracao;
+		return null;
 	}
 
 	@Override
 	public Date getDataCadastro() {
-		return dataCadastro;
+		return null;
 	}
 
 	public boolean isInclusao() {
@@ -297,48 +253,12 @@ public class PedidoEtiqueta extends BaseEntity {
 		this.id = id;
 	}
 
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
-
-	public void setDataAlteracao(Date dataAlteracao) {
-		this.dataAlteracao = dataAlteracao;
-	}
-
-	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
-		this.usuarioAlteracao = usuarioAlteracao;
-	}
-
 	public Localidade getLocalidade() {
 		return localidade;
 	}
 
 	public void setLocalidade(Localidade localidade) {
 		this.localidade = localidade;
-	}
-
-	public BigDecimal getPrecoVendaReceita() {
-		return precoVendaReceita;
-	}
-
-	public void setPrecoVendaReceita(BigDecimal precoVendaReceita) {
-		this.precoVendaReceita = precoVendaReceita;
-	}
-
-	public BigDecimal getPrecoCustoPorcao() {
-		return precoCustoPorcao;
-	}
-
-	public void setPrecoCustoPorcao(BigDecimal precoCustoPorcao) {
-		this.precoCustoPorcao = precoCustoPorcao;
-	}
-
-	public BigDecimal getPrecoVendaTipoPrato() {
-		return precoVendaTipoPrato;
-	}
-
-	public void setPrecoVendaTipoPrato(BigDecimal precoVendaTipoPrato) {
-		this.precoVendaTipoPrato = precoVendaTipoPrato;
 	}
 
 	public FichaTecnicaPratoTipo getFichaTecnicaPratoTipo() {
@@ -367,22 +287,6 @@ public class PedidoEtiqueta extends BaseEntity {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public String getSnConfirmado() {
-		return snConfirmado;
-	}
-
-	public void setSnConfirmado(String snConfirmado) {
-		this.snConfirmado = snConfirmado;
-	}
-
-	public String getLogLancamentoCarteira() {
-		return logLancamentoCarteira;
-	}
-
-	public void setLogLancamentoCarteira(String logLancamentoCarteira) {
-		this.logLancamentoCarteira = logLancamentoCarteira;
 	}
 
 	public List<PedidoDerivacaoContagem> getPedidoDerivacaoContagem() {
@@ -430,5 +334,15 @@ public class PedidoEtiqueta extends BaseEntity {
 	public void setOrdemDerivacao(Integer ordemDerivacao) {
 		this.ordemDerivacao = ordemDerivacao;
 	}
+
+	public BigDecimal getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(BigDecimal saldo) {
+		this.saldo = saldo;
+	}
+	
+	
 
 }

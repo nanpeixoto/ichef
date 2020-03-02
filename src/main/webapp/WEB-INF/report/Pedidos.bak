@@ -408,7 +408,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cliente}.getId()+"-"+$F{cliente}.getNome()]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="168"
 						y="0"
@@ -422,7 +422,6 @@
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{cardapioFichaPrato}.getDescricaoPratoOrdem()
-+"<br></br>Cardapio:"+$F{cardapio}.getDescricaoComDiaSemana() 
 + ( !$F{cardapio}.getDataFormatada().equals(  $F{dataEntregaFormatada}) 
 ? "<br></br>Cardapio:"+$F{cardapio}.getDescricaoComDiaSemana() : "")]]></textFieldExpression>
 				</textField>

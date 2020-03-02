@@ -48,9 +48,6 @@
 	<field name="columnOrderBy" class="java.lang.String">
 		<fieldDescription><![CDATA[columnOrderBy]]></fieldDescription>
 	</field>
-	<field name="confirmado" class="java.lang.Boolean">
-		<fieldDescription><![CDATA[confirmado]]></fieldDescription>
-	</field>
 	<field name="dataEntrega" class="java.util.Date">
 		<fieldDescription><![CDATA[dataEntrega]]></fieldDescription>
 	</field>
@@ -84,9 +81,6 @@
 	<field name="localidade" class="br.com.ichef.model.Localidade">
 		<fieldDescription><![CDATA[localidade]]></fieldDescription>
 	</field>
-	<field name="logLancamentoCarteira" class="java.lang.String">
-		<fieldDescription><![CDATA[logLancamentoCarteira]]></fieldDescription>
-	</field>
 	<field name="observacao" class="java.lang.String">
 		<fieldDescription><![CDATA[observacao]]></fieldDescription>
 	</field>
@@ -99,12 +93,10 @@
 	<field name="quantidade" class="java.lang.Integer">
 		<fieldDescription><![CDATA[quantidade]]></fieldDescription>
 	</field>
-	<field name="snConfirmado" class="java.lang.String">
-		<fieldDescription><![CDATA[snConfirmado]]></fieldDescription>
-	</field>
 	<field name="tipoPrato" class="br.com.ichef.model.TipoPrato">
 		<fieldDescription><![CDATA[tipoPrato]]></fieldDescription>
 	</field>
+	<field name="saldo" class="java.math.BigDecimal"/>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
@@ -152,6 +144,81 @@
 			<band height="130"  isSplitAllowed="false" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
+						x="1"
+						y="42"
+						width="168"
+						height="22"
+						key="textField-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getLocalidade().getDescricao()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="65"
+						width="168"
+						height="16"
+						key="textField-15">
+							<printWhenExpression><![CDATA[ new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) ==  0 )]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica" size="9" isBold="false" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getEndereco()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="83"
+						y="65"
+						width="86"
+						height="16"
+						key="textField-23">
+							<printWhenExpression><![CDATA[ new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) !=  0 )]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="6" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica" size="8" isBold="false" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[( $F{saldo}.compareTo( new BigDecimal( "0" ))  >=  0 ? "" : "CRÉDITO" )
++"(Em "+new SimpleDateFormat("dd/MM").format(new java.util.Date())+")"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="65"
+						width="34"
+						height="16"
+						key="textField-22"
+						stretchType="RelativeToBandHeight">
+							<printWhenExpression><![CDATA[ new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) !=  0 )]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="6" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["SALDO:"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$###,###,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="35"
+						y="65"
+						width="48"
+						height="16"
+						key="textField-21">
+							<printWhenExpression><![CDATA[ new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) !=  0 )]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="6" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{saldo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
 						x="26"
 						y="13"
 						width="142"
@@ -180,37 +247,11 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="1"
-						y="42"
-						width="168"
-						height="22"
-						key="textField-14"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getLocalidade().getDescricao()]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="1"
-						y="65"
-						width="168"
-						height="16"
-						key="textField-15"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement>
-						<font fontName="Arial" pdfFontName="Helvetica" size="9" isBold="false" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{clienteEndereco}.getEndereco()]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="1"
 						y="81"
 						width="168"
 						height="18"
 						key="textField-16"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true" isItalic="false"/>
 					</textElement>
