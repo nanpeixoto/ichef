@@ -189,6 +189,25 @@
 											timeZone="America/Sao_Paulo" />
 									</h:outputLabel>
 								</p:column>
+								
+								<p:column headerText="Tipo Localidade"
+									filterBy="#{item.descricaoTipoLocalidade}"
+									filterMatchMode="contains"
+									filterStyle="display:none; visibility:hidden;"
+									sortBy="#{item.descricaoTipoLocalidade}">
+									<h:outputLabel value="#{item.descricaoTipoLocalidade}"
+										escape="false" />
+
+									<f:facet name="filter">
+										<p:inputText id="globalFilterTipo"
+											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
+											maxlength="255" styleClass="letras-maiusculas semClear">
+											<p:tooltip id="toolTipFadetipo" for="globalFilterTipo"
+												value="Digite o Tipo de Localidade para pesquisar"
+												position="top" />
+										</p:inputText>
+									</f:facet>
+								</p:column>
 
 							
 

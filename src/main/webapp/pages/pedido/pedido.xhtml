@@ -406,7 +406,8 @@
 								<p:column headerText="Tipo" filterBy="#{item.tipoPrato.descricao}" filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;" sortBy="#{item.tipoPrato.descricao}">								
 									<p:tooltip id="toolInplaceDerivacao" for="ajaxInplaceDericavao" value="Clique no campo para editar a Derivação" position="top" />
-									<p:inplace id="ajaxInplaceDericavao" label="#{item.tipoPrato.descricao}/#{item.derivacao.descricao}" disabled="#{item.confirmado}"	editor="#{item.confirmado}" >
+									<p:inplace id="ajaxInplaceDericavao" label="#{item.tipoPrato.descricao}/#{item.derivacao.descricao}" disabled="#{item.confirmado}"
+										editor="true" >
 										<p:ajax event="save" update="tabListaPedidos,growl" listener="#{pedidoController.atualizarPedido(item,'D')}" />	
 										<p:selectOneMenu id="selectderivacao" disabled="#{item.confirmado}"  value="#{item.derivacao}" filter="true" filterMatchMode="contains" autoWidth="false"  converter="omnifaces.SelectItemsConverter">
 											<f:selectItem itemLabel="Selecionar" itemValue="" noSelectionOption="true" />

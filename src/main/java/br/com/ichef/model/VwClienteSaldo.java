@@ -58,6 +58,10 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Column(name = "SALDO_OUTRA_EMPRESA")
 	private BigDecimal valorSaldoOutraEmpresa;
+	
+	//public long diasDevedor() {
+		
+	//}
 
 	@Override
 	public Object getId() {
