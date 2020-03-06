@@ -170,9 +170,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="83"
+						x="88"
 						y="113"
-						width="86"
+						width="81"
 						height="16"
 						key="textField-23">
 							<printWhenExpression><![CDATA[new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) !=  0 )]]></printWhenExpression>
@@ -182,7 +182,7 @@
 						<font fontName="Arial" pdfFontName="Helvetica" size="8" isBold="false" isItalic="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[( $F{saldo}.compareTo( new BigDecimal( "0" ))  >=  0 ? "" : "CRÉDITO" )
-+"(Em "+new SimpleDateFormat("dd/MM").format(new java.util.Date())+")"]]></textFieldExpression>
++"("+new SimpleDateFormat("dd/MM").format(new java.util.Date())+")"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -204,7 +204,7 @@
 					<reportElement
 						x="35"
 						y="113"
-						width="48"
+						width="53"
 						height="16"
 						key="textField-21">
 							<printWhenExpression><![CDATA[new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) !=  0 )]]></printWhenExpression>

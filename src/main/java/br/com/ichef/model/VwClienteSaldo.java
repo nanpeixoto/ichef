@@ -14,6 +14,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import br.com.ichef.arquitetura.BaseEntity;
+import br.com.ichef.util.Util;
 
 @Entity
 @Table(name = "vw_cliente_saldo")
@@ -59,9 +60,9 @@ public class VwClienteSaldo extends BaseEntity {
 	@Column(name = "SALDO_OUTRA_EMPRESA")
 	private BigDecimal valorSaldoOutraEmpresa;
 	
-	//public long diasDevedor() {
-		
-	//}
+	public long diasDevedor() {
+		return Util.diferencaEmDias(getDataCarteira(), new Date());
+	}
 
 	@Override
 	public Object getId() {

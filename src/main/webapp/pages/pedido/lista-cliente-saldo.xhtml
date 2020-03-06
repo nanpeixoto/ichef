@@ -57,8 +57,8 @@
 											<h:graphicImage value="#{resource['images/excel_icon.png']}"
 												style="WIDTH: 29px;" />
 											<p:dataExporter type="xls" target="tabListaPedidos"
-												fileName="iChef_Carteira_Clientes" 
-												 postProcessor="#{clienteSaldoController.preExportar}" />
+												fileName="iChef_Carteira_Clientes"
+												postProcessor="#{clienteSaldoController.preExportar}" />
 										</h:commandLink>
 									</p:outputPanel>
 
@@ -68,7 +68,7 @@
 									<p:rowToggler />
 								</p:column>
 
-								<p:column headerText="Cód Cliente" 
+								<p:column headerText="Cód Cliente"
 									filterBy="#{item.id.codigoCliente}" filterMatchMode="exact"
 									width="10%" filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.id.codigoCliente}">
@@ -82,6 +82,9 @@
 												position="top" />
 										</p:inputText>
 
+										<a
+											href="../cliente/cadastro-cliente.xhtml?id=#{item.id.codigoCliente}">aaa</a>
+
 									</f:facet>
 								</p:column>
 
@@ -90,7 +93,7 @@
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.nome}">
-									<h:outputLabel value="#{item.nome}" escape="false" />
+									<!-- <h:outputLabel value="#{item.nome}" escape="false" /> -->
 
 									<f:facet name="filter">
 										<p:inputText id="globalFilterNome"
@@ -100,9 +103,14 @@
 												value="Digite o Nome para pesquisar" position="top" />
 										</p:inputText>
 									</f:facet>
+									<a class="users-list-name"
+										href="../cliente/cadastro-cliente.xhtml?id=#{item.id.codigoCliente}" target="">
+										#{item.nome}</a>
+
+									
 								</p:column>
-								
-								
+
+
 								<p:column headerText="Saldo" filterBy="#{item.valorSaldo}"
 									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
@@ -112,8 +120,8 @@
 											locale="pt_br" maxFractionDigits="2" />
 									</h:outputLabel>
 								</p:column>
-								
-									<p:column headerText="Outros Saldos"
+
+								<p:column headerText="Outros Saldos"
 									filterBy="#{item.valorSaldoOutraEmpresa}"
 									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
@@ -153,10 +161,10 @@
 										escape="false" />
 
 									<f:facet name="filter">
-										<p:inputText id="globalFilterTipo"
+										<p:inputText id="globalFilterTipo2"
 											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
 											maxlength="255" styleClass="letras-maiusculas semClear">
-											<p:tooltip id="toolTipFadetipo" for="globalFilterTipo"
+											<p:tooltip id="toolTipFadetipo2" for="globalFilterTipo2"
 												value="Digite o Tipo de Localidade para pesquisar"
 												position="top" />
 										</p:inputText>
@@ -189,7 +197,7 @@
 											timeZone="America/Sao_Paulo" />
 									</h:outputLabel>
 								</p:column>
-								
+
 								<p:column headerText="Tipo Localidade"
 									filterBy="#{item.descricaoTipoLocalidade}"
 									filterMatchMode="contains"
@@ -209,7 +217,7 @@
 									</f:facet>
 								</p:column>
 
-							
+
 
 								<p:rowExpansion id="expanded">
 
@@ -239,8 +247,8 @@
 													<h:graphicImage
 														value="#{resource['images/excel_icon.png']}"
 														style="WIDTH: 29px;" />
-													<p:dataExporter type="xls" target="tabListaSaldos" 
-														fileName="iChef_Carteira_Cliente_#{item.id.codigoCliente}_#{item.nome}" 
+													<p:dataExporter type="xls" target="tabListaSaldos"
+														fileName="iChef_Carteira_Cliente_#{item.id.codigoCliente}_#{item.nome}"
 														postProcessor="#{clienteSaldoController.preExportarAnalitico}" />
 												</h:commandLink>
 											</p:outputPanel>
