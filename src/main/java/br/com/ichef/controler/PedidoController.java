@@ -448,11 +448,20 @@ public class PedidoController extends BaseController {
 			} else {
 				getEntity().setCliente(cliente);
 				limparDadosEntregador(null, null, null);
+				limparDerivacaoTipoPratoPrecoUnitario();
 				obterEnderecoCliente();
 			}
 			
 		
 		}
+	}
+
+	private void limparDerivacaoTipoPratoPrecoUnitario() {
+		getEntity().setDerivacao(null);
+		obterTiposDePratos();
+		getEntity().setFormaPagamento(config.getFormaPagamento());
+		getEntity().setDerivacao(config.getDerivacao());
+		
 	}
 
 	public void obterEnderecoCliente() {

@@ -11,6 +11,15 @@
 		</navigation-case>
 	</navigation-rule>
 	
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>cadastroCliente</from-outcome>
+			<to-view-id>/pages/cliente/cadastro-cliente.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
 	<application>
 		<resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
 	</application>

@@ -16,7 +16,7 @@ public class ClienteCarteiraVisitor extends FilterVisitor {
 	@Override
 	public void visitCriteria(Criteria criteria) {
 		if(dataSemHora!=null) {
-			criteria.add( Restrictions.sqlRestriction(" date_format( data, '%d/%m/%Y' ) ='"+Util.dateToString( getDataSemHora() )+"'" ) );
+			criteria.add( Restrictions.sqlRestriction(" date_format( this_.data, '%d/%m/%Y' ) ='"+Util.dateToString( getDataSemHora() )+"'" ) );
 		}
 	}
 

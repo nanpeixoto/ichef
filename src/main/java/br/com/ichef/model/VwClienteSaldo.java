@@ -61,7 +61,13 @@ public class VwClienteSaldo extends BaseEntity {
 	private BigDecimal valorSaldoOutraEmpresa;
 	
 	public long diasDevedor() {
-		return Util.diferencaEmDias(getDataCarteira(), new Date());
+		try {
+			return Util.diferencaEmDias( new Date(), getDataCarteira());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
 	}
 
 	@Override
@@ -214,6 +220,10 @@ public class VwClienteSaldo extends BaseEntity {
 
 	public void setId(VwClienteSaldoID id) {
 		this.id = id;
+	}
+	
+	public String getLink() {
+		return "../cliente/cadastro-cliente.xhtml?id="+((VwClienteSaldoID) getId()).getCodigoCliente()+"#tabs:tabCarteira";
 	}
 
 }

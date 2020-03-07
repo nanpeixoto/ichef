@@ -112,7 +112,8 @@
 								decimalSeparator="," thousandSeparator="." decimalPlaces="0">
 								<p:ajax event="change"
 									listener="#{pedidoController.obterCliente()}"
-									update="growl,endereco,cliente,selectEntregador, ordemEntrega,valorDiaria" />
+									update="growl,endereco,cliente,selectEntregador,ordemEntrega
+									,valorDiaria,qtd,selectTipoPrato,precoPrato,txtQtdDisponivel,selectderivacao,selectFormaPagamento" />
 								<p:tooltip id="toolTipFade" for="codigoCliente"
 									value="Digite o Código do Cliente para pesquisar"
 									position="top" />

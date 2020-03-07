@@ -30,6 +30,7 @@ import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.ClienteCarteiraVisitor;
+import br.com.ichef.visitor.ClienteVisitor;
 
 @Named
 @ViewScoped
@@ -56,6 +57,9 @@ public class LancamentoCarteiraController extends BaseController {
 	private TipoPratoService tipoPratoService;
 
 	@Inject
+	private ClienteService clienteService;
+
+	@Inject
 	private ClienteCarteiraService clienteCarteiraService;
 
 	private List<ClienteCarteira> lista = new ArrayList<ClienteCarteira>();
@@ -66,6 +70,7 @@ public class LancamentoCarteiraController extends BaseController {
 	private Double valorDevido;
 	private Double valorPago;
 	private String descricao;
+	private Long codigoCliente;
 
 	private List<FormaPagamento> listaFormasPagamento = new ArrayList<>();
 	private FormaPagamento formaPagamento;
@@ -120,6 +125,23 @@ public class LancamentoCarteiraController extends BaseController {
 		// listaTiposPrato = tipoPratoService.listAll(true);
 	}
 
+	public List<Cliente> autoCompleteCliente(String query) {
+		List<Cliente> allThemes = new ArrayList<>();
+
+		ClienteVisitor visitor = new ClienteVisitor();
+		visitor.setLikeNomeTelefone(query);
+
+		try {
+			allThemes = clienteService.findByParameters(new Cliente(), visitor);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return allThemes;
+
+	}
+
 	public void obterValorPrato() {
 		if (getTipoPrato() != null)
 			setValorDevido(getTipoPrato().getPrecoAtual().getPreco());
@@ -129,7 +151,9 @@ public class LancamentoCarteiraController extends BaseController {
 
 	public void adicionarCarteira() {
 
-		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO FOR PARA OUTRA EMPRESA
+		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO
+																										// FOR PARA
+																										// OUTRA EMPRESA
 			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO NÃO FOR CREDITO
 				facesMessager.error("O tipo de Lançamento para outra empresa só pode ser Crédito");
 				return;
@@ -241,6 +265,21 @@ public class LancamentoCarteiraController extends BaseController {
 
 	}
 
+	public void obterCliente() {
+		Cliente cliente = null;
+		if (getCodigoCliente() != null) {
+			cliente = (Cliente) clienteService.getById(getCodigoCliente());
+			if (cliente == null) {
+				facesMessager.error("Nenhum cliente encontrado");
+				return;
+			} else {
+				setCliente(cliente);
+
+			}
+
+		}
+	}
+
 	public void limparCarteira() {
 		setData(null);
 		setDescricao(null);
@@ -253,6 +292,7 @@ public class LancamentoCarteiraController extends BaseController {
 		setTipoPrato(null);
 		setData(new Date());
 		setCliente(null);
+		setCodigoCliente(null);
 	}
 
 	public boolean getExibirValorCredito() {
@@ -459,6 +499,14 @@ public class LancamentoCarteiraController extends BaseController {
 
 	public void setLista(List<ClienteCarteira> lista) {
 		this.lista = lista;
+	}
+
+	public Long getCodigoCliente() {
+		return codigoCliente;
+	}
+
+	public void setCodigoCliente(Long codigoCliente) {
+		this.codigoCliente = codigoCliente;
 	}
 
 }

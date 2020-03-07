@@ -72,7 +72,7 @@
 									filterBy="#{item.id.codigoCliente}" filterMatchMode="exact"
 									width="10%" filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.id.codigoCliente}">
-									<h:outputLabel value="#{item.id.codigoCliente}" escape="false" />
+
 									<f:facet name="filter">
 										<p:inputText id="globalFilter1"
 											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
@@ -82,10 +82,12 @@
 												position="top" />
 										</p:inputText>
 
-										<a
-											href="../cliente/cadastro-cliente.xhtml?id=#{item.id.codigoCliente}">aaa</a>
-
 									</f:facet>
+
+									<h:link value="#{item.id.codigoCliente}"
+										outcome="cadastroCliente"  target="_blank">
+										<f:param name="id" value="#{item.id.codigoCliente}" />
+									</h:link>
 								</p:column>
 
 
@@ -103,11 +105,13 @@
 												value="Digite o Nome para pesquisar" position="top" />
 										</p:inputText>
 									</f:facet>
-									<a class="users-list-name"
-										href="../cliente/cadastro-cliente.xhtml?id=#{item.id.codigoCliente}" target="">
-										#{item.nome}</a>
 
-									
+
+									<h:link value="#{item.nome}" outcome="cadastroCliente" target="_blank">
+										<f:param name="id" value="#{item.id.codigoCliente}" />
+									</h:link>
+
+
 								</p:column>
 
 
@@ -121,7 +125,7 @@
 									</h:outputLabel>
 								</p:column>
 
-								<p:column headerText="Outros Saldos"
+								 <p:column headerText="Outros Saldos"
 									filterBy="#{item.valorSaldoOutraEmpresa}"
 									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
@@ -132,7 +136,7 @@
 										<f:convertNumber currencySymbol="R$" type="currency"
 											locale="pt_br" maxFractionDigits="2" />
 									</h:outputLabel>
-								</p:column>
+								</p:column> 
 
 								<p:column headerText="Localidade"
 									filterBy="#{item.descricaoLocalidade}"
@@ -171,7 +175,7 @@
 									</f:facet>
 								</p:column>
 
-								<p:column headerText="Empresa" filterBy="#{item.nomeFantasia}"
+								<!--<p:column headerText="Empresa" filterBy="#{item.nomeFantasia}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.nomeFantasia}">
@@ -185,7 +189,7 @@
 												value="Digite o Nome da empresa" position="top" />
 										</p:inputText>
 									</f:facet>
-								</p:column>
+								</p:column>-->
 
 
 								<p:column headerText="Data" filterBy="#{item.dataCarteira}"
@@ -198,20 +202,20 @@
 									</h:outputLabel>
 								</p:column>
 
-								<p:column headerText="Tipo Localidade"
-									filterBy="#{item.descricaoTipoLocalidade}"
-									filterMatchMode="contains"
+								<p:column headerText="Dias"
+									filterBy="#{item.diasDevedor()}"
+									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.descricaoTipoLocalidade}">
-									<h:outputLabel value="#{item.descricaoTipoLocalidade}"
+									sortBy="#{item.diasDevedor()}">
+									<h:outputLabel value="#{item.diasDevedor()}"
 										escape="false" />
 
 									<f:facet name="filter">
-										<p:inputText id="globalFilterTipo"
+										<p:inputText id="globalFilterDias"
 											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
 											maxlength="255" styleClass="letras-maiusculas semClear">
-											<p:tooltip id="toolTipFadetipo" for="globalFilterTipo"
-												value="Digite o Tipo de Localidade para pesquisar"
+											<p:tooltip id="toolTipFadeDias" for="globalFilterDias"
+												value="Digite a qtd para pesquisar"
 												position="top" />
 										</p:inputText>
 									</f:facet>
