@@ -95,8 +95,8 @@ public class ClienteSaldoController extends BaseController {
 
 			EmailDTO dto = new EmailDTO();
 			dto.setAssunto(clienteCarteira.getNomeFantasia() + " - SALDO ATUAL");
-			//dto.setDestinatario( clienteCarteira.getEmail() );
-			dto.setDestinatario("nanpeixoto@gmail.com");
+			dto.setDestinatario( clienteCarteira.getEmail() );
+			//dto.setDestinatario("nanpeixoto@gmail.com");
 			dto.setTexto(mensagem);
 
 			dto = emailService.enviarEmailHtml(dto);
