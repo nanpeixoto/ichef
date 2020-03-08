@@ -10,6 +10,24 @@ public class EmailDTO {
 	private String log;
 	private String texto;
 	private Date dataEnvio;
+	private String emailRemetente;
+	private String SenhaRemetente;
+
+	public String getSenhaRemetente() {
+		return SenhaRemetente;
+	}
+
+	public void setSenhaRemetente(String senhaRemetente) {
+		SenhaRemetente = senhaRemetente;
+	}
+
+	public String getEmailRemetente() {
+		return emailRemetente;
+	}
+
+	public void setEmailRemetente(String emailRemetente) {
+		this.emailRemetente = emailRemetente;
+	}
 
 	public String getDestinatario() {
 		return destinatario;
@@ -58,7 +76,5 @@ public class EmailDTO {
 	public void setDataEnvio(Date dataEnvio) {
 		this.dataEnvio = dataEnvio;
 	}
-	
-	
 
 }

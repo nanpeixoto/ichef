@@ -60,6 +60,7 @@ public class TipoPratoController extends BaseController {
 		} else {
 			setEntity(new TipoPrato());
 			getEntity().setAtivo("S");
+			getEntity().setSnCongelado("N");
 		}
 		dataVigencia  = new Date();
 		lista = service.listAll();

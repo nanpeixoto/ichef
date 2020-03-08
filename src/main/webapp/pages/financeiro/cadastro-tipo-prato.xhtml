@@ -68,6 +68,10 @@
 					        <p:selectBooleanButton id="contagem" value="#{tipoPratoController.entity.contagem}" 
 					        	onLabel="Incluído na Contagem" offLabel="Não Incluído na Contagem" onIcon="fa fa-sort-numeric-desc" offIcon="fa fa-sort-amount-asc"/>
 						
+							<p:outputLabel value="Congelado" for="Congelado"/>
+					        <p:selectBooleanButton id="Congelado" value="#{tipoPratoController.entity.congelado}" 
+					        	onLabel="Congelado" offLabel="Normal"  />
+						
 						</p:panelGrid>
 						
 						<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>

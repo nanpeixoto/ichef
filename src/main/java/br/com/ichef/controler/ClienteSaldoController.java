@@ -1,6 +1,8 @@
 package br.com.ichef.controler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,9 +13,17 @@ import javax.inject.Named;
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.arquitetura.util.RelatorioUtil;
+import br.com.ichef.dto.EmailDTO;
+import br.com.ichef.model.Cliente;
+import br.com.ichef.model.ClienteEmailAuditoria;
+import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.VwClienteSaldo;
+import br.com.ichef.model.VwClienteSaldoID;
+import br.com.ichef.service.ClienteEmailAuditoriaService;
 import br.com.ichef.service.ClienteSaldoService;
+import br.com.ichef.service.EmailService;
 import br.com.ichef.util.FacesUtil;
+import br.com.ichef.util.JSFUtil;
 
 @Named
 @ViewScoped
@@ -24,6 +34,15 @@ public class ClienteSaldoController extends BaseController {
 	@Inject
 	private ClienteSaldoService service;
 
+	@Inject
+	private Cliente clienteService;
+
+	@Inject
+	private ClienteEmailAuditoriaService clienteEmailAuditoriaService;
+
+	@Inject
+	private EmailService emailService;
+
 	private VwClienteSaldo entity;
 
 	private Long id;
@@ -33,7 +52,9 @@ public class ClienteSaldoController extends BaseController {
 
 	private List<VwClienteSaldo> listaSelecionadas = new ArrayList<VwClienteSaldo>();
 	
-	
+	private List<ClienteEmailAuditoria> listaClienteEmailAuditoria = new ArrayList<ClienteEmailAuditoria>();
+
+	Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
 
 	@PostConstruct
 	public void init() {
@@ -44,9 +65,93 @@ public class ClienteSaldoController extends BaseController {
 			lista = service.findByParameters(saldo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema");
+			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema.");
 		}
 
+	}
+
+	public void obterEmailEnviados(VwClienteSaldo clienteCarteira) {
+		try {
+			ClienteEmailAuditoria auditoria = new ClienteEmailAuditoria();
+			auditoria.setCodigoCliente(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
+			setListaClienteEmailAuditoria(clienteEmailAuditoriaService.findByParameters(auditoria));
+		} catch (Exception e) {
+			e.printStackTrace();
+			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema.");
+		}
+
+	}
+	
+	public void enviarEmailParaTodos() {
+		for (VwClienteSaldo vwClienteSaldo : lista) {
+			EnviarEmail(vwClienteSaldo);
+		}
+	}
+
+	public void EnviarEmail(VwClienteSaldo clienteCarteira) {
+		String mensagem = "";
+		if (clienteCarteira.getEmail() != null) {
+			mensagem = config.getEmailInicio() + clienteCarteira.getListaSaldosEmail() + config.getEmailFim();
+
+			EmailDTO dto = new EmailDTO();
+			dto.setAssunto(clienteCarteira.getNomeFantasia() + " - SALDO ATUAL");
+			//dto.setDestinatario( clienteCarteira.getEmail() );
+			dto.setDestinatario("nanpeixoto@gmail.com");
+			dto.setTexto(mensagem);
+
+			dto = emailService.enviarEmailHtml(dto);
+			ClienteEmailAuditoria auditoria = null;
+
+			if (!dto.getSituacao().equals("S")) {
+				auditoria = criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(),
+						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
+						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
+						clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
+				FacesUtil.addErroMessage("Erro ao enviar o e-mail, por favor, verifique o LOG");
+			} else {
+				auditoria = criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(),
+						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
+						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
+						clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
+			}
+
+			if (auditoria != null) {
+				try {
+					clienteEmailAuditoriaService.saveOrUpdade(auditoria);
+				} catch (Exception e) {
+					e.printStackTrace();
+					FacesUtil.addErroMessage("Não foi possível salvar a auditoria");
+				}
+
+			}
+
+		} else {
+			String erro = "Cliente sem e-mail";
+			criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(), clienteCarteira.getEmail(),
+					"N", erro, mensagem, clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
+					clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
+			FacesUtil.addErroMessage(erro);
+		}
+
+	}
+
+	public ClienteEmailAuditoria criarAuditoria(Long codigoCliente, String email, String enviado, String erro,
+			String mensagem, Long codigoEmpresaAtual, BigDecimal saldoEmpresa, BigDecimal saldoTotal,
+			String descricaoEmpresa) {
+		ClienteEmailAuditoria auditoria = new ClienteEmailAuditoria();
+		auditoria.setCodigoCliente(codigoCliente);
+		auditoria.setDataEnvio(new Date());
+		auditoria.setEmail(email);
+		auditoria.setEnviado(enviado);
+		auditoria.setErro(erro);
+		auditoria.setMensagem(mensagem);
+		auditoria.setUsuario(getUserLogado());
+		auditoria.setCodigoEmpresaAtual(codigoEmpresaAtual);
+		auditoria.setSaldoEmpresa(saldoEmpresa);
+		auditoria.setSaldoTotal(saldoTotal);
+		auditoria.setDescricaoEmpresa(descricaoEmpresa);
+
+		return auditoria;
 	}
 
 	public void excluirSelecionados() {
@@ -56,17 +161,16 @@ public class ClienteSaldoController extends BaseController {
 		}
 		FacesUtil.addInfoMessage("VwClienteSaldos excluídas com sucesso");
 	}
-	
+
 	public void preExportar(Object document) {
 		RelatorioUtil relatorio = new RelatorioUtil("Carteira de Clientes", document);
 		relatorio.preExportar();
 	}
-	
+
 	public void preExportarAnalitico(Object document) {
 		RelatorioUtil relatorio = new RelatorioUtil("Carteira de Clientes", document);
 		relatorio.preExportar();
 	}
-
 
 	public ClienteSaldoService getService() {
 		return service;
@@ -115,6 +219,13 @@ public class ClienteSaldoController extends BaseController {
 	public void setListaFiltro(List<VwClienteSaldo> listaFiltro) {
 		this.listaFiltro = listaFiltro;
 	}
-	
+
+	public List<ClienteEmailAuditoria> getListaClienteEmailAuditoria() {
+		return listaClienteEmailAuditoria;
+	}
+
+	public void setListaClienteEmailAuditoria(List<ClienteEmailAuditoria> listaClienteEmailAuditoria) {
+		this.listaClienteEmailAuditoria = listaClienteEmailAuditoria;
+	}
 
 }

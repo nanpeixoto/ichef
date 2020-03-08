@@ -8,6 +8,7 @@
 		transaction-type="RESOURCE_LOCAL">
 		<!-- <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
 		<non-jta-data-source>java:comp/env/jdbc/ichefDB</non-jta-data-source>
+		<class>br.com.ichef.model.ClienteEmailAuditoria</class>
 
 		<properties>
 

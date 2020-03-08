@@ -53,6 +53,8 @@ public class ClienteEndereco extends BaseEntity {
 
 	@Column(name = "SN_PRINCIPAL")
 	private String principal;
+	
+	
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)

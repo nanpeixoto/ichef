@@ -30,6 +30,12 @@ public class Configuracao extends BaseEntity {
 	@Column(name = "HOST_SMTP")
 	private String hostSMTP;
 
+	@Column(name = "DS_EMAIL_INICIO")
+	private String emailInicio;
+
+	@Column(name = "DS_EMAIL_FIM")
+	private String emailFim;
+
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
@@ -164,6 +170,22 @@ public class Configuracao extends BaseEntity {
 
 	public void setDerivacao(Derivacao derivacao) {
 		this.derivacao = derivacao;
+	}
+
+	public String getEmailInicio() {
+		return emailInicio;
+	}
+
+	public void setEmailInicio(String emailInicio) {
+		this.emailInicio = emailInicio;
+	}
+
+	public String getEmailFim() {
+		return emailFim;
+	}
+
+	public void setEmailFim(String emailFim) {
+		this.emailFim = emailFim;
 	}
 
 }

@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormatSymbols;
 import java.text.Normalizer;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -47,12 +48,47 @@ public class Util extends ReportUtils {
 
 	public static final String RELATORIO = "resources.properties";
 
+	private static SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
+
 	public static final String LETRAS_COM_ACENTUACAO = "Ãƒï¿½Ãƒâ‚¬ÃƒÆ’Ãƒâ€šÃƒâ€žÃƒâ€°ÃƒË†ÃƒÅ Ãƒâ€¹Ãƒï¿½ÃƒÅ’Ãƒï¿½ÃƒÅ½Ãƒâ€œÃƒâ€™Ãƒâ€¢Ãƒâ€�Ãƒâ€“ÃƒÅ¡Ãƒâ„¢Ãƒâ€ºÃƒÅ“Ãƒâ€¡Ãƒâ€˜Ãƒï¿½Ã…Â¸ÃƒÂ¡ÃƒÂ ÃƒÂ£ÃƒÂ¢ÃƒÂ¤ÃƒÂ©ÃƒÂ¨ÃƒÂªÃƒÂ«ÃƒÂ­ÃƒÂ¬ÃƒÂ¯ÃƒÂ®ÃƒÂ³ÃƒÂ²ÃƒÂµÃƒÂ´ÃƒÂ¶ÃƒÂºÃƒÂ¹ÃƒÂ»ÃƒÂ¼ÃƒÂ§ÃƒÂ±ÃƒÂ½ÃƒÂ¿";
 	public static final String LETRAS_SEM_ACENTUACAO = "AAAAAEEEEIIIIOOOOOUUUUCNYYaaaaaeeeeiiiiooooouuuucnyy";
 
 	public static long diferencaEmDias(Date dataInicial, Date dataFinal) {
 		long dt = (dataInicial.getTime() - dataFinal.getTime());
 		return (dt / 86400000L);
+	}
+
+	public static Object formataData(Object valor) {
+		try {
+			if (valor != null)
+				return formatarData.format(valor);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+
+	}
+
+	public static Object formataValor(Object valor) {
+		try {
+			Locale meuLocal = new Locale("pt", "BR");
+			NumberFormat real = NumberFormat.getCurrencyInstance(meuLocal);
+
+			if (valor != null) {
+				return real.format(valor);
+				// return "R$ " + valor.toString().replaceAll(",", ".").replace(".", ",");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			return valor.toString();
+		} catch (Exception e) {
+			return valor;
+		}
+
 	}
 
 	public static Date zerarHoras(Date data) {

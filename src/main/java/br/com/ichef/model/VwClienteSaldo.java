@@ -43,6 +43,9 @@ public class VwClienteSaldo extends BaseEntity {
 	@Column(name = "NM_CLIENTE")
 	private String nome;
 
+	@Column(name = "DS_EMAIL")
+	private String email;
+
 	@Column(name = "DS_TIP_LOCALIDADE")
 	private String descricaoTipoLocalidade;
 
@@ -59,15 +62,15 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Column(name = "SALDO_OUTRA_EMPRESA")
 	private BigDecimal valorSaldoOutraEmpresa;
-	
+
 	public long diasDevedor() {
 		try {
-			return Util.diferencaEmDias( new Date(), getDataCarteira());
+			return Util.diferencaEmDias(new Date(), getDataCarteira());
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return 0;
 		}
-		
+
 	}
 
 	@Override
@@ -221,9 +224,63 @@ public class VwClienteSaldo extends BaseEntity {
 	public void setId(VwClienteSaldoID id) {
 		this.id = id;
 	}
-	
+
 	public String getLink() {
-		return "../cliente/cadastro-cliente.xhtml?id="+((VwClienteSaldoID) getId()).getCodigoCliente()+"#tabs:tabCarteira";
+		return "../cliente/cadastro-cliente.xhtml?id=" + ((VwClienteSaldoID) getId()).getCodigoCliente()
+				+ "#tabs:tabCarteira";
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
+	public String getListaSaldosEmail() {
+		String mensagemFinal = "";
+		BigDecimal saldoTotal =  (getValorSaldoOutraEmpresa()!=null  ?   getValorSaldo().add(getValorSaldoOutraEmpresa()): getValorSaldo() ); 
+		String mensagemSaldoTotal = "<br><br>Seu saldo atual é de <span     style=\"color: "+(saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "red" : "green")+"; font-weight: bold;\">" +Util.formataValor(  saldoTotal)+"</span>";
+		String outrasEmpresas = (getValorSaldoOutraEmpresa()!=null  && saldoTotal.compareTo(new BigDecimal("0")) >= 0   ? " <br> Empresa atual:"+Util.formataValor(getValorSaldo())+ (getValorSaldo().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ")+" - Outras empresas: "+Util.formataValor(getValorSaldoOutraEmpresa())+ (getValorSaldoOutraEmpresa().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ")+"." : " ");
+		String creditoDebito = (saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "" : " (CRÉDITO) ");
+		
+		
+		mensagemSaldoTotal = mensagemSaldoTotal +creditoDebito+outrasEmpresas + "<br><bR> Segue abaixo os valores listados para a empresa "+getNomeFantasia()+": <br>";
+
+		String listaDebitos = "";
+		String thead = "<table role=\"grid\" border=\"1\">" + "<thead id=\"tabListaPedidos:0:tabListaSaldos_head\">"
+				+ "<tr role=\"row\">"
+				+ "<th  class=\"ui-state-default ui-sortable-column ui-filter-column\"   scope=\"col\" style=\"width:10%\" >"
+				+ " Item " + "</th>"
+				+ "<th  class=\"ui-state-default ui-sortable-column ui-filter-column\"   scope=\"col\" style=\"width:10%\" >"
+				+ " Data " + "</th>"
+				+ "<th  class=\"ui-state-default ui-sortable-column ui-filter-column\"   scope=\"col\" style=\"width:10%\" >"
+				+ " Valor Devido " + "</th>"
+				+ "<th  class=\"ui-state-default ui-sortable-column ui-filter-column\"   scope=\"col\" style=\"width:10%\" >"
+				+ " Valor Pago " + "</th>"
+				+ "<th  class=\"ui-state-default ui-sortable-column ui-filter-column\"   scope=\"col\" style=\"width:10%\" >"
+				+ " Forma Pagamento " + "</th>" + "</tr>" + "</thead>"
+				+ "<tbody class=\"ui-datatable-data ui-widget-content\">";
+		String trInicio = "<tr  class=\"ui-widget-content ui-datatable-even\" role=\"row\">";
+		String trFim = "</tr>";
+		for (VwClienteCarteiraSaldo vwClienteCarteiraSaldo : getSaldos()) {
+			listaDebitos = listaDebitos+
+							trInicio + 
+								"<td style=\"text-align: center; \">" + vwClienteCarteiraSaldo.getDescricaoOuPrato() + "</td>" 
+								+"<td style=\"text-align: center; \">" + Util.formataData(vwClienteCarteiraSaldo.getData())+ "</td>" 
+								+"<td style=\"text-align: center; \">" + Util.formataValor( ( vwClienteCarteiraSaldo.getValorDevido()  !=null ? vwClienteCarteiraSaldo.getValorDevido():0) )+ "</td>" 
+								+"<td style=\"text-align: center; \">" +Util.formataValor( ( vwClienteCarteiraSaldo.getValorPago()  !=null ? vwClienteCarteiraSaldo.getValorPago():0) )   + "</td>" 
+								+"<td style=\"text-align: center; \">" + (vwClienteCarteiraSaldo.getFormaPagamento()!=null ? vwClienteCarteiraSaldo.getFormaPagamento().getDescricao():"")+ "</td>" 
+							+ trFim;
+		}
+		
+		String tableFim = "</tbody></table>";
+
+		mensagemFinal = mensagemSaldoTotal+thead+listaDebitos+tableFim;
+
+		return mensagemFinal;
 	}
 
 }

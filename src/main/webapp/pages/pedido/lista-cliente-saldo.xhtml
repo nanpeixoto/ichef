@@ -26,7 +26,15 @@
 					<div class="ui-fluid">
 						<div align="right">
 							<p:panelGrid>
+								<p:commandButton value="Envia para TODOS"
+									icon="fa fa-envelope-o" id="btnImprimir" style="width: 201px;"
+									styleClass="btn btn-danger"
+									title="Enviar E-mail para TODOS os clientes"
+									action="#{clienteSaldoController.enviarEmailParaTodos()}" />
+								<br />
+								<br />
 							</p:panelGrid>
+							<p:panelGrid columns="7" layout="grid"></p:panelGrid>
 						</div>
 
 						<p:panel>
@@ -85,7 +93,7 @@
 									</f:facet>
 
 									<h:link value="#{item.id.codigoCliente}"
-										outcome="cadastroCliente"  target="_blank">
+										outcome="cadastroCliente" target="_blank">
 										<f:param name="id" value="#{item.id.codigoCliente}" />
 									</h:link>
 								</p:column>
@@ -107,7 +115,8 @@
 									</f:facet>
 
 
-									<h:link value="#{item.nome}" outcome="cadastroCliente" target="_blank">
+									<h:link value="#{item.nome}" outcome="cadastroCliente"
+										target="_blank">
 										<f:param name="id" value="#{item.id.codigoCliente}" />
 									</h:link>
 
@@ -125,7 +134,7 @@
 									</h:outputLabel>
 								</p:column>
 
-								 <p:column headerText="Outros Saldos"
+								<p:column headerText="Outros Saldos"
 									filterBy="#{item.valorSaldoOutraEmpresa}"
 									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
@@ -136,7 +145,7 @@
 										<f:convertNumber currencySymbol="R$" type="currency"
 											locale="pt_br" maxFractionDigits="2" />
 									</h:outputLabel>
-								</p:column> 
+								</p:column>
 
 								<p:column headerText="Localidade"
 									filterBy="#{item.descricaoLocalidade}"
@@ -202,24 +211,36 @@
 									</h:outputLabel>
 								</p:column>
 
-								<p:column headerText="Dias"
-									filterBy="#{item.diasDevedor()}"
+								<p:column headerText="Dias" filterBy="#{item.diasDevedor()}"
 									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.diasDevedor()}">
-									<h:outputLabel value="#{item.diasDevedor()}"
-										escape="false" />
+									<h:outputLabel value="#{item.diasDevedor()}" escape="false" />
 
 									<f:facet name="filter">
 										<p:inputText id="globalFilterDias"
 											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
 											maxlength="255" styleClass="letras-maiusculas semClear">
 											<p:tooltip id="toolTipFadeDias" for="globalFilterDias"
-												value="Digite a qtd para pesquisar"
-												position="top" />
+												value="Digite a qtd para pesquisar" position="top" />
 										</p:inputText>
 									</f:facet>
 								</p:column>
+
+								<p:column headerText="Email" width="9%"
+									filterStyle="display:none; visibility:hidden;">
+									<p:commandButton value="" icon="fa fa-envelope-o"
+										id="btnAdicioanr" styleClass="btn btn-danger"
+										style="width: 34px;"
+										action="#{clienteSaldoController.EnviarEmail(item)}" />
+
+									<p:commandButton value="" icon="fa fa-binoculars"
+										styleClass="btn-info" style="width: 34px;"
+										oncomplete="PF('dialogoEmail').show()" update="@(.ui-dialog)"
+										actionListener="#{clienteSaldoController.obterEmailEnviados(item)}" />
+
+								</p:column>
+
 
 
 
@@ -319,6 +340,21 @@
 				</div>
 			</div>
 		</h:form>
+
+		<p:dialog header="E-mails Enviados" widgetVar="dialogoEmail"
+			height="400" width="700" responsive="true" styleClass="box-success">
+			<p:dataList id="listaTarefaSelecionadas"
+				value="#{clienteSaldoController.listaClienteEmailAuditoria}"
+				var="tarefa" type="definition">
+				<span style="color:#{tarefa.cor()}">ID: #{tarefa.id} -
+					Data:#{clienteSaldoController.formataData(tarefa.dataEnvio)} -
+					Saldo:#{clienteSaldoController.formataValor(tarefa.saldoEmpresa)}
+					E-mail: #{tarefa.email} <br />Enviado: #{tarefa.enviado} - Erro:
+					#{tarefa.erro}
+				</span>
+				<br />------------------------------------------------
+	            </p:dataList>
+		</p:dialog>
 
 	</ui:define>
 

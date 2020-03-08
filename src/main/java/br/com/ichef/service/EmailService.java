@@ -44,10 +44,13 @@ public class EmailService extends GenericDAO<Email> {
 	}
 
 	public EmailDTO enviarEmail(EmailDTO email) {
+		
+		String emailRemetente = ( email.getEmailRemetente()!=null ? email.getEmailRemetente():EMAIL_REMETENTE);
+		String senhaRemetente = ( email.getSenhaRemetente()!=null ? email.getSenhaRemetente():SENHA_REMETENTE);
 
 		Session session = Session.getDefaultInstance(init(), new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(EMAIL_REMETENTE, SENHA_REMETENTE);
+				return new PasswordAuthentication(emailRemetente, senhaRemetente);
 			}
 		});
 
@@ -71,6 +74,57 @@ public class EmailService extends GenericDAO<Email> {
 			/** Método para enviar a mensagem criada */
 			Transport.send(message);
 
+			email.setSituacao("S");
+
+		} catch (MessagingException e) {
+			email.setLog(e.getMessage());
+			email.setSituacao("E");
+		}
+
+		email.setDataEnvio(new Date());
+
+		return email;
+	}
+	
+	public EmailDTO enviarEmailHtml(EmailDTO email) {
+		
+		String emailRemetente = ( email.getEmailRemetente()!=null ? email.getEmailRemetente():EMAIL_REMETENTE);
+		String senhaRemetente = ( email.getSenhaRemetente()!=null ? email.getSenhaRemetente():SENHA_REMETENTE);
+		
+
+		Session session = Session.getDefaultInstance(init(), new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(emailRemetente, senhaRemetente);
+			}
+		});
+
+		/** Ativa Debug para sessão */
+		session.setDebug(false);
+
+		try {
+
+			// Create a default MimeMessage object.
+			Message message = new MimeMessage(session);
+
+			// Set From: header field of the header.
+			message.setFrom(new InternetAddress( EMAIL_REMETENTE ));
+
+			// Set To: header field of the header.
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getDestinatario()));
+			message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse( EMAIL_REMETENTE));
+
+			// Set Subject: header field
+			message.setSubject(email.getAssunto());
+			
+
+			// Send the actual HTML message, as big as you like
+			message.setContent(email.getTexto().replace("\n", "<br>"), "text/html");
+
+			// Send message
+			Transport.send(message);
+
+			//System.out.println("Sent message successfully....");
+			
 			email.setSituacao("S");
 
 		} catch (MessagingException e) {

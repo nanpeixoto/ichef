@@ -1,7 +1,9 @@
 package br.com.ichef.model;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +51,9 @@ public class PedidoEtiqueta extends BaseEntity {
 
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
+
+	// @Column(name = "DS_VALIDADE")
+	// private String validade;
 
 	@Column(name = "ORDEM_DERIVACAO")
 	private Integer ordemDerivacao;
@@ -103,7 +108,7 @@ public class PedidoEtiqueta extends BaseEntity {
 
 	@Transient
 	private List<PedidoDerivacaoContagem> pedidoDerivacaoContagem;
-	
+
 	@Column(name = "VL_SALDO")
 	private BigDecimal saldo;
 
@@ -342,7 +347,16 @@ public class PedidoEtiqueta extends BaseEntity {
 	public void setSaldo(BigDecimal saldo) {
 		this.saldo = saldo;
 	}
-	
-	
+
+	public String getValidade() {
+		Calendar calend = Calendar.getInstance();
+		calend.setTime(datafiltro);
+		if (tipoPrato.isCongelado())
+			calend.set(Calendar.DAY_OF_MONTH, calend.get(Calendar.DAY_OF_MONTH) + 90);
+
+		DateFormat df = new SimpleDateFormat("dd/MM"); // para formatar a data
+
+		return "Consumir até " + df.format(calend.getTime());
+	}
 
 }

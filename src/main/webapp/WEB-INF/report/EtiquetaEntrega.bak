@@ -97,6 +97,9 @@
 		<fieldDescription><![CDATA[tipoPrato]]></fieldDescription>
 	</field>
 	<field name="saldo" class="java.math.BigDecimal"/>
+	<field name="validade" class="java.lang.String">
+		<fieldDescription><![CDATA[validade]]></fieldDescription>
+	</field>
 
 	<variable name="COUNT_PEDIDOS" class="java.lang.Integer" resetType="Group" resetGroup="Entregador" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade}]]></variableExpression>
@@ -170,9 +173,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="88"
+						x="94"
 						y="113"
-						width="81"
+						width="75"
 						height="16"
 						key="textField-23">
 							<printWhenExpression><![CDATA[new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) !=  0 )]]></printWhenExpression>
@@ -204,7 +207,7 @@
 					<reportElement
 						x="35"
 						y="113"
-						width="53"
+						width="60"
 						height="16"
 						key="textField-21">
 							<printWhenExpression><![CDATA[new Boolean ($F{saldo}.compareTo( new BigDecimal( "0" )) !=  0 )]]></printWhenExpression>
@@ -219,7 +222,7 @@
 					<reportElement
 						x="26"
 						y="13"
-						width="142"
+						width="74"
 						height="11"
 						key="textField-12"
 						stretchType="RelativeToBandHeight"/>
@@ -319,6 +322,20 @@
 						<font fontName="Arial" size="9"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["@cozinhadechef"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="100"
+						y="13"
+						width="69"
+						height="11"
+						key="textField-24"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[ $F{validade}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

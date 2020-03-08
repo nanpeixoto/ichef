@@ -71,8 +71,14 @@ public class TipoPrato extends BaseEntity {
 	@Column(name = "SN_CONTAGEM")
 	private String snContagem;
 
+	@Column(name = "SN_CONGELADO")
+	private String snCongelado;
+
 	@Transient
 	private boolean isAtivo;
+
+	@Transient
+	private boolean congelado;
 
 	@Transient
 	private boolean plus;
@@ -180,6 +186,24 @@ public class TipoPrato extends BaseEntity {
 			setAtivo("S");
 		} else
 			setAtivo("N");
+	}
+
+	public boolean isCongelado() {
+		if (snCongelado != null) {
+			if (snCongelado.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return congelado;
+	}
+
+	public void setCongelado(boolean congelado) {
+		this.congelado = congelado;
+		if (congelado == Boolean.TRUE) {
+			setSnCongelado("S");
+		} else
+			setSnCongelado("N");
 	}
 
 	public List<TipoPratoPreco> getPrecos() {
@@ -339,6 +363,14 @@ public class TipoPrato extends BaseEntity {
 		} else
 			setSnContagem("N");
 
+	}
+
+	public String getSnCongelado() {
+		return snCongelado;
+	}
+
+	public void setSnCongelado(String snCongelado) {
+		this.snCongelado = snCongelado;
 	}
 
 }
