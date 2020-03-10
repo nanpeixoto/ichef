@@ -51,7 +51,7 @@ public class ClienteSaldoController extends BaseController {
 	private List<VwClienteSaldo> listaFiltro = new ArrayList<VwClienteSaldo>();
 
 	private List<VwClienteSaldo> listaSelecionadas = new ArrayList<VwClienteSaldo>();
-	
+
 	private List<ClienteEmailAuditoria> listaClienteEmailAuditoria = new ArrayList<ClienteEmailAuditoria>();
 
 	Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
@@ -81,14 +81,25 @@ public class ClienteSaldoController extends BaseController {
 		}
 
 	}
-	
+
 	public void enviarEmailParaTodos() {
-		for (VwClienteSaldo vwClienteSaldo : lista) {
-			EnviarEmail(vwClienteSaldo);
-		}
+		new Thread() {
+			@Override
+			public void run() {
+				System.out.println("iniciado");
+				int count = 0;
+				for (VwClienteSaldo vwClienteSaldo : lista) {
+					EnviarEmail(vwClienteSaldo, "S");
+					count++;
+					System.out.println("contador:"+count);
+				}
+				System.out.println("finalizado");
+			}
+		}.start();
+
 	}
 
-	public void EnviarEmail(VwClienteSaldo clienteCarteira) {
+	public void EnviarEmail(VwClienteSaldo clienteCarteira, String todos) {
 		String mensagem = "";
 		if (clienteCarteira.getEmail() != null) {
 			mensagem = config.getEmailInicio() + clienteCarteira.getListaSaldosEmail() + config.getEmailFim();
@@ -103,11 +114,13 @@ public class ClienteSaldoController extends BaseController {
 			ClienteEmailAuditoria auditoria = null;
 
 			if (!dto.getSituacao().equals("S")) {
+				System.out.println("emailEnviado:" +((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente()+" - Email:"+clienteCarteira.getEmail());
 				auditoria = criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(),
 						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
 						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
 						clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
-				FacesUtil.addErroMessage("Erro ao enviar o e-mail, por favor, verifique o LOG");
+				if (todos.equalsIgnoreCase("N"))
+					FacesUtil.addErroMessage("Erro ao enviar o e-mail, por favor, verifique o LOG");
 			} else {
 				auditoria = criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(),
 						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
@@ -120,7 +133,8 @@ public class ClienteSaldoController extends BaseController {
 					clienteEmailAuditoriaService.saveOrUpdade(auditoria);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Não foi possível salvar a auditoria");
+					if (todos.equalsIgnoreCase("N"))
+						FacesUtil.addErroMessage("Não foi possível salvar a auditoria");
 				}
 
 			}
@@ -130,7 +144,8 @@ public class ClienteSaldoController extends BaseController {
 			criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(), clienteCarteira.getEmail(),
 					"N", erro, mensagem, clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
 					clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
-			FacesUtil.addErroMessage(erro);
+			if (todos.equalsIgnoreCase("N"))
+				FacesUtil.addErroMessage(erro);
 		}
 
 	}

@@ -206,7 +206,7 @@
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.dataCarteira}">
 									<h:outputLabel value="#{item.dataCarteira}" escape="false">
-										<f:convertDateTime pattern="dd/MM/yyyy"
+										<f:convertDateTime pattern="dd/MM/yy"
 											timeZone="America/Sao_Paulo" />
 									</h:outputLabel>
 								</p:column>
@@ -227,12 +227,12 @@
 									</f:facet>
 								</p:column>
 
-								<p:column headerText="Email" width="10%"
+								<p:column headerText="Email" width="10%" exportable="false"
 									filterStyle="display:none; visibility:hidden;">
 									<p:commandButton value="" icon="fa fa-envelope-o"
 										id="btnAdicioanr" styleClass="btn btn-danger"
-										style="width: 34px;"
-										action="#{clienteSaldoController.EnviarEmail(item)}" />
+										style="width: 34px;" disabled="#{item.email eq null }"
+										action="#{clienteSaldoController.EnviarEmail( item, 'N' )}" />
 
 									<p:commandButton value="" icon="fa fa-binoculars"
 										styleClass="btn-info" style="width: 34px;"
