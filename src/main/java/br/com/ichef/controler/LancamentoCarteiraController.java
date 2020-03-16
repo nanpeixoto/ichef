@@ -95,9 +95,11 @@ public class LancamentoCarteiraController extends BaseController {
 		setData(new Date());
 		obterListas();
 		ClienteCarteiraVisitor visitor = new ClienteCarteiraVisitor();
+		ClienteCarteira filter = new ClienteCarteira();
+		filter.setEmpresa( getUserLogado().getEmpresaLogada() );
 		visitor.setDataSemHora(getData());
 		try {
-			lista = clienteCarteiraService.findByParameters(new ClienteCarteira(), visitor);
+			lista = clienteCarteiraService.findByParameters(filter, visitor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -352,7 +352,7 @@ public class PedidoEtiqueta extends BaseEntity {
 		Calendar calend = Calendar.getInstance();
 		calend.setTime(datafiltro);
 		if (tipoPrato.isCongelado())
-			calend.set(Calendar.DAY_OF_MONTH, calend.get(Calendar.DAY_OF_MONTH) + 90);
+			calend.add(Calendar.DAY_OF_MONTH, 90);
 
 		DateFormat df = new SimpleDateFormat("dd/MM"); // para formatar a data
 

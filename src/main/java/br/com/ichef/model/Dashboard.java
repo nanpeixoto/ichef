@@ -55,6 +55,9 @@ public class Dashboard extends BaseEntity {
 	@Column(name = "VALOR_TOTAL_DEVIDO")
 	private BigDecimal valorTotalRecebido;
 
+	@Column(name = "VALOR_TOTAL_CARTEIRA_BLOQUEADO")
+	private BigDecimal valorTotalCarteiraBloqueado;
+
 	@Column(name = "QTD_TOTAL_CORTESIAS")
 	private Long quantidadeTotalCortesias;
 
@@ -233,7 +236,13 @@ public class Dashboard extends BaseEntity {
 	public void setQtdTotalPedisoNaoConfirmados(Long qtdTotalPedisoNaoConfirmados) {
 		this.qtdTotalPedisoNaoConfirmados = qtdTotalPedisoNaoConfirmados;
 	}
-	
-	
+
+	public BigDecimal getValorTotalCarteiraBloqueado() {
+		return valorTotalCarteiraBloqueado;
+	}
+
+	public void setValorTotalCarteiraBloqueado(BigDecimal valorTotalCarteiraBloqueado) {
+		this.valorTotalCarteiraBloqueado = valorTotalCarteiraBloqueado;
+	}
 
 }
