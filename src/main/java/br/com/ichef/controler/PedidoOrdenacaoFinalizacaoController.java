@@ -451,7 +451,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 
 	public void atualizarPedido(Pedido pedido, String tipoAlteracao) {
 		try {
-			System.out.println("atualizarPedido1 " + formatarDataHora.format(new Date()));
+			//System.out.println("atualizarPedido1 " + formatarDataHora.format(new Date()));
 
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
@@ -462,7 +462,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
 				}
 			} else if (tipoAlteracao.equals("F") || tipoAlteracao.equals("Q")) {
-				System.out.println("atualizarPedido1.1 " + formatarDataHora.format(new Date()));
+				//System.out.println("atualizarPedido1.1 " + formatarDataHora.format(new Date()));
 				if (pedido.getValorUnitarioPedido() == null) {
 					facesMessager.error(getRequiredMessage("Preço Unitário"));
 					System.out.println("atualizarPedido1.2 " + formatarDataHora.format(new Date()));
@@ -477,12 +477,12 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 					if (tipoAlteracao.equals("Q")) {
 						pedido.setValorPago(valorTotalPedido);
 					}
-					System.out.println("atualizarPedido1.4 " + formatarDataHora.format(new Date()));
+					//System.out.println("atualizarPedido1.4 " + formatarDataHora.format(new Date()));
 
 				}
 			}
 
-			System.out.println("atualizarPedido2 " + formatarDataHora.format(new Date()));
+			//System.out.println("atualizarPedido2 " + formatarDataHora.format(new Date()));
 
 			pedido.setDataAlteracao(new Date());
 			pedido.setUsuarioAlteracao(userLogado);
@@ -494,7 +494,7 @@ public class PedidoOrdenacaoFinalizacaoController extends BaseController {
 				service.saveOrUpdade(pedido);
 			}
 
-			System.out.println("atualizarPedido3 " + formatarDataHora.format(new Date()));
+			//System.out.println("atualizarPedido3 " + formatarDataHora.format(new Date()));
 
 		} catch (Exception e) {
 			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
