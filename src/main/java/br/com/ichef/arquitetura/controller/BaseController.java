@@ -248,6 +248,21 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		return "";
 
 	}
+	
+
+	public Object formataDataHora(Object valor) {
+		try {
+			if (valor != null)
+				return formatarDataHora.format(valor);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+
+	}
+	
+	
 
 	protected HttpServletResponse getResponse() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();

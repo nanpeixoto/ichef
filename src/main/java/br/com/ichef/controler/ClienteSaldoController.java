@@ -83,19 +83,22 @@ public class ClienteSaldoController extends BaseController {
 	}
 
 	public void enviarEmailParaTodos() {
-		new Thread() {
-			@Override
-			public void run() {
-				System.out.println("iniciado");
-				int count = 0;
-				for (VwClienteSaldo vwClienteSaldo : lista) {
+
+		System.out.println("enviarEmailParaTodos - Botão Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
+				+ " -  em " + formataDataHora(new Date()));
+		int count = 0;
+		System.out.println("Envio de Email Iniciado");
+		for (VwClienteSaldo vwClienteSaldo : lista) {
+			new Thread() {
+				@Override
+				public void run() {
 					EnviarEmail(vwClienteSaldo, "S");
-					count++;
-					System.out.println("contador:"+count);
+					// count++;
+					System.out.println("ENVIANDO E-MAIL CLIENTE: "+vwClienteSaldo.getNome());
 				}
-				System.out.println("finalizado");
-			}
-		}.start();
+			}.start();
+		}
+		System.out.println("finalizado");
 
 	}
 
@@ -106,15 +109,16 @@ public class ClienteSaldoController extends BaseController {
 
 			EmailDTO dto = new EmailDTO();
 			dto.setAssunto(clienteCarteira.getNomeFantasia() + " - SALDO ATUAL");
-			dto.setDestinatario( clienteCarteira.getEmail() );
-			//dto.setDestinatario("nanpeixoto@gmail.com");
+			dto.setDestinatario(clienteCarteira.getEmail());
+			// dto.setDestinatario("nanpeixoto@gmail.com");
 			dto.setTexto(mensagem);
 
 			dto = emailService.enviarEmailHtml(dto);
 			ClienteEmailAuditoria auditoria = null;
 
 			if (!dto.getSituacao().equals("S")) {
-				System.out.println("emailEnviado:" +((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente()+" - Email:"+clienteCarteira.getEmail());
+				System.out.println("emailEnviado:" + ((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente()
+						+ " - Email:" + clienteCarteira.getEmail());
 				auditoria = criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(),
 						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
 						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),

@@ -25,7 +25,22 @@
 		             	<p:separator/>-->
 					<div class="ui-fluid">
 						<div align="right">
-							<p:panelGrid>
+						
+						  <p:commandButton id="bt-destroy" value="Envia para TODOS" styleClass="btn btn-danger"
+                                     actionListener="#{clienteSaldoController.enviarEmailParaTodos()}" icon="fa fa-question">
+                        <p:confirm header="Confirmação" message="Essa rotina irá disparar e-mail para todos os clientes. Tem certeza?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-solid box-danger">
+                        <p:commandButton value="Sim" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                         icon="fa fa-check"/>
+                        <p:commandButton value="Não" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                         icon="fa fa-close"/>
+                    </p:confirmDialog>
+                    <br/> <br/> <br/> <br/>
+                    
+                    
+							<!-- <p:panelGrid>
 								<p:commandButton value="Envia para TODOS"
 									icon="fa fa-envelope-o" id="btnImprimir" style="width: 201px;"
 									styleClass="btn btn-danger"
@@ -33,7 +48,7 @@
 									action="#{clienteSaldoController.enviarEmailParaTodos()}" />
 								<br />
 								<br />
-							</p:panelGrid>
+							</p:panelGrid> -->
 							<p:panelGrid columns="7" layout="grid"></p:panelGrid>
 						</div>
 
