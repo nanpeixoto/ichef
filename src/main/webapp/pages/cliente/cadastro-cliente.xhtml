@@ -405,8 +405,8 @@
 								</div>
 								<p:panelGrid  columns="1" layout="grid"><p:separator/></p:panelGrid>
 								<p:panel > 	
-								<p:dataTable id="tableCarteira" widgetVar="itensCarteira" rows="10" 
-											paginator="false" value="#{clienteController.entity.carteiras}" var="itemCarteira"
+								<p:dataTable id="tableCarteira" widgetVar="itensCarteira" rows="20" 
+											paginator="true" value="#{clienteController.entity.carteiras}" var="itemCarteira"
 											rowKey="#{itemCarteira.id}" reflow="true" 
 											paginatorPosition="bottom" editable="true"
 											emptyMessage="Nenhum item encontrado" sortBy="#{itemCarteira.id}"  
