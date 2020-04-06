@@ -87,19 +87,21 @@ public class ClienteSaldoController extends BaseController {
 		System.out.println("enviarEmailParaTodos - Botão Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
 				+ " -  em " + formataDataHora(new Date()));
 		int count = 0;
-		System.out.println("Envio de Email Iniciado");
-		for (VwClienteSaldo vwClienteSaldo : lista) {
-			if (vwClienteSaldo.getEmail() != null) {
-				new Thread() {
-					@Override
-					public void run() {
+		new Thread() {
+			@Override
+			public void run() {
+				System.out.println("Envio de Email Iniciado");
+				for (VwClienteSaldo vwClienteSaldo : lista) {
+					if (vwClienteSaldo.getEmail() != null) {
+
 						EnviarEmail(vwClienteSaldo, "S");
 						// count++;
 						System.out.println("ENVIANDO E-MAIL CLIENTE: " + vwClienteSaldo.getNome());
+
 					}
-				}.start();
+				}
 			}
-		}
+		}.start();
 		System.out.println("finalizado");
 
 	}

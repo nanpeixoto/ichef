@@ -12,6 +12,8 @@
 		driverClass="com.mysql.jdbc.Driver"
 		jdbcUrl="jdbc:mysql://localhost:3306/ichef?autoReconnect=true"
 		user="ichef" password="ichef" minPoolSize="10" maxPoolSize="750" />
+		
+		
 
 	<!-- local -->
 	<!-- <Resource name="jdbc/ichefDB" auth="Container" type="javax.sql.DataSource" 
