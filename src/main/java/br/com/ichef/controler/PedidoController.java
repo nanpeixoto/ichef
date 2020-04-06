@@ -150,6 +150,9 @@ public class PedidoController extends BaseController {
 
 	private boolean entregaDataCardapio;
 	private boolean antesNoveEMeia;
+	private boolean clienteDeveSerApagado;
+
+	private Double valorDevedor;
 
 	@PostConstruct
 	public void init() {
@@ -451,8 +454,7 @@ public class PedidoController extends BaseController {
 				limparDerivacaoTipoPratoPrecoUnitario();
 				obterEnderecoCliente();
 			}
-			
-		
+
 		}
 	}
 
@@ -461,7 +463,7 @@ public class PedidoController extends BaseController {
 		obterTiposDePratos();
 		getEntity().setFormaPagamento(config.getFormaPagamento());
 		getEntity().setDerivacao(config.getDerivacao());
-		
+
 	}
 
 	public void obterEnderecoCliente() {
@@ -507,181 +509,123 @@ public class PedidoController extends BaseController {
 	public void adicionarPedido(Boolean apagarCliente) {
 		try {
 
+			if (camposObrigatoriosPedido()) {
+
+				// SELECIONAR O QTD DEVEDORA DO CLIENTE
+				valorDevedor = 0d;
+				try {
+					valorDevedor = service.findValorDebito(getEntity().getCliente().getId(),
+							userLogado.getEmpresaLogada().getId());
+				} catch (Exception e) {
+					System.out.println("ERRO: adicionarPedido - findValorDebito - Debito não encontrado");
+				}
+				//configuracao
+				Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+				
+				
+				// SE FOR ATÉ 10 ABRIR POUPUP
+				if (valorDevedor >= config.getValorAlertaSaldo()) {
+					clienteDeveSerApagado = apagarCliente;
+					showDialog("confirmacaoVendaDevedorfalse");
+				} else {
+					// SE NAO FOR CHAMAR O METODO PRA ADD
+					adicionarPedidoEmBanco(apagarCliente);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ERRO: adicionarPedido");
+		}
+
+	}
+
+	public void adicionarPedidoEmBanco(Boolean apagarCliente) {
+		try {
+
 			// CAMPOS OBRIGATORIOS
 			getEntity().setConfirmado(false);
 
-			// CARDAPIO
-			if (getEntity().getCardapio() == null) {
-				facesMessager.error("Cardápio não encontrado, verifique o cadastro do cardápio");
-				return;
-			}
+			if (camposObrigatoriosPedido()) {
 
-			// CLIENTE
-			if (getEntity().getCliente() == null) {
-				facesMessager.error(getRequiredMessage("Cliente"));
-				return;
-			}
+				// VERFICO A QUANTIDADE
+				Long quantidadeJaPedida = getQuantidadeDisponivel();
+				CardapioFichaPratoEmpresa fichaEmpresaLogada = obterFichaEmpresaLogada();
 
-			// ENDERECO
-			if (getEntity().getClienteEndereco() == null) {
-				facesMessager.error(getRequiredMessage("Endereço"));
-				return;
-			} else {
-				getEntity().setLocalidade(getEntity().getClienteEndereco().getLocalidade());
-			}
+				int qtdPedidoPratoEntregador = getQuantidadePedidoEntregador();
 
-			// PRATO
-			if (getEntity().getCardapioFichaPrato() == null) {
-				facesMessager.error(getRequiredMessage("Prato"));
-				return;
-			}
-
-			// QTD E MAIOR QUE 1
-			if (getEntity().getQuantidade() == null || getEntity().getQuantidade() < 0) {
-				facesMessager.error(getRequiredMessage("Quantidade"));
-				return;
-			}
-
-			// TIPO DE PRATO
-			if (getEntity().getFichaTecnicaPratoTipo() == null) {
-				facesMessager.error(getRequiredMessage("Tipo de Prato"));
-				return;
-			} else {
-				getEntity().setTipoPrato(getEntity().getFichaTecnicaPratoTipo().getTipoPrato());
-			}
-
-			// PRECO MAIOR QUE ZERO
-			if (getEntity().getValorUnitarioPedido() == null) {
-				facesMessager.error(getRequiredMessage("Preço Unitário"));
-				return;
-			} else {
-				BigDecimal valorTotalPedido = getEntity().getValorUnitarioPedido()
-						.multiply(new BigDecimal(getEntity().getQuantidade()));
-				getEntity().setValorPedido(valorTotalPedido);
-				getEntity().setValorPago(valorTotalPedido);
-			}
-
-			// PRECO MAIOR QUE ZERO
-			if (getEntity().getValorPedido() == null) {
-				facesMessager.error(getRequiredMessage("Valor Pedido"));
-				return;
-			}
-
-			
-			// valor da diaria do entregador
-			if (getEntity().getValorDiariaEntregador() == null) {
-				facesMessager.error(getRequiredMessage("Valor da Diária"));
-				return;
-			}
-
-			// DERIVACAO
-			if (getEntity().getDerivacao() == null) {
-				facesMessager.error(getRequiredMessage("Derivação"));
-				return;
-			}
-
-			// FORMA PAGAMENTO
-			if (getEntity().getFormaPagamento() == null) {
-				facesMessager.error(getRequiredMessage("Forma de Pagamento"));
-				return;
-			} else {
-				if( getEntity().getFormaPagamento().isCortesia() ) {
-					getEntity().setValorPedido(new BigDecimal(0));
-					getEntity().setValorPago( new BigDecimal(0) );
+				// ENTREGADOR
+				if (getEntity().getEntregador() == null) {
+					facesMessager.error(getRequiredMessage("Entregador"));
+					return;
+				} else {
+					if (getEntity().getEntregador().getQuantiadadeQuentinha() != null
+							&& (getEntity().getTipoPrato().isContagem()
+									&& ((qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity()
+											.getEntregador().getQuantiadadeQuentinha()))) {
+						facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "
+								+ (getEntity().getEntregador().getQuantiadadeQuentinha() - qtdPedidoPratoEntregador));
+						return;
+					}
 				}
-			}
 
-			// ENTREGADOR
-			if (getEntity().getEntregador() == null) {
-				facesMessager.error(getRequiredMessage("Entregador"));
-				return;
-			} else {
-
-			}
-
-			// ORDEM
-			if (getEntity().getOrdemEntrega() == null) {
-				facesMessager.error(getRequiredMessage("Ordem"));
-				return;
-			}
-
-			// VERFICO A QUANTIDADE
-			Long quantidadeJaPedida = getQuantidadeDisponivel();
-			CardapioFichaPratoEmpresa fichaEmpresaLogada = obterFichaEmpresaLogada();
-
-			int qtdPedidoPratoEntregador = getQuantidadePedidoEntregador();
-
-			// ENTREGADOR
-			if (getEntity().getEntregador() == null) {
-				facesMessager.error(getRequiredMessage("Entregador"));
-				return;
-			} else {
-				if (getEntity().getEntregador().getQuantiadadeQuentinha() != null
-						&& ( 
-								getEntity().getTipoPrato().isContagem() &&
-								 ( (qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity().getEntregador().getQuantiadadeQuentinha()))) {
-					facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "
-							+ (getEntity().getEntregador().getQuantiadadeQuentinha() - qtdPedidoPratoEntregador));
+				if (!fichaEmpresaLogada.isPodeVenderAcimaDoLimite()
+						&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
+					facesMessager.error("Quantidade disponível menor que a quantidade solicitada");
 					return;
 				}
+
+				if ((quantidadeJaPedida - getEntity().getQuantidade()) <= 5) {
+					FacesUtil.addInfoMessage(
+							"Quantdade disponível para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
+				}
+
+				getEntity().setDataCadastro(new Date());
+				getEntity().setUsuarioCadastro(userLogado);
+
+				// setar os precos de venda e custo
+				getEntity().setPrecoCustoPorcao(
+						getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoCustoPorcao());
+				getEntity().setPrecoVendaReceita(
+						getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoVendaReceita());
+				getEntity().setPrecoVendaTipoPrato(getEntity().getCardapioFichaPrato().getFichaTecnicaPrato()
+						.getPercoPorTipoPrato(getEntity().getTipoPrato()));
+
+				if (getEntity().getPrecoCustoPorcao() == null) {
+					facesMessager.error("Não foi possível obter o Preço de Custo da Porção");
+					return;
+				}
+
+				if (getEntity().getPrecoVendaReceita() == null) {
+					facesMessager.error("Não foi possível obter o Preço de Venda da Receita");
+					return;
+				}
+
+				if (getEntity().getPrecoVendaTipoPrato() == null) {
+					facesMessager.error("Não foi possível obter o Preço de Venda por Tipo de Prato");
+					return;
+				}
+
+				if (getEntity().getFormaPagamento().isCortesia()) {
+					getEntity().setValorUnitarioPedido(new BigDecimal(0));
+				}
+
+				service.saveOrUpdade(getEntity());
+
+				if (getEntity().getId() == null) {
+					facesMessager.error("Houve um erro, entre em contato com o adminstrador do sistema");
+				} else {
+					getLista().add(getEntity());
+					orderbyId(getLista());
+				}
+
+				updateComponentes("tabListaPedidos");
+
+				limparPedido();
+
+				if (apagarCliente)
+					limparCliente();
 			}
-
-			if (!fichaEmpresaLogada.isPodeVenderAcimaDoLimite()
-					&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
-				facesMessager.error("Quantidade disponível menor que a quantidade solicitada");
-				return;
-			}
-
-			if ((quantidadeJaPedida - getEntity().getQuantidade()) <= 5) {
-				FacesUtil.addInfoMessage(
-						"Quantdade disponível para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
-			}
-
-			getEntity().setDataCadastro(new Date());
-			getEntity().setUsuarioCadastro(userLogado);
-
-			// setar os precos de venda e custo
-			getEntity().setPrecoCustoPorcao(
-					getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoCustoPorcao());
-			getEntity().setPrecoVendaReceita(
-					getEntity().getCardapioFichaPrato().getFichaTecnicaPrato().getPrecoVendaReceita());
-			getEntity().setPrecoVendaTipoPrato(getEntity().getCardapioFichaPrato().getFichaTecnicaPrato()
-					.getPercoPorTipoPrato(getEntity().getTipoPrato()));
-
-			if (getEntity().getPrecoCustoPorcao() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Custo da Porção");
-				return;
-			}
-
-			if (getEntity().getPrecoVendaReceita() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Venda da Receita");
-				return;
-			}
-
-			if (getEntity().getPrecoVendaTipoPrato() == null) {
-				facesMessager.error("Não foi possível obter o Preço de Venda por Tipo de Prato");
-				return;
-			}
-
-			if (getEntity().getFormaPagamento().isCortesia()) {
-				getEntity().setValorUnitarioPedido(new BigDecimal(0));
-			}
-
-			service.saveOrUpdade(getEntity());
-
-			if (getEntity().getId() == null) {
-				facesMessager.error("Houve um erro, entre em contato com o adminstrador do sistema");
-			} else {
-				getLista().add(getEntity());
-				orderbyId(getLista());
-			}
-
-			updateComponentes("tabListaPedidos");
-
-			limparPedido();
-
-			if (apagarCliente)
-				limparCliente();
 
 		} catch (
 
@@ -692,12 +636,114 @@ public class PedidoController extends BaseController {
 
 	}
 
+	public void cancelar() {
+		limparPedido();
+
+		limparCliente();
+	}
+
+	private boolean camposObrigatoriosPedido() {
+		// CARDAPIO
+		if (getEntity().getCardapio() == null) {
+			facesMessager.error("Cardápio não encontrado, verifique o cadastro do cardápio");
+			return false;
+		}
+
+		// CLIENTE
+		if (getEntity().getCliente() == null) {
+			facesMessager.error(getRequiredMessage("Cliente"));
+			return false;
+		}
+
+		// ENDERECO
+		if (getEntity().getClienteEndereco() == null) {
+			facesMessager.error(getRequiredMessage("Endereço"));
+			return false;
+		} else {
+			getEntity().setLocalidade(getEntity().getClienteEndereco().getLocalidade());
+		}
+
+		// PRATO
+		if (getEntity().getCardapioFichaPrato() == null) {
+			facesMessager.error(getRequiredMessage("Prato"));
+			return false;
+		}
+
+		// QTD E MAIOR QUE 1
+		if (getEntity().getQuantidade() == null || getEntity().getQuantidade() < 0) {
+			facesMessager.error(getRequiredMessage("Quantidade"));
+			return false;
+		}
+
+		// TIPO DE PRATO
+		if (getEntity().getFichaTecnicaPratoTipo() == null) {
+			facesMessager.error(getRequiredMessage("Tipo de Prato"));
+			return false;
+		} else {
+			getEntity().setTipoPrato(getEntity().getFichaTecnicaPratoTipo().getTipoPrato());
+		}
+
+		// PRECO MAIOR QUE ZERO
+		if (getEntity().getValorUnitarioPedido() == null) {
+			facesMessager.error(getRequiredMessage("Preço Unitário"));
+			return false;
+		} else {
+			BigDecimal valorTotalPedido = getEntity().getValorUnitarioPedido()
+					.multiply(new BigDecimal(getEntity().getQuantidade()));
+			getEntity().setValorPedido(valorTotalPedido);
+			getEntity().setValorPago(valorTotalPedido);
+		}
+
+		// PRECO MAIOR QUE ZERO
+		if (getEntity().getValorPedido() == null) {
+			facesMessager.error(getRequiredMessage("Valor Pedido"));
+			return false;
+		}
+
+		// valor da diaria do entregador
+		if (getEntity().getValorDiariaEntregador() == null) {
+			facesMessager.error(getRequiredMessage("Valor da Diária"));
+			return false;
+		}
+
+		// DERIVACAO
+		if (getEntity().getDerivacao() == null) {
+			facesMessager.error(getRequiredMessage("Derivação"));
+			return false;
+		}
+
+		// FORMA PAGAMENTO
+		if (getEntity().getFormaPagamento() == null) {
+			facesMessager.error(getRequiredMessage("Forma de Pagamento"));
+			return false;
+		} else {
+			if (getEntity().getFormaPagamento().isCortesia()) {
+				getEntity().setValorPedido(new BigDecimal(0));
+				getEntity().setValorPago(new BigDecimal(0));
+			}
+		}
+
+		// ENTREGADOR
+		if (getEntity().getEntregador() == null) {
+			facesMessager.error(getRequiredMessage("Entregador"));
+			return false;
+		} else {
+
+		}
+
+		// ORDEM
+		if (getEntity().getOrdemEntrega() == null) {
+			facesMessager.error(getRequiredMessage("Ordem"));
+			return false;
+		}
+		return true;
+	}
+
 	private void limparCliente() {
 		newInstance();
 		setCodigoCliente(null);
 
 	}
-	
 
 	private void limparPedido() {
 		ClienteEndereco enderecoAtual = getEntity().getClienteEndereco();
@@ -713,11 +759,12 @@ public class PedidoController extends BaseController {
 		getEntity().setClienteEndereco(enderecoAtual);
 		getEntity().setCliente(clienteAtual);
 		setCodigoCliente(codigoClienteAtual);
-		
+
 		limparDadosEntregador(entregadorAtual, valorDiariaEntregadorAtual, ordemEntregaAtual);
 	}
 
-	private void limparDadosEntregador(Entregador entregadorAtual, BigDecimal valorDiariaEntregadorAtual,Integer ordemEntregaAtual) {
+	private void limparDadosEntregador(Entregador entregadorAtual, BigDecimal valorDiariaEntregadorAtual,
+			Integer ordemEntregaAtual) {
 		getEntity().setEntregador(entregadorAtual);
 		getEntity().setValorDiariaEntregador(valorDiariaEntregadorAtual);
 		getEntity().setOrdemEntrega(ordemEntregaAtual);
@@ -763,7 +810,8 @@ public class PedidoController extends BaseController {
 					facesMessager.error(getRequiredMessage("Preço Unitário"));
 					return;
 				} else {
-					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido().multiply(new BigDecimal(pedido.getQuantidade()));
+					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
+							.multiply(new BigDecimal(pedido.getQuantidade()));
 					pedido.setValorPedido(valorTotalPedido);
 					if (tipoAlteracao.equals("Q")) {
 						pedido.setValorPago(valorTotalPedido);
@@ -874,11 +922,11 @@ public class PedidoController extends BaseController {
 		Collections.sort(persons, new Comparator() {
 
 			public int compare(Object o1, Object o2) {
-				
+
 				Date d1 = ((Pedido) o1).getDataEntrega();
 				Date d2 = ((Pedido) o2).getDataEntrega();
 				int sComp = d1.compareTo(d2);
-				
+
 				if (sComp != 0) {
 					return sComp;
 				}
@@ -916,7 +964,7 @@ public class PedidoController extends BaseController {
 			pedidoVisitor.setDataEntregaFinal(getDataFinal());
 
 			List<Pedido> pedidos = new ArrayList<>();
-			
+
 			if (getCodigoCliente() != null) {
 				Cliente cliente = new Cliente();
 				cliente.setId(getCodigoCliente());
@@ -1103,7 +1151,6 @@ public class PedidoController extends BaseController {
 			pedidoVisitor.setDataEtiqueta(getDataInicial());
 			pedidoVisitor.setLimitarImpressaoPorHorarioExtra(true);
 			pedidoVisitor.setAntesNoveeTrinta(isAntesNoveEMeia());
-			
 
 			if (getEntregador() != null) {
 				filter.setEntregador(getEntregador());
@@ -1445,6 +1492,22 @@ public class PedidoController extends BaseController {
 
 	public void setAntesNoveEMeia(boolean antesNoveEMeia) {
 		this.antesNoveEMeia = antesNoveEMeia;
+	}
+
+	public Double getValorDevedor() {
+		return valorDevedor;
+	}
+
+	public void setValorDevedor(Double valorDevedor) {
+		this.valorDevedor = valorDevedor;
+	}
+
+	public boolean isClienteDeveSerApagado() {
+		return clienteDeveSerApagado;
+	}
+
+	public void setClienteDeveSerApagado(boolean clienteDeveSerApagado) {
+		this.clienteDeveSerApagado = clienteDeveSerApagado;
 	}
 
 }

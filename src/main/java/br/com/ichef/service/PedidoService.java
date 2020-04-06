@@ -29,6 +29,16 @@ public class PedidoService extends GenericDAO<Pedido> {
 		return pedidos;
 
 	}
+	
+	public Double findValorDebito(Long codigoCliente, Long codigoEmpresa) {
+		 	StringBuilder sb =  new StringBuilder();
+			sb.append("select saldo from vw_cliente_saldo where cd_cliente =  " + codigoCliente+	" and cd_empresa = "+codigoEmpresa);
+			
+			Query query = getManager().createNativeQuery(sb.toString());
+			Double saldo =    Double.parseDouble(query.getSingleResult().toString());
+			return saldo;
+		 
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void order(List<Pedido> persons) {

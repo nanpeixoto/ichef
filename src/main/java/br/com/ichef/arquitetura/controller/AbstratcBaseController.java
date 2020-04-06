@@ -60,7 +60,8 @@ public abstract class AbstratcBaseController implements Serializable {
 	 * @param widgetvar
 	 */
 	protected void showDialog(String widgetvar) {
-		RequestContext.getCurrentInstance().execute(widgetvar + ".show()");
+		//RequestContext.getCurrentInstance().execute(widgetvar + ".show()");
+		RequestContext.getCurrentInstance().execute("PF('"+widgetvar+"').show();");
 	}
 
 	/**

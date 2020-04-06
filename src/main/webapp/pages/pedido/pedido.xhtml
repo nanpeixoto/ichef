@@ -526,6 +526,41 @@
 					</div>
 				</div>
 			</div>
+			
+		 
+		
+			<p:dialog header="Alerta de Saldo" widgetVar="confirmacaoVendaDevedorfalse" id="confirmacaoVendaDevedorfalse"
+			height="150" width="350" responsive="true"   styleClass="box-danger"  modal="true" appendTo="@(body)">
+				 <font color="red" style="font-size:20px">
+				 	Atenção, o saldo atual desse cliente é <span style="font-weight: bold;"> #{pedidoController.formataValor(pedidoController.valorDevedor)}</span> 
+				 	deseja confirmar  esse pedido?
+				 </font>
+				<br></br>
+				<p:spacer height="30px" />
+				<div align="right">
+				 <p:commandLink id="btnExcluir"  style="width: 60px;"
+					 styleClass="btn btn-danger"  ajax="false" update="form,growl"
+					actionListener="#{pedidoController.adicionarPedidoEmBanco(pedidoController.clienteDeveSerApagado)}"
+					oncomplete="PF('confirmacaoVendaDevedorfalse').hide();">
+					<span><h:outputText style="width: 1; height: 1;" title="Sim"
+							value="Sim" /></span>
+				</p:commandLink>
+				
+				 <p:commandLink id="btnExcluirNao"  style="width: 60px;margin-left: 24px;"
+					 styleClass="btn btn-success"  ajax="false"
+					 actionListener="#{pedidoController.cancelar()}" update="form,growl"
+					 oncomplete="PF('confirmacaoVendaDevedorfalse').hide();">
+					<span><h:outputText style="width: 1; height: 1;" title="Sim"
+							value="Não" /></span>
+				</p:commandLink>
+				
+				 						
+					 
+				 </div>
+		</p:dialog>
+		
+		 
+		
 		</h:form>
 
 	</ui:define>

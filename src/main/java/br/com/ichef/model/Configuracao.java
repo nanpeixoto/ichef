@@ -46,6 +46,9 @@ public class Configuracao extends BaseEntity {
 
 	@Column(name = "NR_CMV")
 	private Integer custoMercadoriaVendida;
+	
+	@Column(name = "VL_ALERTA_SALDO")
+	private Double valorAlertaSaldo;
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
@@ -187,5 +190,15 @@ public class Configuracao extends BaseEntity {
 	public void setEmailFim(String emailFim) {
 		this.emailFim = emailFim;
 	}
+
+	public Double getValorAlertaSaldo() {
+		return valorAlertaSaldo;
+	}
+
+	public void setValorAlertaSaldo(Double valorAlertaSaldo) {
+		this.valorAlertaSaldo = valorAlertaSaldo;
+	}
+	
+	
 
 }
