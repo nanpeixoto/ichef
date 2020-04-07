@@ -32,7 +32,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	
 	public Double findValorDebito(Long codigoCliente, Long codigoEmpresa) {
 		 	StringBuilder sb =  new StringBuilder();
-			sb.append("select saldo from vw_cliente_saldo where cd_cliente =  " + codigoCliente+	" and cd_empresa = "+codigoEmpresa);
+			sb.append("select saldo from vw_cliente_saldo_empresa where cd_cliente =  " + codigoCliente+	" and cd_empresa = "+codigoEmpresa);
 			
 			Query query = getManager().createNativeQuery(sb.toString());
 			Double saldo =    Double.parseDouble(query.getSingleResult().toString());
