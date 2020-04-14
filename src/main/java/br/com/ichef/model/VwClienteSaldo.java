@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -34,8 +35,8 @@ public class VwClienteSaldo extends BaseEntity {
 	@Column(name = "CD_EMPRESA", insertable = false, updatable = false)
 	private Long codigoEmpresa;
 
-	@Column(name = "CD_TIP_LOCALIDADE")
-	private Long codigoTipoLocalidade;
+	//@Column(name = "CD_TIP_LOCALIDADE")
+	//private Long codigoTipoLocalidade;
 
 	@Column(name = "DS_LOCALIDADE")
 	private String descricaoLocalidade;
@@ -46,8 +47,14 @@ public class VwClienteSaldo extends BaseEntity {
 	@Column(name = "DS_EMAIL")
 	private String email;
 
-	@Column(name = "DS_TIP_LOCALIDADE")
-	private String descricaoTipoLocalidade;
+	@Column(name = "SN_ATIVO")
+	private String ativo;
+
+	@Column(name = "SN_BLOQUEADO")
+	private String bloqueado;
+
+	//@Column(name = "DS_TIP_LOCALIDADE")
+	//private String descricaoTipoLocalidade;
 
 	@Column(name = "NM_FANTASIA")
 	private String nomeFantasia;
@@ -62,12 +69,19 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Column(name = "SALDO_OUTRA_EMPRESA")
 	private BigDecimal valorSaldoOutraEmpresa;
+	
+	@Transient
+	private boolean estaBloqueado;
+	
+	@Transient
+	private boolean isAtivo;
+
 
 	public long diasDevedor() {
 		try {
 			return Util.diferencaEmDias(new Date(), getDataCarteira());
 		} catch (Exception e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			return 0;
 		}
 
@@ -157,13 +171,7 @@ public class VwClienteSaldo extends BaseEntity {
 		this.codigoLocalidade = codigoLocalidade;
 	}
 
-	public Long getCodigoTipoLocalidade() {
-		return codigoTipoLocalidade;
-	}
 
-	public void setCodigoTipoLocalidade(Long codigoTipoLocalidade) {
-		this.codigoTipoLocalidade = codigoTipoLocalidade;
-	}
 
 	public String getDescricaoLocalidade() {
 		return descricaoLocalidade;
@@ -172,6 +180,14 @@ public class VwClienteSaldo extends BaseEntity {
 	public void setDescricaoLocalidade(String descricaoLocalidade) {
 		this.descricaoLocalidade = descricaoLocalidade;
 	}
+	
+	/*public Long getCodigoTipoLocalidade() {
+		return codigoTipoLocalidade;
+	}
+
+	public void setCodigoTipoLocalidade(Long codigoTipoLocalidade) {
+		this.codigoTipoLocalidade = codigoTipoLocalidade;
+	}
 
 	public String getDescricaoTipoLocalidade() {
 		return descricaoTipoLocalidade;
@@ -179,7 +195,7 @@ public class VwClienteSaldo extends BaseEntity {
 
 	public void setDescricaoTipoLocalidade(String descricaoTipoLocalidade) {
 		this.descricaoTipoLocalidade = descricaoTipoLocalidade;
-	}
+	}*/
 
 	public String getNomeFantasia() {
 		return nomeFantasia;
@@ -237,17 +253,24 @@ public class VwClienteSaldo extends BaseEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
+
 	public String getListaSaldosEmail() {
 		String mensagemFinal = "";
-		BigDecimal saldoTotal =  (getValorSaldoOutraEmpresa()!=null  ?   getValorSaldo().add(getValorSaldoOutraEmpresa()): getValorSaldo() ); 
-		String mensagemSaldoTotal = "<br><br>Seu saldo atual é de <span     style=\"color: "+(saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "red" : "green")+"; font-weight: bold;\">" +Util.formataValor(  saldoTotal)+"</span>";
-		String outrasEmpresas = (getValorSaldoOutraEmpresa()!=null  && saldoTotal.compareTo(new BigDecimal("0")) >= 0   ? " <br> Empresa atual:"+Util.formataValor(getValorSaldo())+ (getValorSaldo().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ")+" - Outras empresas: "+Util.formataValor(getValorSaldoOutraEmpresa())+ (getValorSaldoOutraEmpresa().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ")+"." : " ");
+		BigDecimal saldoTotal = (getValorSaldoOutraEmpresa() != null ? getValorSaldo().add(getValorSaldoOutraEmpresa())
+				: getValorSaldo());
+		String mensagemSaldoTotal = "<br><br>Seu saldo atual é de <span     style=\"color: "
+				+ (saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "red" : "green") + "; font-weight: bold;\">"
+				+ Util.formataValor(saldoTotal) + "</span>";
+		String outrasEmpresas = (getValorSaldoOutraEmpresa() != null && saldoTotal.compareTo(new BigDecimal("0")) >= 0
+				? " <br> Empresa atual:" + Util.formataValor(getValorSaldo())
+						+ (getValorSaldo().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ")
+						+ " - Outras empresas: " + Util.formataValor(getValorSaldoOutraEmpresa())
+						+ (getValorSaldoOutraEmpresa().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ") + "."
+				: " ");
 		String creditoDebito = (saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "" : " (CRÉDITO) ");
-		
-		
-		mensagemSaldoTotal = mensagemSaldoTotal +creditoDebito+outrasEmpresas + "<br><bR> Segue abaixo os valores listados para a empresa "+getNomeFantasia()+": <br>";
+
+		mensagemSaldoTotal = mensagemSaldoTotal + creditoDebito + outrasEmpresas
+				+ "<br><bR> Segue abaixo os valores listados para a empresa " + getNomeFantasia() + ": <br>";
 
 		String listaDebitos = "";
 		String thead = "<table role=\"grid\" border=\"1\">" + "<thead id=\"tabListaPedidos:0:tabListaSaldos_head\">"
@@ -266,21 +289,69 @@ public class VwClienteSaldo extends BaseEntity {
 		String trInicio = "<tr  class=\"ui-widget-content ui-datatable-even\" role=\"row\">";
 		String trFim = "</tr>";
 		for (VwClienteCarteiraSaldo vwClienteCarteiraSaldo : getSaldos()) {
-			listaDebitos = listaDebitos+
-							trInicio + 
-								"<td style=\"text-align: center; \">" + vwClienteCarteiraSaldo.getDescricaoOuPrato() + "</td>" 
-								+"<td style=\"text-align: center; \">" + Util.formataData(vwClienteCarteiraSaldo.getData())+ "</td>" 
-								+"<td style=\"text-align: center; \">" + Util.formataValor( ( vwClienteCarteiraSaldo.getValorDevido()  !=null ? vwClienteCarteiraSaldo.getValorDevido():0) )+ "</td>" 
-								+"<td style=\"text-align: center; \">" +Util.formataValor( ( vwClienteCarteiraSaldo.getValorPago()  !=null ? vwClienteCarteiraSaldo.getValorPago():0) )   + "</td>" 
-								+"<td style=\"text-align: center; \">" + (vwClienteCarteiraSaldo.getFormaPagamento()!=null ? vwClienteCarteiraSaldo.getFormaPagamento().getDescricao():"")+ "</td>" 
-							+ trFim;
+			listaDebitos = listaDebitos + trInicio + "<td style=\"text-align: center; \">"
+					+ vwClienteCarteiraSaldo.getDescricaoOuPrato() + "</td>" + "<td style=\"text-align: center; \">"
+					+ Util.formataData(vwClienteCarteiraSaldo.getData()) + "</td>"
+					+ "<td style=\"text-align: center; \">"
+					+ Util.formataValor(
+							(vwClienteCarteiraSaldo.getValorDevido() != null ? vwClienteCarteiraSaldo.getValorDevido()
+									: 0))
+					+ "</td>" + "<td style=\"text-align: center; \">"
+					+ Util.formataValor(
+							(vwClienteCarteiraSaldo.getValorPago() != null ? vwClienteCarteiraSaldo.getValorPago() : 0))
+					+ "</td>" + "<td style=\"text-align: center; \">"
+					+ (vwClienteCarteiraSaldo.getFormaPagamento() != null
+							? vwClienteCarteiraSaldo.getFormaPagamento().getDescricao()
+							: "")
+					+ "</td>" + trFim;
 		}
-		
+
 		String tableFim = "</tbody></table>";
 
-		mensagemFinal = mensagemSaldoTotal+thead+listaDebitos+tableFim;
+		mensagemFinal = mensagemSaldoTotal + thead + listaDebitos + tableFim;
 
 		return mensagemFinal;
+	}
+
+	public String getSituacaoAtual() {
+		String situacao = "";
+		if (isEstaBloqueado()) {
+			situacao = "BLOQUEADO";
+		}
+
+		if (!isAtivo()) {
+			if (!situacao.equalsIgnoreCase(""))
+				situacao += "/";
+			situacao += "INATIVO";
+		} else {
+			if (!situacao.equalsIgnoreCase(""))
+				situacao += "/";
+			situacao += "ATIVO";
+		}
+		
+		 
+
+		return situacao;
+	}
+
+	public boolean isEstaBloqueado() {
+		if (bloqueado != null) {
+			if (bloqueado.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return estaBloqueado;
+	}
+
+	public boolean isAtivo() {
+		if (ativo != null) {
+			if (ativo.equalsIgnoreCase("S"))
+				return true;
+			else
+				return false;
+		}
+		return isAtivo;
 	}
 
 }

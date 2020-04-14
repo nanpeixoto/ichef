@@ -149,7 +149,7 @@
 									</h:outputLabel>
 								</p:column>
 
-								<p:column headerText="Outros Saldos"
+								<!-- <p:column headerText="Outros Saldos"
 									filterBy="#{item.valorSaldoOutraEmpresa}"
 									filterMatchMode="contains" width="8%"
 									filterStyle="display:none; visibility:hidden;"
@@ -160,7 +160,7 @@
 										<f:convertNumber currencySymbol="R$" type="currency"
 											locale="pt_br" maxFractionDigits="2" />
 									</h:outputLabel>
-								</p:column>
+								</p:column> -->
 
 								<p:column headerText="Localidade"
 									filterBy="#{item.descricaoLocalidade}"
@@ -180,12 +180,12 @@
 									</f:facet>
 								</p:column>
 
-								<p:column headerText="Tipo Localidade"
-									filterBy="#{item.descricaoTipoLocalidade}"
+								<p:column headerText="Situação"
+									filterBy="#{item.situacaoAtual}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.descricaoTipoLocalidade}">
-									<h:outputLabel value="#{item.descricaoTipoLocalidade}"
+									sortBy="#{item.situacaoAtual}">
+									<h:outputLabel value="#{item.situacaoAtual}"
 										escape="false" />
 
 									<f:facet name="filter">
@@ -193,7 +193,7 @@
 											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
 											maxlength="255" styleClass="letras-maiusculas semClear">
 											<p:tooltip id="toolTipFadetipo2" for="globalFilterTipo2"
-												value="Digite o Tipo de Localidade para pesquisar"
+												value="Digite a Situação para pesquisar"
 												position="top" />
 										</p:inputText>
 									</f:facet>
