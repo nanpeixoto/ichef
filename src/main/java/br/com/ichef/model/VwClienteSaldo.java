@@ -354,4 +354,14 @@ public class VwClienteSaldo extends BaseEntity {
 		return isAtivo;
 	}
 
+	public String getBloqueado() {
+		return bloqueado;
+	}
+
+	public void setBloqueado(String bloqueado) {
+		this.bloqueado = bloqueado;
+	}
+	
+	
+
 }

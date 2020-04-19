@@ -164,7 +164,7 @@
 
 								<p:column headerText="Localidade"
 									filterBy="#{item.descricaoLocalidade}"
-									filterMatchMode="contains"
+									filterMatchMode="contains" 
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.descricaoLocalidade}">
 									<h:outputLabel value="#{item.descricaoLocalidade}"
@@ -227,32 +227,36 @@
 								</p:column>
 
 								<p:column headerText="Dias" filterBy="#{item.diasDevedor()}"
-									filterMatchMode="contains" width="8%"
+									filterMatchMode="contains" width="6%"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.diasDevedor()}">
 									<h:outputLabel value="#{item.diasDevedor()}" escape="false" />
 
 									<f:facet name="filter">
 										<p:inputText id="globalFilterDias"
-											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
-											maxlength="255" styleClass="letras-maiusculas semClear">
+											onblur="PF('itens').filter(); hideBar();" style="width:30px;"
+											maxlength="10" styleClass="letras-maiusculas semClear">
 											<p:tooltip id="toolTipFadeDias" for="globalFilterDias"
 												value="Digite a qtd para pesquisar" position="top" />
 										</p:inputText>
 									</f:facet>
 								</p:column>
 
-								<p:column headerText="Email" width="10%" exportable="false"
+								<p:column headerText="Email" width="12%" exportable="false"
 									filterStyle="display:none; visibility:hidden;">
 									<p:commandButton value="" icon="fa fa-envelope-o"
 										id="btnAdicioanr" styleClass="btn btn-danger"
-										style="width: 34px;" disabled="#{item.email eq null }"
+										style="width: 32px;" disabled="#{item.email eq null }"
 										action="#{clienteSaldoController.EnviarEmail( item, 'N' )}" />
 
 									<p:commandButton value="" icon="fa fa-binoculars"
-										styleClass="btn-info" style="width: 34px;"
+										styleClass="btn-info" style="width: 32px;"
 										oncomplete="PF('dialogoEmail').show()" update="@(.ui-dialog)"
 										actionListener="#{clienteSaldoController.obterEmailEnviados(item)}" />
+										
+										<p:commandButton value="" icon="#{clienteSaldoController.getIconBloqueadoCliente(item)}"
+										styleClass="btn btn-warning" style="width: 32px;" update="tabListaPedidos"
+										actionListener="#{clienteSaldoController.bloquearCliente(item)}" />
 
 								</p:column>
 

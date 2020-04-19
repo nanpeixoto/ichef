@@ -3,8 +3,12 @@ package br.com.ichef.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+
 import org.apache.regexp.recompile;
 
+import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.Cliente;
 import br.com.ichef.model.ClienteTelefone;
@@ -23,12 +27,10 @@ public class ClienteService extends GenericDAO<Cliente> {
 
 	}
 
-	
 	private boolean validaRegras(Cliente entity) {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
 
 	public List<Cliente> listAll(Boolean ativo) {
 		Cliente filter = new Cliente();
@@ -42,6 +44,49 @@ public class ClienteService extends GenericDAO<Cliente> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public String atualizarStatusBloqueio(String statusBloqueio, Long codigoCliente) {
+		EntityTransaction tx = null;
+		try {
+
+			StringBuilder hql = null;
+			int result = -1;
+
+			hql = new StringBuilder();
+
+			hql.append("UPDATE Cliente SET bloqueado = '"+statusBloqueio+"'");
+			 hql.append(" where  id = "+codigoCliente);
+			
+
+			if (hql != null) {
+
+				if (!getManager().isOpen()) {
+					EntityManagerProducer producer = new EntityManagerProducer();
+					setManager(producer.createEntityManager());
+				} else {
+					getManager().clear();
+				}
+
+				tx = getManager().getTransaction();
+				tx.begin();
+
+				Query query = getManager().createQuery(hql.toString());
+				result = query.executeUpdate();
+				tx.commit();
+
+			}
+			if (result == 0) {
+				return "Operação Não Realizada. Contact o ADM do sistema";
+			}
+
+			return null;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return e.getMessage();
+		}  
+		
 	}
 
 }

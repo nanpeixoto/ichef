@@ -21,6 +21,7 @@ import br.com.ichef.model.VwClienteSaldo;
 import br.com.ichef.model.VwClienteSaldoID;
 import br.com.ichef.service.ClienteEmailAuditoriaService;
 import br.com.ichef.service.ClienteSaldoService;
+import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.EmailService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
@@ -35,7 +36,7 @@ public class ClienteSaldoController extends BaseController {
 	private ClienteSaldoService service;
 
 	@Inject
-	private Cliente clienteService;
+	private ClienteService clienteService;
 
 	@Inject
 	private ClienteEmailAuditoriaService clienteEmailAuditoriaService;
@@ -80,6 +81,31 @@ public class ClienteSaldoController extends BaseController {
 			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema.");
 		}
 
+	}
+
+	public void bloquearCliente(VwClienteSaldo clienteCarteira) {
+		try {
+			String statusBloqueio = (clienteCarteira.isEstaBloqueado() ? "N" : "S");
+			String result = clienteService.atualizarStatusBloqueio(statusBloqueio,
+					((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
+			if (result != null)
+				facesMessager.error(result);
+			else {
+				facesMessager.info("Atualizado");
+				clienteCarteira.setBloqueado(statusBloqueio);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema."
+					+ e.getMessage());
+		}
+
+	}
+
+	public String getIconBloqueadoCliente(VwClienteSaldo clienteCarteira) {
+		String iconBloqueado = (clienteCarteira.isEstaBloqueado() ? "fa fa-unlock-alt" : "fa fa-lock");
+		return iconBloqueado;
 	}
 
 	public void enviarEmailParaTodos() {
