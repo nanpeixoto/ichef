@@ -95,11 +95,14 @@ public class RelPedidoEtiqueta extends BaseController {
 
 	private boolean entregaDataCardapio;
 	private boolean antesNoveEMeia;
+	
+	private boolean tipoImpressao;
 
 	@PostConstruct
 	public void init() {
 
 		obterListas();
+		tipoImpressao = true;
 
 	}
 
@@ -161,6 +164,7 @@ public class RelPedidoEtiqueta extends BaseController {
 			} else {
 				try {
 					setParametroReport("logoEtiqtea", getImagem(LOGO_ETIQUETA));
+					setParametroReport("tipoImpressao", tipoImpressao );
 					orderBrOrdemPedidoEtiqueta(pedidos);
 					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
@@ -360,6 +364,14 @@ public class RelPedidoEtiqueta extends BaseController {
 
 	public void setHorarioCorte(Date horarioCorte) {
 		this.horarioCorte = horarioCorte;
+	}
+
+	public boolean isTipoImpressao() {
+		return tipoImpressao;
+	}
+
+	public void setTipoImpressao(boolean tipoImpressao) {
+		this.tipoImpressao = tipoImpressao;
 	}
 
 }

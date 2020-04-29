@@ -517,7 +517,7 @@ public class PedidoController extends BaseController {
 					valorDevedor = service.findValorDebito(getEntity().getCliente().getId(),
 							userLogado.getEmpresaLogada().getId());
 				} catch (Exception e) {
-					System.out.println("ERRO: adicionarPedido - findValorDebito - Debito não encontrado");
+					//System.out.println("ERRO: adicionarPedido - findValorDebito - Debito não encontrado");
 				}
 				//configuracao
 				Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");

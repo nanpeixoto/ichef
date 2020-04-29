@@ -78,6 +78,10 @@
 								value="#{relPedidoEtiqueta.horarioCorte}" pattern="HH:mm"
 								size="10"  timeOnly="true"
 								mask="true"  locale="pt_BR" />
+								
+							<p:outputLabel value="Tipo de Impressão" for="tipo"/>
+		                    <p:selectBooleanButton id="tipo" value="#{relPedidoEtiqueta.tipoImpressao}" 
+					        	onLabel="Exibir Validade" offLabel="Sem Validade" onIcon="fa fa-clock-o" offIcon="fa fa-times"/>
 
 							<!-- <p:outputLabel value="Data Final" for="dtFinal"/>
                     		<p:calendar id="dtFinal" value="#{relPedidoEtiqueta.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"

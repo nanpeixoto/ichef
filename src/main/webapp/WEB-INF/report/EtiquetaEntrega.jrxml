@@ -26,6 +26,7 @@
 	<parameter name="pLogo" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="logoEtiqtea" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="tipoImpressao" isForPrompting="false" class="java.lang.Boolean"/>
 
 	<field name="auditoria" class="java.lang.String">
 		<fieldDescription><![CDATA[auditoria]]></fieldDescription>
@@ -330,12 +331,14 @@
 						width="81"
 						height="11"
 						key="textField-24"
-						stretchType="RelativeToBandHeight"/>
+						stretchType="RelativeToBandHeight">
+							<printWhenExpression><![CDATA[$P{tipoImpressao}]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[ $F{validade}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{validade}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
