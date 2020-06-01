@@ -292,7 +292,9 @@
 						y="3"
 						width="57"
 						height="11"
-						key="textField-19"/>
+						key="textField-19">
+							<printWhenExpression><![CDATA[$P{tipoImpressao}]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" rightPadding="1" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true" isItalic="false"/>

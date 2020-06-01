@@ -12,11 +12,16 @@ public class ClienteCarteiraVisitor extends FilterVisitor {
 
 	private Date dataSemHora;
 	
+	private boolean semPedido;
+	
 
 	@Override
 	public void visitCriteria(Criteria criteria) {
 		if(dataSemHora!=null) {
 			criteria.add( Restrictions.sqlRestriction(" date_format( this_.data, '%d/%m/%Y' ) ='"+Util.dateToString( getDataSemHora() )+"'" ) );
+		}
+		if(semPedido) {
+			criteria.add( Restrictions.sqlRestriction("this_.cd_pedido is null "));
 		}
 	}
 
@@ -28,6 +33,16 @@ public class ClienteCarteiraVisitor extends FilterVisitor {
 
 	public void setDataSemHora(Date dataSemHora) {
 		this.dataSemHora = dataSemHora;
+	}
+
+
+	public boolean isSemPedido() {
+		return semPedido;
+	}
+
+
+	public void setSemPedido(boolean semPedido) {
+		this.semPedido = semPedido;
 	}
 	
 	

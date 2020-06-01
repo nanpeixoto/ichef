@@ -86,8 +86,7 @@ public class ClienteSaldoController extends BaseController {
 	public void bloquearCliente(VwClienteSaldo clienteCarteira) {
 		try {
 			String statusBloqueio = (clienteCarteira.isEstaBloqueado() ? "N" : "S");
-			String result = clienteService.atualizarStatusBloqueio(statusBloqueio,
-					((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
+			String result = clienteService.atualizarStatusBloqueio(statusBloqueio,((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
 			if (result != null)
 				facesMessager.error(result);
 			else {
@@ -135,7 +134,10 @@ public class ClienteSaldoController extends BaseController {
 	public void EnviarEmail(VwClienteSaldo clienteCarteira, String todos) {
 		String mensagem = "";
 		if (clienteCarteira.getEmail() != null) {
-			mensagem = config.getEmailInicio() + clienteCarteira.getListaSaldosEmail() + config.getEmailFim();
+			String inicio  = config.getEmailInicio();
+			inicio =inicio.replace( "#codigo#", ((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente().toString() );
+			mensagem = inicio + clienteCarteira.getListaSaldosEmail() 
+				+ clienteCarteira.getDescricaoLink() + config.getEmailFim();
 
 			EmailDTO dto = new EmailDTO();
 			dto.setAssunto(clienteCarteira.getNomeFantasia() + " - SALDO ATUAL");

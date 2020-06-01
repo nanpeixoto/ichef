@@ -118,7 +118,9 @@ public class EmailService extends GenericDAO<Email> {
 			
 
 			// Send the actual HTML message, as big as you like
-			message.setContent(email.getTexto().replace("\n", "<br>"), "text/html");
+			message.setHeader("Content-Type", "text/html; charset=\"iso-8859-1\"");
+			message.setContent(email.getTexto().replace("\n", "<br>"), "text/html; charset=iso-8859-1");
+			message.setHeader("Content-Transfer-Encoding", "quoted-printable");
 
 			// Send message
 			Transport.send(message);

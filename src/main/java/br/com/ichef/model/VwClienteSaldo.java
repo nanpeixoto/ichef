@@ -34,6 +34,9 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Column(name = "CD_EMPRESA", insertable = false, updatable = false)
 	private Long codigoEmpresa;
+	
+	@Column(name = "DS_LINK_PAGAMENTO", insertable = false, updatable = false)
+	private String descricaoLink ;
 
 	//@Column(name = "CD_TIP_LOCALIDADE")
 	//private Long codigoTipoLocalidade;
@@ -360,6 +363,14 @@ public class VwClienteSaldo extends BaseEntity {
 
 	public void setBloqueado(String bloqueado) {
 		this.bloqueado = bloqueado;
+	}
+
+	public String getDescricaoLink() {
+		return descricaoLink;
+	}
+
+	public void setDescricaoLink(String descricaoLink) {
+		this.descricaoLink = descricaoLink;
 	}
 	
 	

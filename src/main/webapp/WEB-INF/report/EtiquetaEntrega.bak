@@ -26,9 +26,7 @@
 	<parameter name="pLogo" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="logoEtiqtea" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="tipoImpressao" isForPrompting="false" class="java.lang.Boolean">
-		<defaultValueExpression ><![CDATA[tipoImpressao]]></defaultValueExpression>
-	</parameter>
+	<parameter name="tipoImpressao" isForPrompting="false" class="java.lang.Boolean"/>
 
 	<field name="auditoria" class="java.lang.String">
 		<fieldDescription><![CDATA[auditoria]]></fieldDescription>

@@ -98,6 +98,7 @@ public class LancamentoCarteiraController extends BaseController {
 		ClienteCarteira filter = new ClienteCarteira();
 		filter.setEmpresa( getUserLogado().getEmpresaLogada() );
 		visitor.setDataSemHora(getData());
+		visitor.setSemPedido(true);
 		try {
 			lista = clienteCarteiraService.findByParameters(filter, visitor);
 		} catch (Exception e) {
