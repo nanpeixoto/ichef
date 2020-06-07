@@ -70,6 +70,9 @@ public class RelControelQuantitativoVendasController extends BaseController {
 					setParametroReport("pDataInicio", formatarData.format(getDataInicial()));
 					if(getCodigoCliente()!=null) {
 						setParametroReport("pCodigoCliente",  getCodigoCliente());
+						setParametroReport("pWhereCodCliente",  " and cd_cliente =  "+ getCodigoCliente());
+					}else {
+						setParametroReport("pWhereCodCliente", "");
 					}
 					setParametroReport("pDataFinal", formatarData.format(getDataFinal()));
 					setParametroReport("pCodigoEmpresa",getEmpresa().getId());

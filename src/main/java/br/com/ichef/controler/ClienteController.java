@@ -6,12 +6,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.TabChangeEvent;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
@@ -333,6 +335,26 @@ public class ClienteController extends BaseController {
 		return "black";
 	}
 
+	public void onTabChange(TabChangeEvent event) {
+		try {
+
+			if (event.getTab().getTitle().contains("Carteira") && getEntity().getId() != null) {
+				Cliente cliente = new Cliente();
+				cliente.setId(getEntity().getId());
+				ClienteCarteira filter = new ClienteCarteira();
+				filter.setCliente(cliente);
+
+				getEntity().setCarteiras(clienteCarteiraService.findByParameters(filter));
+			}
+
+		} catch (Exception e) {
+			System.out.println("ERRO: #0001" + e.getMessage());
+			e.printStackTrace();
+			facesMessager.error(
+					"Não foi possivel efeturar a operação, entre em contato com administrador do sistema e informe o erro #0001");
+		}
+	}
+
 	public void adicionarCarteira() {
 
 		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO
@@ -612,16 +634,28 @@ public class ClienteController extends BaseController {
 	}
 
 	public void excluirCarteira(ClienteCarteira obj) {
-		List<ClienteCarteira> temp = new ArrayList<>();
-		temp.addAll(entity.getCarteiras());
-		for (ClienteCarteira item : entity.getCarteiras()) {
-			if (obj.equals(item))
-				temp.remove(item);
+		try {
+
+			List<ClienteCarteira> temp = new ArrayList<>();
+			temp.addAll(entity.getCarteiras());
+			for (ClienteCarteira item : entity.getCarteiras()) {
+				if (obj.equals(item))
+					temp.remove(item);
+			}
+			entity.getCarteiras().clear();
+			entity.getCarteiras().addAll(temp);
+			// updateComponentes(":form:tabCarteira:tableCarteira");
+
+			clienteCarteiraService.excluir(obj);
+
+			FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+
+		} catch (Exception e) {
+			System.out.println("ERRO: #0002" + e.getMessage());
+			e.printStackTrace();
+			facesMessager.error(
+					"Não foi possivel efeturar a operação, entre em contato com administrador do sistema e informe o erro #0002");
 		}
-		entity.getCarteiras().clear();
-		entity.getCarteiras().addAll(temp);
-		// updateComponentes(":form:tabCarteira:tableCarteira");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
 	}
 
 	public void editarLinhaEndereco(RowEditEvent event) throws Exception {

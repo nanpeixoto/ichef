@@ -6,12 +6,30 @@
 
 
 	<!-- local -->
-	<Resource name="jdbc/ichefDB" auth="Container"
+	<!-- <Resource  auth="Container" name="jdbc/ichefDB"
 		factory="org.apache.naming.factory.BeanFactory"
 		type="com.mchange.v2.c3p0.ComboPooledDataSource"
-		driverClass="com.mysql.jdbc.Driver"
+		driverClass="com.mysql.jdbc.Driver"   testOnBorrow="true"  testWhileIdle="true"	  validationQuery="SELECT 1"
 		jdbcUrl="jdbc:mysql://localhost:3306/ichef?autoReconnect=true"
-		user="ichef" password="ichef" minPoolSize="10" maxPoolSize="750" />
+		user="ichef" password="ichef" minPoolSize="10" maxPoolSize="750" /> -->
+		
+		<Resource auth="Container" 
+   name="jdbc/ichefDB" 
+    driverClassName="com.mysql.jdbc.Driver" 
+    maxActive="20"    
+    maxIdle="10" 
+    maxWait="-1" 
+    type="javax.sql.DataSource" 
+    url="jdbc:mysql://localhost:3306/ichef?autoReconnect=true" 
+    password="ichef"    
+    username="ichef"  
+    removeAbandoned = "true"
+    validationInterval = "34000"
+    validationQuery="SELECT 1"
+    testOnBorrow="true"   testWhileIdle="true"
+   timeBetweenEvictionRunsMillis="10000"
+    minEvictableIdleTimeMillis="60000" />
+
 		
 		
 

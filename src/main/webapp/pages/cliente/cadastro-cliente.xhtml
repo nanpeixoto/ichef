@@ -20,6 +20,8 @@
         <p:growl id="growl" showDetail="false" sticky="false" escape="true"  autoUpdate="false" />  
         <h:form id="form" prependId="false">
         	<p:tabView id="tabs">
+        		 <p:ajax event="tabChange" listener="#{clienteController.onTabChange}" update="form"/>
+      			<!--  <p:ajax event="tabClose" listener="#{tabbedView.onTabClose}" update=":form:msgs"/> --> 
         		 <p:tab title="Cadastro" id="tabCadastro">
 		            <p:focus context="capaPanel"/>
 		

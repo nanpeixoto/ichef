@@ -88,8 +88,9 @@ public class Cliente extends BaseEntity {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<ClienteEndereco> enderecos;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	/*@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)*/
+	@Transient
 	private List<ClienteCarteira> carteiras;
 
 	@Column(name = "DS_APELIDO")
