@@ -34,13 +34,17 @@
 	<parameter name="pCodigoEmpresa" isForPrompting="false" class="java.lang.Long">
 		<defaultValueExpression ><![CDATA[new Long("2")]]></defaultValueExpression>
 	</parameter>
+	<parameter name="pCodigoCliente" isForPrompting="false" class="java.lang.Long">
+		<defaultValueExpression ><![CDATA[new Long("1")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pWhereCodCliente" isForPrompting="false" class="java.lang.String"/>
 	<queryString><![CDATA[select *
  from  vw_controle_quantitativo where cd_empresa = $P!{pCodigoEmpresa}
  and STR_TO_DATE( date_format( data,'%d-%m-%Y'),'%d-%m-%Y')
  between  STR_TO_DATE( '$P!{pDataInicio}','%d-%m-%Y')  
  and  STR_TO_DATE( '$P!{pDataFinal}','%d-%m-%Y')
-and cd_cliente = coalesce($P!{pCodigoCliente}, cd_cliente )
-order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDAPIO_PRATO]]></queryString>
+ $P!{pWhereCodCliente}
+order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pagamento]]></queryString>
 
 	<field name="CD_CLIENTE" class="java.lang.Integer"/>
 	<field name="NM_CLIENTE" class="java.lang.String"/>
@@ -92,13 +96,13 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 	<variable name="valorPagoPorEmpresa" class="java.lang.Double" resetType="Group" resetGroup="empresa" calculation="Sum">
 		<variableExpression><![CDATA[$F{VL_LUCRO}]]></variableExpression>
 	</variable>
-	<variable name="quantidadePorPrato" class="java.lang.Integer" resetType="Group" resetGroup="cardapio" calculation="Sum">
+	<variable name="quantidadePorPrato" class="java.lang.Integer" resetType="Group" resetGroup="cardapio_prato" calculation="Sum">
 		<variableExpression><![CDATA[$F{NR_QTD}]]></variableExpression>
 	</variable>
 	<variable name="quantidadePorData" class="java.lang.Integer" resetType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$F{NR_QTD}]]></variableExpression>
 	</variable>
-	<variable name="valorPagoPorPrato" class="java.lang.Double" resetType="Group" resetGroup="cardapio" calculation="Sum">
+	<variable name="valorPagoPorPrato" class="java.lang.Double" resetType="Group" resetGroup="cardapio_prato" calculation="Sum">
 		<variableExpression><![CDATA[$F{VL_LUCRO}]]></variableExpression>
 	</variable>
 	<variable name="quantidadePorEmpresa" class="java.lang.Integer" resetType="Group" resetGroup="empresa" calculation="Sum">
@@ -240,7 +244,52 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="cardapio" >
+		<group  name="data" >
+			<groupExpression><![CDATA[$F{DATA}]]></groupExpression>
+			<groupHeader>
+			<band height="12"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="1"
+						y="0"
+						width="533"
+						height="12"
+						backcolor="#999999"
+						key="rectangle-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="1"
+						width="528"
+						height="11"
+						key="textField-21"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{DATA}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="ordem" >
+			<groupExpression><![CDATA[$F{NR_ORDEM}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="cardapio_prato" >
 			<groupExpression><![CDATA[$F{CD_CARDAPIO_PRATO}]]></groupExpression>
 			<groupHeader>
 			<band height="13"  isSplitAllowed="true" >
@@ -314,6 +363,28 @@ order by cd_empresa, data, nr_ordem, ds_tip_prato,  ds_forma_pagamento ,CD_CARDA
 					</textElement>
 				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPagoPorPrato}]]></textFieldExpression>
 				</textField>
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="DS_TIP_PRATO" >
+			<groupExpression><![CDATA[$F{DS_TIP_PRATO}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="DS_FORMA_PAGAMENTO" >
+			<groupExpression><![CDATA[$F{DS_FORMA_PAGAMENTO}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 			</groupFooter>
 		</group>

@@ -45,7 +45,7 @@
  and  STR_TO_DATE( '$P!{pDataFinal}','%d-%m-%Y')
  $P!{pWhereCodCliente}
  GROUP BY  STR_TO_DATE( date_format( data,'%d-%m-%Y'),'%d-%m-%Y'), CD_ENTREGADOR) a)
-VL_DIARIA
+VL_DIARIA,sum( nr_preco_custo_tipo_prato)nr_preco_custo_tipo_prato
  from  vw_controle_quantitativo where cd_empresa = $P!{pCodigoEmpresa}
  and STR_TO_DATE( date_format( data,'%d-%m-%Y'),'%d-%m-%Y')
  between  STR_TO_DATE( '$P!{pDataInicio}','%d-%m-%Y')  
@@ -66,6 +66,9 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 	<field name="DS_DESCRICAO" class="java.lang.String"/>
 	<field name="DS_TIP_PRATO" class="java.lang.String"/>
 	<field name="VL_DIARIA" class="java.lang.Double"/>
+	<field name="nr_preco_custo_tipo_prato" class="java.lang.Double">
+		<fieldDescription><![CDATA[nr_preco_custo_tipo_prato]]></fieldDescription>
+	</field>
 
 	<variable name="valorPago" class="java.lang.Double" resetType="Group" resetGroup="descricaoFormaPagamento" calculation="Sum">
 		<variableExpression><![CDATA[$F{VL_LUCRO}]]></variableExpression>
@@ -102,6 +105,18 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 	</variable>
 	<variable name="valorTotalDiaria" class="java.lang.Double" resetType="Group" resetGroup="empresa" calculation="Sum">
 		<variableExpression><![CDATA[$F{VL_DIARIA}]]></variableExpression>
+	</variable>
+	<variable name="valorPrecoCustoTipoPratobyFormaPag" class="java.lang.Double" resetType="Group" resetGroup="descricaoFormaPagamento" calculation="Sum">
+		<variableExpression><![CDATA[$F{nr_preco_custo_tipo_prato}]]></variableExpression>
+	</variable>
+	<variable name="valorPrecoCustoTipoPratoByTipoPrato" class="java.lang.Double" resetType="Group" resetGroup="DS_TIP_PRATO" calculation="Sum">
+		<variableExpression><![CDATA[$V{valorPrecoCustoTipoPratobyFormaPag}]]></variableExpression>
+	</variable>
+	<variable name="valorPrecoCustoPorPrato" class="java.lang.Double" resetType="Group" resetGroup="cardapio" calculation="Sum">
+		<variableExpression><![CDATA[$F{nr_preco_custo_tipo_prato}]]></variableExpression>
+	</variable>
+	<variable name="valorPrecoCustoPorData" class="java.lang.Double" resetType="Group" resetGroup="DATA" calculation="Sum">
+		<variableExpression><![CDATA[ $F{nr_preco_custo_tipo_prato}]]></variableExpression>
 	</variable>
 
 		<group  name="empresa" >
@@ -230,9 +245,9 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 			<band height="14"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
-						x="226"
+						x="181"
 						y="1"
-						width="159"
+						width="353"
 						height="13"
 						backcolor="#CCCCCC"
 						key="rectangle-6"/>
@@ -240,9 +255,9 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</rectangle>
 				<staticText>
 					<reportElement
-						x="231"
+						x="195"
 						y="-1"
-						width="60"
+						width="96"
 						height="15"
 						key="staticText-13"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -268,14 +283,41 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<reportElement
 						x="331"
 						y="-1"
-						width="54"
+						width="65"
 						height="13"
 						key="textField-17"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPagoPorData}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="395"
+						y="-1"
+						width="64"
+						height="13"
+						key="textField-47"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPrecoCustoPorData}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="459"
+						y="-1"
+						width="75"
+						height="13"
+						key="textField-48"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorData}.doubleValue()   - $V{valorPrecoCustoPorData}.doubleValue()   )
+]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -333,12 +375,12 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="14"  isSplitAllowed="true" >
+			<band height="18"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
-						x="205"
+						x="181"
 						y="1"
-						width="180"
+						width="353"
 						height="13"
 						backcolor="#CCCCCC"
 						key="rectangle-5"/>
@@ -346,9 +388,9 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</rectangle>
 				<staticText>
 					<reportElement
-						x="206"
+						x="190"
 						y="1"
-						width="85"
+						width="101"
 						height="13"
 						key="staticText-12"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -374,14 +416,41 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<reportElement
 						x="331"
 						y="1"
-						width="54"
+						width="65"
 						height="13"
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPagoPorPrato}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="395"
+						y="1"
+						width="64"
+						height="13"
+						key="textField-45"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPrecoCustoPorPrato}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="459"
+						y="1"
+						width="75"
+						height="13"
+						key="textField-46"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorPrato}.doubleValue()   - $V{valorPrecoCustoPorPrato}.doubleValue()   )
+]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -389,12 +458,12 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 		<group  name="DS_TIP_PRATO" >
 			<groupExpression><![CDATA[$F{DS_TIP_PRATO}]]></groupExpression>
 			<groupHeader>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="24"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						x="1"
 						y="-1"
-						width="436"
+						width="533"
 						height="12"
 						backcolor="#CCCCCC"
 						key="rectangle-4"/>
@@ -402,9 +471,9 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</rectangle>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="3"
+						x="1"
 						y="0"
-						width="407"
+						width="533"
 						height="12"
 						key="textField-19"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -413,15 +482,80 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DS_TIP_PRATO}]]></textFieldExpression>
 				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="12"
+						width="291"
+						height="12"
+						key="textField-36"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Forma de Pagamento"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="291"
+						y="12"
+						width="42"
+						height="12"
+						key="textField-37"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Qtd"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="330"
+						y="12"
+						width="65"
+						height="12"
+						key="textField-38"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Vl. Liq."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="395"
+						y="12"
+						width="64"
+						height="12"
+						key="textField-39"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Vl. Custo"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="459"
+						y="12"
+						width="75"
+						height="12"
+						key="textField-41"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Vl. Total"]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="14"  isSplitAllowed="true" >
+			<band height="18"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
-						x="204"
+						x="181"
 						y="1"
-						width="180"
+						width="353"
 						height="13"
 						backcolor="#CCCCCC"
 						key="rectangle-8"/>
@@ -429,9 +563,9 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</rectangle>
 				<staticText>
 					<reportElement
-						x="205"
+						x="195"
 						y="1"
-						width="85"
+						width="95"
 						height="13"
 						key="staticText-14"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -451,20 +585,47 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[ $V{quantidadePorTipoPrato}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{quantidadePorTipoPrato}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="330"
 						y="1"
-						width="54"
+						width="65"
 						height="13"
 						key="textField-21"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{valorPagoPorTipoPrato}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{valorPagoPorTipoPrato} ]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="395"
+						y="1"
+						width="64"
+						height="13"
+						key="textField-40"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{valorPrecoCustoTipoPratoByTipoPrato} ]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="459"
+						y="1"
+						width="75"
+						height="13"
+						key="textField-44"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorTipoPrato}.doubleValue()   - $V{valorPrecoCustoTipoPratoByTipoPrato}.doubleValue()   )
+]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -628,13 +789,13 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 			<band height="12"  isSplitAllowed="false" >
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="331"
+						x="330"
 						y="1"
-						width="54"
+						width="65"
 						height="11"
 						key="textField"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
+					<textElement textAlignment="Center">
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPagoPorFormaPagamento}]]></textFieldExpression>
@@ -664,6 +825,32 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{quantidadePorFormaPagamento}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="395"
+						y="1"
+						width="64"
+						height="11"
+						key="textField"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{valorPrecoCustoTipoPratobyFormaPag} ]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="459"
+						y="1"
+						width="75"
+						height="11"
+						key="textField-42"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double (  $V{valorPagoPorFormaPagamento}.doubleValue() -   $V{valorPrecoCustoTipoPratobyFormaPag} .doubleValue())]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
@@ -728,11 +915,11 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 			</band>
 		</pageFooter>
 		<summary>
-			<band height="57"  isSplitAllowed="true" >
+			<band height="120"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
-						x="83"
-						y="4"
+						x="84"
+						y="73"
 						width="371"
 						height="47"
 						backcolor="#999999"
@@ -741,8 +928,8 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</rectangle>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="99"
-						y="8"
+						x="100"
+						y="77"
 						width="159"
 						height="13"
 						key="textField-27"/>
@@ -754,8 +941,8 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="258"
-						y="8"
+						x="259"
+						y="77"
 						width="77"
 						height="13"
 						key="textField-28"/>
@@ -767,8 +954,8 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="335"
-						y="8"
+						x="336"
+						y="77"
 						width="82"
 						height="13"
 						key="textField-29"/>
@@ -780,8 +967,8 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="100"
-						y="34"
+						x="101"
+						y="103"
 						width="159"
 						height="13"
 						key="textField-30"/>
@@ -793,8 +980,8 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="259"
-						y="34"
+						x="260"
+						y="103"
 						width="80"
 						height="13"
 						key="textField-31"/>
@@ -802,12 +989,12 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font pdfFontName="Helvetica" size="9" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[ new Double(  ($F{VL_DIARIA}.doubleValue()) /($V{quantidadePorEmpresa}.intValue()) )]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double(  ($F{VL_DIARIA}.doubleValue()) /($V{quantidadePorEmpresa}.intValue()) )]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="100"
-						y="21"
+						x="101"
+						y="90"
 						width="159"
 						height="13"
 						key="textField-32"/>
@@ -819,8 +1006,8 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="259"
-						y="21"
+						x="260"
+						y="90"
 						width="82"
 						height="13"
 						key="textField-33"/>
@@ -830,6 +1017,73 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					</textElement>
 				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{VL_DIARIA}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="2"
+						y="7"
+						width="529"
+						height="24"
+						key="staticText-15"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Resumo Quantitativo de Vendas ]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement
+						x="2"
+						y="36"
+						width="534"
+						height="22"
+						forecolor="#FFFFFF"
+						backcolor="#CCCCCC"
+						key="rectangle-10"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="36"
+						width="531"
+						height="11"
+						key="textField-34"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NM_FANTASIA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="51"
+						y="47"
+						width="70"
+						height="11"
+						key="textField-35"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{pDataInicio}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="3"
+						y="47"
+						width="48"
+						height="11"
+						key="staticText-16"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Data Inicial:]]></text>
+				</staticText>
 			</band>
 		</summary>
 </jasperReport>

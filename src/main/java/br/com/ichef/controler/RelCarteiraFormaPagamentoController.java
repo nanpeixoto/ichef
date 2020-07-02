@@ -15,7 +15,6 @@ import br.com.ichef.model.VwCarteiraFormaPagamento;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.VwCarteiraFormaPagamentoService;
 import br.com.ichef.util.FacesUtil;
-import br.com.ichef.visitor.VwCarteiraFormaPagamentoVisitor;
 
 @Named
 @ViewScoped
@@ -31,9 +30,11 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 
 	private VwCarteiraFormaPagamento entity;
 
-	private List<VwCarteiraFormaPagamento> lista = new ArrayList<VwCarteiraFormaPagamento>();
-	private List<VwCarteiraFormaPagamento> listaFiltro = new ArrayList<VwCarteiraFormaPagamento>();
+	private List<VwCarteiraFormaPagamento > lista = new ArrayList<VwCarteiraFormaPagamento>();
+	private List<VwCarteiraFormaPagamento > listaFiltro = new ArrayList<VwCarteiraFormaPagamento>();
 	private List<Empresa> empresas = new ArrayList<>();
+	
+	private boolean agrupamento;
 
 	// relatorio
 	private Date dataInicial;
@@ -64,7 +65,10 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
 					setParametroReport("pDataInicio", getDataInicial());
 					setParametroReport("pDataFinal", getDataFinal());
-					escreveRelatorioPDF("CarteiraFormaPagamento", true, lista);
+					if(!agrupamento)
+						escreveRelatorioPDF("CarteiraFormaPagamentoData", true, lista);
+					else 
+						escreveRelatorioPDF("CarteiraFormaPagamento", true, service.getConnection());
 				} catch (Exception e) {
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
 				}
@@ -80,6 +84,7 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 
 	@PostConstruct
 	public void init() {
+		setAgrupamento(true);
 		obterListas();
 
 		empresa = userLogado.getEmpresaLogada();
@@ -169,6 +174,14 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public boolean isAgrupamento() {
+		return agrupamento;
+	}
+
+	public void setAgrupamento(boolean agrupamento) {
+		this.agrupamento = agrupamento;
 	}
 
 }
