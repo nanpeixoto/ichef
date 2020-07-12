@@ -49,22 +49,22 @@ public class Insumo extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_TIP_INSUMO")
 	private TipoInsumo tipoInsumo;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_UNIDADE")
 	private Unidade unidade;

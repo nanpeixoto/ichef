@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,27 +38,27 @@ public class ClienteCarteira extends BaseEntity {
 	@Column(name = "DT_CADASTRO")
 	private Date dataCadastrado;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_DERIVACAO")
 	private Derivacao derivacao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_TIP_PRATO")
 	private TipoPrato tipoPrato;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_EMPRESA")
 	private Empresa empresa;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_EMPRESA_LOGADA")
 	private Empresa empresaLogada;
@@ -75,22 +76,22 @@ public class ClienteCarteira extends BaseEntity {
 	@Column(name = "VALOR_PAGO")
 	private BigDecimal valorPago;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CLIENTE")
 	private Cliente cliente;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO")
 	private Cardapio cardapio;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TEC_PRATO")
 	private FichaTecnicaPrato fichaTecnicaPrato;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
 	private FormaPagamento formaPagamento;
@@ -98,12 +99,12 @@ public class ClienteCarteira extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_PEDIDO")
 	private Pedido pedido;

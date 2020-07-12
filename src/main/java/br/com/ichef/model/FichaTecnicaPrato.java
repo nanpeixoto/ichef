@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,12 +34,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	@Column(name = "CD_FICHA_TECNICA_PRATO")
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
@@ -77,12 +78,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 	// private BigDecimal precoVendaReceita;
 
 	// bi-directional many-to-one association to FichaTecnicaPratoPreparo
-	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos;
 
 	// bi-directional many-to-one association to FichaTecnicaPratoTipo
-	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<FichaTecnicaPratoTipo> fichaTecnicaPratoTipos;
 

@@ -103,7 +103,7 @@ public class FichaTecnicaPratoService extends GenericDAO<FichaTecnicaPrato> {
 				"   having GROUP_CONCAT(pe1_.cd_ficha_tecnica_preparo)   = '"+ listaPreparacoes+"')tab"
 		);
 		
-		Query query = getManager().createNativeQuery(sb.toString());
+		Query query = getEntityManager().createNativeQuery(sb.toString());
 		int count =  query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
 		return count;
 	}

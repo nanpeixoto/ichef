@@ -34,12 +34,12 @@ public class Cardapio extends BaseEntity implements Comparable<Cardapio> {
 	@Column(name = "CD_CARDAPIO")
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
@@ -62,7 +62,7 @@ public class Cardapio extends BaseEntity implements Comparable<Cardapio> {
 	@Transient
 	private boolean isAtivo;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.JOIN)
 	private List<CardapioFichaPrato> pratos;
 

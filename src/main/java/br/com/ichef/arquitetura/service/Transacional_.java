@@ -10,7 +10,7 @@ import javax.interceptor.InterceptorBinding;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @InterceptorBinding
-public @interface Transacional {
+public @interface Transacional_ {
 	
 	
 	

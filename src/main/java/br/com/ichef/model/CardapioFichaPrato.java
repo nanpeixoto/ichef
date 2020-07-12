@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,19 +46,19 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 	@Column(name = "NR_ORDEM")
 	private Integer ordem;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
 	// bi-directional many-to-one association to Cardapio
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO")
 	private Cardapio cardapio;
 
 	// bi-directional many-to-one association to FichaTecnicaPrato
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TECNICA_PRATO")
 	private FichaTecnicaPrato fichaTecnicaPrato;
@@ -65,7 +66,7 @@ public class CardapioFichaPrato extends BaseEntity implements Comparable<Cardapi
 	@Column(name = "SN_VENDER_ACIMA_LIMITE")
 	private String venderAcimaDoLimite;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;

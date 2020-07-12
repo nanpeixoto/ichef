@@ -1,0 +1,37 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<global-method-security secured-annotations="enabled" 
+								pre-post-annotations="enabled"/>
+	
+	<http auto-config="true" access-denied-page="/denied" >
+		<intercept-url pattern="/" access="ROLE_USER,ROLE_ADMIN" />
+		<intercept-url pattern="/addItemForm*" access="ROLE_USER,ROLE_ADMIN" />
+		<intercept-url pattern="/home" access="ROLE_USER,ROLE_ADMIN" />
+		<intercept-url pattern="/add*" access="ROLE_ADMIN" />
+		<intercept-url pattern="/users*" access="ROLE_USER,ROLE_ADMIN" />
+		<form-login login-page="/login" default-target-url="/home"
+			authentication-failure-url="/login?error=true"/>
+		<logout logout-success-url="/login" />
+	</http>
+
+	<authentication-manager alias="authenticationManager">
+ 		<authentication-provider user-service-ref='userService'>
+			<!-- <user-service>
+				<user name="ermalu" password="ermalu" authorities="ROLE_USER" />
+				<user name="ermala" password="ermala" authorities="ROLE_ADMIN" />
+			</user-service> -->
+		</authentication-provider> 
+		<!--*** UserService do not implement UserDetailsService.loadUserByUsername() 
+		hardcoding user/pwd ***
+		<authentication-provider user-service-ref='userService'>
+		</authentication-provider>
+		-->
+	</authentication-manager>
+
+</beans:beans>

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,12 +31,12 @@ public class CardapioFichaPratoEmpresa extends BaseEntity {
 	@Column(name = "NR_QUANTIDADE")
 	private Integer quantidade;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO_PRATO")
 	private CardapioFichaPrato cardapioFichaPrato;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_EMPRESA")
 	private Empresa empresa;

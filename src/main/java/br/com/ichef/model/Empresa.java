@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,12 +57,12 @@ public class Empresa extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlteracao;
@@ -70,7 +71,7 @@ public class Empresa extends BaseEntity {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CIDADE")
 	private Cidade cidade;
@@ -81,7 +82,7 @@ public class Empresa extends BaseEntity {
 	@Column(name = "NM_FANTASIA")
 	private String nomeFantasia;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_LOCALIDADE")
 	private Localidade localidade;

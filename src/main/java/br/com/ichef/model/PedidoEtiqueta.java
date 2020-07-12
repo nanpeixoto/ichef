@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,12 +59,12 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Column(name = "ORDEM_DERIVACAO")
 	private Integer ordemDerivacao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO_PRATO")
 	private CardapioFichaPrato cardapioFichaPrato;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_ENTREGADOR")
 	private Entregador entregador;
@@ -71,37 +72,37 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Column(name = "NR_ORDEM_ENTREGA")
 	private Integer ordemEntrega;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_EMPRESA")
 	private Empresa empresa;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_LOCALIDADE")
 	private Localidade localidade;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_TIP_PRATO")
 	private TipoPrato tipoPrato;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_DERIVACAO")
 	private Derivacao derivacao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CLIENTE")
 	private Cliente cliente;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TEC_PRATO_TIPO")
 	private FichaTecnicaPratoTipo fichaTecnicaPratoTipo;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CLIENTE_ENDERECO")
 	private ClienteEndereco clienteEndereco;

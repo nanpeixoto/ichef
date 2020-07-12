@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,12 +52,12 @@ public class Usuario extends BaseEntity {
 	@Column(name = "DT_ALTERACAO")
 	private Date dataAlteracao;
 
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "CD_USUARIO_CADASTRO")
 	private Usuario usuarioCadastro;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
 	private Usuario usuarioAlterado;
@@ -73,7 +74,7 @@ public class Usuario extends BaseEntity {
 	@Column(name = "DS_SENHA")
 	private String senha;
 
-	@OneToMany(mappedBy = "usuario",  cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "usuario",  cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY )
 	@Fetch(FetchMode.SUBSELECT)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 	

@@ -10,7 +10,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import br.com.ichef.arquitetura.service.EntityManagerProducer;
-import br.com.ichef.arquitetura.service.Transacional;
+import br.com.ichef.arquitetura.service.Transacional_;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.GenericDAO;
 import br.com.ichef.model.FormaPagamento;
@@ -34,7 +34,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 		 	StringBuilder sb =  new StringBuilder();
 			sb.append("select saldo from vw_cliente_saldo_empresa where cd_cliente =  " + codigoCliente+	" and cd_empresa = "+codigoEmpresa);
 			
-			Query query = getManager().createNativeQuery(sb.toString());
+			Query query = getEntityManager().createNativeQuery(sb.toString());
 			Double saldo =    Double.parseDouble(query.getSingleResult().toString());
 			return saldo;
 		 
@@ -84,7 +84,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	 * query.getResultList(); }
 	 */
 
-	@Transacional
+	@Transacional_
 	public Integer findTotalPedidoPrato(Pedido pedido) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(
@@ -93,14 +93,9 @@ public class PedidoService extends GenericDAO<Pedido> {
 						+ pedido.getCardapioFichaPrato().getId() + " and cd_empresa = " + pedido.getEmpresa().getId()
 						+ " and p.CD_TIP_PRATO = tp.CD_TIP_PRATO ");
 		try {
-			if (!getManager().isOpen()) {
-				EntityManagerProducer producer = new EntityManagerProducer();
-				setManager(producer.createEntityManager());
-			} else {
-				getManager().clear();
-			}
+			 
 
-			Query query = getManager().createNativeQuery(sb.toString());
+			Query query = getEntityManager().createNativeQuery(sb.toString());
 			int count = query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
 			return count;
 		} catch (NoResultException e) {
@@ -109,7 +104,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 	}
 	
-	@Transacional
+	@Transacional_
 	public Integer findQtdPedidoPratoEntregador(Pedido pedido) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(
@@ -117,14 +112,8 @@ public class PedidoService extends GenericDAO<Pedido> {
 						+ " fROM pedido p , tip_prato t   WHERE    p.cd_tip_prato = t.CD_TIP_PRATO  AND   cd_entregador = " + pedido.getEntregador().getId()
 						+ " and   coalesce(t.SN_CONTAGEM, 'N')  = 'S' and date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(pedido.getDataEntrega()) + "'");
 		try {
-			if (!getManager().isOpen()) {
-				EntityManagerProducer producer = new EntityManagerProducer();
-				setManager(producer.createEntityManager());
-			} else {
-				getManager().clear();
-			}
-
-			Query query = getManager().createNativeQuery(sb.toString());
+		 
+			Query query = getEntityManager().createNativeQuery(sb.toString());
 			int count = query.getSingleResult() != null ? Integer.parseInt(query.getSingleResult().toString()) : 0;
 			return count;
 		} catch (NoResultException e) {
@@ -143,14 +132,9 @@ public class PedidoService extends GenericDAO<Pedido> {
 		}
 
 		try {
-			if (!getManager().isOpen()) {
-				EntityManagerProducer producer = new EntityManagerProducer();
-				setManager(producer.createEntityManager());
-			} else {
-				getManager().clear();
-			}
+			 
 
-			Query query = getManager().createNativeQuery(sb.toString());
+			Query query = getEntityManager().createNativeQuery(sb.toString());
 			String count = query.getSingleResult() != null ? query.getSingleResult().toString() : null;
 			return count;
 		} catch (NoResultException e) {
@@ -160,8 +144,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	}
 
 	public String finalizarPedido(Pedido entity) {
-		EntityTransaction tx = null;
-		try {
+		 try {
 
 			StringBuilder hql = null;
 			int result = -1;
@@ -178,19 +161,11 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 			if (hql != null) {
 
-				if (!getManager().isOpen()) {
-					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager(producer.createEntityManager());
-				} else {
-					getManager().clear();
-				}
-
-				tx = getManager().getTransaction();
-				tx.begin();
-
-				Query query = getManager().createQuery(hql.toString());
+				 
+				 
+				Query query = getEntityManager().createQuery(hql.toString());
 				result = query.executeUpdate();
-				tx.commit();
+			 
 
 			}
 			if (result == 0) {
@@ -210,8 +185,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	}
 
 	public String excluirPedido(Pedido entity) {
-		EntityTransaction tx = null;
-		try {
+		 try {
 
 			StringBuilder hql = null;
 			int result = -1;
@@ -222,19 +196,10 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 			if (hql != null) {
 
-				if (!getManager().isOpen()) {
-					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager(producer.createEntityManager());
-				} else {
-					getManager().clear();
-				}
-
-				tx = getManager().getTransaction();
-				tx.begin();
-
-				Query query = getManager().createQuery(hql.toString());
+			 
+				Query query = getEntityManager().createQuery(hql.toString());
 				result = query.executeUpdate();
-				tx.commit();
+				 
 
 			}
 			if (result == 0) {
@@ -268,21 +233,10 @@ public class PedidoService extends GenericDAO<Pedido> {
 					+ listaPedidos + ")");
 
 			if (hql != null) {
-
-				if (!getManager().isOpen()) {
-					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager(producer.createEntityManager());
-				} else {
-					getManager().clear();
-				}
-
-				tx = getManager().getTransaction();
-				tx.begin();
-
-				Query query = getManager().createQuery(hql.toString());
+ 
+				Query query = getEntityManager().createQuery(hql.toString());
 				result = query.executeUpdate();
-				tx.commit();
-
+				 
 			}
 			if (result == 0) {
 				return "Operação Não Realizada. Contact o ADM do sistema";
@@ -301,8 +255,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	
 	
 	public String atualizarFormaPagamentoValorPago(Pedido pedido) {
-		EntityTransaction tx = null;
-		try {
+		 try {
 
 			StringBuilder hql = null;
 			int result = -1;
@@ -318,19 +271,10 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 			if (hql != null) {
 
-				if (!getManager().isOpen()) {
-					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager(producer.createEntityManager());
-				} else {
-					getManager().clear();
-				}
-
-				tx = getManager().getTransaction();
-				tx.begin();
-
-				Query query = getManager().createQuery(hql.toString());
+				 
+				Query query = getEntityManager().createQuery(hql.toString());
 				result = query.executeUpdate();
-				tx.commit();
+				 
 
 			}
 			if (result == 0) {
@@ -351,9 +295,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 	@Override
 	protected Pedido updateImpl(Pedido entity) throws Exception {
 
-		if (getManager().isOpen()) {
-			getManager().clear();
-		}
+		 
 		return super.updateImpl(entity);
 	}
 

@@ -16,20 +16,18 @@ public class UsuarioService extends GenericDAO<Usuario> {
 
 	public List<Usuario> findByLogin(String login) {
 
-		return getManager().createQuery("FROM Usuario WHERE login = :LoginUsuario").setParameter("LoginUsuario", login)
-				.setMaxResults(1).getResultList();
+		return getEntityManager().createQuery("FROM Usuario WHERE login = :LoginUsuario")
+				.setParameter("LoginUsuario", login).setMaxResults(1).getResultList();
 
 	}
 
 	public List<Usuario> findByLogin(String login, String senha) {
-		return getManager().createQuery("FROM Usuario WHERE login = :LoginUsuario and senha = :SenhaUsuario")
+		return getEntityManager().createQuery("FROM Usuario WHERE login = :LoginUsuario and senha = :SenhaUsuario")
 				.setParameter("LoginUsuario", login).setParameter("SenhaUsuario", senha).setMaxResults(1)
 				.getResultList();
 	}
-	
-	
+
 	public String alterarSenha(Usuario entity) {
-		EntityTransaction tx = null;
 		try {
 
 			StringBuilder hql = null;
@@ -37,25 +35,13 @@ public class UsuarioService extends GenericDAO<Usuario> {
 
 			hql = new StringBuilder();
 
-			hql.append("UPDATE Usuario SET senha = '"+entity.getSenha()+"'");
-			 hql.append(" where  id = "+entity.getId());
-			
+			hql.append("UPDATE Usuario SET senha = '" + entity.getSenha() + "'");
+			hql.append(" where  id = " + entity.getId());
 
 			if (hql != null) {
 
-				if (!getManager().isOpen()) {
-					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager(producer.createEntityManager());
-				} else {
-					getManager().clear();
-				}
-
-				tx = getManager().getTransaction();
-				tx.begin();
-
-				Query query = getManager().createQuery(hql.toString());
+				Query query = getEntityManager().createQuery(hql.toString());
 				result = query.executeUpdate();
-				tx.commit();
 
 			}
 			if (result == 0) {

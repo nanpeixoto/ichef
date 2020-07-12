@@ -11,14 +11,29 @@
       http://www.springframework.org/schema/tx
       http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<!-- Contexto do DispatcherServlet: define a infraestrutura do processamento 
+		das requisições feitas ao Servlet (DispatcherServlet) -->
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="PU" />
 		<property name="dataSource" ref="mysqlDataSource" />
-		<property name="jpaVendorAdapter">
-			<bean
-				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		<property name="ichef">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
 	</bean>
+	<bean id="mysqlDataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost/ichef" />
+		<property name="username" value="ichef" />
+		<property name="password" value="ichef" />
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<tx:annotation-driven />
 
+	<!-- Define o pacote base para o escaneamento das anotações de contexto  (@Component, @Repository, @Service, @Controller, etc) -->
+	<context:component-scan base-package="br.com.ichef" />
+	<context:annotation-config />
 
 </beans>

@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,12 +34,12 @@ public class FichaTecnicaPratoPreparo extends BaseEntity {
 	@Column(name = "CD_FICHA_TEC_PRATO_PREPARO")
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TECNICA_PREPARO")
 	private FichaTecnicaPreparo fichaTecnicaPreparo;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TECNICA_PRATO")
 	private FichaTecnicaPrato fichaTecnicaPrato;

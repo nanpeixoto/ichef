@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	@Column(name = "CD_FICHA_TEC_INSUMO")
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_INSUMO")
 	private Insumo insumo;
@@ -60,12 +61,12 @@ public class FichaTecnicaPreparoInsumo extends BaseEntity {
 	@Column(name = "SN_ATIVO")
 	private String ativo;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TECNICA_PREPATO")
 	private FichaTecnicaPreparo fichaTecnicaPreparo;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FICHA_TEC_PERPARO_REFERENCIA")
 	private FichaTecnicaPreparo fichaTecnicaPreparoReferencia;

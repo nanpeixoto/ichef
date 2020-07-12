@@ -47,8 +47,7 @@ public class ClienteService extends GenericDAO<Cliente> {
 	}
 
 	public String atualizarStatusBloqueio(String statusBloqueio, Long codigoCliente) {
-		EntityTransaction tx = null;
-		try {
+		 try {
 
 			StringBuilder hql = null;
 			int result = -1;
@@ -61,19 +60,10 @@ public class ClienteService extends GenericDAO<Cliente> {
 
 			if (hql != null) {
 
-				if (!getManager().isOpen()) {
-					EntityManagerProducer producer = new EntityManagerProducer();
-					setManager(producer.createEntityManager());
-				} else {
-					getManager().clear();
-				}
-
-				tx = getManager().getTransaction();
-				tx.begin();
-
-				Query query = getManager().createQuery(hql.toString());
+			 
+				Query query = getEntityManager().createQuery(hql.toString());
 				result = query.executeUpdate();
-				tx.commit();
+				 
 
 			}
 			if (result == 0) {
