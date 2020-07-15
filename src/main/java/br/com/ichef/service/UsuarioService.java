@@ -2,22 +2,39 @@ package br.com.ichef.service;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
+
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.dao.GenericDAO;
-import br.com.ichef.model.Pedido;
+import br.com.ichef.listener.Uteis;
 import br.com.ichef.model.Usuario;
 
-@SuppressWarnings("unchecked")
+@Component
+@Repository
+@Stateless
 public class UsuarioService extends GenericDAO<Usuario> {
+	
+	   @PersistenceContext(unitName = "jpa-persistence", type = PersistenceContextType.EXTENDED)
+	private EntityManager em;
+	
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unchecked")
 	public List<Usuario> findByLogin(String login) {
 
-		return getManager().createQuery("FROM Usuario WHERE login = :LoginUsuario").setParameter("LoginUsuario", login)
+		EntityManager entityManager =  Uteis.JpaEntityManager();
+		
+		return em.createQuery("FROM Usuario WHERE login = :LoginUsuario").setParameter("LoginUsuario", login)
 				.setMaxResults(1).getResultList();
+		
 
 	}
 

@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.Criteria;
@@ -27,6 +27,7 @@ import org.hibernate.criterion.Example.PropertySelector;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Component;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.FacesMensager;
@@ -34,14 +35,16 @@ import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.excepticon.NegocioExcepticon;
 
-@SuppressWarnings("unchecked")
+@Component
 public class GenericDAO<T extends BaseEntity> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	protected FacesMensager facesMessager = new FacesMensager();;
 
-	@Inject
+	 
+	
+	@PersistenceContext
 	private EntityManager manager;
 	
 	public Connection getConnection() {

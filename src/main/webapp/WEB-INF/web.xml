@@ -4,14 +4,10 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 
-	<resource-ref>
-		<description>DB Connection</description>
-		<res-ref-name>jdbc/ichefDB</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-		<lookup-name>java:comp/env/jdbc/ichefDB</lookup-name>
-	</resource-ref>
-	
+	<!-- <resource-ref> <description>DB Connection</description> <res-ref-name>jdbc/ichefDB</res-ref-name> 
+		<res-type>javax.sql.DataSource</res-type> <res-auth>Container</res-auth> 
+		<lookup-name>java:comp/env/jdbc/ichefDB</lookup-name> </resource-ref> -->
+
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
@@ -48,6 +44,11 @@
 		<listener-class>br.com.ichef.job.ListenerTaskExample</listener-class>
 	</listener>
 
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	 
 
 	<!-- <listener> <listener-class>br.com.ichef.listener.CronWebListener</listener-class> 
 		</listener> -->
