@@ -6,25 +6,30 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.event.ToggleEvent;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.arquitetura.controller.BaseController;
 import br.com.ichef.arquitetura.util.RelatorioUtil;
 import br.com.ichef.dto.EmailDTO;
-import br.com.ichef.model.Cliente;
 import br.com.ichef.model.ClienteEmailAuditoria;
 import br.com.ichef.model.Configuracao;
+import br.com.ichef.model.VwClienteCarteiraSaldo;
 import br.com.ichef.model.VwClienteSaldo;
 import br.com.ichef.model.VwClienteSaldoID;
 import br.com.ichef.service.ClienteEmailAuditoriaService;
 import br.com.ichef.service.ClienteSaldoService;
 import br.com.ichef.service.ClienteService;
 import br.com.ichef.service.EmailService;
+import br.com.ichef.service.VwClienteCarteiraSaldoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
+import br.com.ichef.visitor.VwClienteCarteiraSaldoVisitor;
 
 @Named
 @ViewScoped
@@ -34,6 +39,9 @@ public class ClienteSaldoController extends BaseController {
 
 	@Inject
 	private ClienteSaldoService service;
+
+	@Inject
+	private VwClienteCarteiraSaldoService vwClienteCarteiraSaldoService;
 
 	@Inject
 	private ClienteService clienteService;
@@ -86,7 +94,8 @@ public class ClienteSaldoController extends BaseController {
 	public void bloquearCliente(VwClienteSaldo clienteCarteira) {
 		try {
 			String statusBloqueio = (clienteCarteira.isEstaBloqueado() ? "N" : "S");
-			String result = clienteService.atualizarStatusBloqueio(statusBloqueio,((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
+			String result = clienteService.atualizarStatusBloqueio(statusBloqueio,
+					((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
 			if (result != null)
 				facesMessager.error(result);
 			else {
@@ -96,8 +105,9 @@ public class ClienteSaldoController extends BaseController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema."
-					+ e.getMessage());
+			facesMessager
+					.error("Nï¿½o foi possï¿½vel carregar os dados, entre em contato com o administrador do sistema."
+							+ e.getMessage());
 		}
 
 	}
@@ -109,7 +119,7 @@ public class ClienteSaldoController extends BaseController {
 
 	public void enviarEmailParaTodos() {
 
-		System.out.println("enviarEmailParaTodos - Botão Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
+		System.out.println("enviarEmailParaTodos - Botï¿½o Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
 				+ " -  em " + formataDataHora(new Date()));
 		int count = 0;
 		new Thread() {
@@ -134,10 +144,11 @@ public class ClienteSaldoController extends BaseController {
 	public void EnviarEmail(VwClienteSaldo clienteCarteira, String todos) {
 		String mensagem = "";
 		if (clienteCarteira.getEmail() != null) {
-			String inicio  = config.getEmailInicio();
-			inicio =inicio.replace( "#codigo#", ((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente().toString() );
-			mensagem = inicio + clienteCarteira.getListaSaldosEmail() 
-				+ clienteCarteira.getDescricaoLink() + config.getEmailFim();
+			String inicio = config.getEmailInicio();
+			inicio = inicio.replace("#codigo#",
+					((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente().toString());
+			mensagem = inicio + clienteCarteira.getListaSaldosEmail() + clienteCarteira.getDescricaoLink()
+					+ config.getEmailFim();
 
 			EmailDTO dto = new EmailDTO();
 			dto.setAssunto(clienteCarteira.getNomeFantasia() + " - SALDO ATUAL");
@@ -170,7 +181,7 @@ public class ClienteSaldoController extends BaseController {
 				} catch (Exception e) {
 					e.printStackTrace();
 					if (todos.equalsIgnoreCase("N"))
-						FacesUtil.addErroMessage("Não foi possível salvar a auditoria");
+						FacesUtil.addErroMessage("Nï¿½o foi possï¿½vel salvar a auditoria");
 				}
 
 			}
@@ -205,12 +216,33 @@ public class ClienteSaldoController extends BaseController {
 		return auditoria;
 	}
 
+	public void expandirLinha(ToggleEvent event) {
+		VwClienteSaldo carteira = ((VwClienteSaldo) event.getData());
+		VwClienteCarteiraSaldo filter = new VwClienteCarteiraSaldo();
+		filter.setCodigoEmpresa(carteira.getCodigoEmpresa());
+		filter.setCodigoCliente(carteira.getCodigoCliente());
+
+		VwClienteCarteiraSaldoVisitor visitor = new VwClienteCarteiraSaldoVisitor();
+		visitor.setCodigoCarteira(carteira.getCodigoCarteira());
+
+		try {
+			carteira.setSaldos(vwClienteCarteiraSaldoService.findByParameters(filter, visitor));
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema.");
+
+		}
+
+	}
+
 	public void excluirSelecionados() {
 		for (BaseEntity entity : listaSelecionadas) {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("VwClienteSaldos excluídas com sucesso");
+		FacesUtil.addInfoMessage("VwClienteSaldos excluï¿½das com sucesso");
 	}
 
 	public void preExportar(Object document) {

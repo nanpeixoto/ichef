@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -35,21 +34,24 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 	@Column(name = "DATA")
 	private Date data;
 
-	@Column(name = "DT_CADASTRO")
-	private Date dataCadastrado;
+	@Column(name = "CD_CLIENTE")
+	private Long codigoCliente;
 
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_USUARIO_CADASTRO")
-	private Usuario usuarioCadastro;
+	@Column(name = "CD_EMPRESA")
+	private Long codigoEmpresa;
 
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumns({
-
-			@JoinColumn(name = "CD_CLIENTE", referencedColumnName = "CD_CLIENTE"),
-			@JoinColumn(name = "CD_EMPRESA", referencedColumnName = "CD_EMPRESA") })
-	private VwClienteSaldo vwClienteSaldo;
+	/*
+	 * @ManyToOne
+	 * 
+	 * @Fetch(FetchMode.JOIN)
+	 * 
+	 * @JoinColumns({
+	 * 
+	 * @JoinColumn(name = "CD_CLIENTE", referencedColumnName = "CD_CLIENTE"),
+	 * 
+	 * @JoinColumn(name = "CD_EMPRESA", referencedColumnName = "CD_EMPRESA") })
+	 * private VwClienteSaldo vwClienteSaldo;
+	 */
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
@@ -60,16 +62,6 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_TIP_PRATO")
 	private TipoPrato tipoPrato;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_EMPRESA", insertable=false, updatable = false)
-	private Empresa empresa;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_EMPRESA_LOGADA")
-	private Empresa empresaLogada;
 
 	@Column(name = "DS_CARTEIRA")
 	private String descricao;
@@ -86,13 +78,8 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_CLIENTE", insertable=false, updatable = false)
+	@JoinColumn(name = "CD_CLIENTE", insertable = false, updatable = false)
 	private Cliente cliente;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_CARDAPIO")
-	private Cardapio cardapio;
 
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
@@ -103,19 +90,6 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
 	private FormaPagamento formaPagamento;
-
-	@Column(name = "DT_ALTERACAO")
-	private Date dataAlteracao;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_USUARIO_ALTERACAO")
-	private Usuario usuarioAlteracao;
-
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "CD_PEDIDO")
-	private Pedido pedido;
 
 	@Override
 	public Object getId() {
@@ -149,24 +123,12 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	@Override
 	public Usuario getUsuarioCadastro() {
-		return usuarioCadastro;
-	}
-
-	public Date getDataCadastrado() {
-		return dataCadastrado;
-	}
-
-	public void setDataCadastrado(Date dataCadastrado) {
-		this.dataCadastrado = dataCadastrado;
-	}
-
-	public void setUsuarioCadastro(Usuario usuarioCadastro) {
-		this.usuarioCadastro = usuarioCadastro;
+		return null;
 	}
 
 	@Override
 	public Date getDataCadastro() {
-		return dataCadastrado;
+		return null;
 	}
 
 	public boolean isInclusao() {
@@ -175,14 +137,6 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	public boolean isEdicao() {
 		return !isInclusao();
-	}
-
-	public Cardapio getCardapio() {
-		return cardapio;
-	}
-
-	public void setCardapio(Cardapio cardapio) {
-		this.cardapio = cardapio;
 	}
 
 	public static long getSerialversionuid() {
@@ -290,44 +244,20 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 		this.tipoPrato = tipoPrato;
 	}
 
-	public Empresa getEmpresa() {
-		return empresa;
+	public Long getCodigoCliente() {
+		return codigoCliente;
 	}
 
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
+	public void setCodigoCliente(Long codigoCliente) {
+		this.codigoCliente = codigoCliente;
 	}
 
-	public void setDataAlteracao(Date dataAlteracao) {
-		this.dataAlteracao = dataAlteracao;
+	public Long getCodigoEmpresa() {
+		return codigoEmpresa;
 	}
 
-	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
-		this.usuarioAlteracao = usuarioAlteracao;
-	}
-
-	public Empresa getEmpresaLogada() {
-		return empresaLogada;
-	}
-
-	public void setEmpresaLogada(Empresa empresaLogada) {
-		this.empresaLogada = empresaLogada;
-	}
-
-	public Pedido getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
-
-	public VwClienteSaldo getVwClienteSaldo() {
-		return vwClienteSaldo;
-	}
-
-	public void setVwClienteSaldo(VwClienteSaldo vwClienteSaldo) {
-		this.vwClienteSaldo = vwClienteSaldo;
+	public void setCodigoEmpresa(Long codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
 	}
 
 }

@@ -7,12 +7,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.util.Util;
@@ -24,7 +20,8 @@ public class VwClienteSaldo extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private VwClienteSaldoID id;
+	@Column(name = "CD_CARTEIRA_SALDO")
+	private Long id;
 
 	@Column(name = "SALDO")
 	private BigDecimal valorSaldo;
@@ -34,12 +31,15 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Column(name = "CD_EMPRESA", insertable = false, updatable = false)
 	private Long codigoEmpresa;
-	
-	@Column(name = "DS_LINK_PAGAMENTO", insertable = false, updatable = false)
-	private String descricaoLink ;
 
-	//@Column(name = "CD_TIP_LOCALIDADE")
-	//private Long codigoTipoLocalidade;
+	@Column(name = "CD_CLIENTE", insertable = false, updatable = false)
+	private Long codigoCliente;
+
+	@Column(name = "DS_LINK_PAGAMENTO", insertable = false, updatable = false)
+	private String descricaoLink;
+
+	// @Column(name = "CD_TIP_LOCALIDADE")
+	// private Long codigoTipoLocalidade;
 
 	@Column(name = "DS_LOCALIDADE")
 	private String descricaoLocalidade;
@@ -56,8 +56,8 @@ public class VwClienteSaldo extends BaseEntity {
 	@Column(name = "SN_BLOQUEADO")
 	private String bloqueado;
 
-	//@Column(name = "DS_TIP_LOCALIDADE")
-	//private String descricaoTipoLocalidade;
+	// @Column(name = "DS_TIP_LOCALIDADE")
+	// private String descricaoTipoLocalidade;
 
 	@Column(name = "NM_FANTASIA")
 	private String nomeFantasia;
@@ -65,20 +65,23 @@ public class VwClienteSaldo extends BaseEntity {
 	@Column(name = "DATA_CARTEIRA")
 	private Date dataCarteira;
 
+	@Column(name = "CD_CARTEIRA")
+	private Long codigoCarteira;
+
 	// bi-directional many-to-one association to AreaLocalidade
-	@OneToMany(mappedBy = "vwClienteSaldo")
-	@Fetch(FetchMode.SELECT)
+	// @OneToMany(mappedBy = "vwClienteSaldo")
+	// @Fetch(FetchMode.SELECT)
+	@Transient
 	private List<VwClienteCarteiraSaldo> saldos;
 
 	@Column(name = "SALDO_OUTRA_EMPRESA")
 	private BigDecimal valorSaldoOutraEmpresa;
-	
+
 	@Transient
 	private boolean estaBloqueado;
-	
+
 	@Transient
 	private boolean isAtivo;
-
 
 	public long diasDevedor() {
 		try {
@@ -97,7 +100,7 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Override
 	public void setId(Object id) {
-		this.id = (VwClienteSaldoID) id;
+		this.id = (Long) id;
 
 	}
 
@@ -174,8 +177,6 @@ public class VwClienteSaldo extends BaseEntity {
 		this.codigoLocalidade = codigoLocalidade;
 	}
 
-
-
 	public String getDescricaoLocalidade() {
 		return descricaoLocalidade;
 	}
@@ -183,22 +184,19 @@ public class VwClienteSaldo extends BaseEntity {
 	public void setDescricaoLocalidade(String descricaoLocalidade) {
 		this.descricaoLocalidade = descricaoLocalidade;
 	}
-	
-	/*public Long getCodigoTipoLocalidade() {
-		return codigoTipoLocalidade;
-	}
 
-	public void setCodigoTipoLocalidade(Long codigoTipoLocalidade) {
-		this.codigoTipoLocalidade = codigoTipoLocalidade;
-	}
-
-	public String getDescricaoTipoLocalidade() {
-		return descricaoTipoLocalidade;
-	}
-
-	public void setDescricaoTipoLocalidade(String descricaoTipoLocalidade) {
-		this.descricaoTipoLocalidade = descricaoTipoLocalidade;
-	}*/
+	/*
+	 * public Long getCodigoTipoLocalidade() { return codigoTipoLocalidade; }
+	 * 
+	 * public void setCodigoTipoLocalidade(Long codigoTipoLocalidade) {
+	 * this.codigoTipoLocalidade = codigoTipoLocalidade; }
+	 * 
+	 * public String getDescricaoTipoLocalidade() { return descricaoTipoLocalidade;
+	 * }
+	 * 
+	 * public void setDescricaoTipoLocalidade(String descricaoTipoLocalidade) {
+	 * this.descricaoTipoLocalidade = descricaoTipoLocalidade; }
+	 */
 
 	public String getNomeFantasia() {
 		return nomeFantasia;
@@ -240,7 +238,7 @@ public class VwClienteSaldo extends BaseEntity {
 		this.valorSaldoOutraEmpresa = valorSaldoOutraEmpresa;
 	}
 
-	public void setId(VwClienteSaldoID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -261,16 +259,16 @@ public class VwClienteSaldo extends BaseEntity {
 		String mensagemFinal = "";
 		BigDecimal saldoTotal = (getValorSaldoOutraEmpresa() != null ? getValorSaldo().add(getValorSaldoOutraEmpresa())
 				: getValorSaldo());
-		String mensagemSaldoTotal = "<br><br>Seu saldo atual é de <span     style=\"color: "
+		String mensagemSaldoTotal = "<br><br>Seu saldo atual ï¿½ de <span     style=\"color: "
 				+ (saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "red" : "green") + "; font-weight: bold;\">"
 				+ Util.formataValor(saldoTotal) + "</span>";
 		String outrasEmpresas = (getValorSaldoOutraEmpresa() != null && saldoTotal.compareTo(new BigDecimal("0")) >= 0
 				? " <br> Empresa atual:" + Util.formataValor(getValorSaldo())
-						+ (getValorSaldo().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ")
+						+ (getValorSaldo().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crï¿½dito) ")
 						+ " - Outras empresas: " + Util.formataValor(getValorSaldoOutraEmpresa())
-						+ (getValorSaldoOutraEmpresa().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crédito) ") + "."
+						+ (getValorSaldoOutraEmpresa().compareTo(new BigDecimal("0")) >= 0 ? "" : " (crï¿½dito) ") + "."
 				: " ");
-		String creditoDebito = (saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "" : " (CRÉDITO) ");
+		String creditoDebito = (saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "" : " (CRï¿½DITO) ");
 
 		mensagemSaldoTotal = mensagemSaldoTotal + creditoDebito + outrasEmpresas
 				+ "<br><bR> Segue abaixo os valores listados para a empresa " + getNomeFantasia() + ": <br>";
@@ -331,8 +329,6 @@ public class VwClienteSaldo extends BaseEntity {
 				situacao += "/";
 			situacao += "ATIVO";
 		}
-		
-		 
 
 		return situacao;
 	}
@@ -372,7 +368,21 @@ public class VwClienteSaldo extends BaseEntity {
 	public void setDescricaoLink(String descricaoLink) {
 		this.descricaoLink = descricaoLink;
 	}
-	
-	
+
+	public Long getCodigoCarteira() {
+		return codigoCarteira;
+	}
+
+	public void setCodigoCarteira(Long codigoCarteira) {
+		this.codigoCarteira = codigoCarteira;
+	}
+
+	public Long getCodigoCliente() {
+		return codigoCliente;
+	}
+
+	public void setCodigoCliente(Long codigoCliente) {
+		this.codigoCliente = codigoCliente;
+	}
 
 }

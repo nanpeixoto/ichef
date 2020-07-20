@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -40,6 +39,7 @@ import br.com.ichef.service.FichaTecnicaPratoService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.LocalidadeService;
 import br.com.ichef.service.TipoPratoService;
+import br.com.ichef.service.VwClienteCarteiraSaldoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.ClienteVisitor;
 
@@ -208,7 +208,7 @@ public class ClienteController extends BaseController {
 			service.excluir(entity);
 			lista.remove(entity);
 		}
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void excluirTelefonesSelecionados(ClienteTelefone obj) {
@@ -221,7 +221,7 @@ public class ClienteController extends BaseController {
 		entity.getTelefones().clear();
 		entity.getTelefones().addAll(temp);
 		updateComponentes(":form:tabs:dttel");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public void excluirLocalidadesSelecionadas(ClienteEndereco obj) {
@@ -234,7 +234,7 @@ public class ClienteController extends BaseController {
 		entity.getEnderecos().clear();
 		entity.getEnderecos().addAll(temp);
 		updateComponentes(":form:tabs:dtendereco");
-		FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+		FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 	}
 
 	public String Salvar() throws Exception {
@@ -251,9 +251,10 @@ public class ClienteController extends BaseController {
 		}
 
 		entity.setDescricaoTelefone(entity.getAllTelefones());
+		// entity.setCodigoLocalidadePrincipal( entity.getLocalidadePrincipalAtual() );
 		service.saveOrUpdade(entity);
 
-		FacesUtil.addInfoMessage("Novo cliente criado código: " + getEntity().getId());
+		FacesUtil.addInfoMessage("Novo cliente criado cï¿½digo: " + getEntity().getId());
 
 		return "lista-cliente.xhtml?faces-redirect=true";
 
@@ -294,10 +295,10 @@ public class ClienteController extends BaseController {
 				setStsTelefonePrincipal(false);
 				setTelefone(null);
 			} else {
-				facesMessager.error("Já existe um telefone principal para esse cliente");
+				facesMessager.error("Jï¿½ existe um telefone principal para esse cliente");
 			}
 			// } else {
-			// facesMessager.error("Telefone já adicionado para essa cliente");
+			// facesMessager.error("Telefone jï¿½ adicionado para essa cliente");
 			// }
 		}
 	}
@@ -351,7 +352,7 @@ public class ClienteController extends BaseController {
 			System.out.println("ERRO: #0001" + e.getMessage());
 			e.printStackTrace();
 			facesMessager.error(
-					"Não foi possivel efeturar a operação, entre em contato com administrador do sistema e informe o erro #0001");
+					"Nï¿½o foi possivel efeturar a operaï¿½ï¿½o, entre em contato com administrador do sistema e informe o erro #0001");
 		}
 	}
 
@@ -360,8 +361,8 @@ public class ClienteController extends BaseController {
 		if (getEmpresa() != null && (userLogado.getEmpresaLogada().getId() != getEmpresa().getId())) {// SE O LANCAMENTO
 																										// FOR PARA
 																										// OUTRA EMPRESA
-			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO NÃO FOR CREDITO
-				facesMessager.error("O tipo de Lançamento para outra empresa só pode ser Crédito");
+			if (!getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO Nï¿½O FOR CREDITO
+				facesMessager.error("O tipo de Lanï¿½amento para outra empresa sï¿½ pode ser Crï¿½dito");
 				return;
 			}
 		}
@@ -373,7 +374,7 @@ public class ClienteController extends BaseController {
 
 		if (getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO FOR CREDITO
 			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Descrição"));
+				facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o"));
 				return;
 			}
 			if (getData() == null) {// data precisa estar preenhida
@@ -400,7 +401,7 @@ public class ClienteController extends BaseController {
 				return;
 			}
 			// if (getDerivacao() == null) {// descricao precisa estar preenhida
-			// facesMessager.error(getRequiredMessage("Derivação"));
+			// facesMessager.error(getRequiredMessage("Derivaï¿½ï¿½o"));
 			// return;
 			// }
 			if (getData() == null) {// data precisa estar preenhida
@@ -415,7 +416,7 @@ public class ClienteController extends BaseController {
 
 		if (getTipoCarteira().equalsIgnoreCase("D")) { // SE O SELECIONADO FOR CREDITO
 			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Descrição"));
+				facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o"));
 				return;
 			}
 
@@ -559,10 +560,10 @@ public class ClienteController extends BaseController {
 					setEndereco(null);
 					setLocalidade(null);
 				} else {
-					facesMessager.error("Já existe um endereco principal para esse cliente");
+					facesMessager.error("Jï¿½ existe um endereco principal para esse cliente");
 				}
 			} else {
-				facesMessager.error("Endereco já adicionado para essa cliente");
+				facesMessager.error("Endereco jï¿½ adicionado para essa cliente");
 			}
 		} else {
 			facesMessager.error("Nenhuma localidade Informada");
@@ -574,7 +575,7 @@ public class ClienteController extends BaseController {
 		System.out.println(telefone);
 
 		if (telefone.length() < 8) {
-			FacesUtil.addErroMessage("Informe um telefone válido para continuar");
+			FacesUtil.addErroMessage("Informe um telefone vï¿½lido para continuar");
 			return "";
 		}
 
@@ -627,7 +628,7 @@ public class ClienteController extends BaseController {
 				telefoneEditado.setDataAlteracao(new Date());
 				clienteTelefoneService.saveOrUpdade(telefoneEditado);
 			} else {
-				FacesUtil.addErroMessage("Já existe um telefone principal para esse cliente");
+				FacesUtil.addErroMessage("Jï¿½ existe um telefone principal para esse cliente");
 			}
 		}
 
@@ -648,13 +649,13 @@ public class ClienteController extends BaseController {
 
 			clienteCarteiraService.excluir(obj);
 
-			FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+			FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 
 		} catch (Exception e) {
 			System.out.println("ERRO: #0002" + e.getMessage());
 			e.printStackTrace();
 			facesMessager.error(
-					"Não foi possivel efeturar a operação, entre em contato com administrador do sistema e informe o erro #0002");
+					"Nï¿½o foi possivel efeturar a operaï¿½ï¿½o, entre em contato com administrador do sistema e informe o erro #0002");
 		}
 	}
 

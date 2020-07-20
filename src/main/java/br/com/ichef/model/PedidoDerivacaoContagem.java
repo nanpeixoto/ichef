@@ -50,8 +50,7 @@ public class PedidoDerivacaoContagem extends BaseEntity {
 
 	@Override
 	public String getColumnOrderBy() {
-		// TODO Auto-generated method stub
-		return null;
+		return "nomeEntregador";
 	}
 
 	@Override

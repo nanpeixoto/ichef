@@ -62,6 +62,8 @@
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
 								rowsPerPageTemplate="25,50,75,100,125">
+								
+								<p:ajax event="rowToggle" listener="#{clienteSaldoController.expandirLinha}"   />
 
 								<f:facet name="header">
 									<p:outputPanel style="text-align:right; margin-right:-10px"
@@ -92,9 +94,9 @@
 								</p:column>
 
 								<p:column headerText="Cód Cliente"
-									filterBy="#{item.id.codigoCliente}" filterMatchMode="exact"
+									filterBy="#{item.codigoCliente}" filterMatchMode="exact"
 									width="10%" filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.id.codigoCliente}">
+									sortBy="#{item.codigoCliente}">
 
 									<f:facet name="filter">
 										<p:inputText id="globalFilter1"
@@ -107,9 +109,9 @@
 
 									</f:facet>
 
-									<h:link value="#{item.id.codigoCliente}"
+									<h:link value="#{item.codigoCliente}"
 										outcome="cadastroCliente" target="_blank">
-										<f:param name="id" value="#{item.id.codigoCliente}" />
+										<f:param name="id" value="#{item.codigoCliente}" />
 									</h:link>
 								</p:column>
 
@@ -132,7 +134,7 @@
 
 									<h:link value="#{item.nome}" outcome="cadastroCliente"
 										target="_blank">
-										<f:param name="id" value="#{item.id.codigoCliente}" />
+										<f:param name="id" value="#{item.codigoCliente}" />
 									</h:link>
 
 
@@ -149,19 +151,7 @@
 									</h:outputLabel>
 								</p:column>
 
-								<!-- <p:column headerText="Outros Saldos"
-									filterBy="#{item.valorSaldoOutraEmpresa}"
-									filterMatchMode="contains" width="8%"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.valorSaldoOutraEmpresa}">
-									<h:outputLabel value="#{item.valorSaldoOutraEmpresa}"
-										escape="false"
-										rendered="#{ (item.valorSaldoOutraEmpresa > 0) }">
-										<f:convertNumber currencySymbol="R$" type="currency"
-											locale="pt_br" maxFractionDigits="2" />
-									</h:outputLabel>
-								</p:column> -->
-
+								 
 								<p:column headerText="Localidade"
 									filterBy="#{item.descricaoLocalidade}"
 									filterMatchMode="contains" 
@@ -199,21 +189,7 @@
 									</f:facet>
 								</p:column>
 
-								<!--<p:column headerText="Empresa" filterBy="#{item.nomeFantasia}"
-									filterMatchMode="contains"
-									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.nomeFantasia}">
-									<h:outputLabel value="#{item.nomeFantasia}" escape="false" />
-
-									<f:facet name="filter">
-										<p:inputText id="filtroEmpresa"
-											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
-											maxlength="255" styleClass="letras-maiusculas semClear">
-											<p:tooltip for="filtroEmpresa"
-												value="Digite o Nome da empresa" position="top" />
-										</p:inputText>
-									</f:facet>
-								</p:column>-->
+								 
 
 
 								<p:column headerText="Data" filterBy="#{item.dataCarteira}"
@@ -292,7 +268,7 @@
 														value="#{resource['images/excel_icon.png']}"
 														style="WIDTH: 29px;" />
 													<p:dataExporter type="xls" target="tabListaSaldos"
-														fileName="iChef_Carteira_Cliente_#{item.id.codigoCliente}_#{item.nome}"
+														fileName="iChef_Carteira_Cliente_#{item.codigoCliente}_#{item.nome}"
 														postProcessor="#{clienteSaldoController.preExportarAnalitico}" />
 												</h:commandLink>
 											</p:outputPanel>

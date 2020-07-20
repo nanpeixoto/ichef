@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -73,8 +74,7 @@ public class Usuario extends BaseEntity {
 	@Column(name = "DS_SENHA")
 	private String senha;
 
-	@OneToMany(mappedBy = "usuario",  cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Transient
 	private List<UsuarioEmpresa> usuarioEmpresas;
 	
 	@Transient

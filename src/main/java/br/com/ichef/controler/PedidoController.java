@@ -307,7 +307,7 @@ public class PedidoController extends BaseController {
 
 				if (getEntity().getEntregador() == null) {
 					getEntity().setOrdemEntrega(1);
-					facesMessager.error("Localidade não associada a um entregador, por favor, revisar o cadastro");
+					facesMessager.error("Localidade nï¿½o associada a um entregador, por favor, revisar o cadastro");
 				}
 
 				ObterValorDiariaEntregador();
@@ -492,7 +492,7 @@ public class PedidoController extends BaseController {
 			} else if (listaEnderecos.size() < 1) {
 				getEntity().setClienteEndereco(null);
 				if (listaEnderecos == null || listaEnderecos.size() == 0) {
-					facesMessager.error("Nenhum endereço cadastradado para essa empresa, revise o cadastro do cliente");
+					facesMessager.error("Nenhum endereï¿½o cadastradado para essa empresa, revise o cadastro do cliente");
 					limparDadosEntregador(null, null, null);
 				}
 			}
@@ -517,13 +517,13 @@ public class PedidoController extends BaseController {
 					valorDevedor = service.findValorDebito(getEntity().getCliente().getId(),
 							userLogado.getEmpresaLogada().getId());
 				} catch (Exception e) {
-					//System.out.println("ERRO: adicionarPedido - findValorDebito - Debito não encontrado");
+					//System.out.println("ERRO: adicionarPedido - findValorDebito - Debito nï¿½o encontrado");
 				}
 				//configuracao
 				Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
 				
 				
-				// SE FOR ATÉ 10 ABRIR POUPUP
+				// SE FOR ATï¿½ 10 ABRIR POUPUP
 				if (valorDevedor >= config.getValorAlertaSaldo()) {
 					clienteDeveSerApagado = apagarCliente;
 					showDialog("confirmacaoVendaDevedorfalse");
@@ -563,7 +563,7 @@ public class PedidoController extends BaseController {
 							&& (getEntity().getTipoPrato().isContagem()
 									&& ((qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity()
 											.getEntregador().getQuantiadadeQuentinha()))) {
-						facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "
+						facesMessager.error("Quantidade mï¿½xima do Entregador jï¿½ atingida, qtd disponï¿½vel: "
 								+ (getEntity().getEntregador().getQuantiadadeQuentinha() - qtdPedidoPratoEntregador));
 						return;
 					}
@@ -571,13 +571,13 @@ public class PedidoController extends BaseController {
 
 				if (!fichaEmpresaLogada.isPodeVenderAcimaDoLimite()
 						&& (quantidadeJaPedida - getEntity().getQuantidade()) < 0) {
-					facesMessager.error("Quantidade disponível menor que a quantidade solicitada");
+					facesMessager.error("Quantidade disponï¿½vel menor que a quantidade solicitada");
 					return;
 				}
 
 				if ((quantidadeJaPedida - getEntity().getQuantidade()) <= 5) {
 					FacesUtil.addInfoMessage(
-							"Quantdade disponível para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
+							"Quantdade disponï¿½vel para o prato:" + (quantidadeJaPedida - getEntity().getQuantidade()));
 				}
 
 				getEntity().setDataCadastro(new Date());
@@ -592,17 +592,17 @@ public class PedidoController extends BaseController {
 						.getPercoPorTipoPrato(getEntity().getTipoPrato()));
 
 				if (getEntity().getPrecoCustoPorcao() == null) {
-					facesMessager.error("Não foi possível obter o Preço de Custo da Porção");
+					facesMessager.error("Nï¿½o foi possï¿½vel obter o Preï¿½o de Custo da Porï¿½ï¿½o");
 					return;
 				}
 
 				if (getEntity().getPrecoVendaReceita() == null) {
-					facesMessager.error("Não foi possível obter o Preço de Venda da Receita");
+					facesMessager.error("Nï¿½o foi possï¿½vel obter o Preï¿½o de Venda da Receita");
 					return;
 				}
 
 				if (getEntity().getPrecoVendaTipoPrato() == null) {
-					facesMessager.error("Não foi possível obter o Preço de Venda por Tipo de Prato");
+					facesMessager.error("Nï¿½o foi possï¿½vel obter o Preï¿½o de Venda por Tipo de Prato");
 					return;
 				}
 
@@ -630,7 +630,7 @@ public class PedidoController extends BaseController {
 		} catch (
 
 		Exception e) {
-			facesMessager.error("Não foi possível executar essa operação");
+			facesMessager.error("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o");
 			e.printStackTrace();
 		}
 
@@ -645,7 +645,7 @@ public class PedidoController extends BaseController {
 	private boolean camposObrigatoriosPedido() {
 		// CARDAPIO
 		if (getEntity().getCardapio() == null) {
-			facesMessager.error("Cardápio não encontrado, verifique o cadastro do cardápio");
+			facesMessager.error("Cardï¿½pio nï¿½o encontrado, verifique o cadastro do cardï¿½pio");
 			return false;
 		}
 
@@ -657,7 +657,7 @@ public class PedidoController extends BaseController {
 
 		// ENDERECO
 		if (getEntity().getClienteEndereco() == null) {
-			facesMessager.error(getRequiredMessage("Endereço"));
+			facesMessager.error(getRequiredMessage("Endereï¿½o"));
 			return false;
 		} else {
 			getEntity().setLocalidade(getEntity().getClienteEndereco().getLocalidade());
@@ -685,7 +685,7 @@ public class PedidoController extends BaseController {
 
 		// PRECO MAIOR QUE ZERO
 		if (getEntity().getValorUnitarioPedido() == null) {
-			facesMessager.error(getRequiredMessage("Preço Unitário"));
+			facesMessager.error(getRequiredMessage("Preï¿½o Unitï¿½rio"));
 			return false;
 		} else {
 			BigDecimal valorTotalPedido = getEntity().getValorUnitarioPedido()
@@ -702,13 +702,13 @@ public class PedidoController extends BaseController {
 
 		// valor da diaria do entregador
 		if (getEntity().getValorDiariaEntregador() == null) {
-			facesMessager.error(getRequiredMessage("Valor da Diária"));
+			facesMessager.error(getRequiredMessage("Valor da Diï¿½ria"));
 			return false;
 		}
 
 		// DERIVACAO
 		if (getEntity().getDerivacao() == null) {
-			facesMessager.error(getRequiredMessage("Derivação"));
+			facesMessager.error(getRequiredMessage("Derivaï¿½ï¿½o"));
 			return false;
 		}
 
@@ -785,9 +785,9 @@ public class PedidoController extends BaseController {
 			lista.addAll(temp);
 			// service.calcularPercos(entity, configuracao);
 			updateComponentes("tabListaPedidos");
-			FacesUtil.addInfoMessage("Itens excluídos com sucesso");
+			FacesUtil.addInfoMessage("Itens excluï¿½dos com sucesso");
 		} catch (Exception e) {
-			FacesUtil.addErroMessage("Não foi possível executar essa operação:" + e.getMessage());
+			FacesUtil.addErroMessage("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o:" + e.getMessage());
 		}
 
 	}
@@ -798,7 +798,7 @@ public class PedidoController extends BaseController {
 			if (tipoAlteracao.equals("E")) {
 				if (pedido.getEntregador() != null) {
 					if (pedido.getEntregador().getValorDiaria() == null) {
-						facesMessager.error("Entregador sem diária cadastrada");
+						facesMessager.error("Entregador sem diï¿½ria cadastrada");
 						return;
 					}
 					pedido.setValorDiariaEntregador(pedido.getEntregador().getValorDiaria());
@@ -807,7 +807,7 @@ public class PedidoController extends BaseController {
 
 			if (tipoAlteracao.equals("F") || tipoAlteracao.equals("Q")) {
 				if (pedido.getValorUnitarioPedido() == null) {
-					facesMessager.error(getRequiredMessage("Preço Unitário"));
+					facesMessager.error(getRequiredMessage("Preï¿½o Unitï¿½rio"));
 					return;
 				} else {
 					BigDecimal valorTotalPedido = pedido.getValorUnitarioPedido()
@@ -825,7 +825,7 @@ public class PedidoController extends BaseController {
 			service.saveOrUpdade(pedido);
 
 		} catch (Exception e) {
-			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
+			facesMessager.error("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o:" + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -979,7 +979,7 @@ public class PedidoController extends BaseController {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (pedidos.size() == 0) {
@@ -990,7 +990,7 @@ public class PedidoController extends BaseController {
 					escreveRelatorioPDF("Pedidos", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 
@@ -1054,7 +1054,7 @@ public class PedidoController extends BaseController {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (pedidos.size() == 0) {
@@ -1066,7 +1066,7 @@ public class PedidoController extends BaseController {
 					escreveRelatorioPDF("Rota", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 		}
@@ -1170,7 +1170,7 @@ public class PedidoController extends BaseController {
 				pedidos = pedidoEtiquetaService.findByParameters(filter, pedidoVisitor);
 			} catch (Exception e) {
 				e.printStackTrace();
-				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
+				FacesUtil.addErroMessage("Erro ao obter os dados do relatï¿½rio");
 			}
 
 			if (pedidos.size() == 0) {
@@ -1182,7 +1182,7 @@ public class PedidoController extends BaseController {
 					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
 					e.printStackTrace();
-					FacesUtil.addErroMessage("Erro ao gerar o relatório");
+					FacesUtil.addErroMessage("Erro ao gerar o relatï¿½rio");
 				}
 			}
 
@@ -1203,7 +1203,7 @@ public class PedidoController extends BaseController {
 
 			if (pedido.getEntregador() != null) {
 				if (pedido.getEntregador().getValorDiaria() == null) {
-					facesMessager.error("Entregador sem diária cadastrada");
+					facesMessager.error("Entregador sem diï¿½ria cadastrada");
 					return;
 				}
 				List<Pedido> listaPedidosEntregador = obterPedidosDoEntregador(pedido.getEntregador());
@@ -1221,7 +1221,7 @@ public class PedidoController extends BaseController {
 			}
 
 		} catch (Exception e) {
-			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
+			facesMessager.error("Nï¿½o foi possï¿½vel executar essa operaï¿½ï¿½o:" + e.getMessage());
 			e.printStackTrace();
 		}
 
