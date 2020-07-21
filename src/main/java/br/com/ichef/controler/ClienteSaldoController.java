@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,7 +20,6 @@ import br.com.ichef.model.ClienteEmailAuditoria;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.VwClienteCarteiraSaldo;
 import br.com.ichef.model.VwClienteSaldo;
-import br.com.ichef.model.VwClienteSaldoID;
 import br.com.ichef.service.ClienteEmailAuditoriaService;
 import br.com.ichef.service.ClienteSaldoService;
 import br.com.ichef.service.ClienteService;
@@ -82,7 +80,7 @@ public class ClienteSaldoController extends BaseController {
 	public void obterEmailEnviados(VwClienteSaldo clienteCarteira) {
 		try {
 			ClienteEmailAuditoria auditoria = new ClienteEmailAuditoria();
-			auditoria.setCodigoCliente(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
+			auditoria.setCodigoCliente( clienteCarteira.getCodigoCliente());
 			setListaClienteEmailAuditoria(clienteEmailAuditoriaService.findByParameters(auditoria));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,8 +92,7 @@ public class ClienteSaldoController extends BaseController {
 	public void bloquearCliente(VwClienteSaldo clienteCarteira) {
 		try {
 			String statusBloqueio = (clienteCarteira.isEstaBloqueado() ? "N" : "S");
-			String result = clienteService.atualizarStatusBloqueio(statusBloqueio,
-					((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente());
+			String result = clienteService.atualizarStatusBloqueio(statusBloqueio, clienteCarteira.getCodigoCliente());
 			if (result != null)
 				facesMessager.error(result);
 			else {
@@ -121,7 +118,6 @@ public class ClienteSaldoController extends BaseController {
 
 		System.out.println("enviarEmailParaTodos - Botï¿½o Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
 				+ " -  em " + formataDataHora(new Date()));
-		int count = 0;
 		new Thread() {
 			@Override
 			public void run() {
@@ -145,8 +141,8 @@ public class ClienteSaldoController extends BaseController {
 		String mensagem = "";
 		if (clienteCarteira.getEmail() != null) {
 			String inicio = config.getEmailInicio();
-			inicio = inicio.replace("#codigo#",
-					((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente().toString());
+			inicio = inicio.replace("#codigo#", clienteCarteira.getCodigoCliente().toString());
+			obterDetalhamento(clienteCarteira);
 			mensagem = inicio + clienteCarteira.getListaSaldosEmail() + clienteCarteira.getDescricaoLink()
 					+ config.getEmailFim();
 
@@ -160,16 +156,14 @@ public class ClienteSaldoController extends BaseController {
 			ClienteEmailAuditoria auditoria = null;
 
 			if (!dto.getSituacao().equals("S")) {
-				System.out.println("emailEnviado:" + ((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente()
-						+ " - Email:" + clienteCarteira.getEmail());
-				auditoria = criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(),
-						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
+				System.out.println("emailEnviado:" + clienteCarteira.getCodigoCliente()	+ " - Email:" + clienteCarteira.getEmail());
+				auditoria = criarAuditoria( clienteCarteira.getCodigoCliente(),	clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
 						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
 						clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
 				if (todos.equalsIgnoreCase("N"))
 					FacesUtil.addErroMessage("Erro ao enviar o e-mail, por favor, verifique o LOG");
 			} else {
-				auditoria = criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(),
+				auditoria = criarAuditoria( clienteCarteira.getCodigoCliente(),
 						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
 						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
 						clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
@@ -188,7 +182,7 @@ public class ClienteSaldoController extends BaseController {
 
 		} else {
 			String erro = "Cliente sem e-mail";
-			criarAuditoria(((VwClienteSaldoID) clienteCarteira.getId()).getCodigoCliente(), clienteCarteira.getEmail(),
+			criarAuditoria(clienteCarteira.getCodigoCliente(), clienteCarteira.getEmail(),
 					"N", erro, mensagem, clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
 					clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
 			if (todos.equalsIgnoreCase("N"))
@@ -218,6 +212,11 @@ public class ClienteSaldoController extends BaseController {
 
 	public void expandirLinha(ToggleEvent event) {
 		VwClienteSaldo carteira = ((VwClienteSaldo) event.getData());
+		obterDetalhamento(carteira);
+
+	}
+
+	private void obterDetalhamento(VwClienteSaldo carteira) {
 		VwClienteCarteiraSaldo filter = new VwClienteCarteiraSaldo();
 		filter.setCodigoEmpresa(carteira.getCodigoEmpresa());
 		filter.setCodigoCliente(carteira.getCodigoCliente());
@@ -234,7 +233,6 @@ public class ClienteSaldoController extends BaseController {
 			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema.");
 
 		}
-
 	}
 
 	public void excluirSelecionados() {

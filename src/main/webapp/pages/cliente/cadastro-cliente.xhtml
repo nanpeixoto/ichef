@@ -475,6 +475,16 @@
 							 				<p:tooltip for="valorPago"  value="#{clienteController.getUsuarioCadastro(itemCarteira)}"  /> 
 										</p:column>
 										
+										<p:column headerText="Saldo" filterBy="#{itemCarteira.saldo}"
+											style="width:6%" filterMatchMode="contains"
+											filterStyle="display:none; visibility:hidden;"
+											sortBy="#{itemCarteira.saldo}">
+											<h:outputLabel value="#{itemCarteira.saldo}" escape="false">
+												<f:convertNumber currencySymbol="R$" type="currency"
+													locale="pt_br" maxFractionDigits="2" />
+											</h:outputLabel>
+										</p:column>
+										
 										
 										<!-- 
 										<p:column style="width:25px">

@@ -259,7 +259,7 @@ public class VwClienteSaldo extends BaseEntity {
 		String mensagemFinal = "";
 		BigDecimal saldoTotal = (getValorSaldoOutraEmpresa() != null ? getValorSaldo().add(getValorSaldoOutraEmpresa())
 				: getValorSaldo());
-		String mensagemSaldoTotal = "<br><br>Seu saldo atual ï¿½ de <span     style=\"color: "
+		String mensagemSaldoTotal = "<br><br>Seu saldo atual é de <span     style=\"color: "
 				+ (saldoTotal.compareTo(new BigDecimal("0")) >= 0 ? "red" : "green") + "; font-weight: bold;\">"
 				+ Util.formataValor(saldoTotal) + "</span>";
 		String outrasEmpresas = (getValorSaldoOutraEmpresa() != null && saldoTotal.compareTo(new BigDecimal("0")) >= 0

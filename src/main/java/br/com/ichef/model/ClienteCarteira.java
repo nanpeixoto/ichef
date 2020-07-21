@@ -23,7 +23,7 @@ import br.com.ichef.arquitetura.BaseEntity;
  */
 @Entity
 @Table(name = "cliente_carteira")
-public class ClienteCarteira extends BaseEntity {
+public class ClienteCarteira extends BaseEntity  implements Comparable<ClienteCarteira>{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -107,6 +107,9 @@ public class ClienteCarteira extends BaseEntity {
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_PEDIDO")
 	private Pedido pedido;
+
+	@Column(name = "VL_SALDO")
+	private BigDecimal saldo;
 
 	@Override
 	public Object getId() {
@@ -253,12 +256,13 @@ public class ClienteCarteira extends BaseEntity {
 	}
 
 	public String getDescricaoOuPrato() {
-		if (getDescricao() != null && getFichaTecnicaPrato()==null)
+		if (getDescricao() != null && getFichaTecnicaPrato() == null)
 			return getDescricao();
-		if(getFichaTecnicaPrato()!=null  && getDescricao()!=null  )
-			return getDescricao()+" <br>"+getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "-"
+		if (getFichaTecnicaPrato() != null && getDescricao() != null)
+			return getDescricao() + " <br>" + getFichaTecnicaPrato().getDescricao() + "<br>"
+					+ getTipoPrato().getDescricao() + "-"
 					+ (getDerivacao() != null ? getDerivacao().getDescricao() : "");
-		if(getFichaTecnicaPrato()!=null  && getDescricao()==null  )
+		if (getFichaTecnicaPrato() != null && getDescricao() == null)
 			return getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "-"
 					+ (getDerivacao() != null ? getDerivacao().getDescricao() : "");
 		return getDescricao();
@@ -311,5 +315,19 @@ public class ClienteCarteira extends BaseEntity {
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
 	}
+
+	public BigDecimal getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(BigDecimal saldo) {
+		this.saldo = saldo;
+	}
+	
+	@Override
+	public int compareTo(ClienteCarteira o) {
+		return o.getData().compareTo(this.getData());
+	}
+
 
 }

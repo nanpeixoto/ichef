@@ -91,6 +91,9 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 	@JoinColumn(name = "CD_FORMA_PAGAMENTO")
 	private FormaPagamento formaPagamento;
 
+	@Column(name = "VL_SALDO")
+	private BigDecimal saldo;
+
 	@Override
 	public Object getId() {
 		return id;
@@ -258,6 +261,14 @@ public class VwClienteCarteiraSaldo extends BaseEntity {
 
 	public void setCodigoEmpresa(Long codigoEmpresa) {
 		this.codigoEmpresa = codigoEmpresa;
+	}
+
+	public BigDecimal getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(BigDecimal saldo) {
+		this.saldo = saldo;
 	}
 
 }

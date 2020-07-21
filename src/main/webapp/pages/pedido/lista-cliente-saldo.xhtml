@@ -321,6 +321,16 @@
 											sortBy="#{saldo.formaPagamento.descricao}">
 											<h:outputLabel value="#{saldo.formaPagamento.descricao}" />
 										</p:column>
+										
+										<p:column headerText="Saldo" filterBy="#{saldo.saldo}"
+											style="width:10%" filterMatchMode="contains"
+											filterStyle="display:none; visibility:hidden;"
+											sortBy="#{saldo.saldo}">
+											<h:outputLabel value="#{saldo.saldo}">
+												<f:convertNumber currencySymbol="R$" type="currency"
+													locale="pt_br" maxFractionDigits="2" />
+											</h:outputLabel>
+										</p:column>
 
 									</p:dataTable>
 
