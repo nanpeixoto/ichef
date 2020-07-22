@@ -7,6 +7,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.apache.regexp.recompile;
+import org.hibernate.Hibernate;
 
 import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.dao.GenericDAO;
@@ -25,6 +26,25 @@ public class ClienteService extends GenericDAO<Cliente> {
 		}
 		return entity;
 
+	}
+	
+	public void inicilizarListas(Cliente entity) {
+		try {
+			if (!getManager().isOpen()) {
+				EntityManagerProducer producer = new EntityManagerProducer();
+				setManager(producer.createEntityManager());
+			}
+
+			
+			Hibernate.initialize(entity.getEnderecos());
+			Hibernate.initialize(entity.getTelefones());
+			Hibernate.initialize(entity.getCarteiras());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getManager().close();
+		}
 	}
 
 	private boolean validaRegras(Cliente entity) {
@@ -55,9 +75,8 @@ public class ClienteService extends GenericDAO<Cliente> {
 
 			hql = new StringBuilder();
 
-			hql.append("UPDATE Cliente SET bloqueado = '"+statusBloqueio+"'");
-			 hql.append(" where  id = "+codigoCliente);
-			
+			hql.append("UPDATE Cliente SET bloqueado = '" + statusBloqueio + "'");
+			hql.append(" where  id = " + codigoCliente);
 
 			if (hql != null) {
 
@@ -85,8 +104,12 @@ public class ClienteService extends GenericDAO<Cliente> {
 
 			e.printStackTrace();
 			return e.getMessage();
-		}  
-		
+
+		} finally {
+			if (getManager().isOpen())
+				getManager().close();
+		}
+
 	}
 
 }
