@@ -85,11 +85,11 @@ public class Cliente extends BaseEntity {
 	private List<ClienteTelefone> telefones;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<ClienteEndereco> enderecos;
 
-	 @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT) 
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SELECT) 
 	//@Transient
 	private List<ClienteCarteira> carteiras;
 

@@ -39,7 +39,6 @@ import br.com.ichef.service.FichaTecnicaPratoService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.LocalidadeService;
 import br.com.ichef.service.TipoPratoService;
-import br.com.ichef.service.VwClienteCarteiraSaldoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.ClienteVisitor;
 
@@ -130,6 +129,7 @@ public class ClienteController extends BaseController {
 			setEntity(service.getById(id));
 			telefone = "5571 ";
 			setData(new Date());
+			// java.util.Collections.sort( getEntity().getCarteiras() );
 		} else {
 			if (telefone != null) {
 				adicionarTelefone();
@@ -344,6 +344,8 @@ public class ClienteController extends BaseController {
 				cliente.setId(getEntity().getId());
 				ClienteCarteira filter = new ClienteCarteira();
 				filter.setCliente(cliente);
+				
+				getEntity().setCarteiras(new ArrayList<>());
 
 				getEntity().setCarteiras(clienteCarteiraService.findByParameters(filter));
 			}
@@ -352,7 +354,7 @@ public class ClienteController extends BaseController {
 			System.out.println("ERRO: #0001" + e.getMessage());
 			e.printStackTrace();
 			facesMessager.error(
-					"Nï¿½o foi possivel efeturar a operaï¿½ï¿½o, entre em contato com administrador do sistema e informe o erro #0001");
+					"Não foi possivel efeturar a operação, entre em contato com administrador do sistema e informe o erro #0001");
 		}
 	}
 

@@ -25,49 +25,66 @@
 		             	<p:separator/>-->
 					<div class="ui-fluid">
 						<div align="right">
-						
-						  <p:commandButton id="bt-destroy" value="Envia para TODOS" styleClass="btn btn-danger"
-                                     actionListener="#{clienteSaldoController.enviarEmailParaTodos()}" icon="fa fa-question">
-                        <p:confirm header="Confirmação" message="Essa rotina irá disparar e-mail para todos os clientes. Tem certeza?" icon="ui-icon-alert"/>
-                    </p:commandButton>
 
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-solid box-danger">
-                        <p:commandButton value="Sim" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
-                                         icon="fa fa-check"/>
-                        <p:commandButton value="Não" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
-                                         icon="fa fa-close"/>
-                    </p:confirmDialog>
-                    <br/> <br/> <br/> <br/>
-                    
-                    
-							<!-- <p:panelGrid>
-								<p:commandButton value="Envia para TODOS"
-									icon="fa fa-envelope-o" id="btnImprimir" style="width: 201px;"
-									styleClass="btn btn-danger"
-									title="Enviar E-mail para TODOS os clientes"
-									action="#{clienteSaldoController.enviarEmailParaTodos()}" />
-								<br />
-								<br />
-							</p:panelGrid> -->
+
+
+							<p:separator></p:separator>
+							<!-- <div class="ui-fluid">
+								<fieldset>
+									<p:panelGrid id="capaPanel" columns="5" layout="grid"
+										columnClasses="ui-g-2, ui-g-2">
+	
+										<p:outputLabel value="Situação do Cliente:" />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.todos}" id="todos" itemLabel="Todos"  />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.ativo}" id="ativo" itemLabel="Ativo"   />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.inativo}" id="inativo" itemLabel="Inativo"   />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.bloqueado}" id="bloqueado" itemLabel="Bloqueado"   />
+	
+										<p:outputLabel value="Situação da Carteira:" />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.carteiraTodos}"  id="diasTodos" itemLabel="Todos" />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.carteira30Dias}"   id="dias30" itemLabel="+30 dias" />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.carteira120Dias}"   id="dias120" itemLabel="+120 dias" />
+										<p:selectBooleanCheckbox value="#{clienteSaldoController.carteiraEmDias}"   id="emdias" itemLabel="Em dias" />
+									</p:panelGrid>
+								</fieldset>
+							</div>
+							<div align="right">
+								<p:commandButton value="Pesquisar" ajax="false"
+									  style="width: 15%;"    immediate="true"
+                                         icon="fa fa-search" styleClass="btn-primary" action="#{clienteSaldoController.pesquisar()}"/>
+                                         
+                                         	<p:commandButton  value="Plus" icon="fa fa-plus" 
+                    	 	 id="btnSurname"     ajax="false"
+                    	 	 actionListener="#{clienteSaldoController.pesquisar()}" 
+                    	 	 styleClass="btn-primary" 
+                    	 	/>
+							</div>-->
+
+							<p:separator/>
 							<p:panelGrid columns="7" layout="grid"></p:panelGrid>
-						</div>
+						</div> 
 
-						<p:panel>
+						<p:panel id="lista">
+
 
 							<p:dataTable id="tabListaPedidos" widgetVar="itens"
 								value="#{clienteSaldoController.lista}" var="item"
+								filteredValue="#{clienteSaldoController.listaFiltro}"
 								rowKey="#{item.id}" reflow="true" sortBy="#{item.nome}"
 								expandableRowGroups="true" paginator="true" rows="50"
 								paginatorPosition="bottom" emptyMessage="Nenhum item encontrado"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
 								rowsPerPageTemplate="25,50,75,100,125">
-								
-								<p:ajax event="rowToggle" listener="#{clienteSaldoController.expandirLinha}"   />
+
+								<p:ajax event="rowToggle"
+									listener="#{clienteSaldoController.expandirLinha}" />
 
 								<f:facet name="header">
+
 									<p:outputPanel style="text-align:right; margin-right:-10px"
 										styleClass="ui-widget-auxiliar">
+
 
 										<h:outputText value="Pesquisar " escape="false" />
 
@@ -85,6 +102,8 @@
 												fileName="iChef_Carteira_Clientes"
 												postProcessor="#{clienteSaldoController.preExportar}" />
 										</h:commandLink>
+
+
 									</p:outputPanel>
 
 								</f:facet>
@@ -109,8 +128,8 @@
 
 									</f:facet>
 
-									<h:link value="#{item.codigoCliente}"
-										outcome="cadastroCliente" target="_blank">
+									<h:link value="#{item.codigoCliente}" outcome="cadastroCliente"
+										target="_blank">
 										<f:param name="id" value="#{item.codigoCliente}" />
 									</h:link>
 								</p:column>
@@ -151,10 +170,10 @@
 									</h:outputLabel>
 								</p:column>
 
-								 
+
 								<p:column headerText="Localidade"
 									filterBy="#{item.descricaoLocalidade}"
-									filterMatchMode="contains" 
+									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.descricaoLocalidade}">
 									<h:outputLabel value="#{item.descricaoLocalidade}"
@@ -170,26 +189,23 @@
 									</f:facet>
 								</p:column>
 
-								<p:column headerText="Situação"
-									filterBy="#{item.situacaoAtual}"
+								<p:column headerText="Situação" filterBy="#{item.situacaoAtual}"
 									filterMatchMode="contains"
 									filterStyle="display:none; visibility:hidden;"
 									sortBy="#{item.situacaoAtual}">
-									<h:outputLabel value="#{item.situacaoAtual}"
-										escape="false" />
+									<h:outputLabel value="#{item.situacaoAtual}" escape="false" />
 
 									<f:facet name="filter">
 										<p:inputText id="globalFilterTipo2"
 											onblur="PF('itens').filter(); hideBar();" style="width:65px;"
 											maxlength="255" styleClass="letras-maiusculas semClear">
 											<p:tooltip id="toolTipFadetipo2" for="globalFilterTipo2"
-												value="Digite a Situação para pesquisar"
-												position="top" />
+												value="Digite a Situação para pesquisar" position="top" />
 										</p:inputText>
 									</f:facet>
 								</p:column>
 
-								 
+
 
 
 								<p:column headerText="Data" filterBy="#{item.dataCarteira}"
@@ -202,11 +218,11 @@
 									</h:outputLabel>
 								</p:column>
 
-								<p:column headerText="Dias" filterBy="#{item.diasDevedor()}"
+								<p:column headerText="Dias" filterBy="#{item.diasDevedor}"
 									filterMatchMode="contains" width="6%"
 									filterStyle="display:none; visibility:hidden;"
-									sortBy="#{item.diasDevedor()}">
-									<h:outputLabel value="#{item.diasDevedor()}" escape="false" />
+									sortBy="#{item.diasDevedor}">
+									<h:outputLabel value="#{item.diasDevedor}" escape="false" />
 
 									<f:facet name="filter">
 										<p:inputText id="globalFilterDias"
@@ -220,6 +236,16 @@
 
 								<p:column headerText="Email" width="12%" exportable="false"
 									filterStyle="display:none; visibility:hidden;">
+									 <f:facet name="header">
+									 		Ações<br/>
+									 		<p:tooltip id="toolTipFade2" for="btEnviarEmail"
+										value="Clique aqui para envia e-mail para a lista filtrada" position="top" />
+											<p:commandButton id="btEnviarEmail"  styleClass="btn btn-danger"  icon="fa fa-envelope-o"
+			                               actionListener="#{clienteSaldoController.enviarEmailParaLista()}"   >
+								        	<p:confirm header="Confirmação" message="Essa rotina irá disparar e-mail para os clientes filtrados na lista. Tem certeza?" icon="ui-icon-alert"/>
+								      	</p:commandButton>
+								   	</f:facet>
+								      	
 									<p:commandButton value="" icon="fa fa-envelope-o"
 										id="btnAdicioanr" styleClass="btn btn-danger"
 										style="width: 32px;" disabled="#{item.email eq null }"
@@ -229,9 +255,11 @@
 										styleClass="btn-info" style="width: 32px;"
 										oncomplete="PF('dialogoEmail').show()" update="@(.ui-dialog)"
 										actionListener="#{clienteSaldoController.obterEmailEnviados(item)}" />
-										
-										<p:commandButton value="" icon="#{clienteSaldoController.getIconBloqueadoCliente(item)}"
-										styleClass="btn btn-warning" style="width: 32px;" update="tabListaPedidos"
+
+									<p:commandButton value=""
+										icon="#{clienteSaldoController.getIconBloqueadoCliente(item)}"
+										styleClass="btn btn-warning" style="width: 32px;"
+										update="tabListaPedidos"
 										actionListener="#{clienteSaldoController.bloquearCliente(item)}" />
 
 								</p:column>
@@ -321,7 +349,7 @@
 											sortBy="#{saldo.formaPagamento.descricao}">
 											<h:outputLabel value="#{saldo.formaPagamento.descricao}" />
 										</p:column>
-										
+
 										<p:column headerText="Saldo" filterBy="#{saldo.saldo}"
 											style="width:10%" filterMatchMode="contains"
 											filterStyle="display:none; visibility:hidden;"
@@ -342,8 +370,33 @@
 
 						</p:panel>
 					</div>
+					<br /> <br />
+					<div align="right">
+
+						<p:commandButton id="bt-destroy" value="Envia para TODOS"
+							styleClass="btn btn-danger"
+							actionListener="#{clienteSaldoController.enviarEmailParaTodos()}"
+							icon="fa fa-question">
+							<p:confirm header="Confirmação"
+								message="Essa rotina irá disparar e-mail para todos os clientes. Tem certeza?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							styleClass="box-solid box-danger">
+							<p:commandButton value="Sim" type="button"
+								styleClass="btn-material btn-primary ui-confirmdialog-yes"
+								icon="fa fa-check" />
+							<p:commandButton value="Não" type="button"
+								styleClass="btn-material btn-danger ui-confirmdialog-no"
+								icon="fa fa-close" />
+						</p:confirmDialog>
+					</div>
+					<br /> <br />
 				</div>
+
 			</div>
+
 		</h:form>
 
 		<p:dialog header="E-mails Enviados" widgetVar="dialogoEmail"

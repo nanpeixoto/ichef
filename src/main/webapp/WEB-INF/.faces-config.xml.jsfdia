@@ -10,6 +10,15 @@
   SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:*:1" PATH="*" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:*:1" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="loginPageEntregador::#loginEntregador.xhtml"
+    NAME="output" PATH="/loginEntregador.xhtml"
+    TARGET="rules:#loginEntregador.xhtml" TITLE="loginPageEntregador" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#cliente#cadastro-cliente.xhtml"
+  PATH="/pages/cliente/cadastro-cliente.xhtml" SHAPE="240,145,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:*:2" PATH="*" SHAPE="32,353,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:2" NAME="item" PATH="*" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT
     ID="cadastroCliente::#pages#cliente#cadastro-cliente.xhtml"
     NAME="output" PATH="/pages/cliente/cadastro-cliente.xhtml"
@@ -17,6 +26,6 @@
     TITLE="cadastroCliente" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#pages#cliente#cadastro-cliente.xhtml"
-  PATH="/pages/cliente/cadastro-cliente.xhtml" SHAPE="240,145,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#loginEntregador.xhtml"
+  PATH="/loginEntregador.xhtml" SHAPE="240,257,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

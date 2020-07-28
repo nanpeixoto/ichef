@@ -1,5 +1,10 @@
 package br.com.ichef.controler;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +30,7 @@ import br.com.ichef.service.LogAcessoService;
 import br.com.ichef.service.UsuarioService;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.util.StringUtil;
+import br.com.ichef.util.Util;
 
 @Named
 @ViewScoped
@@ -53,6 +59,10 @@ public class LoginController extends BaseController {
 	private List<Empresa> empresas;
 	private String login;
 
+	// Entregador
+	private String senhaEntregador;
+	private String LoginEntregador;
+
 	@PostConstruct
 	public void init() {
 
@@ -64,27 +74,27 @@ public class LoginController extends BaseController {
 			if (!getSenhaNova().equalsIgnoreCase(getSenhaNovaConfirmacao())) {
 				facesMessager.error("As senhas digitadas não conferem");
 				return;
-			
-			}
-			if (getSenhaNova().equalsIgnoreCase(getSenha())) {
-				facesMessager.error("A nova senha corresponde a senha atual");
-			} else {
-				Usuario usuario = service.getById(getUserLogado().getId());
-				if (usuario.getSenha().equalsIgnoreCase(StringUtil.criptografa(getSenha()))) {
-					try {
-						usuario.setSenha(StringUtil.criptografa(getSenhaNova()));
-						service.alterarSenha(usuario);
-						facesMessager.info("Senha sucesso");
-					} catch (Exception e) {
-						e.printStackTrace();
-						facesMessager.error("Não foi possível efetuar a operação");
-					}
 
-				} else {
-					facesMessager.error("Senha Atual não confere");
+			}
+		if (getSenhaNova().equalsIgnoreCase(getSenha())) {
+			facesMessager.error("A nova senha corresponde a senha atual");
+		} else {
+			Usuario usuario = service.getById(getUserLogado().getId());
+			if (usuario.getSenha().equalsIgnoreCase(StringUtil.criptografa(getSenha()))) {
+				try {
+					usuario.setSenha(StringUtil.criptografa(getSenhaNova()));
+					service.alterarSenha(usuario);
+					facesMessager.info("Senha sucesso");
+				} catch (Exception e) {
+					e.printStackTrace();
+					facesMessager.error("Não foi possível efetuar a operação");
 				}
 
+			} else {
+				facesMessager.error("Senha Atual não confere");
 			}
+
+		}
 
 	}
 
@@ -122,6 +132,42 @@ public class LoginController extends BaseController {
 
 	public Usuario getUsuarioLogado() {
 		return getUserLogado();
+	}
+
+	public String autenticarEntregador() throws IOException {
+
+		if (LoginEntregador == null || LoginEntregador.equalsIgnoreCase("")) {
+			Messages.addGlobalError("Login é obrigatório");
+			return null;
+		}
+
+		if (senhaEntregador == null || senhaEntregador.equalsIgnoreCase("")) {
+			Messages.addGlobalError("Login é obrigatório");
+			return null;
+		}
+
+		String urlLogin = Util.API_ICHEF + Util.API_ICHEF_LOGIN_ENTREGADOR + LoginEntregador + "/" + senhaEntregador;
+
+		URL url = new URL(urlLogin);
+
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+        
+        if (conn.getResponseCode() != 200) {
+            throw new RuntimeException("Failed : HTTP Error code : "
+                    + conn.getResponseCode());
+        }
+        InputStreamReader in = new InputStreamReader(conn.getInputStream());
+        BufferedReader br = new BufferedReader(in);
+        String output;
+        while ((output = br.readLine()) != null) {
+            System.out.println(output);
+        }
+	
+
+		return "/index.xhtml?faces-redirect=true";
+
 	}
 
 	public String autenticar() throws Exception {
@@ -267,6 +313,22 @@ public class LoginController extends BaseController {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getLoginEntregador() {
+		return LoginEntregador;
+	}
+
+	public void setLoginEntregador(String loginEntregador) {
+		LoginEntregador = loginEntregador;
+	}
+
+	public String getSenhaEntregador() {
+		return senhaEntregador;
+	}
+
+	public void setSenhaEntregador(String senhaEntregador) {
+		this.senhaEntregador = senhaEntregador;
 	}
 
 }

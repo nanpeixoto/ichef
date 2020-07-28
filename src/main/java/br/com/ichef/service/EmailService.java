@@ -111,7 +111,7 @@ public class EmailService extends GenericDAO<Email> {
 
 			// Set To: header field of the header.
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getDestinatario()));
-			message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse( EMAIL_REMETENTE));
+			 message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse( EMAIL_REMETENTE));
 
 			// Set Subject: header field
 			message.setSubject(email.getAssunto());

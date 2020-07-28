@@ -59,7 +59,7 @@ public class Area extends BaseEntity {
 
 	// bi-directional many-to-one association to AreaLocalidade
 	@OneToMany(mappedBy = "area",  cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<AreaLocalidade> localidades;
 
 	@Transient

@@ -91,7 +91,7 @@ public class FichaTecnicaPreparo extends BaseEntity implements Cloneable {
 	private String classificacao;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "fichaTecnicaPreparo", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<FichaTecnicaPreparoInsumo> insumos;
 
 	@Transient
