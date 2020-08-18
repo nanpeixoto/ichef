@@ -67,7 +67,7 @@ public class Entregador extends BaseEntity {
 	private boolean isAtivo;
 
 	@OneToMany(mappedBy = "entregador", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<EntregadorLocalidade> localidades;
 
 	@ManyToOne

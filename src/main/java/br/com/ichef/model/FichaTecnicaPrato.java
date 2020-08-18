@@ -78,12 +78,12 @@ public class FichaTecnicaPrato extends BaseEntity implements Cloneable {
 
 	// bi-directional many-to-one association to FichaTecnicaPratoPreparo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<FichaTecnicaPratoPreparo> fichaTecnicaPratoPreparos;
 
 	// bi-directional many-to-one association to FichaTecnicaPratoTipo
 	@OneToMany(mappedBy = "fichaTecnicaPrato", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<FichaTecnicaPratoTipo> fichaTecnicaPratoTipos;
 
 	@Transient

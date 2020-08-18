@@ -15,6 +15,7 @@ import br.com.ichef.model.VwCarteiraFormaPagamento;
 import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.VwCarteiraFormaPagamentoService;
 import br.com.ichef.util.FacesUtil;
+import br.com.ichef.util.Util;
 
 @Named
 @ViewScoped
@@ -30,10 +31,10 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 
 	private VwCarteiraFormaPagamento entity;
 
-	private List<VwCarteiraFormaPagamento > lista = new ArrayList<VwCarteiraFormaPagamento>();
-	private List<VwCarteiraFormaPagamento > listaFiltro = new ArrayList<VwCarteiraFormaPagamento>();
+	private List<VwCarteiraFormaPagamento> lista = new ArrayList<VwCarteiraFormaPagamento>();
+	private List<VwCarteiraFormaPagamento> listaFiltro = new ArrayList<VwCarteiraFormaPagamento>();
 	private List<Empresa> empresas = new ArrayList<>();
-	
+
 	private boolean agrupamento;
 
 	// relatorio
@@ -41,18 +42,15 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 	private Date dataFinal;
 	private Empresa empresa;
 
-	public void imprimir() {
+	public void imprimir(Boolean excel) {
 		if (getDataInicial() == null || getDataFinal() == null) {
 			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
 			return;
 		} else {
 
-		 
- 
-
 			try {
-				lista = /*service.findByParameters(new VwCarteiraFormaPagamento(), visitor);*/
-						service.findByParameters( getDataInicial(), getDataFinal(), empresa.getId());
+				lista = /* service.findByParameters(new VwCarteiraFormaPagamento(), visitor); */
+						service.findByParameters(getDataInicial(), getDataFinal(), empresa.getId());
 
 			} catch (Exception e) {
 				FacesUtil.addErroMessage("Erro ao obter os dados do relatório");
@@ -63,13 +61,22 @@ public class RelCarteiraFormaPagamentoController extends BaseController {
 			} else {
 				try {
 					setParametroReport(REPORT_PARAM_LOGO, getImagem(LOGO));
-					setParametroReport("pDataInicio", getDataInicial());
-					setParametroReport("pDataFinal", getDataFinal());
-					if(!agrupamento)
-						escreveRelatorioPDF("CarteiraFormaPagamentoData", true, lista);
-					else 
+					setParametroReport("pDataInicio", Util.formataData(getDataInicial()));
+					setParametroReport("pDataFinal", Util.formataData(getDataFinal()));
+					setParametroReport("pCdEmpresa", new Integer(getEmpresa().getId().toString()));
+					if (!agrupamento) {
+						if (excel) {
+							geraRelatorioXLS(lista, "CarteiraFormaPagamentoData");
+						} else {
+							escreveRelatorioPDF("CarteiraFormaPagamentoData", true, lista);
+						}
+					} else if (excel)
+						geraRelatorioXLS(service.getConnection(), "CarteiraFormaPagamento");
+					else
 						escreveRelatorioPDF("CarteiraFormaPagamento", true, service.getConnection());
+
 				} catch (Exception e) {
+					e.printStackTrace();
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
 				}
 			}

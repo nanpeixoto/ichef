@@ -63,7 +63,7 @@ public class Cardapio extends BaseEntity implements Comparable<Cardapio> {
 	private boolean isAtivo;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
+	@Fetch(FetchMode.SELECT)
 	private List<CardapioFichaPrato> pratos;
 
 	public Usuario getUsuarioAlteracao() {

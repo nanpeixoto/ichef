@@ -1,16 +1,20 @@
 package br.com.ichef.arquitetura.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -30,8 +34,19 @@ import br.com.ichef.arquitetura.BaseEntity;
 import br.com.ichef.model.Configuracao;
 import br.com.ichef.model.Usuario;
 import br.com.ichef.util.JSFUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 
 public class BaseController extends AbstratcBaseController implements Serializable {
 
@@ -116,7 +131,64 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		lReportData = JasperRunManager.runReportToPdf(
 				getInputStream(getProperties().getProperty("dir.relatorio") + nome + ".jasper"), parametros,
 				connection);
-		escreveRelatorio(lReportData, nome, download);
+		escreveRelatorioPDF(lReportData, nome, download);
+	}
+
+	@SuppressWarnings("deprecation")
+	public void geraRelatorioXLS(Connection con, String nome) throws JRException, Exception {
+
+		JasperDesign desenho = JRXmlLoader
+				.load(getRealPath(getProperties().getProperty("dir.relatorio") + nome + ".jrxml"));
+
+		// compila o relatório
+		JasperReport relatorio = JasperCompileManager.compileReport(desenho);
+
+		JasperPrint impressao = JasperFillManager.fillReport(relatorio, parametros, con);
+
+		JRXlsExporter exporter = new JRXlsExporter();
+		ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
+		exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, impressao);
+		exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, xlsReport);
+		exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, "c:/relatorio.xls");
+
+		exporter.exportReport();
+		byte[] bytes = xlsReport.toByteArray();
+
+		escreveRelatorioEXCEL(bytes, nome, true);
+
+	}
+
+	@SuppressWarnings({  "deprecation" })
+	public void geraRelatorioXLS(Collection collecao, String nome) throws JRException, Exception {
+
+		JasperDesign desenho = JRXmlLoader
+				.load(getRealPath(getProperties().getProperty("dir.relatorio") + nome + ".jrxml"));
+
+		// compila o relatório
+		JasperReport relatorio = JasperCompileManager.compileReport(desenho);
+
+		JasperPrint impressao = JasperFillManager.fillReport(relatorio, parametros,
+				new JRBeanCollectionDataSource(collecao));
+
+		JRXlsExporter exporter = new JRXlsExporter();
+		ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
+		exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, impressao);
+		exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, xlsReport);
+		exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, "c:/relatorio.xls");
+
+		exporter.exportReport();
+		byte[] bytes = xlsReport.toByteArray();
+
+		escreveRelatorioEXCEL(bytes, nome, true);
+
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -130,7 +202,7 @@ public class BaseController extends AbstratcBaseController implements Serializab
 				getInputStream(getProperties().getProperty("dir.relatorio") + nome + ".jasper"), parametros,
 				new JRBeanCollectionDataSource(colecao));
 
-		escreveRelatorio(lReportData, nome, download);
+		escreveRelatorioPDF(lReportData, nome, download);
 	}
 
 	public InputStream getInputStream(String arquivo) {
@@ -248,7 +320,6 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		return "";
 
 	}
-	
 
 	public Object formataDataHora(Object valor) {
 		try {
@@ -261,8 +332,6 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		return "";
 
 	}
-	
-	
 
 	protected HttpServletResponse getResponse() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();

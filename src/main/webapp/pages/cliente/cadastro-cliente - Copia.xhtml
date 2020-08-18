@@ -587,10 +587,7 @@
 														value="#{resource['images/excel_icon.png']}"
 														style="WIDTH: 29px;" />
 													<p:dataExporter type="xls" target="tableCarteira"
-														fileName="iChef-Lançamentos-#{clienteController.entity.nome}" 
-														postProcessor="#{clienteController.preExportar}" 
-														/>
-														
+														fileName="iChef - Lançamentos Cliente - #{clienteController.entity.nome}" />
 												</h:commandLink>
 											</p:outputPanel>
 										</f:facet>
@@ -601,7 +598,7 @@
 										</p:column> -->
 
 
-										<p:column headerText="Empresa"  exportable="false"
+										<p:column headerText="Empresa"
 											filterBy="#{itemCarteira.empresa.nomeFantasia}"
 											style="width:15%" filterMatchMode="contains"
 											filterStyle="display:none; visibility:hidden;"
@@ -664,7 +661,7 @@
 										</p:column>
 
 										<p:column headerText="Saldo" filterBy="#{itemCarteira.saldo}"
-											style="width:6%" filterMatchMode="contains" exportable="false"
+											style="width:6%" filterMatchMode="contains"
 											filterStyle="display:none; visibility:hidden;"
 											sortBy="#{itemCarteira.saldo}">
 											<h:outputLabel value="#{itemCarteira.saldo}" escape="false">

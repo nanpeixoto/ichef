@@ -73,11 +73,11 @@ public class Insumo extends BaseEntity {
 	private boolean isAtivo;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<InsumoPreco> precos;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "insumo")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private Set<VwInsumoPreco> ultimoPreco;
 
 	public boolean isAtivo() {

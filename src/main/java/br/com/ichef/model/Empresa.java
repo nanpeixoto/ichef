@@ -67,7 +67,7 @@ public class Empresa extends BaseEntity {
 	private Usuario usuarioAlteracao;
 
 	@OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<UsuarioEmpresa> usuarioEmpresas;
 
 	@ManyToOne

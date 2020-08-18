@@ -88,11 +88,11 @@ public class TipoPrato extends BaseEntity {
 
 	// bi-directional many-to-one association to TipPratoPreco
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<TipoPratoPreco> precos;
 
 	@OneToMany(mappedBy = "tipoPrato", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<TipoPratoInsumo> insumos;
 
 	// @OneToMany(mappedBy = "tipoPrato")

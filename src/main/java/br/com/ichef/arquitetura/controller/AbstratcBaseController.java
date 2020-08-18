@@ -95,13 +95,25 @@ public abstract class AbstratcBaseController implements Serializable {
 	// =======================================================================================================
 	// Métodos Relatório
 	// =======================================================================================================
-	protected void escreveRelatorio(byte[] relatorio, String nome, boolean download) {
+	protected void escreveRelatorioPDF(byte[] relatorio, String nome, boolean download) {
 		try {
 			this.escreveRelatorioResponse(relatorio, nome, ReportUtils.REL_TIPO_PDF, "application/pdf", download);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	// =======================================================================================================
+		// Métodos Relatório
+		// =======================================================================================================
+		protected void escreveRelatorioEXCEL(byte[] relatorio, String nome, boolean download) {
+			try {
+				this.escreveRelatorioResponse(relatorio, nome, ReportUtils.REL_TIPO_XLS, "application/vnd.ms-excel", download);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 
 	protected void escreveRelatorio(byte[] relatorio, String nome, String tipo, String contentType, boolean download) {
 		try {

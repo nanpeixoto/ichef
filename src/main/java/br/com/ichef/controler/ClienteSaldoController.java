@@ -28,6 +28,7 @@ import br.com.ichef.service.VwClienteCarteiraSaldoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.visitor.VwClienteCarteiraSaldoVisitor;
+import br.com.ichef.visitor.VwClienteSaldoVisitor;
 
 @Named
 @ViewScoped
@@ -61,15 +62,68 @@ public class ClienteSaldoController extends BaseController {
 
 	private List<ClienteEmailAuditoria> listaClienteEmailAuditoria = new ArrayList<ClienteEmailAuditoria>();
 
-	Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+	private Configuracao config = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
+
+	private boolean ativo;
+	private boolean todos;
+	private boolean inativo;
+	private boolean bloqueado;
+	private boolean carteiraTodos;
+	private boolean carteira30Dias;
+	private boolean carteira120Dias;
+	private boolean carteiraEmDias;
 
 	@PostConstruct
 	public void init() {
+		ativo 			= false;
+		inativo 		= false;
+		bloqueado 		= false;
+		carteira30Dias 	= false;
+		carteira120Dias = false;
+		carteiraEmDias 	= false;
+		todos 			= true;
+		carteiraTodos 	= true;
+
+		VwClienteSaldoVisitor visitor = new VwClienteSaldoVisitor();
+		visitor.setAtivo(ativo);
+		visitor.setCarteira120Dias(carteira120Dias);
+		visitor.setCarteiraEmDias(carteiraEmDias);
+		visitor.setCarteira30Dias(carteira30Dias);
+		visitor.setInativo(inativo);
+		visitor.setBloqueado(bloqueado);
+		visitor.setTodos(todos);
+		visitor.setCarteiraTodos(carteiraTodos);
+
+		VwClienteSaldo saldo = new VwClienteSaldo();
+
+		saldo.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
+		saldo.setId(id);
+		try {
+			lista = service.findByParameters(saldo, visitor);
+		} catch (Exception e) {
+			e.printStackTrace();
+			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema.");
+		}
+
+	}
+
+	public void pesquisar() {
+
+		VwClienteSaldoVisitor visitor = new VwClienteSaldoVisitor();
+		visitor.setAtivo(ativo);
+		visitor.setCarteira120Dias(carteira120Dias);
+		visitor.setCarteiraEmDias(carteiraEmDias);
+		visitor.setCarteira30Dias(carteira30Dias);
+		visitor.setInativo(inativo);
+		visitor.setBloqueado(bloqueado);
+		visitor.setTodos(todos);
+		visitor.setCarteiraTodos(carteiraTodos);
+
 		VwClienteSaldo saldo = new VwClienteSaldo();
 		saldo.setCodigoEmpresa(userLogado.getEmpresaLogada().getId());
 		saldo.setId(id);
 		try {
-			lista = service.findByParameters(saldo);
+			lista = service.findByParameters(saldo, visitor);
 		} catch (Exception e) {
 			e.printStackTrace();
 			facesMessager.error("Não foi possível carregar os dados, entre em contato com o administrador do sistema.");
@@ -80,7 +134,7 @@ public class ClienteSaldoController extends BaseController {
 	public void obterEmailEnviados(VwClienteSaldo clienteCarteira) {
 		try {
 			ClienteEmailAuditoria auditoria = new ClienteEmailAuditoria();
-			auditoria.setCodigoCliente( clienteCarteira.getCodigoCliente());
+			auditoria.setCodigoCliente(clienteCarteira.getCodigoCliente());
 			setListaClienteEmailAuditoria(clienteEmailAuditoriaService.findByParameters(auditoria));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,7 +170,7 @@ public class ClienteSaldoController extends BaseController {
 
 	public void enviarEmailParaTodos() {
 
-		System.out.println("enviarEmailParaTodos - Botï¿½o Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
+		System.out.println("enviarEmailParaTodos - Botão Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
 				+ " -  em " + formataDataHora(new Date()));
 		new Thread() {
 			@Override
@@ -133,6 +187,30 @@ public class ClienteSaldoController extends BaseController {
 				}
 			}
 		}.start();
+		System.out.println("finalizado");
+
+	}
+
+	public void enviarEmailParaLista() {
+
+		System.out.println("enviarEmailParaLista - Botão Clicado pelo usuario : " + getUserLogado().getNomeAbreviado()
+				+ " -  em " + formataDataHora(new Date()));
+
+		System.out.println("Envio de Email Iniciado");
+		if (listaFiltro != null && listaFiltro.size() > 0) {
+			for (VwClienteSaldo vwClienteSaldo : listaFiltro) {
+				if (vwClienteSaldo.getEmail() != null) {
+
+					EnviarEmail(vwClienteSaldo, "S");
+					System.out.println("ENVIANDO E-MAIL CLIENTE: " + vwClienteSaldo.getNome());
+
+				}
+			}
+			FacesUtil.addInfoMessage("E-mail(s) disparado(s)");
+		} else {
+			FacesUtil.addErroMessage("Nenhum filtro encontrado");
+		}
+
 		System.out.println("finalizado");
 
 	}
@@ -156,17 +234,19 @@ public class ClienteSaldoController extends BaseController {
 			ClienteEmailAuditoria auditoria = null;
 
 			if (!dto.getSituacao().equals("S")) {
-				System.out.println("emailEnviado:" + clienteCarteira.getCodigoCliente()	+ " - Email:" + clienteCarteira.getEmail());
-				auditoria = criarAuditoria( clienteCarteira.getCodigoCliente(),	clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
-						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
-						clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
+				System.out.println("emailEnviado:" + clienteCarteira.getCodigoCliente() + " - Email:"
+						+ clienteCarteira.getEmail());
+				auditoria = criarAuditoria(clienteCarteira.getCodigoCliente(), clienteCarteira.getEmail(),
+						dto.getSituacao(), dto.getLog(), mensagem, clienteCarteira.getCodigoEmpresa(),
+						clienteCarteira.getValorSaldo(), clienteCarteira.getValorSaldoOutraEmpresa(),
+						clienteCarteira.getNomeFantasia());
 				if (todos.equalsIgnoreCase("N"))
 					FacesUtil.addErroMessage("Erro ao enviar o e-mail, por favor, verifique o LOG");
 			} else {
-				auditoria = criarAuditoria( clienteCarteira.getCodigoCliente(),
-						clienteCarteira.getEmail(), dto.getSituacao(), dto.getLog(), mensagem,
-						clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
-						clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
+				auditoria = criarAuditoria(clienteCarteira.getCodigoCliente(), clienteCarteira.getEmail(),
+						dto.getSituacao(), dto.getLog(), mensagem, clienteCarteira.getCodigoEmpresa(),
+						clienteCarteira.getValorSaldo(), clienteCarteira.getValorSaldoOutraEmpresa(),
+						clienteCarteira.getNomeFantasia());
 			}
 
 			if (auditoria != null) {
@@ -182,8 +262,8 @@ public class ClienteSaldoController extends BaseController {
 
 		} else {
 			String erro = "Cliente sem e-mail";
-			criarAuditoria(clienteCarteira.getCodigoCliente(), clienteCarteira.getEmail(),
-					"N", erro, mensagem, clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
+			criarAuditoria(clienteCarteira.getCodigoCliente(), clienteCarteira.getEmail(), "N", erro, mensagem,
+					clienteCarteira.getCodigoEmpresa(), clienteCarteira.getValorSaldo(),
 					clienteCarteira.getValorSaldoOutraEmpresa(), clienteCarteira.getNomeFantasia());
 			if (todos.equalsIgnoreCase("N"))
 				FacesUtil.addErroMessage(erro);
@@ -308,5 +388,103 @@ public class ClienteSaldoController extends BaseController {
 	public void setListaClienteEmailAuditoria(List<ClienteEmailAuditoria> listaClienteEmailAuditoria) {
 		this.listaClienteEmailAuditoria = listaClienteEmailAuditoria;
 	}
+
+	public ClienteService getClienteService() {
+		return clienteService;
+	}
+
+	public void setClienteService(ClienteService clienteService) {
+		this.clienteService = clienteService;
+	}
+
+	public ClienteEmailAuditoriaService getClienteEmailAuditoriaService() {
+		return clienteEmailAuditoriaService;
+	}
+
+	public void setClienteEmailAuditoriaService(ClienteEmailAuditoriaService clienteEmailAuditoriaService) {
+		this.clienteEmailAuditoriaService = clienteEmailAuditoriaService;
+	}
+
+	public EmailService getEmailService() {
+		return emailService;
+	}
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
+	}
+
+	public Configuracao getConfig() {
+		return config;
+	}
+
+	public void setConfig(Configuracao config) {
+		this.config = config;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public boolean isInativo() {
+		return inativo;
+	}
+
+	public void setInativo(boolean inativo) {
+		this.inativo = inativo;
+	}
+
+	public boolean isBloqueado() {
+		return bloqueado;
+	}
+
+	public void setBloqueado(boolean bloqueado) {
+		this.bloqueado = bloqueado;
+	}
+
+	public boolean isCarteira30Dias() {
+		return carteira30Dias;
+	}
+
+	public void setCarteira30Dias(boolean carteira30Dias) {
+		this.carteira30Dias = carteira30Dias;
+	}
+
+	public boolean isCarteira120Dias() {
+		return carteira120Dias;
+	}
+
+	public void setCarteira120Dias(boolean carteira120Dias) {
+		this.carteira120Dias = carteira120Dias;
+	}
+
+	public boolean isCarteiraEmDias() {
+		return carteiraEmDias;
+	}
+
+	public void setCarteiraEmDias(boolean carteiraEmDias) {
+		this.carteiraEmDias = carteiraEmDias;
+	}
+
+	public boolean isTodos() {
+		return todos;
+	}
+
+	public void setTodos(boolean todos) {
+		this.todos = todos;
+	}
+
+	public boolean isCarteiraTodos() {
+		return carteiraTodos;
+	}
+
+	public void setCarteiraTodos(boolean carteiraTodos) {
+		this.carteiraTodos = carteiraTodos;
+	}
+	
+	
 
 }

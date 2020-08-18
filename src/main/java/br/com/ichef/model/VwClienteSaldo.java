@@ -76,6 +76,9 @@ public class VwClienteSaldo extends BaseEntity {
 
 	@Column(name = "SALDO_OUTRA_EMPRESA")
 	private BigDecimal valorSaldoOutraEmpresa;
+	
+	@Column(name = "DIFERENCA_DIAS")
+	private Long diasDevedor;
 
 	@Transient
 	private boolean estaBloqueado;
@@ -83,7 +86,7 @@ public class VwClienteSaldo extends BaseEntity {
 	@Transient
 	private boolean isAtivo;
 
-	public long diasDevedor() {
+	/*public long diasDevedor() {
 		try {
 			return Util.diferencaEmDias(new Date(), getDataCarteira());
 		} catch (Exception e) {
@@ -91,7 +94,7 @@ public class VwClienteSaldo extends BaseEntity {
 			return 0;
 		}
 
-	}
+	}*/
 
 	@Override
 	public Object getId() {
@@ -384,5 +387,22 @@ public class VwClienteSaldo extends BaseEntity {
 	public void setCodigoCliente(Long codigoCliente) {
 		this.codigoCliente = codigoCliente;
 	}
+
+	public Long getDiasDevedor() {
+		return diasDevedor;
+	}
+
+	public void setDiasDevedor(Long diasDevedor) {
+		this.diasDevedor = diasDevedor;
+	}
+
+	public String getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(String ativo) {
+		this.ativo = ativo;
+	}
+	
 
 }

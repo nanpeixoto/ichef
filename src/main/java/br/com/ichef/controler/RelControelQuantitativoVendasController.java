@@ -81,6 +81,8 @@ public class RelControelQuantitativoVendasController extends BaseController {
 						escreveRelatorioPDF("ControleQuantitativoVendas", true, service.getConnection());
 					else 
 						escreveRelatorioPDF("ControleQuantitativoVendasAnalitico", true, service.getConnection());
+					
+				
 				} catch (Exception e) {
 					e.printStackTrace();
 					FacesUtil.addErroMessage("Erro ao gerar o relatório");
