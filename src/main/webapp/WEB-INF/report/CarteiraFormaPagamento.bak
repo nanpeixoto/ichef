@@ -34,7 +34,7 @@
 	<parameter name="pCdEmpresa" isForPrompting="false" class="java.lang.Integer">
 		<defaultValueExpression ><![CDATA[new Integer("1")]]></defaultValueExpression>
 	</parameter>
-	<queryString><![CDATA[ select e.NM_FANTASIA,  e.CD_EMPRESA , CC.CD_FORMA_PAGAMENTO, 
+	<queryString><![CDATA[ select e.NM_FANTASIA,  e.CD_EMPRESA , cc.CD_FORMA_PAGAMENTO, 
     concat (DS_FORMA_PAGAMENTO
     ,  case when sn_percentual = 'S' then  Replace( concat ( ' (',  taxa,'%)' )  ,',','.')  else '' end )  
   FORMA_PAG,  
