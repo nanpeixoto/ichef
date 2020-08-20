@@ -34,7 +34,9 @@
 	<parameter name="pCdEmpresa" isForPrompting="false" class="java.lang.Integer">
 		<defaultValueExpression ><![CDATA[new Integer("1")]]></defaultValueExpression>
 	</parameter>
-	<queryString><![CDATA[select CD_EMPRESA, NM_FANTASIA,DS_DESCRICAO ,case when sn_contagem= 'S' then 'Itens com Contagem (influenciam no rateio)'  else 'Itens sem Contagem (não influenciam no rateio)' end  sn_contagem, count(*) qtd_dias, round( avg(qtd_por_dia) ) media_por_dia from 
+	<queryString><![CDATA[select * from (select CD_EMPRESA, NM_FANTASIA,DS_DESCRICAO 
+,case when sn_contagem= 'S' then 'Itens com Contagem (influenciam no rateio)'  else 'Itens sem Contagem (não influenciam no rateio)' end  sn_contagem
+, count(*) qtd_dias, round( avg(qtd_por_dia) ) media_por_dia from 
 (select 
 	  e.cd_empresa, e.nm_fantasia, ftp.DS_DESCRICAO ,  c.data,  tp.sn_contagem,  sum(p.NR_QTD)  qtd_por_dia
      --  p.cd_pedido, p.NR_QTD, ftp.DS_DESCRICAO
@@ -50,9 +52,8 @@ and p.CD_CARDAPIO_PRATO = cfp.CD_CARDAPIO_PRATO
                and e.CD_EMPRESA = $P!{pCdEmpresa}
     -- and ftp.DS_DESCRICAO like '%ARRUMADINHO DE CARNE DO SOL%'
   group by  e.cd_empresa, e.nm_fantasia, cfp.nr_ordem, ftp.DS_DESCRICAO, c.data, tp.sn_contagem) a
-group by  cd_empresa, nm_fantasia, DS_DESCRICAO, sn_contagem
-order by cd_empresa, nm_fantasia, sn_contagem  ,DS_DESCRICAO, qtd_dias 
-]]></queryString>
+group by  cd_empresa, nm_fantasia, DS_DESCRICAO, sn_contagem) final 
+order by cd_empresa, nm_fantasia, sn_contagem ,  qtd_dias  desc , media_por_dia  desc ,DS_DESCRICAO, qtd_dias]]></queryString>
 
 	<field name="CD_EMPRESA" class="java.lang.Integer"/>
 	<field name="NM_FANTASIA" class="java.lang.String"/>
@@ -215,7 +216,7 @@ order by cd_empresa, nm_fantasia, sn_contagem  ,DS_DESCRICAO, qtd_dias
 					<textElement verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[ $F{sn_contagem}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{sn_contagem}]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupHeader>
