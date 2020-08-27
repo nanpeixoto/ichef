@@ -28,7 +28,7 @@
 			autoUpdate="false" />
 		<h:form id="form" prependId="false">
 			<p:tabView id="tabs">
-				<!--  <p:ajax event="tabChange"  listener="#{clienteController.onTabChange}" update="form"/>   -->
+				   <p:ajax event="tabChange"  listener="#{clienteController.onTabChange}" update="form"/>   
 				<p:tab title="Cadastro" id="tabCadastro">
 					<p:focus context="capaPanel" />
 
@@ -715,6 +715,129 @@
 						</div>
 					</div>
 				</p:tab>
+			
+				<p:tab title="Pedidos não Confirmados" id="tabPedido">
+					<p:focus context="capaCarteira" />
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<div id="main-buttons" class="hidden-sm hidden-xs">
+								<p:commandButton value="Salvar" update="@form" icon="fa fa-check" styleClass="btn-primary" action="#{clienteController.Salvar()}" />
+								<p:spacer width="5" />
+								<p:commandButton value="Voltar" immediate="true" action="lista-cliente?faces-redirect=true" process="@this" icon="fa fa-close" />
+							</div>
+							<p:splitButton value="Salvar" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary" action="#{clienteController.Salvar()}">
+								<p:menuitem value="Excluir" process="@this" icon="fa fa-trash" action="#{clienteController.excluir()}" rendered="#{clienteController.entity.edicao}" />
+								<p:separator />
+								<p:menuitem value="Voltar" action="lista-cliente?faces-redirect=true" process="@this" icon="fa fa-close" />
+							</p:splitButton>
+
+							<p:separator />
+
+							<div class="ui-fluid">
+							
+								<p:dataTable id="tablePedidos" widgetVar="itensPedidos" rows="10" paginator="true"
+										value="#{clienteController.entity.pedidos}" var="itemPedido" rowKey="#{itemCarteira.id}" reflow="true"
+										paginatorPosition="bottom" editable="true" emptyMessage="Nenhum item encontrado"
+										sortBy="#{itemPedido.dataCadastro}" sortOrder="DESCENDING" currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="10,15,20,30" >
+										
+										<p:ajax event="rowEdit" listener="#{clienteController.editarPedido}" update="tablePedidos"/>
+
+										<f:facet name="header">
+											<p:outputPanel style="text-align:right; margin-right:-10px" styleClass="ui-widget-auxiliar">
+
+												<h:outputText value="Pesquisar " escape="false" />
+												<p:inputText id="globalFilter" onchange="PF('itensPedidos').filter();" style="width:150px;" placeholder="Pesquisar" styleClass="letras-maiusculas semClear" />
+												<h:outputText value=" " escape="false" />
+												<p:commandButton id="Search" value="" icon="fa fa-search" style="font-size: 0.8em;width:3%;" />
+
+												<h:commandLink>
+													<h:graphicImage value="#{resource['images/excel_icon.png']}" style="WIDTH: 29px;" />
+													<p:dataExporter type="xls" target="tablePedidos" fileName="iChef-Pedidos-#{clienteController.entity.nome}"  postProcessor="#{clienteController.preExportar}" />
+												</h:commandLink>
+											</p:outputPanel>
+										</f:facet>
+										
+										<p:column headerText="Cardário"  exportable="true" style="width:15%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{itemPedido.cardapio.descricaoComDiaSemana}">
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{itemPedido.cardapio.descricaoComDiaSemana}" escape="false"  /></f:facet>
+												<f:facet name="input"><h:outputLabel value="#{itemPedido.cardapio.descricaoComDiaSemana}" escape="false"  /></f:facet>
+											</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Pedido"  exportable="true" style="width:15%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{itemPedido.descricaoPedido}">
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{itemPedido.descricaoPedido}" escape="false"   /></f:facet>
+												<f:facet name="input"><h:outputLabel value="#{itemPedido.descricaoPedido}" escape="false"   /></f:facet>
+											</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Qtd."  exportable="true" style="width:5%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{itemPedido.quantidade}">
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{itemPedido.quantidade}" escape="false"   /></f:facet>
+												<f:facet name="input"><h:outputLabel value="#{itemPedido.quantidade}" escape="false"   /></f:facet>
+											</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Dt Pedido"  exportable="true" style="width:8%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{clienteController.formataData(itemPedido.dataCadastro)}">
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{clienteController.formataData(itemPedido.dataCadastro)}" escape="false"  /></f:facet>
+												<f:facet name="input"><h:outputLabel value="#{clienteController.formataData(itemPedido.dataCadastro)}" escape="false"  /></f:facet>
+											</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Entrega"  exportable="true" style="width:8%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{clienteController.formataData(itemPedido.dataEntrega)}">
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{clienteController.formataData(itemPedido.dataEntrega)}" escape="false"   /></f:facet>
+												<f:facet name="input">
+													<p:calendar id="data"
+															 value="#{itemPedido.dataEntrega}"
+															pattern="dd/MM/yyyy" size="10" mask="99/99/9999">
+														</p:calendar>
+												</f:facet>								
+											</p:cellEditor>
+										</p:column>
+																				
+										<p:column headerText="Entregador"  exportable="true" style="width:15%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{itemPedido.entregador.nome}">
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{itemPedido.entregador.nome}" escape="false"   /></f:facet>
+												<f:facet name="input"><h:outputLabel value="#{itemPedido.entregador.nome}" escape="false"   /></f:facet>
+											</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Vlr. Unit."  style="width:8%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{itemPedido.valorUnitarioPedido}" >
+											<p:cellEditor>
+												<f:facet name="output"><h:outputLabel value="#{clienteController.formataValor(itemPedido.valorUnitarioPedido)}" /></f:facet>
+												<f:facet name="input"><h:outputLabel value="#{clienteController.formataValor(itemPedido.valorUnitarioPedido)}" /></f:facet>
+											</p:cellEditor>
+										</p:column>
+										
+										<p:column headerText="Vlr. Pedido."  style="width:8%" filterMatchMode="contains" filterStyle="display:none; visibility:hidden;"
+											filterBy="#{itemPedido.valorPedido}" >
+											<p:cellEditor>
+												 <f:facet name="output"><h:outputLabel value="#{clienteController.formataValor(itemPedido.valorPedido)}" /></f:facet>
+												 <f:facet name="input"><h:outputLabel value="#{clienteController.formataValor(itemPedido.valorPedido)}" /></f:facet>
+											</p:cellEditor>
+										</p:column>
+										
+										<p:column style="width:10%">
+								            <p:rowEditor />
+								        </p:column>
+	
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</p:tab>
+			
 			</p:tabView>
 
 

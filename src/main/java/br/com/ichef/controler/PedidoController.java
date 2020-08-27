@@ -563,7 +563,7 @@ public class PedidoController extends BaseController {
 							&& (getEntity().getTipoPrato().isContagem()
 									&& ((qtdPedidoPratoEntregador + getEntity().getQuantidade()) > getEntity()
 											.getEntregador().getQuantiadadeQuentinha()))) {
-						facesMessager.error("Quantidade mï¿½xima do Entregador jï¿½ atingida, qtd disponï¿½vel: "
+						facesMessager.error("Quantidade máxima do Entregador já atingida, qtd disponível: "
 								+ (getEntity().getEntregador().getQuantiadadeQuentinha() - qtdPedidoPratoEntregador));
 						return;
 					}

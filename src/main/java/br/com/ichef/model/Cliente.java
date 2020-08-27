@@ -89,9 +89,12 @@ public class Cliente extends BaseEntity {
 	private List<ClienteEndereco> enderecos;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SELECT) 
-	//@Transient
+	@Fetch(FetchMode.SELECT)
+	// @Transient
 	private List<ClienteCarteira> carteiras;
+
+	@Transient
+	private List<Pedido> pedidos;
 
 	@Column(name = "DS_APELIDO")
 	private String apelido;
@@ -565,6 +568,14 @@ public class Cliente extends BaseEntity {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao.toUpperCase();
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 }

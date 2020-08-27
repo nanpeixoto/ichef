@@ -1,6 +1,7 @@
 package br.com.ichef.service;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -13,6 +14,7 @@ import br.com.ichef.arquitetura.service.EntityManagerProducer;
 import br.com.ichef.arquitetura.service.Transacional;
 import br.com.ichef.arquitetura.util.FilterVisitor;
 import br.com.ichef.dao.GenericDAO;
+import br.com.ichef.model.CardapioFichaPrato;
 import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Pedido;
 import br.com.ichef.model.Usuario;
@@ -29,15 +31,16 @@ public class PedidoService extends GenericDAO<Pedido> {
 		return pedidos;
 
 	}
-	
+
 	public Double findValorDebito(Long codigoCliente, Long codigoEmpresa) {
-		 	StringBuilder sb =  new StringBuilder();
-			sb.append("select saldo from vw_cliente_saldo_empresa where cd_cliente =  " + codigoCliente+	" and cd_empresa = "+codigoEmpresa);
-			
-			Query query = getManager().createNativeQuery(sb.toString());
-			Double saldo =    Double.parseDouble(query.getSingleResult().toString());
-			return saldo;
-		 
+		StringBuilder sb = new StringBuilder();
+		sb.append("select saldo from vw_cliente_saldo_empresa where cd_cliente =  " + codigoCliente
+				+ " and cd_empresa = " + codigoEmpresa);
+
+		Query query = getManager().createNativeQuery(sb.toString());
+		Double saldo = Double.parseDouble(query.getSingleResult().toString());
+		return saldo;
+
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -108,14 +111,15 @@ public class PedidoService extends GenericDAO<Pedido> {
 		}
 
 	}
-	
+
 	@Transacional
 	public Integer findQtdPedidoPratoEntregador(Pedido pedido) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(
-				" SELECT   sum( NR_QTD )   nr_total_pedido "
-						+ " fROM pedido p , tip_prato t   WHERE    p.cd_tip_prato = t.CD_TIP_PRATO  AND   cd_entregador = " + pedido.getEntregador().getId()
-						+ " and   coalesce(t.SN_CONTAGEM, 'N')  = 'S' and date_format( dt_entrega, '%d/%m/%Y' ) ='" + Util.dateToString(pedido.getDataEntrega()) + "'");
+		sb.append(" SELECT   sum( NR_QTD )   nr_total_pedido "
+				+ " fROM pedido p , tip_prato t   WHERE    p.cd_tip_prato = t.CD_TIP_PRATO  AND   cd_entregador = "
+				+ pedido.getEntregador().getId()
+				+ " and   coalesce(t.SN_CONTAGEM, 'N')  = 'S' and date_format( dt_entrega, '%d/%m/%Y' ) ='"
+				+ Util.dateToString(pedido.getDataEntrega()) + "'");
 		try {
 			if (!getManager().isOpen()) {
 				EntityManagerProducer producer = new EntityManagerProducer();
@@ -298,8 +302,7 @@ public class PedidoService extends GenericDAO<Pedido> {
 			 */
 
 	}
-	
-	
+
 	public String atualizarFormaPagamentoValorPago(Pedido pedido) {
 		EntityTransaction tx = null;
 		try {
@@ -309,12 +312,11 @@ public class PedidoService extends GenericDAO<Pedido> {
 
 			hql = new StringBuilder();
 
-			hql.append("UPDATE Pedido SET formaPagamento.id = "+pedido.getFormaPagamento().getId());
-			hql.append(" , valorPago = "+pedido.getValorPago());
+			hql.append("UPDATE Pedido SET formaPagamento.id = " + pedido.getFormaPagamento().getId());
+			hql.append(" , valorPago = " + pedido.getValorPago());
 			hql.append(" , dataAlteracao = now()");
-			hql.append(" , usuarioAlteracao.id = "+pedido.getUsuarioAlteracao().getId());
-			hql.append(" where  id = "+pedido.getId());
-			
+			hql.append(" , usuarioAlteracao.id = " + pedido.getUsuarioAlteracao().getId());
+			hql.append(" where  id = " + pedido.getId());
 
 			if (hql != null) {
 
@@ -355,6 +357,57 @@ public class PedidoService extends GenericDAO<Pedido> {
 			getManager().clear();
 		}
 		return super.updateImpl(entity);
+	}
+
+	public String atualizarData(Pedido entity, Usuario usuario) {
+		 
+			EntityTransaction tx = null;
+			try {
+
+				StringBuilder hql = null;
+				int result = -1;
+
+				hql = new StringBuilder();
+				// `DT_ENTREGA`='2020-01-24 00:00:00'
+				
+				int qtdPedidoPratoEntregador = findQtdPedidoPratoEntregador(entity);
+				if (entity.getEntregador().getQuantiadadeQuentinha() != null
+						&& (entity.getTipoPrato().isContagem()
+								&& ((qtdPedidoPratoEntregador + entity.getQuantidade()) > entity.getEntregador().getQuantiadadeQuentinha()))) {
+					String erro = "Quantidade máxima do Entregador já atingida, qtd disponível: " + (entity.getEntregador().getQuantiadadeQuentinha() - qtdPedidoPratoEntregador);
+					return erro;
+				}
+				
+				SimpleDateFormat formatarData  = new SimpleDateFormat("yyyy-MM-dd");
+				hql.append("UPDATE Pedido SET dataEntrega = '" + formatarData.format(entity.getDataEntrega()) + " 00:00:00', usuarioAlteracao.id = "
+						+ usuario.getId() + ", dataAlteracao = now() where id = " + entity.getId());
+
+				if (hql != null) {
+					if (!getManager().isOpen()) {
+						EntityManagerProducer producer = new EntityManagerProducer();
+						setManager(producer.createEntityManager());
+					}
+
+					tx = getManager().getTransaction();
+					tx.begin();
+					Query query = getManager().createQuery(hql.toString());
+					result = query.executeUpdate();
+					tx.commit();
+				}
+				if (result == 0)
+					return "Operação Não Realizada. Contact o ADM do sistema";
+				return null;
+			} catch (Exception e) {
+				if (tx != null)
+					tx.rollback();
+				e.printStackTrace();
+				return e.getMessage();
+			} finally {
+				getManager().close();
+			}
+
+		
+		
 	}
 
 }

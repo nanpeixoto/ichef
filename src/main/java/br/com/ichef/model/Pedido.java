@@ -277,6 +277,13 @@ public class Pedido extends BaseEntity {
 		return observacaoEntrega;
 	}
 
+	public String getDescricaoPedido() {
+
+		return cardapioFichaPrato.getFichaTecnicaPrato().getDescricao() + "<br>" + getTipoPrato().getDescricao() + "-"
+				+ (getDerivacao() != null ? getDerivacao().getDescricao() : "");
+
+	}
+
 	public Cardapio getCardapio() {
 		return cardapio;
 	}

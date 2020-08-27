@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import br.com.ichef.model.FichaTecnicaPrato;
 import br.com.ichef.model.FichaTecnicaPratoTipo;
 import br.com.ichef.model.FormaPagamento;
 import br.com.ichef.model.Localidade;
+import br.com.ichef.model.Pedido;
 import br.com.ichef.model.TipoPrato;
 import br.com.ichef.service.CidadeService;
 import br.com.ichef.service.ClienteCarteiraService;
@@ -39,6 +41,7 @@ import br.com.ichef.service.EmpresaService;
 import br.com.ichef.service.FichaTecnicaPratoService;
 import br.com.ichef.service.FormaPagamentoService;
 import br.com.ichef.service.LocalidadeService;
+import br.com.ichef.service.PedidoService;
 import br.com.ichef.service.TipoPratoService;
 import br.com.ichef.util.FacesUtil;
 import br.com.ichef.visitor.ClienteVisitor;
@@ -55,8 +58,8 @@ public class ClienteController extends BaseController {
 	@Inject
 	private CidadeService cidadeService;
 
-	@Inject
-	private FormaPagamentoService formaPagamentoService;
+	@Inject		private FormaPagamentoService 	formaPagamentoService;
+	@Inject 	private PedidoService 			pedidoService;
 
 	@Inject
 	private ClienteEnderecoService clienteEnderecoService;
@@ -296,7 +299,7 @@ public class ClienteController extends BaseController {
 				setStsTelefonePrincipal(false);
 				setTelefone(null);
 			} else {
-				facesMessager.error("Jï¿½ existe um telefone principal para esse cliente");
+				facesMessager.error("Já existe um telefone principal para esse cliente");
 			}
 			// } else {
 			// facesMessager.error("Telefone jï¿½ adicionado para essa cliente");
@@ -336,11 +339,30 @@ public class ClienteController extends BaseController {
 			return "green";
 		return "black";
 	}
+	
+	
+	 public void editarPedido(RowEditEvent event) {
+		 try {
+			 Pedido pedido = (Pedido) event.getObject() ;
+		        String retornoAtualizacao = pedidoService.atualizarData(pedido, getUserLogado());
+		         if(retornoAtualizacao!=null) {
+		    		FacesUtil.addErroMessage("Não foi possível executar essa operação:" + retornoAtualizacao);
+		        	facesMessager.error("Não foi possível executar essa operação:" + retornoAtualizacao);
+		        }
+		        else
+		        	FacesUtil.addInfoMessage("Ação realizada");
+		} catch (Exception e) {
+			FacesUtil.addErroMessage("Não foi possível executar essa operação:" + e.getMessage());
+			facesMessager.error("Não foi possível executar essa operação:" + e.getMessage());
+			e.printStackTrace();
+		}
+	        
+	    }
 
 	public void onTabChange(TabChangeEvent event) {
 		try {
 
-			if (event.getTab().getTitle().contains("Carteira") && getEntity().getId() != null) {
+			/*if (event.getTab().getTitle().contains("Carteira") && getEntity().getId() != null) {
 				Cliente cliente = new Cliente();
 				cliente.setId(getEntity().getId());
 				ClienteCarteira filter = new ClienteCarteira();
@@ -349,6 +371,23 @@ public class ClienteController extends BaseController {
 				getEntity().setCarteiras(new ArrayList<>());
 
 				getEntity().setCarteiras(clienteCarteiraService.findByParameters(filter));
+			}*/
+			
+			if (event.getTab().getId().contains("tabPedido") && getEntity().getId() != null) {
+				//BuscarPedidosDoCliente
+				Cliente cliente = new Cliente();
+				cliente.setId(getEntity().getId());
+				Pedido filterPedido  = new Pedido();
+				filterPedido.setCliente(cliente);
+				
+				Empresa empresa = new Empresa();
+				empresa.setId(getUserLogado().getEmpresaLogada().getId());
+				
+				filterPedido.setEmpresa(empresa);
+				
+				filterPedido.setSnConfirmado("N");;
+				
+				getEntity().setPedidos(pedidoService.findByParameters(filterPedido));
 			}
 
 		} catch (Exception e) {
@@ -377,7 +416,7 @@ public class ClienteController extends BaseController {
 
 		if (getTipoCarteira().equalsIgnoreCase("C")) { // SE O SELECIONADO FOR CREDITO
 			if (getDescricao() == null || getDescricao().equals("")) {// descricao precisa estar preenhida
-				facesMessager.error(getRequiredMessage("Descriï¿½ï¿½o"));
+				facesMessager.error(getRequiredMessage("Descrição"));
 				return;
 			}
 			if (getData() == null) {// data precisa estar preenhida
