@@ -3,390 +3,69 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	template="WEB-INF/templates/template.xhtml">
+	template="WEB-INF/templates/template-sem-menu.xhtml">
 
 	<ui:define name="head-end">
 		<ui:param name="renderBreadCrumb" value="false" />
 		<h:outputStylesheet library="css" name="estilo.css" />
+		<style type="text/css">
+			.PainelTituloCinza .ui-panel-titlebar {
+				background: #f4f4f4;
+				color: white;
+				font-weight: bold;
+				font-family: verdana;
+			}
+			</style>
+
 	</ui:define>
 
 	<ui:define name="title">
 		<p:growl autoUpdate="true" life="4000" />
 
 		<section class="content">
+		
+			 <f:metadata>
+		        	 <f:event listener="#{dashboardController.init()}" type="preRenderView"></f:event>
+		        </f:metadata>
+        
 			<h2 class="align-center">
 
 
-				Bem vindo ao <span class="text-aqua"> <i> <a
+				Bem vindo <span class="text-aqua"> <i> <a
 						href="https://www.waze.com/ul?q=Rua artur de sa" target="_blank"
-						style="text-transform: none; text-decoration: none">#{dashboardController.userLogado.empresaLogada.nomeFantasia}</a></i></span>!
+						style="text-transform: none; text-decoration: none">#{dashboardController.usuarioLogado.entregador}</a></i></span>!
 				<br />
-				<!--  <small>Utilizando <p:link value="Primefaces" href="http://primefaces.org" target="_blank"/>, <p:link value="Bootstrap"
-	                                                                                                  href="http://getbootstrap.com/" target="_blank"/> e
-	                <p:link value="Admin LTE" href="https://almsaeedstudio.com/themes/AdminLTE/index2.html" target="_blank"/> com
-	                <p:link value="JSF" href="https://javaserverfaces.java.net/" target="_blank"/>.
-	            </small> -->
-			</h2>
+				
+		</h2>	
+			<h:form>
+				<p:dataGrid var="item" value="#{dashboardController.lista}"
+					columns="1" layout="grid" rows="12" paginator="false" id="itens"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="6,12,16" emptyMessage="Nenhuma rota encontrada para hoje">
+
+					<f:facet name="header">Lista de Rotas</f:facet>
+					<h:link  outcome="rota_detalhe.xhtml">
+
+						<p:panel header="#{item.localidade}" style="text-align:center;"
+							styleClass="PainelTituloCinza">
+							<h:panelGrid columns="1" style="width:100%">
+								<!-- <p:graphicImage name="demo/images/car/#{car.brand}.gif"/>  -->
+
+								<h:outputText value="Quantidade: #{item.quantidade}" />
 
 
+							</h:panelGrid>
+						</p:panel>
 
-			<div class="row">
-				<div class="col-md-4 col-sm-6 col-xs-12">
-					<div class="info-box">
-						<span class="info-box-icon bg-yellow"><i
-							class="fa fa-lightbulb-o"></i></span>
+						<f:param name="id" value="#{item.codigoLocalidade}" />
+						<f:param name="descricaoRota" value="#{item.localidade}" />
+					</h:link>
 
-						<div class="info-box-content">
-							<span class="info-box-text"><p:outputLabel
-									id="explicacao1">Média de pedidos/dia</p:outputLabel></span> <span
-								class="info-box-number">#{dashboardController.entity.mediaPedidosDiaMes}</span>
-							<p:tooltip id="toolTipexplicacao1" for="explicacao1"
-								value="Média de pedidos do mês confirmados, sem sobremesas"
-								position="top" />
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-
-				<div class="col-md-4 col-sm-6 col-xs-12">
-					<div class="info-box">
-						<span class="info-box-icon bg-aqua"><i
-							class="fa fa-phone-volume"></i></span>
-
-						<div class="info-box-content">
-							<span class="info-box-text"><h:outputLabel id="quadro2"> Pedidos</h:outputLabel></span>
-							<span class="info-box-number">#{dashboardController.entity.quantidadeTotalPedidos}</span>
-							<p:tooltip id="toolTipexplicacao3" for="quadro2"
-								value="Pedidos, sem contar sobremesas, confirmados ou não, inclusive para datas futuras, dentro do cardápio do mês"
-								position="top" />
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-				<!-- /.col -->
-				<div class="col-md-4 col-sm-6 col-xs-12">
-					<div class="info-box">
-						<span class="info-box-icon bg-purple"><i class="fa fa-gift"></i></span>
-
-						<div class="info-box-content">
-							<span class="info-box-text"><h:outputLabel id="quadro3"> Cortesias</h:outputLabel></span>
-							<span class="info-box-number">#{dashboardController.entity.quantidadeTotalCortesias}</span>
-							<p:tooltip id="toolTipexplicacao4" for="quadro3"
-								value="Cortesias, sem contar sobremesas, confirmados, inclusive para datas futuras, dentro do cardápio do mês"
-								position="top" />
-
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-				<!-- /.col -->
-
-				<!-- fix for small devices only -->
-				<div class="clearfix visible-sm-block"></div>
-
-
-			</div>
-
-
-
-			<div class="row">
-
-
-				<div class="col-md-3 col-sm-3 col-xs-12">
-					<div class="info-box">
-						<span class="info-box-icon bg-maroon"><i
-							class="fa fa-google-wallet"></i></span>
-
-						<div class="info-box-content">
-							<span class="info-box-text"><h:outputLabel id="quadro11"> Carteira</h:outputLabel>  
-								</span><span class="info-box-number"> <h:outputLabel
-									value="#{dashboardController.entity.valorTotalRecebido}">
-									<f:convertNumber currencySymbol="R$" type="currency"
-										locale="pt_br" maxFractionDigits="2" />
-								</h:outputLabel></span>
-								<p:tooltip id="toolTipexplicaca11" for="quadro11"
-								value="Total em cartera para clientes não bloqueados"
-								position="top" />
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-				<div class="col-md-3 col-sm-3 col-xs-12">
-					<div class="info-box">
-						<span class="info-box-icon bg-red"><i
-							class="fa fa-ban"></i></span>
-
-						<div class="info-box-content">
-							<span class="info-box-text"><h:outputLabel id="quadro10"> Bloqueados</h:outputLabel>  
-								</span><span class="info-box-number"> <h:outputLabel
-									value="#{dashboardController.entity.valorTotalCarteiraBloqueado}">
-									<f:convertNumber currencySymbol="R$" type="currency"
-										locale="pt_br" maxFractionDigits="2" />
-								</h:outputLabel></span>
-								<p:tooltip id="toolTipexplicaca10" for="quadro10"
-								value="Total em cartera para clientes Bloqueados"
-								position="top" />
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-				<!-- /.col -->
-				<div class="col-md-3 col-sm-3 col-xs-12">
-					<div class="info-box">
-						<span class="info-box-icon bg-olive"><i class="fa fa-money"></i></span>
-
-						<div class="info-box-content">
-							<span class="info-box-text">Recebido</span> <span
-								class="info-box-number"> <h:outputLabel
-									value="#{dashboardController.entity.valorTotalPago}">
-									<f:convertNumber currencySymbol="R$" type="currency"
-										locale="pt_br" maxFractionDigits="2" />
-								</h:outputLabel></span>
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-				</div>
-				<h:form>
-					<p:commandLink icon="fa fa-print" ajax="false"
-						action="#{dashboardController.imprimirPedidosNaoConfirmados()}">
-						<div class="col-md-3 col-sm-2 col-xs-12">
-							<div class="info-box">
-
-
-								<span class="info-box-icon bg-#{dashboardController.cor}"><i
-									class="fa fa-exclamation"></i></span>
-
-								<div class="info-box-content">
-									<span class="info-box-text">Não confirmado</span> <span
-										class="info-box-number"
-										style="color: #{dashboardController.cor};">#{dashboardController.entity.qtdTotalPedisoNaoConfirmados}</span>
-								</div>
-								<!-- /.info-box-content -->
-							</div>
-							<!-- /.info-box -->
-						</div>
-					</p:commandLink>
-				</h:form>
-			</div>
-
-			<div class="row">
-
-				<div class="col-sm-6 col-xs-12">
-					<div class="info-box bg-yellow">
-						<span class="info-box-icon"><i class="fa fa-thumbs-o-down"></i></span>
-						<div class="info-box-content">
-							<span class="info-box-text">Lançamento em Carteira</span> <span
-								class="info-box-number"> <h:outputLabel
-									value="#{dashboardController.entity.valorRecebido}">
-									<f:convertNumber currencySymbol="R$" type="currency"
-										locale="pt_br" maxFractionDigits="2" />
-								</h:outputLabel>
-							</span>
-							<div class="progress">
-								<div class="progress-bar" style="width: 100%"></div>
-							</div>
-							<span class="progress-description">Valor total lançado em
-								carteira na data de hoje </span>
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-				<div class="col-sm-6 col-xs-12">
-					<div class="info-box bg-orange">
-						<span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
-						<div class="info-box-content">
-							<span class="info-box-text">Valor Pago</span> <span
-								class="info-box-number"> <h:outputLabel
-									value="#{dashboardController.entity.valorPago}">
-									<f:convertNumber currencySymbol="R$" type="currency"
-										locale="pt_br" maxFractionDigits="2" />
-								</h:outputLabel>
-							</span>
-							<div class="progress">
-								<div class="progress-bar" style="width: 100%"></div>
-							</div>
-							<span class="progress-description">Valor total pago em
-								carteira na data de hoje </span>
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-
-				<div class="col-sm-6 col-xs-12">
-					<div class="info-box bg-aqua">
-						<span class="info-box-icon"><i class="fa fa-list"></i></span>
-						<div class="info-box-content">
-							<span class="info-box-text"><h:outputLabel
-									id="explicacao2" />Pedido</span> <span class="info-box-number">#{dashboardController.entity.quantidadePedidos}
-								(#{dashboardController.entity.quantidadeCortesias} cortesias)</span>
-							<div class="progress">
-								<div class="progress-bar" style="width: 100%"></div>
-							</div>
-							<span class="progress-description"><p:outputLabel
-									id="explicacao3"> Cardápio do dia, não conta sobremesas, com e sem confirmação</p:outputLabel>
-							</span>
-							<p:tooltip id="toolTipexplicacao2" for="explicacao3"
-								value="Pedidos do cardápio do dia, não conta sobremesas, com e sem confirmação"
-								position="top" />
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-				<div class="col-sm-6 col-xs-12">
-					<div class="info-box bg-blue">
-						<span class="info-box-icon"><i class="fa fa-list"></i></span>
-						<div class="info-box-content">
-							<span class="info-box-text">Pedidos não confirmados</span> <span
-								class="info-box-number">#{dashboardController.entity.quantidadePedidosNaoConfirmados}</span>
-							<div class="progress">
-								<div class="progress-bar" style="width: 100%"></div>
-							</div>
-							<span class="progress-description">Pedidos com entrega no
-								dia de hoje não confirmado </span>
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-
-				<div class="col-sm-6 col-xs-12">
-					<div class="info-box bg-olive">
-						<span class="info-box-icon"><i class="fa fa-server"></i></span>
-						<div class="info-box-content">
-							<span class="info-box-text">Fichas Técnicas de Prato</span> <span
-								class="info-box-number">#{dashboardController.entity.quantidadeFichaPratos}</span>
-							<div class="progress">
-								<div class="progress-bar" style="width: 100%"></div>
-							</div>
-							<span class="progress-description">Total pratos diponíveis
-							</span>
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-				<div class="col-sm-6 col-xs-12">
-					<div class="info-box bg-green">
-						<span class="info-box-icon"><i class="fa fa-user"></i></span>
-						<div class="info-box-content">
-							<span class="info-box-text">Clientes</span> <span
-								class="info-box-number">#{dashboardController.entity.quantidadeClientes}</span>
-							<div class="progress">
-								<div class="progress-bar" style="width: 100%"></div>
-							</div>
-							<span class="progress-description">Total de Clientes
-								disponíveis </span>
-						</div>
-						<!-- /.info-box-content -->
-					</div>
-					<!-- /.info-box -->
-				</div>
-
-
-
-				<!-- <div class="col-sm-6 col-xs-12">
-	                <div class="info-box bg-yellow">
-	                    <span class="info-box-icon"><i class="fa fa-credit-card"></i></span>
-	                    <div class="info-box-content">
-	                        <span class="info-box-text">Pagamentos em Cartão</span>
-	                        <span class="info-box-number">50</span>
-	                        <div class="progress">
-	                            <div class="progress-bar" style="width: 14%"></div>
-	                        </div>
-	                        <span class="progress-description">14% dos pedidos</span>
-	                    </div>
-	                </div>
-	            </div>
-	            
-	            <div class="col-sm-6 col-xs-12">
-	                <div class="info-box bg-red">
-	                    <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
-	                    <div class="info-box-content">
-	                        <span class="info-box-text">Pagamentos em Carteira</span>
-	                        <span class="info-box-number">290</span>
-	                        <div class="progress">
-	                            <div class="progress-bar" style="width: 82%"></div>
-	                        </div>
-	                        <span class="progress-description">82% dos pedidos</span>
-	                    </div>
-	                </div>
-	            </div>-->
-
-				<div class="col-sm-12 col-xs-12">
-
-					<div class="box box-danger">
-						<div class="box-header with-border">
-							<h3 class="box-title"></h3>
-
-							<div class="box-tools pull-right">
-								<span class="label label-danger">10 novos clientes</span>
-								<button type="button" class="btn btn-box-tool"
-									data-widget="collapse">
-									<i class="fa fa-minus"></i>
-								</button>
-								<button type="button" class="btn btn-box-tool"
-									data-widget="remove">
-									<i class="fa fa-times"></i>
-								</button>
-							</div>
-						</div>
-
-						<div class="box-body no-padding">
-							<p:carousel numVisible="5" circular="true"
-								value="#{dashboardController.clientes}"
-								headerText="Últimos Clientes" var="car"
-								itemStyle="text-align:center" responsive="true">
-								<p:panelGrid columns="1" style="width:100%;margin:10px 0px"
-									columnClasses="users-list-name,users-list-date" layout="grid"
-									styleClass="ui-panelgrid-blank">
-									<a class="users-list-name" href="#"><h:link
-											value="#{car.nmCliente}"
-											outcome="pages/cliente/cadastro-cliente.xhtml">
-											<f:param name="id" value="#{car.id}" />
-										</h:link></a>
-									<span class="users-list-date">#{car.id}</span>
-									<span class="users-list-date">#{car.dsTelefone}</span>
-								</p:panelGrid>
-							</p:carousel>
-							<!-- /.users-list -->
-						</div>
-						<!-- /.box-body -->
-						<div class="box-footer text-center">
-							<a href="/iChef/pages/cliente/lista-cliente.xhtml"
-								class="uppercase">Ver todos os clientes</a>
-						</div>
-						<!-- /.box-footer -->
-					</div>
-					<!--/.box -->
-				</div>
-
-				<!-- /.col -->
-			</div>
-			<div class="col-sm-12 col-xs-12">
-				<div style="font-size: 10px;">
-					<p:schedule id="schedule" value="#{dashboardController.eventModel}"
-						widgetVar="myschedule" />
-
-				</div>
-			</div>
-
+				</p:dataGrid>
+			</h:form>
 		</section>
+
+
 
 	</ui:define>
 

@@ -53,8 +53,11 @@ public class Util extends ReportUtils {
 	public static final String LETRAS_COM_ACENTUACAO = "Ãƒï¿½Ãƒâ‚¬ÃƒÆ’Ãƒâ€šÃƒâ€žÃƒâ€°ÃƒË†ÃƒÅ Ãƒâ€¹Ãƒï¿½ÃƒÅ’Ãƒï¿½ÃƒÅ½Ãƒâ€œÃƒâ€™Ãƒâ€¢Ãƒâ€�Ãƒâ€“ÃƒÅ¡Ãƒâ„¢Ãƒâ€ºÃƒÅ“Ãƒâ€¡Ãƒâ€˜Ãƒï¿½Ã…Â¸ÃƒÂ¡ÃƒÂ ÃƒÂ£ÃƒÂ¢ÃƒÂ¤ÃƒÂ©ÃƒÂ¨ÃƒÂªÃƒÂ«ÃƒÂ­ÃƒÂ¬ÃƒÂ¯ÃƒÂ®ÃƒÂ³ÃƒÂ²ÃƒÂµÃƒÂ´ÃƒÂ¶ÃƒÂºÃƒÂ¹ÃƒÂ»ÃƒÂ¼ÃƒÂ§ÃƒÂ±ÃƒÂ½ÃƒÂ¿";
 	public static final String LETRAS_SEM_ACENTUACAO = "AAAAAEEEEIIIIOOOOOUUUUCNYYaaaaaeeeeiiiiooooouuuucnyy";
 
-	public static final String API_ICHEF = "http://142.93.185.193:8083/";
-	public static final String API_ICHEF_LOGIN_ENTREGADOR = "/entregador_login/";
+	public static final String API_ICHEF = "http://127.0.0.1:8080/";
+	public static final String API_ICHEF_LOGIN_ENTREGADOR = "entregador_login/";
+	public static final String API_ICHEF_ROTA_ENTREGADOR = "rota_entregador/";
+	public static final String API_ICHEF_ROTA_DETALHE = "rota_detalhe/";
+	public static final String API_ICHEF_ROTA_CONFIRMAR_ENTREGA = "rota_confirmar_entrega";
 	
 	public static long diferencaEmDias(Date dataInicial, Date dataFinal) {
 		long dt = (dataInicial.getTime() - dataFinal.getTime());

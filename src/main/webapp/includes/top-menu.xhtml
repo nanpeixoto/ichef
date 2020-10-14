@@ -11,17 +11,15 @@
 		<li class="dropdown user user-menu"><a href="#"
 			class="dropdown-toggle" data-toggle="dropdown"> <pe:gravatar
 					id="userImage" value="nonexisting" /> <span class="hidden-xs">
-					#{loginController.usuarioLogado.nomeAbreviado}</span>
+					#{loginController.entregador.entregador}</span>
 		</a>
 			<ul class="dropdown-menu">
 				<li class="user-header">
 					<div class="hidden-xs">
 						<pe:gravatar style="border-radius: 50%"
-							value="#{loginController.usuarioLogado.email}" />
+							value="#{loginController.entregador.entregador}" />
 					</div>
-					<p>
-						#{loginController.usuarioLogado.nome} <small>
-							#{loginController.usuarioLogado.empresaLogada.nomeFantasia} </small>
+					<p>#{loginController.entregador.entregador} <small>  </small>
 					</p>
 				</li>
 				<li class="user-footer"><h:form prependId="false">
@@ -37,6 +35,9 @@
 						</div>
 					</h:form></li>
 			</ul></li>
+			  <li>
+            <a id="layout-setup" href="#" class="ui-link ui-widget hidden-sm hidden-xs" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+        </li>
 	</ul>
 
 	<p:dialog header="Trocar Senha" widgetVar="trocarSenha" height="230"
@@ -44,7 +45,7 @@
 		resizable="false" modal="true">
 		<h:form>
 			Senha Atual:
-			<p:inputText value="#{loginController.senha}" type="password"
+			<p:inputText value="#{loginController.senhaEntregador}" type="password"
 				styleClass="form-control" placeholder="Senha Atual" required="true"
 				autocomplete="off" id="password"
 				requiredMessage="Password is required." />
@@ -65,6 +66,7 @@
 					<i class="fa fa-check-square fa-2x"></i>
 				</p:commandLink>
 			</div>
+			
 		</h:form>
 	</p:dialog>
 

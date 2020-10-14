@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 
 import br.com.ichef.util.JSFUtil;
 import br.com.ichef.util.ReportUtils;
@@ -39,7 +39,7 @@ public abstract class AbstratcBaseController implements Serializable {
 	protected void hideDialog(String widgetvar) {
 		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("PF('"+widgetvar+"').hide()");
 		
-		RequestContext.getCurrentInstance().execute("PF('"+widgetvar+"').hide()");
+		PrimeFaces.current().executeScript("PF('"+widgetvar+"').hide()");
 
 	}
 
@@ -61,7 +61,7 @@ public abstract class AbstratcBaseController implements Serializable {
 	 */
 	protected void showDialog(String widgetvar) {
 		//RequestContext.getCurrentInstance().execute(widgetvar + ".show()");
-		RequestContext.getCurrentInstance().execute("PF('"+widgetvar+"').show();");
+		PrimeFaces.current().executeScript("PF('"+widgetvar+"').show();");
 	}
 
 	/**
@@ -72,7 +72,7 @@ public abstract class AbstratcBaseController implements Serializable {
 	protected void updateComponentes(String... idComponente) {
 		for (String id : idComponente) {
 			FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(id);
-			RequestContext.getCurrentInstance().update(id);
+			PrimeFaces.current().ajax().update(id);
 		}
 	}
 

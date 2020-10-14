@@ -24,12 +24,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 
-import br.com.ichef.arquitetura.BaseEntity;
-import br.com.ichef.model.Configuracao;
-import br.com.ichef.model.Usuario;
-import br.com.ichef.util.JSFUtil;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -44,10 +40,6 @@ public class BaseController extends AbstratcBaseController implements Serializab
 	public static String LOGO_ETIQUETA = "logo_etiqueta.jpg";
 
 	protected static String ERRO_GENERICO = "Erro ao gerar relatório, por favor entre em contato com o Administrator do Sistema.";
-
-	protected Usuario userLogado = (Usuario) JSFUtil.getSessionMapValue("usuario");
-
-	protected Configuracao configuracao = (Configuracao) JSFUtil.getSessionMapValue("configuracao");
 
 	SimpleDateFormat formatarDataHora = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -248,7 +240,6 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		return "";
 
 	}
-	
 
 	public Object formataDataHora(Object valor) {
 		try {
@@ -261,8 +252,6 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		return "";
 
 	}
-	
-	
 
 	protected HttpServletResponse getResponse() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -278,36 +267,8 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		return request;
 	}
 
-	public Usuario getUserLogado() {
-		return userLogado;
-	}
-
 	public void reset() {
-		RequestContext.getCurrentInstance().reset(DIALOG_CADASTRAR);
-	}
-
-	public String getUsuarioCadastro(BaseEntity entity) {
-
-		if (entity != null && entity.getUsuarioCadastro() != null && entity.getDataCadastro() != null) {
-			return "por " + entity.getUsuarioCadastro().getNomeAbreviado() + " em: "
-					+ formatarDataHora.format(entity.getDataCadastro());
-		}
-
-		return "";
-	}
-
-	public String getUsuarioAlteracao(BaseEntity entity) {
-
-		if (entity != null && entity.getUsuarioAlteracao() != null && entity.getDataAlteracao() != null) {
-			return "por " + entity.getUsuarioAlteracao().getNomeAbreviado() + " em: "
-					+ formatarDataHora.format(entity.getDataAlteracao());
-		}
-
-		return "";
-	}
-
-	public Configuracao getConfiguracao() {
-		return configuracao;
+		PrimeFaces.current().resetInputs(DIALOG_CADASTRAR);
 	}
 
 }

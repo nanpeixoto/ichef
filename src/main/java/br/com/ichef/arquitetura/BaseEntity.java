@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.MappedSuperclass;
 
-import br.com.ichef.model.Usuario;
-
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
@@ -15,21 +13,15 @@ public abstract class BaseEntity implements Serializable {
 	public abstract Object getId();
 
 	public abstract void setId(Object id);
-	
+
 	public abstract String getColumnOrderBy();
-	
+
 	public abstract String getAuditoria();
-	
-	public abstract Usuario getUsuarioAlteracao();
-	
+
 	public abstract Date getDataAlteracao();
-	
-	public abstract Usuario getUsuarioCadastro();
-	
+
 	public abstract Date getDataCadastro();
-	
+
 	public abstract boolean isEdicao();
-	
-	
-	
+
 }

@@ -1,152 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core" 
-      xmlns:adm="http://github.com/adminfaces"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <title>iChef</title>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/cozinha.ico']}"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/cozinha.ico']}" sizes="16x16"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/cozinha.ico']}" sizes="32x32"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/cozinha.ico']}" sizes="96x96"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/cozinha.ico']}" sizes="144x144"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/cozinha.ico']}" sizes="192x192"/>
-        <link rel="icon" type="image/x-icon" 	href="#{resource['images/cozinha.ico']}" />
-		<link rel="icon" type="image/png" 		href="#{resource['images/cozinha.png']}" />
-		<link rel="icon" type="image/gif"		href="#{resource['images/cozinha.gif']}" />
-		
-        <link rel="icon" type="image/x-icon" href="#{resource['images/cozinha.ico']}" />
-        <meta charset="utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-        <meta name="mobile-web-app-capable" content="yes"/>
-        <h:outputStylesheet library="css" name="prism.css"/>
-        
-   
-        
-        <meta name="theme-color" content="#444"/>
+<h:head>
+	<title>iChef</title>
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" sizes="16x16" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" sizes="32x32" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" sizes="96x96" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" sizes="144x144" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" sizes="192x192" />
+	<link rel="icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" />
+	<link rel="icon" type="image/png"
+		href="#{resource['images/cozinha.png']}" />
+	<link rel="icon" type="image/gif"
+		href="#{resource['images/cozinha.gif']}" />
+
+	<link rel="icon" type="image/x-icon"
+		href="#{resource['images/cozinha.ico']}" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<h:outputStylesheet library="css" name="prism.css" />
 
 
-        <style type="text/css">
 
-            /* below css hides growls in small screens and makes messages visible */
-            @media (max-width: 768px) {
+	<meta name="theme-color" content="#444" />
+
+
+	<style type="text/css">
+
+/* below css hides growls in small screens and makes messages visible */
+@media ( max-width : 768px) {
+	body div.ui-growl {
+		display: none;
+	}
+	body div.ui-messages {
+		display: block;
+	}
+}
+/* below css hides messages in medium/big devices and makes growl visible in such devices */
+@media ( min-width : 769px) {
+	body div.ui-growl {
+		display: block;
+	}
+	body div.ui-messages {
+		display: none;
+	}
+}
+
+body.login-page {
+	background-color: transparent;
+}
+
+html {
+	background: url(#{ resource [ 'images:login-bg.jpg' ]
+}
+
+)
+no-repeat
+ 
+center
+ 
+center
+ 
+fixed
+;
+
                 
-                body div.ui-growl {
-                    display: none;
-                }
+-webkit-background-size
+:
+ 
+cover
+;
+
                 
-               body div.ui-messages {
-                    display: block;
-                }
+-moz-background-size
+:
+ 
+cover
+;
 
-            }
-            /* below css hides messages in medium/big devices and makes growl visible in such devices */
-            @media (min-width: 769px) {
-              body div.ui-growl {
-                    display: block;
-                }
+                
+-o-background-size
+:
+ 
+cover
+;
 
-              body div.ui-messages {
-                    display: none;
-                }
-            }
+                
+background-size
+:
+ 
+cover
+;
 
-
-            body.login-page {
-                background-color: transparent;
-            }
-
-            html {
-                background: url(#{resource[ 'images:login-bg.jpg' ]}) no-repeat center center fixed;
-                -webkit-background-size: cover;
-                -moz-background-size: cover;
-                -o-background-size: cover;
-                background-size: cover;
-            }
             
-            @media (max-width: 768px) {
-                html {
-                    background-image: url(#{resource[ 'images:login-bg-mobile.jpeg' ]});
-                }
-            }
+}
+@media ( max-width : 768px) {
+	html {
+		background-image: url(#{ resource [ 'images:login-bg-mobile.jpeg' ]
+	}
+	);
+}
+}
+</style>
+</h:head>
 
-        </style>
-    </h:head>
+
+<h:body styleClass="hold-transition login-page">
+	<div id="loader" class="load-bar" style="display: none">
+		<div class="bar"></div>
+		<div class="bar"></div>
+		<div class="bar"></div>
+	</div>
+
+	<p:dialog id="adminStatusDialog" modal="true" widgetVar="statusDialog"
+		draggable="false" closable="false" resizable="false" responsive="true"
+		showHeader="false" appendTo="@(body)">
+	</p:dialog>
+
+	<div class="login-box">
+		<div class="login-logo">
+			<span style="color: white;"><b>i</b>Chef</span>
+		</div>
+		<!-- /.login-logo -->
+		<div class="box login-box-body">
+			<h:form autocomplete="off">
+				<p class="login-box-msg">Faça o login</p>
+				<p:messages closable="true" />
+				<p:growl sticky="true" />
+				<div class="form-group has-feedback">
+					<table style="width: 100%;">
+						<tr>
+							<th rowspan="2" style="width: 20%;"><h:graphicImage
+									value="#{resource['images/entregador_mascara.png']}"
+									style="WIDTH: 73px;" /></th>
+							<td><p:inputText value="#{loginController.loginEntregador}"
+									styleClass="form-control" placeholder="Login" required="true"
+									autocomplete="off" id="usuarioentregador"
+									requiredMessage="Login é obrigatório" /></td>
+						</tr>
+						<tr>
+							<td><p:inputText value="#{loginController.senhaEntregador}"
+									type="password" styleClass="form-control" placeholder="Senha"
+									required="true" autocomplete="off" id="senhaentregador"
+									requiredMessage="Senha é obrigatório" /></td>
+						</tr>
+					</table>
+				</div>
 
 
-    <h:body styleClass="hold-transition login-page">
-        <div id="loader" class="load-bar" style="display: none">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-        
-        <p:dialog id="adminStatusDialog" modal="true" widgetVar="statusDialog" draggable="false" closable="false"
-                  resizable="false" responsive="true" showHeader="false" appendTo="@(body)">
-        </p:dialog>
+				<div class="row">
 
-        <div class="login-box">
-            <div class="login-logo">
-               <span style="color: white;"><b>i</b>Chef</span>
-            </div>
-            <!-- /.login-logo -->
-            <div class="box login-box-body">
-                <h:form autocomplete="off">
-                    <p class="login-box-msg">Faça o login</p>
-                    <p:messages closable="true" />
-                    <p:growl sticky="true"/>
-                    <div class="form-group has-feedback">
-                        <p:inputText value="#{loginController.login}" styleClass="form-control" placeholder="Login"
-                                     required="true" autocomplete="off" id="usuario"
-                                     requiredMessage="Email is required." onblur="#{loginController.buscarEmpresa()}" onchange="#{loginController.buscarEmpresa()}">
-							<p:ajax event="blur" update="empresa" listener="#{loginController.buscarEmpresa()}" />      
-							<p:ajax event="blur"
-								      listener="#{loginController.buscarEmpresa()}"
-								      process="@this" partialSubmit="true"
-								      update="empresa" />
-								                            
-						</p:inputText>
-                        <i class="fa fa-user form-control-feedback"></i>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <p:inputText value="#{loginController.senha}" type="password" styleClass="form-control"
-                                     placeholder="Password" required="true" autocomplete="off" id="password"
-                                     requiredMessage="Password is required."/>
-                        <i class="fa fa-lock form-control-feedback" style="font-size: 18px" ></i>
-                  	</div>
-                  	<div class="form-group has-feedback"> 
-                        <p:selectOneMenu id="empresa" value="#{loginController.empresa}"  converter= "omnifaces.SelectItemsConverter">
-					            <f:selectItem itemLabel="Selecione a Empresa...." itemValue=""  noSelectionOption="true" />
-					            <f:selectItems value="#{loginController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" /> 
-					     </p:selectOneMenu>
+					<p:spacer height="10" />
+					<div class="col-xs-12">
+						<p:commandButton styleClass="btn btn-success btn-block"
+							onclick="showBar()"
+							action="#{loginController.autenticarEntregador()}"
+							oncomplete="if(args.validationFailed) { hideBar()}"
+							value="Entrar" process="@form" update="@form" />
 					</div>
-					   <p class="login-box-msg">Versão: 22-07-2020-1</p>
-                    <div class="row">
-                        
-                        <p:spacer height="10"/>
-                        <div class="col-xs-12">
-                            <p:commandButton styleClass="btn btn-success btn-block" onclick="showBar()"
-                                             action="#{loginController.autenticar()}" oncomplete="if(args.validationFailed) { hideBar()}"
-                                             value="Sign In" process="@form" update="@form"/>
-                        </div>
-                    </div>
-                 
-                </h:form>
+				</div>
 
-               
-            </div>
-            <!-- /.login-box-body -->
-        </div>
-
-        
-        <h:outputScript library="js" name="prism.js"  target="head"/>
-        <h:outputScript library="js" name="admintemplate.js"  target="head"/>
-        
+			</h:form>
 
 
-    </h:body>
+		</div>
+		<!-- /.login-box-body -->
+	</div>
+
+
+	<h:outputScript library="js" name="prism.js" target="head" />
+	<h:outputScript library="js" name="admintemplate.js" target="head" />
+
+
+
+</h:body>
 </html>

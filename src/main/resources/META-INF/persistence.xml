@@ -7,21 +7,7 @@
 	<persistence-unit name="PU"
 		transaction-type="RESOURCE_LOCAL">
 		<!-- <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
-		<non-jta-data-source>java:comp/env/jdbc/ichefDB</non-jta-data-source>
-
-		<properties>
-
-			<!-- <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/agenda" 
-				/> <property name="javax.persistence.jdbc.user" value="root" /> <property 
-				name="javax.persistence.jdbc.password" value="root" /> <property name="javax.persistence.jdbc.driver" 
-				value="com.mysql.jdbc.Driver" /> -->
-
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="false" />
-		</properties>
-
+	
 	</persistence-unit>
 </persistence>
 
