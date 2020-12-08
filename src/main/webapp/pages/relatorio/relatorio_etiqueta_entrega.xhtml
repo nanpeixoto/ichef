@@ -39,7 +39,7 @@
 
 
 						<p:panelGrid id="capaPanel" columns="2" layout="grid"
-							columnClasses="ui-g-2, ui-g-2">
+							columnClasses="ui-g-2, ui-g-6">
 							
 							<!-- 
 							<p:outputLabel value="Horário de Corte" for="horarioCorte" />
@@ -66,13 +66,22 @@
 									value="#{relPedidoEtiqueta.listaEntregadorCarregada}" var="item"
 									itemLabel="#{item.nome}" itemValue="#{item}" />
 							</p:selectOneMenu>
-							<p:outputLabel value="Data Entrega" for="dtInicial" />
+							<p:outputLabel value="Data do Cardápio" for="dtInicial" />
 							<p:calendar id="dtInicial"
 								value="#{relPedidoEtiqueta.dataInicial}" pattern="dd/MM/yyyy"
 								size="10" required="true"
 								requiredMessage="#{relPedidoEtiqueta.getRequiredMessage('Data Cardapio')}"
 								mask="true" showOn="button" locale="pt_BR" />
-								
+							 
+								<p:outputLabel value="Tipo de Filtro" for="dtInicial" />
+					        <p:selectOneButton value="#{relPedidoEtiqueta.tipoDeFiltroData}">
+					            <f:selectItem itemLabel="Todas" itemValue="T" />
+					            <f:selectItem itemLabel="Entrega para hoje" itemValue="E" />
+					            <f:selectItem itemLabel="Entrega Futura" itemValue="F" />
+					        </p:selectOneButton>
+					      </p:panelGrid>
+					        <p:panelGrid  columns="2" layout="grid"
+							columnClasses="ui-g-2, ui-g-2">							
 							<p:outputLabel value="Horário do Pedido (a partir de)" for="horarioCorte" />
 							<p:calendar id="horarioCorte"
 								value="#{relPedidoEtiqueta.horarioCorte}" pattern="HH:mm"
@@ -82,7 +91,8 @@
 							<p:outputLabel value="Tipo de Impressão" for="tipo"/>
 		                    <p:selectBooleanButton id="tipo" value="#{relPedidoEtiqueta.tipoImpressao}" 
 					        	onLabel="Exibir Validade" offLabel="Sem Validade" onIcon="fa fa-clock-o" offIcon="fa fa-times"/>
-
+					        	
+					    
 							<!-- <p:outputLabel value="Data Final" for="dtFinal"/>
                     		<p:calendar id="dtFinal" value="#{relPedidoEtiqueta.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"
                     			requiredMessage="#{relPedidoEtiqueta.getRequiredMessage('Data Final')}" mask="true" showOn="button" locale="pt_BR"

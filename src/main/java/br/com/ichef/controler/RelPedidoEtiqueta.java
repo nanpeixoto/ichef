@@ -95,12 +95,14 @@ public class RelPedidoEtiqueta extends BaseController {
 
 	private boolean entregaDataCardapio;
 	private boolean antesNoveEMeia;
-	
+
 	private boolean tipoImpressao;
+
+	private String tipoDeFiltroData;
 
 	@PostConstruct
 	public void init() {
-
+		setTipoDeFiltroData("T");
 		obterListas();
 		tipoImpressao = true;
 
@@ -119,6 +121,7 @@ public class RelPedidoEtiqueta extends BaseController {
 	}
 
 	public void imprimirEtiquetaEntrega() {
+
 		setDataFinal(getDataInicial());
 		if (getDataInicial() == null || getDataFinal() == null) {
 			FacesUtil.addInfoMessage(getRequiredMessage("Data"));
@@ -150,6 +153,10 @@ public class RelPedidoEtiqueta extends BaseController {
 				pedidoVisitor.setHorarioCorte(null);
 			}
 
+			if (getTipoDeFiltroData() != null && !getTipoDeFiltroData().equalsIgnoreCase("T")) {
+				pedidoVisitor.setTipoDeFiltroData(getTipoDeFiltroData());
+			}
+
 			List<PedidoEtiqueta> pedidos = new ArrayList<>();
 
 			try {
@@ -164,7 +171,7 @@ public class RelPedidoEtiqueta extends BaseController {
 			} else {
 				try {
 					setParametroReport("logoEtiqtea", getImagem(LOGO_ETIQUETA));
-					setParametroReport("tipoImpressao", tipoImpressao );
+					setParametroReport("tipoImpressao", tipoImpressao);
 					orderBrOrdemPedidoEtiqueta(pedidos);
 					escreveRelatorioPDF("EtiquetaEntrega", true, pedidos);
 				} catch (Exception e) {
@@ -372,6 +379,14 @@ public class RelPedidoEtiqueta extends BaseController {
 
 	public void setTipoImpressao(boolean tipoImpressao) {
 		this.tipoImpressao = tipoImpressao;
+	}
+
+	public String getTipoDeFiltroData() {
+		return tipoDeFiltroData;
+	}
+
+	public void setTipoDeFiltroData(String tipoDeFiltroData) {
+		this.tipoDeFiltroData = tipoDeFiltroData;
 	}
 
 }

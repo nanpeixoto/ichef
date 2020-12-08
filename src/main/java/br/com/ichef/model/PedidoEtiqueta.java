@@ -58,6 +58,9 @@ public class PedidoEtiqueta extends BaseEntity {
 	@Column(name = "ORDEM_DERIVACAO")
 	private Integer ordemDerivacao;
 
+	@Column(name = "tip_filtro_data")
+	private String tipoFiltroData;
+
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "CD_CARDAPIO_PRATO")
@@ -357,6 +360,14 @@ public class PedidoEtiqueta extends BaseEntity {
 		DateFormat df = new SimpleDateFormat("dd/MM"); // para formatar a data
 
 		return "Consumir até " + df.format(calend.getTime());
+	}
+
+	public String getTipoFiltroData() {
+		return tipoFiltroData;
+	}
+
+	public void setTipoFiltroData(String tipoFiltroData) {
+		this.tipoFiltroData = tipoFiltroData;
 	}
 
 }

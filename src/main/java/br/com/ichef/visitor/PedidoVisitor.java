@@ -34,6 +34,8 @@ public class PedidoVisitor extends FilterVisitor {
 	private boolean antesNoveeTrinta;
 
 	private Date dataEtiqueta;
+	
+	private String tipoDeFiltroData;
 
 	private String horarioCorte;
 
@@ -85,6 +87,11 @@ public class PedidoVisitor extends FilterVisitor {
 		if (getCodigoEntregador() != null) {
 			criteria.add(Restrictions.eq("id.codigoEntregador", getCodigoEntregador()));
 		}
+		
+		if (getTipoDeFiltroData() != null) {
+			criteria.add(Restrictions.eq("tipoFiltroData", getTipoDeFiltroData()));
+		}
+
 
 		if (getHorarioCorte() != null)
 			criteria.add(Restrictions.sqlRestriction("  this_.dt_cadastro  > STR_TO_DATE('"
@@ -206,6 +213,14 @@ public class PedidoVisitor extends FilterVisitor {
 
 	public void setHorarioCorte(String horarioCorte) {
 		this.horarioCorte = horarioCorte;
+	}
+
+	public String getTipoDeFiltroData() {
+		return tipoDeFiltroData;
+	}
+
+	public void setTipoDeFiltroData(String tipoDeFiltroData) {
+		this.tipoDeFiltroData = tipoDeFiltroData;
 	}
 
 }
