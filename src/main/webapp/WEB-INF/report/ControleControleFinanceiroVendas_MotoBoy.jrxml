@@ -1,29 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ControleControleFinanceiroVendas_MotoBoy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="840169e4-3c8c-4488-8634-93578d2c7452">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<property name="ireport.scriptlethandling" value="0"/>
-	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="java.util.*"/>
-	<import value="net.sf.jasperreports.engine.data.*"/>
-	<parameter name="pLogo" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:/Desenvolvimento/Projetos/iChef/ichefTomCat/src/main/webapp/WEB-INF/report"]]></defaultValueExpression>
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="ControleControleFinanceiroVendas_MotoBoy"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.0" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="pLogo" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["D:/Desenvolvimento/Projetos/iChef/ichefTomCat/src/main/webapp/WEB-INF/report"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="pListaContagem" class="java.util.List" isForPrompting="false"/>
-	<parameter name="pDataInicio" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["01/11/2020"]]></defaultValueExpression>
+	<parameter name="pListaContagem" isForPrompting="false" class="java.util.List"/>
+	<parameter name="pDataInicio" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["01/11/2020"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="pDataFinal" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["30/11/2020"]]></defaultValueExpression>
+	<parameter name="pDataFinal" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["30/11/2020"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="cdEmpresa" class="java.lang.Integer" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new Integer("1")]]></defaultValueExpression>
+	<parameter name="cdEmpresa" isForPrompting="false" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[new Integer("1")]]></defaultValueExpression>
 	</parameter>
-	<queryString>
-		<![CDATA[SELECT
+	<queryString><![CDATA[SELECT
 DISTINCT 	e.CD_ENTREGADOR,
 concat(e.NM_ENTREGADOR, ' (', case when e.sn_ativo = 'S' then 'ATIVO' else 'INATIVO' end, ')' )NM_ENTREGADOR, e.cd_empresa,
 em.nm_fantasia
@@ -31,573 +48,679 @@ FROM
 pedido p
 INNER JOIN entregador e  on p.cd_entregador = e.cd_entregador
 inner join empresa em on em.cd_empresa = p.cd_empresa
-where  STR_TO_DATE(DATE_FORMAT(p.dt_entrega, '%d-%m-%Y'),     '%d-%m-%Y')
-  between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' )
+where  STR_TO_DATE(DATE_FORMAT(p.dt_entrega, '%d-%m-%Y'),     '%d-%m-%Y') 
+  between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' ) 
             and  STR_TO_DATE('$P!{pDataFinal}', '%d/%m/%Y' )
 and p.cd_empresa     =$P!{cdEmpresa}
-ORDER BY e.CD_ENTREGADOR,  concat(e.NM_ENTREGADOR, ' (', case when e.sn_ativo = 'S' then 'ATIVO' else 'INATIVO' end, ')' )]]>
-	</queryString>
+ORDER BY e.CD_ENTREGADOR,  e.NM_ENTREGADOR,nm_entregador desc]]></queryString>
+
 	<field name="CD_ENTREGADOR" class="java.lang.Integer"/>
 	<field name="NM_ENTREGADOR" class="java.lang.String"/>
 	<field name="cd_empresa" class="java.lang.Integer"/>
 	<field name="nm_fantasia" class="java.lang.String"/>
-	<group name="Empresa">
-		<groupExpression><![CDATA[$F{cd_empresa}]]></groupExpression>
-		<groupHeader>
-			<band height="33" splitType="Stretch">
+
+
+		<group  name="Empresa" >
+			<groupExpression><![CDATA[$F{cd_empresa}]]></groupExpression>
+			<groupHeader>
+			<band height="33"  isSplitAllowed="true" >
 				<rectangle>
-					<reportElement key="rectangle-1" x="2" y="5" width="534" height="22" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="3121335b-f87d-4db5-865c-ffb82c33c062"/>
-					<graphicElement>
-						<pen lineWidth="0.0" lineStyle="Solid"/>
-					</graphicElement>
+					<reportElement
+						x="2"
+						y="5"
+						width="534"
+						height="22"
+						forecolor="#FFFFFF"
+						backcolor="#CCCCCC"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
 				</rectangle>
-				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
-					<reportElement key="textField-1" positionType="Float" x="3" y="5" width="531" height="11" isPrintWhenDetailOverflows="true" uuid="abbb073f-8f11-4095-9776-f1a75625c746"/>
-					<box>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="5"
+						width="531"
+						height="11"
+						key="textField-1"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{nm_fantasia}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{nm_fantasia}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
-					<reportElement key="textField-2" positionType="Float" x="51" y="16" width="70" height="11" isPrintWhenDetailOverflows="true" uuid="7acaec57-8d25-475f-b9fe-2036f6f62d41"/>
-					<box>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="51"
+						y="16"
+						width="70"
+						height="11"
+						key="textField-2"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{pDataInicio}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{pDataInicio}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement key="staticText-15" x="120" y="16" width="48" height="11" uuid="d13cb482-eb52-417f-b64b-9aff45af9814"/>
-					<box>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
+					<reportElement
+						x="120"
+						y="16"
+						width="48"
+						height="11"
+						key="staticText-15"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-					<text><![CDATA[Data Fim:]]></text>
+				<text><![CDATA[Data Fim:]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
-					<reportElement key="textField-3" positionType="Float" x="161" y="16" width="70" height="11" isPrintWhenDetailOverflows="true" uuid="d688b661-b55c-49a6-a52f-02f74147dd7b"/>
-					<box>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="161"
+						y="16"
+						width="70"
+						height="11"
+						key="textField-3"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{pDataFinal}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{pDataFinal}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement key="staticText-16" x="3" y="16" width="48" height="11" uuid="3a6db0d0-a240-405a-b547-0b1fa40aa6d9"/>
-					<box>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
+					<reportElement
+						x="3"
+						y="16"
+						width="48"
+						height="11"
+						key="staticText-16"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-					<text><![CDATA[Data Inicial:]]></text>
+				<text><![CDATA[Data Inicial:]]></text>
 				</staticText>
 			</band>
-		</groupHeader>
-		<groupFooter>
-			<band splitType="Stretch"/>
-		</groupFooter>
-	</group>
-	<group name="Entregador">
-		<groupExpression><![CDATA[$F{CD_ENTREGADOR}]]></groupExpression>
-		<groupHeader>
-			<band height="81" splitType="Prevent">
-				<textField isBlankWhenNull="false">
-					<reportElement key="textField" positionType="Float" mode="Opaque" x="4" y="4" width="531" height="18" forecolor="#000000" backcolor="#CCCCCC" uuid="ff3f25a7-f389-4a17-b8c7-9db48e3e0ab7"/>
-					<box leftPadding="5">
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="Entregador" >
+			<groupExpression><![CDATA[$F{CD_ENTREGADOR}]]></groupExpression>
+			<groupHeader>
+			<band height="81"  isSplitAllowed="false" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="4"
+						y="4"
+						width="531"
+						height="18"
+						forecolor="#000000"
+						backcolor="#CCCCCC"
+						key="textField"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{NM_ENTREGADOR}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NM_ENTREGADOR}]]></textFieldExpression>
 				</textField>
-				<subreport isUsingCache="true">
-					<reportElement key="subreport-1" positionType="Float" x="4" y="22" width="525" height="18" uuid="1b97a1b6-09cd-405a-9792-1d6c6aaf863b"/>
-					<subreportParameter name="pCdEntregador">
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="4"
+						y="22"
+						width="525"
+						height="18"
+						key="subreport-1"
+						positionType="Float"/>
+					<subreportParameter  name="pCdEntregador">
 						<subreportParameterExpression><![CDATA[$F{CD_ENTREGADOR}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="pDataInicio">
+					<subreportParameter  name="pDataInicio">
 						<subreportParameterExpression><![CDATA[$P{pDataInicio}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="pDataFinal">
+					<subreportParameter  name="pDataFinal">
 						<subreportParameterExpression><![CDATA[$P{pDataFinal}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="cdEmpresa">
+					<subreportParameter  name="cdEmpresa">
 						<subreportParameterExpression><![CDATA[$P{cdEmpresa}]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendas_MotoBoy_CrossTab_modelo2.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendas_MotoBoy_CrossTab_modelo2.jasper"]]></subreportExpression>
 				</subreport>
-				<subreport isUsingCache="true">
-					<reportElement key="subreport-2" positionType="Float" x="4" y="42" width="525" height="18" uuid="e01a66fa-5896-4373-b110-f05e4066e0d7"/>
-					<subreportParameter name="pCdEntregador">
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="4"
+						y="42"
+						width="525"
+						height="18"
+						key="subreport-2"
+						positionType="Float"/>
+					<subreportParameter  name="pCdEntregador">
 						<subreportParameterExpression><![CDATA[$F{CD_ENTREGADOR}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="pDataInicio">
+					<subreportParameter  name="pDataInicio">
 						<subreportParameterExpression><![CDATA[$P{pDataInicio}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="pDataFinal">
+					<subreportParameter  name="pDataFinal">
 						<subreportParameterExpression><![CDATA[$P{pDataFinal}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="cdEmpresa">
+					<subreportParameter  name="cdEmpresa">
 						<subreportParameterExpression><![CDATA[$P{cdEmpresa}]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyCustoEntrega.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyCustoEntrega.jasper"]]></subreportExpression>
 				</subreport>
-				<subreport isUsingCache="true">
-					<reportElement key="subreport-5" positionType="Float" x="4" y="63" width="525" height="18" uuid="1ebffef2-063a-4235-8707-a0f2dc692e5a"/>
-					<subreportParameter name="pCdEntregador">
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="4"
+						y="63"
+						width="525"
+						height="18"
+						key="subreport-5"
+						positionType="Float"/>
+					<subreportParameter  name="pCdEntregador">
 						<subreportParameterExpression><![CDATA[$F{CD_ENTREGADOR}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="pDataInicio">
+					<subreportParameter  name="pDataInicio">
 						<subreportParameterExpression><![CDATA[$P{pDataInicio}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="pDataFinal">
+					<subreportParameter  name="pDataFinal">
 						<subreportParameterExpression><![CDATA[$P{pDataFinal}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter name="cdEmpresa">
+					<subreportParameter  name="cdEmpresa">
 						<subreportParameterExpression><![CDATA[$P{cdEmpresa}]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyReceita.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyReceita.jasper"]]></subreportExpression>
 				</subreport>
 			</band>
-		</groupHeader>
-		<groupFooter>
-			<band splitType="Stretch"/>
-		</groupFooter>
-	</group>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band splitType="Stretch"/>
-	</title>
-	<pageHeader>
-		<band height="52" splitType="Stretch">
-			<staticText>
-				<reportElement key="staticText-1" x="100" y="5" width="321" height="47" uuid="841c2216-9972-4662-bc2e-ce67d7b12855"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="52"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="100"
+						y="5"
+						width="321"
+						height="47"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
+					</textElement>
 				<text><![CDATA[CONTROLE FINANCEIRO DE VENDAS X MOTOBOY]]></text>
-			</staticText>
-			<image>
-				<reportElement key="image-1" x="4" y="4" width="91" height="45" uuid="d476bb28-070b-42a7-9df9-66987588c0bc"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<imageExpression><![CDATA[$P{pLogo}]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement key="staticText-17" x="432" y="37" width="28" height="15" uuid="9b16d22b-6a89-445c-aa5e-2e4c2f4e8b0e"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle"/>
+				</staticText>
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="4"
+						y="4"
+						width="91"
+						height="45"
+						key="image-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{pLogo}]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement
+						x="432"
+						y="37"
+						width="28"
+						height="15"
+						key="staticText-17"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
 				<text><![CDATA[Pág.:]]></text>
-			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-4" x="463" y="37" width="25" height="15" uuid="4ca105df-4f1d-474b-936b-ea4e22159580"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement key="staticText-18" x="490" y="37" width="15" height="15" uuid="671c28ef-b594-4042-93f4-4ba595ca1dfc"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="463"
+						y="37"
+						width="25"
+						height="15"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="490"
+						y="37"
+						width="15"
+						height="15"
+						key="staticText-18"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
 				<text><![CDATA[de]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-19" x="432" y="21" width="28" height="15" uuid="fb1040c2-cb55-44c1-8635-3eb1105a0280"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="432"
+						y="21"
+						width="28"
+						height="15"
+						key="staticText-19"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
 				<text><![CDATA[Hora:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-20" x="432" y="5" width="28" height="15" uuid="2c06e4d8-6b36-4a63-8ede-83c73644d84a"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="432"
+						y="5"
+						width="28"
+						height="15"
+						key="staticText-20"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
 				<text><![CDATA[Data:]]></text>
-			</staticText>
-			<textField evaluationTime="Report" pattern="dd/MM/yyyy" isBlankWhenNull="false">
-				<reportElement key="textField-5" x="463" y="5" width="69" height="15" uuid="31936ed7-28e7-4e68-ba4a-fc6856900694"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report" pattern="HH:mm" isBlankWhenNull="false">
-				<reportElement key="textField-6" x="463" y="21" width="69" height="15" uuid="12c35f43-02b8-48b8-93ba-5b35aec8043c"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report" isBlankWhenNull="false">
-				<reportElement key="textField-7" x="507" y="36" width="25" height="15" uuid="fa83f2c8-e669-41f5-aa5e-03092499ec49"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band splitType="Stretch"/>
-	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="15" splitType="Stretch">
-			<staticText>
-				<reportElement key="staticText-6" positionType="Float" x="299" y="3" width="231" height="12" isPrintWhenDetailOverflows="true" uuid="a886347b-9914-4b8f-a03e-3fd2616704c6"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="463"
+						y="5"
+						width="69"
+						height="15"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="HH:mm" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="463"
+						y="21"
+						width="69"
+						height="15"
+						key="textField-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="507"
+						y="36"
+						width="25"
+						height="15"
+						key="textField-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="15"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="299"
+						y="3"
+						width="231"
+						height="12"
+						key="staticText-6"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
 				<text><![CDATA[ControleControleFinanceiroVendas_MotoBoy.jrxml]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-7" positionType="Float" x="1" y="3" width="329" height="12" isPrintWhenDetailOverflows="true" uuid="42085ee6-6a1b-4d36-8eb6-ce726de72af8"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="3"
+						width="329"
+						height="12"
+						key="staticText-7"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
 				<text><![CDATA[iChef - Cozinha de Chef]]></text>
-			</staticText>
-			<line>
-				<reportElement key="line-1" x="1" y="2" width="528" height="1" uuid="39975e6d-5e7a-4567-8df4-5535e2e638c0"/>
-			</line>
-		</band>
-	</pageFooter>
-	<summary>
-		<band height="119" splitType="Stretch">
-			<staticText>
-				<reportElement key="staticText-8" positionType="Float" x="1" y="3" width="529" height="24" uuid="2052ccde-38f0-45ff-8402-2ccc527105f6"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="2"
+						width="528"
+						height="1"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="119"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="1"
+						y="3"
+						width="529"
+						height="24"
+						key="staticText-8"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Resumo]]></text>
-			</staticText>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-3" positionType="Float" x="1" y="61" width="525" height="10" uuid="afb38a29-8033-4152-afe7-c818eb328167"/>
-				<subreportParameter name="pDataInicio">
-					<subreportParameterExpression><![CDATA[$P{pDataInicio}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pDataFinal">
-					<subreportParameterExpression><![CDATA[$P{pDataFinal}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pCdEmpresa">
-					<subreportParameterExpression><![CDATA[$P{cdEmpresa}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pLogo">
-					<subreportParameterExpression><![CDATA[$P{pLogo}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="SUBREPORT_DIR">
-					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pCdEntregador">
-					<subreportParameterExpression><![CDATA[new Integer("0")]]></subreportParameterExpression>
-				</subreportParameter>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyCustoEntrega.jasper"]]></subreportExpression>
-			</subreport>
-			<staticText>
-				<reportElement key="staticText-9" positionType="Float" x="155" y="47" width="110" height="13" uuid="b8c3a24a-8740-4d9a-b263-302203abd09e"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="1"
+						y="61"
+						width="525"
+						height="10"
+						key="subreport-3"
+						positionType="Float"/>
+					<subreportParameter  name="pDataInicio">
+						<subreportParameterExpression><![CDATA[$P{pDataInicio}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pDataFinal">
+						<subreportParameterExpression><![CDATA[$P{pDataFinal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pCdEmpresa">
+						<subreportParameterExpression><![CDATA[$P{cdEmpresa}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pLogo">
+						<subreportParameterExpression><![CDATA[$P{pLogo}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pCdEntregador">
+						<subreportParameterExpression><![CDATA[new Integer("0")]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyCustoEntrega.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement
+						x="155"
+						y="47"
+						width="110"
+						height="13"
+						key="staticText-9"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Valor da Diária]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-10" positionType="Float" x="445" y="47" width="82" height="13" uuid="0576c149-e753-4f9a-861f-e89cad0b3b46"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="445"
+						y="47"
+						width="82"
+						height="13"
+						key="staticText-10"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Custo da Entrega]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-11" positionType="Float" x="266" y="47" width="47" height="13" uuid="c46084a8-6d75-4281-9fc9-82d4a7d0f366"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="266"
+						y="47"
+						width="47"
+						height="13"
+						key="staticText-11"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Dias Trabalhados]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-12" positionType="Float" x="313" y="47" width="69" height="13" uuid="0e14ed2e-e995-4e82-a6eb-90f71a1c445d"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="313"
+						y="47"
+						width="69"
+						height="13"
+						key="staticText-12"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Valor Total]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-13" positionType="Float" x="1" y="47" width="154" height="13" uuid="493aa562-d741-40e5-8eb0-72f9de7b8ff2"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="47"
+						width="154"
+						height="13"
+						key="staticText-13"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Entregador]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-14" positionType="Float" x="380" y="47" width="69" height="13" uuid="29ca4305-3a50-422c-ad41-7583fd029046"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="380"
+						y="47"
+						width="69"
+						height="13"
+						key="staticText-14"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Qtd. Entregue]]></text>
-			</staticText>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-4" positionType="Float" x="1" y="109" width="525" height="10" uuid="d230bebc-0135-41a0-acde-80339d1ca26b"/>
-				<subreportParameter name="pDataInicio">
-					<subreportParameterExpression><![CDATA[$P{pDataInicio}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pDataFinal">
-					<subreportParameterExpression><![CDATA[$P{pDataFinal}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pCdEmpresa">
-					<subreportParameterExpression><![CDATA[$P{cdEmpresa}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pLogo">
-					<subreportParameterExpression><![CDATA[$P{pLogo}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="SUBREPORT_DIR">
-					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="pCdEntregador">
-					<subreportParameterExpression><![CDATA[new Integer("0")]]></subreportParameterExpression>
-				</subreportParameter>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyReceita.jasper"]]></subreportExpression>
-			</subreport>
-			<staticText>
-				<reportElement key="staticText-21" positionType="Float" x="155" y="95" width="110" height="13" uuid="2e4562ae-c7e4-4c25-831f-844db94eda92"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="1"
+						y="109"
+						width="525"
+						height="10"
+						key="subreport-4"
+						positionType="Float"/>
+					<subreportParameter  name="pDataInicio">
+						<subreportParameterExpression><![CDATA[$P{pDataInicio}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pDataFinal">
+						<subreportParameterExpression><![CDATA[$P{pDataFinal}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pCdEmpresa">
+						<subreportParameterExpression><![CDATA[$P{cdEmpresa}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pLogo">
+						<subreportParameterExpression><![CDATA[$P{pLogo}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="pCdEntregador">
+						<subreportParameterExpression><![CDATA[new Integer("0")]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "/ControleControleFinanceiroVendasMotoBoyReceita.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement
+						x="155"
+						y="95"
+						width="110"
+						height="13"
+						key="staticText-21"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Valor da Diária]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-22" positionType="Float" x="445" y="95" width="82" height="13" uuid="7802adaa-3e42-4d7d-9d4d-82476a64aaad"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="445"
+						y="95"
+						width="82"
+						height="13"
+						key="staticText-22"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Total]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-23" positionType="Float" x="266" y="95" width="47" height="13" uuid="c17dc2ec-2a74-4f14-b669-50b09562f2eb"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="266"
+						y="95"
+						width="47"
+						height="13"
+						key="staticText-23"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Dias Trabalhados]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-24" positionType="Float" x="313" y="95" width="69" height="13" uuid="f90a1dd9-dd9d-40ea-8ef0-96cfff9d58f1"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="313"
+						y="95"
+						width="69"
+						height="13"
+						key="staticText-24"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Valor Total]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-25" positionType="Float" x="1" y="95" width="154" height="13" uuid="fbb26cbe-cde7-48d8-a2cb-b1b9912981a5"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="95"
+						width="154"
+						height="13"
+						key="staticText-25"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Entregador]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-26" positionType="Float" x="380" y="95" width="69" height="13" uuid="e0518ae7-a3d4-4466-80f4-abb115114bea"/>
-				<box leftPadding="2" rightPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="380"
+						y="95"
+						width="69"
+						height="13"
+						key="staticText-26"
+						positionType="Float"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="Thin" rightBorderColor="#000000" rightPadding="2" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
 				<text><![CDATA[Receita]]></text>
-			</staticText>
-			<textField isBlankWhenNull="false">
-				<reportElement key="textField-8" positionType="Float" mode="Opaque" x="1" y="31" width="531" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="f4b47489-d249-4060-b6d0-9fdc39b8779f"/>
-				<box leftPadding="5">
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Curso da Entrega"]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="false">
-				<reportElement key="textField-9" positionType="Float" mode="Opaque" x="1" y="79" width="531" height="16" forecolor="#000000" backcolor="#CCCCCC" uuid="31c2f586-e6c9-4a09-a24e-86e12d8a4979"/>
-				<box leftPadding="5">
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Receita"]]></textFieldExpression>
-			</textField>
-		</band>
-	</summary>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="1"
+						y="31"
+						width="531"
+						height="16"
+						forecolor="#000000"
+						backcolor="#CCCCCC"
+						key="textField-8"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Curso da Entrega"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="1"
+						y="79"
+						width="531"
+						height="16"
+						forecolor="#000000"
+						backcolor="#CCCCCC"
+						key="textField-9"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="5" rightBorder="None" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Receita"]]></textFieldExpression>
+				</textField>
+			</band>
+		</summary>
 </jasperReport>

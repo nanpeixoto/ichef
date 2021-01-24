@@ -316,8 +316,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorData}.doubleValue()   - $V{valorPrecoCustoPorData}.doubleValue()   )
-]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorData}.doubleValue()   - $V{valorPrecoCustoPorData}.doubleValue()   )]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -449,8 +448,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorPrato}.doubleValue()   - $V{valorPrecoCustoPorPrato}.doubleValue()   )
-]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorPrato}.doubleValue()   - $V{valorPrecoCustoPorPrato}.doubleValue()   )]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -598,7 +596,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{valorPagoPorTipoPrato} ]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPagoPorTipoPrato}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -611,7 +609,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{valorPrecoCustoTipoPratoByTipoPrato} ]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPrecoCustoTipoPratoByTipoPrato}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -624,8 +622,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorTipoPrato}.doubleValue()   - $V{valorPrecoCustoTipoPratoByTipoPrato}.doubleValue()   )
-]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double  (  $V{valorPagoPorTipoPrato}.doubleValue()   - $V{valorPrecoCustoTipoPratoByTipoPrato}.doubleValue()   )]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -837,7 +834,7 @@ order by cd_empresa, data, nr_ordem, CD_CARDAPIO_PRATO,DS_TIP_PRATO, ds_forma_pa
 					<textElement textAlignment="Center">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{valorPrecoCustoTipoPratobyFormaPag} ]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{valorPrecoCustoTipoPratobyFormaPag}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
