@@ -260,6 +260,23 @@
 									</p:column>
 
 
+									<p:column headerText="" width="5%"
+										filterStyle="display:none; visibility:hidden;">
+										
+										
+											 	<h:outputText styleClass="fa fa-check-circle"
+													style="margin:0 auto;    width:20%; font-size:30px; color:red " rendered="#{!item.localidadeEntregue}"
+													  />
+												 
+											
+											 
+												<h:outputText styleClass="fa fa-check-circle" title="Pedido Entregue"
+													style="margin:0 auto;    width:20%; font-size:30px; color:green " rendered="#{item.localidadeEntregue}" />
+												 
+										 
+										 
+									</p:column>
+
 
 
 									<p:rowExpansion id="expanded">

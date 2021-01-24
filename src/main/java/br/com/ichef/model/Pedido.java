@@ -155,6 +155,9 @@ public class Pedido extends BaseEntity {
 	@Column(name = "LOG_LANCAMENTO_CARTEIRA")
 	private String logLancamentoCarteira;
 
+	@Column(name = "SN_ENTREGUE")
+	private String entregue;
+
 	@Transient
 	private boolean confirmado;
 
@@ -526,6 +529,22 @@ public class Pedido extends BaseEntity {
 
 	public void setValorUnitarioPedido(BigDecimal valorUnitarioPedido) {
 		this.valorUnitarioPedido = valorUnitarioPedido;
+	}
+
+	public String getEntregue() {
+		return entregue;
+	}
+
+	public void setEntregue(String entregue) {
+		this.entregue = entregue;
+	}
+
+	public Boolean getLocalidadeEntregue() {
+		if (getEntregue() == null || getEntregue().equalsIgnoreCase("N"))
+			return false;
+		if (getEntregue().equalsIgnoreCase("S"))
+			return true;
+		return false;
 	}
 
 }

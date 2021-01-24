@@ -50,7 +50,7 @@
         , `empresa` `e`
 where   `cc`.`CD_FORMA_PAGAMENTO` = `fp`.`CD_FORMA_PAGAMENTO`
             AND `cc`.`CD_EMPRESA` = `e`.`CD_EMPRESA`
-            and data between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' ) 
+            and  STR_TO_DATE(DATE_FORMAT(cc.data, '%d-%m-%Y'),     '%d-%m-%Y')  between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' ) 
             and  STR_TO_DATE('$P!{pDataFinal}', '%d/%m/%Y' )
                and e.CD_EMPRESA = $P!{pCdEmpresa}
                and `fp`.`SN_CORTESIA` = 'N'
@@ -490,11 +490,28 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 			</band>
 		</columnFooter>
 		<pageFooter>
-			<band height="15"  isSplitAllowed="true" >
+			<band height="47"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="1"
+						y="0"
+						width="329"
+						height="33"
+						key="staticText-14"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Top">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[*Baseado na data de confirmação (ou seja, data de entrega, data de pagamento);
+**Não entra cortesia
+***Não entra carteita]]></text>
+				</staticText>
 				<staticText>
 					<reportElement
 						x="303"
-						y="3"
+						y="35"
 						width="231"
 						height="12"
 						key="staticText-6"
@@ -509,7 +526,7 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 				<staticText>
 					<reportElement
 						x="1"
-						y="3"
+						y="35"
 						width="329"
 						height="12"
 						key="staticText-7"
@@ -524,7 +541,7 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 				<line direction="TopDown">
 					<reportElement
 						x="1"
-						y="2"
+						y="34"
 						width="532"
 						height="0"
 						key="line-1"/>

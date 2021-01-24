@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        Relatório - Quantidade Produzida x Forma Pagamento
+    </ui:define>
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Quantidade Produzida x Forma Pagamento" link="relatorio_quantidade_producao_forma_pagamento.xhtml"/>
+        <h:form id="form" prependId="false">
+           <p:focus context="capaPanel"/>
+
+			
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Imprimir PDF" update="@form"
+                                         icon="fa fa-print" styleClass="btn-primary" ajax="false" action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(false)}"/>
+                       <!-- <p:spacer width="5"/>
+                        <p:commandButton value="Imprimir EXCEL" update="@form"
+                                         icon="fa fa-file-excel-o" styleClass="btn-success" ajax="false" action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(true)}"/>
+                       --> 
+                    </div>
+                    
+                    <p:splitButton value="Imprimir PDF" update="@form"
+                                   icon="fa fa-print"
+                                   styleClass="hidden-md hidden-lg btn-primary"  action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(false)}">
+                    </p:splitButton>
+                    
+                    <!--  <p:splitButton value="Imprimir Excel" update="@form"
+                                   icon="fa fa-file-excel-o"
+                                   styleClass="hidden-md hidden-lg btn-success"  action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(true)}">
+                    </p:splitButton> -->
+					
+					<p:separator/>
+
+                    <div class="ui-fluid">
+                    	<p:panelGrid id="capaPanel" columns="2" layout="grid" columnClasses="ui-g-2, ui-g-2">
+                    	
+                    		<p:outputLabel value="Empresa" for="empresa"/>
+		                    <p:selectOneMenu id="empresa" value="#{relQuantidadeProduzidaFormaPagamentoController.empresa}"  converter= "omnifaces.SelectItemsConverter" >
+								<f:selectItem itemLabel="Selecionar" itemValue=""  noSelectionOption="true"/>
+							    <f:selectItems value="#{relQuantidadeProduzidaFormaPagamentoController.empresas}" var="item" itemLabel="#{item.nomeFantasia}" itemValue="#{item}" />
+							 </p:selectOneMenu>
+							 
+                    	
+                    		<p:outputLabel value="Data Inicial" for="dtInicial"/>
+                    		<p:calendar id="dtInicial" value="#{relQuantidadeProduzidaFormaPagamentoController.dataInicial}"  pattern="dd/MM/yyyy" size="10" required="true"
+                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Inicial')}"  mask="true" showOn="button" locale="pt_BR"
+                    		/>
+                    		
+                    		<p:outputLabel value="Data Final" for="dtFinal"/>
+                    		<p:calendar id="dtFinal" value="#{relQuantidadeProduzidaFormaPagamentoController.dataFinal}"  pattern="dd/MM/yyyy" size="10" required="true"
+                    			requiredMessage="#{configuracaoController.getRequiredMessage('Data Final')}" mask="true" showOn="button" locale="pt_BR"
+                    		/>
+                    		
+						</p:panelGrid>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>   

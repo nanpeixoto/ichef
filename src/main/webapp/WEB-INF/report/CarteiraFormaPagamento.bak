@@ -34,7 +34,7 @@
 	<parameter name="pCdEmpresa" isForPrompting="false" class="java.lang.Integer">
 		<defaultValueExpression ><![CDATA[new Integer("1")]]></defaultValueExpression>
 	</parameter>
-	<queryString><![CDATA[ select e.NM_FANTASIA,  e.CD_EMPRESA , cc.CD_FORMA_PAGAMENTO, 
+	<queryString><![CDATA[select e.NM_FANTASIA,  e.CD_EMPRESA , cc.CD_FORMA_PAGAMENTO, 
     concat (DS_FORMA_PAGAMENTO
     ,  case when sn_percentual = 'S' then  Replace( concat ( ' (',  taxa,'%)' )  ,',','.')  else '' end )  
   FORMA_PAG,  
@@ -50,15 +50,14 @@
         , `empresa` `e`
 where   `cc`.`CD_FORMA_PAGAMENTO` = `fp`.`CD_FORMA_PAGAMENTO`
             AND `cc`.`CD_EMPRESA` = `e`.`CD_EMPRESA`
-            and data between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' ) 
+            and  STR_TO_DATE(DATE_FORMAT(cc.data, '%d-%m-%Y'),     '%d-%m-%Y')  between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' ) 
             and  STR_TO_DATE('$P!{pDataFinal}', '%d/%m/%Y' )
                and e.CD_EMPRESA = $P!{pCdEmpresa}
                and `fp`.`SN_CORTESIA` = 'N'
                AND `fp`.`SN_CARTEIRA` = 'N'
 group by    `fp`.`CD_FORMA_PAGAMENTO`  , 
         `fp`.`DS_FORMA_PAGAMENTO`       
-        order by DS_FORMA_PAGAMENTO, taxa  
-]]></queryString>
+        order by DS_FORMA_PAGAMENTO, taxa]]></queryString>
 
 	<field name="NM_FANTASIA" class="java.lang.String"/>
 	<field name="CD_EMPRESA" class="java.lang.Integer"/>
@@ -244,7 +243,7 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{SomaValorBruto}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{SomaValorBruto}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -257,7 +256,7 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 					<textElement textAlignment="Right">
 						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[ $V{SomaValorTaxa}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{SomaValorTaxa}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -491,11 +490,28 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 			</band>
 		</columnFooter>
 		<pageFooter>
-			<band height="15"  isSplitAllowed="true" >
+			<band height="73"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="1"
+						y="0"
+						width="329"
+						height="33"
+						key="staticText-14"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Top">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[*Baseado na data de confirmação (ou seja, data de entrega, data de pagamento);
+**Não entra cortesia
+***Não entra carteita]]></text>
+				</staticText>
 				<staticText>
 					<reportElement
 						x="303"
-						y="3"
+						y="35"
 						width="231"
 						height="12"
 						key="staticText-6"
@@ -510,7 +526,7 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 				<staticText>
 					<reportElement
 						x="1"
-						y="3"
+						y="35"
 						width="329"
 						height="12"
 						key="staticText-7"
@@ -525,7 +541,7 @@ group by    `fp`.`CD_FORMA_PAGAMENTO`  ,
 				<line direction="TopDown">
 					<reportElement
 						x="1"
-						y="2"
+						y="34"
 						width="532"
 						height="0"
 						key="line-1"/>
