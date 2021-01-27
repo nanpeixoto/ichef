@@ -409,8 +409,7 @@ public class GenericDAO<T extends BaseEntity> implements Serializable {
 	}
 
 	protected Class<?> getTypeClass() {
-		Class<?> clazz = (Class<?>) ((ParameterizedType) this.getClass().getGenericSuperclass())
-				.getActualTypeArguments()[0];
+		Class<?> clazz =  (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];;
 		return clazz;
 	}
 

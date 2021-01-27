@@ -45,6 +45,17 @@ public class CardapioFichaPratoEmpresa extends BaseEntity {
 
 	@Transient
 	private boolean podeVenderAcimaDoLimite;
+	
+	@Column(name = "QTD_MEDIA_VENDA")
+	private Integer qtdMediaVenda;
+	public Integer getQtdMediaVenda() {
+		return qtdMediaVenda;
+	}
+
+	public void setQtdMediaVenda(Integer qtdMediaVenda) {
+		this.qtdMediaVenda = qtdMediaVenda;
+	}
+	
 
 	public boolean isPodeVenderAcimaDoLimite() {
 		if (getVenderAcimaDoLimite() != null) {

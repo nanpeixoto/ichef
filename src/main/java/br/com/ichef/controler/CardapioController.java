@@ -172,6 +172,7 @@ public class CardapioController extends BaseController {
 				CardapioFichaPratoEmpresa pratoEmpresa = new CardapioFichaPratoEmpresa();
 				pratoEmpresa.setCardapioFichaPrato(ficha);
 				pratoEmpresa.setEmpresa(empresa);
+				pratoEmpresa.setQtdMediaVenda( service.findMediaDeVenda(ficha, empresa) );
 				pratoEmpresa.setPodeVenderAcimaDoLimite(isPodeVenderAcimaDoLimite());
 				pratoEmpresa.setQuantidade(getQuantidade());
 				if (ficha.getFichaPratoEmpresa() == null) {
