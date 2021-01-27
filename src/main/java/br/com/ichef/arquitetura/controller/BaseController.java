@@ -144,6 +144,8 @@ public class BaseController extends AbstratcBaseController implements Serializab
 		JasperReport relatorio = JasperCompileManager.compileReport(desenho);
 
 		JasperPrint impressao = JasperFillManager.fillReport(relatorio, parametros, con);
+		
+		setParametroReport(REPORT_PARAM_SUBREPORT_DIR, getRealPath(getProperties().getProperty("dir.relatorio")));
 
 		JRXlsExporter exporter = new JRXlsExporter();
 		ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();

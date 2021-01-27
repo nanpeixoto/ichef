@@ -5,11 +5,10 @@
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">
-        Relatório - Quantidade Produzida x Forma Pagamento
+        Relatório - Qtd Produzida x Forma Pagamento (Mensal)
     </ui:define>
 
     <ui:define name="body">
-        <adm:breadcrumb title="Quantidade Produzida x Forma Pagamento" link="relatorio_quantidade_producao_forma_pagamento.xhtml"/>
         <h:form id="form" prependId="false">
            <p:focus context="capaPanel"/>
 
@@ -19,10 +18,10 @@
                     <div id="main-buttons" class="hidden-sm hidden-xs">
                         <p:commandButton value="Imprimir PDF" update="@form"
                                          icon="fa fa-print" styleClass="btn-primary" ajax="false" action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(false)}"/>
-                       <!-- <p:spacer width="5"/>
+                         <p:spacer width="5"/>
                         <p:commandButton value="Imprimir EXCEL" update="@form"
                                          icon="fa fa-file-excel-o" styleClass="btn-success" ajax="false" action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(true)}"/>
-                       --> 
+                        
                     </div>
                     
                     <p:splitButton value="Imprimir PDF" update="@form"
@@ -30,10 +29,10 @@
                                    styleClass="hidden-md hidden-lg btn-primary"  action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(false)}">
                     </p:splitButton>
                     
-                    <!--  <p:splitButton value="Imprimir Excel" update="@form"
+                    <p:splitButton value="Imprimir Excel" update="@form"
                                    icon="fa fa-file-excel-o"
                                    styleClass="hidden-md hidden-lg btn-success"  action="#{relQuantidadeProduzidaFormaPagamentoController.imprimir(true)}">
-                    </p:splitButton> -->
+                    </p:splitButton>  
 					
 					<p:separator/>
 
