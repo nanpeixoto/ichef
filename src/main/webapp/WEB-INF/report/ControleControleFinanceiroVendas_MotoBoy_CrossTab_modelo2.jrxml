@@ -1,64 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"  ?>
-<!-- Created with iReport - A designer for JasperReports -->
-<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-<jasperReport
-		 name="ControleControleFinanceiroVendas_MotoBoy_CrossTab_modelo2"
-		 columnCount="1"
-		 printOrder="Vertical"
-		 orientation="Portrait"
-		 pageWidth="595"
-		 pageHeight="842"
-		 columnWidth="595"
-		 columnSpacing="0"
-		 leftMargin="0"
-		 rightMargin="0"
-		 topMargin="0"
-		 bottomMargin="0"
-		 whenNoDataType="NoPages"
-		 isTitleNewPage="false"
-		 isSummaryNewPage="false">
-	<property name="ireport.zoom" value="1.0" />
-	<property name="ireport.x" value="0" />
-	<property name="ireport.y" value="0" />
-	<property name="ireport.scriptlethandling" value="0" />
-	<property name="ireport.encoding" value="UTF-8" />
-	<import value="java.util.*" />
-	<import value="net.sf.jasperreports.engine.*" />
-	<import value="net.sf.jasperreports.engine.data.*" />
-
-	<parameter name="pLogo" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="pListaContagem" isForPrompting="false" class="java.util.List"/>
-	<parameter name="pCdEntregador" isForPrompting="false" class="java.lang.Integer">
-		<defaultValueExpression ><![CDATA[new Integer("10")]]></defaultValueExpression>
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ControleControleFinanceiroVendas_MotoBoy_CrossTab_modelo2" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="690fc777-1405-4bd8-8317-6e4295f4c5ea">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="pLogo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pListaContagem" class="java.util.List" isForPrompting="false"/>
+	<parameter name="pCdEntregador" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Integer("10")]]></defaultValueExpression>
 	</parameter>
-	<parameter name="pDataInicio" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA["01/11/2020"]]></defaultValueExpression>
+	<parameter name="pDataInicio" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["01/11/2020"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="pDataFinal" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA["30/11/2020"]]></defaultValueExpression>
+	<parameter name="pDataFinal" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["30/11/2020"]]></defaultValueExpression>
 	</parameter>
-	<queryString><![CDATA[SELECT 
-	e.CD_ENTREGADOR, e.NM_ENTREGADOR, 
+	<queryString>
+		<![CDATA[SELECT
+	e.CD_ENTREGADOR, e.NM_ENTREGADOR,
 	concat (DS_FORMA_PAGAMENTO
-    ,  case when sn_percentual = 'S' then  Replace( concat ( ' (',  taxa,'%)' )  ,',','.')  else '' end )  
+    ,  case when sn_percentual = 'S' then  Replace( concat ( ' (',  taxa,'%)' )  ,',','.')  else '' end )
   DS_FORMA_PAGAMENTO
 	, tp.DS_TIP_PRATO
 , CASE WHEN SUM(p.NR_QTD) = 0 THEN   NULL ELSE SUM(p.NR_QTD) END  QTD
-/*, case  when WEEKDAY(p.dt_entrega)= 0 then 'Segunda-Feira' 
- when WEEKDAY(p.dt_entrega)= 1 then 'terca-Feira' 
- when WEEKDAY(p.dt_entrega)= 2 then 'Quarta-Feira' 
- when WEEKDAY(p.dt_entrega)= 3 then 'Quinta-Feira' 
- when WEEKDAY(p.dt_entrega)= 4 then 'Sexta-Feira' 
+/*, case  when WEEKDAY(p.dt_entrega)= 0 then 'Segunda-Feira'
+ when WEEKDAY(p.dt_entrega)= 1 then 'terca-Feira'
+ when WEEKDAY(p.dt_entrega)= 2 then 'Quarta-Feira'
+ when WEEKDAY(p.dt_entrega)= 3 then 'Quinta-Feira'
+ when WEEKDAY(p.dt_entrega)= 4 then 'Sexta-Feira'
  when WEEKDAY(p.dt_entrega)= 5 then 'Sábado'
- when WEEKDAY(p.dt_entrega)= 6 then 'Domingo'   end 
+ when WEEKDAY(p.dt_entrega)= 6 then 'Domingo'   end
 	 dia_semana*/
-,       case when taxa is not null then 
-    ROUND(    sum(    p.vl_pedido  - (  (p.vl_pedido  *taxa ) /100)    )   ,10) 
-   else   ROUND(  SUM(  p.vl_pedido   ) ,10)   end 
+,       case when taxa is not null then
+    ROUND(    sum(    p.vl_pedido  - (  (p.vl_pedido  *taxa ) /100)    )   ,10)
+   else   ROUND(  SUM(  p.vl_pedido   ) ,10)   end
    AS valor_liquido
-FROM  
-pedido p 
+FROM
+pedido p
 -- inner join cliente_carteira cc on cc.cd_pedido = p.cd_pedido
 INNER JOIN entregador e  on p.cd_entregador = e.cd_entregador
 INNER JOIN forma_pagamento fp ON fp.CD_FORMA_PAGAMENTO = p.CD_FORMA_PAGAMENTO
@@ -68,295 +51,336 @@ INNER JOIN empresa em ON em.CD_EMPRESA = p.CD_EMPRESA
 -- INNER JOIN cardapio c ON c.CD_CARDAPIO = p.CD_CARDAPIO
 -- INNER JOIN ficha_tecnica_prato ftp ON ftp.CD_FICHA_TECNICA_PRATO = cfp.CD_FICHA_TECNICA_PRATO
 where  e.CD_ENTREGADOR =  $P!{pCdEntregador}
-and   STR_TO_DATE(DATE_FORMAT(p.dt_entrega, '%d-%m-%Y'),     '%d-%m-%Y') 
-  between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' ) 
+and   STR_TO_DATE(DATE_FORMAT(p.dt_entrega, '%d-%m-%Y'),     '%d-%m-%Y')
+  between STR_TO_DATE( '$P!{pDataInicio}', '%d/%m/%Y' )
             and  STR_TO_DATE('$P!{pDataFinal}', '%d/%m/%Y' )
 and tp.sn_contagem = 'S'
-GROUP BY e.CD_ENTREGADOR, e.NM_ENTREGADOR, 
+GROUP BY e.CD_ENTREGADOR, e.NM_ENTREGADOR,
 	  fp.DS_FORMA_PAGAMENTO
 	, tp.DS_TIP_PRATO
 	-- ,   cfp.DS_CARDAPIO_FICHA
-ORDER BY 	e.cd_empresa,  e.CD_ENTREGADOR, e.NM_ENTREGADOR 
+	, sn_percentual ,  taxa
+ORDER BY 	e.cd_empresa,  e.CD_ENTREGADOR, e.NM_ENTREGADOR
  , fp.DS_FORMA_PAGAMENTO
-, tp.DS_TIP_PRATO]]></queryString>
-
+, tp.DS_TIP_PRATO]]>
+	</queryString>
 	<field name="CD_ENTREGADOR" class="java.lang.Integer"/>
 	<field name="NM_ENTREGADOR" class="java.lang.String"/>
 	<field name="DS_FORMA_PAGAMENTO" class="java.lang.String"/>
 	<field name="DS_TIP_PRATO" class="java.lang.String"/>
 	<field name="QTD" class="java.lang.Integer"/>
 	<field name="valor_liquido" class="java.lang.Double"/>
-
-		<background>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</background>
-		<title>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</title>
-		<pageHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageHeader>
-		<columnHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</columnHeader>
-		<detail>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</detail>
-		<columnFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</columnFooter>
-		<pageFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageFooter>
-		<summary>
-			<band height="14"  isSplitAllowed="true" >
-				<crosstab >
-					<reportElement
-						x="0"
-						y="0"
-						width="587"
-						height="14"
-						key="crosstab-2"/>
-					<crosstabHeaderCell>						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="150"
-						height="25"
-						key="textField-1"/>
-					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Total"]]></textFieldExpression>
-				</textField>
-						</cellContents>
-					</crosstabHeaderCell>					<rowGroup name="DS_FORMA_PAGAMENTO" width="150" totalPosition="End">
-						<bucket>
-							<bucketExpression class="java.lang.String"><![CDATA[$F{DS_FORMA_PAGAMENTO}]]></bucketExpression>
-						</bucket>
-						<crosstabRowHeader>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="14" splitType="Stretch">
+			<crosstab>
+				<reportElement key="crosstab-2" x="0" y="0" width="587" height="14" uuid="c345294b-c8fe-455e-ad29-0b27675d01f8"/>
+				<crosstabHeaderCell>
+					<cellContents mode="Transparent">
+						<box>
+							<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField-1" x="0" y="0" width="150" height="25" uuid="e9162f7f-fca5-4e6d-8cc6-5c6eb87b9b3d"/>
+							<box>
+								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="DS_FORMA_PAGAMENTO" width="150" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{DS_FORMA_PAGAMENTO}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
 						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="150"
-						height="30"
-						key="textField"/>
-					<box topBorder="1Point" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="7"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$V{DS_FORMA_PAGAMENTO}]]></textFieldExpression>
-				</textField>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="150" height="30" uuid="4933d169-3179-4d0f-9b5a-b29d2d4f3cbd"/>
+								<box>
+									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{DS_FORMA_PAGAMENTO}]]></textFieldExpression>
+							</textField>
 						</cellContents>
-						</crosstabRowHeader>
-						<crosstabTotalRowHeader>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
 						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="150"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Total"]]></textFieldExpression>
-				</textField>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="150" height="30" uuid="572e975d-b034-4db7-a3d9-956f5cea0ece"/>
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+							</textField>
 						</cellContents>
-						</crosstabTotalRowHeader>
-					</rowGroup>
-					<columnGroup name="DS_TIP_PRATO" height="25" totalPosition="End" headerPosition="Center">
-						<bucket>
-							<bucketExpression class="java.lang.String"><![CDATA[$F{DS_TIP_PRATO}]]></bucketExpression>
-						</bucket>
-						<crosstabColumnHeader>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="DS_TIP_PRATO" height="25" totalPosition="End" headerPosition="Center">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{DS_TIP_PRATO}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
 						<cellContents mode="Transparent">
-					<box topBorder="1Point" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="79"
-						height="25"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="7"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$V{DS_TIP_PRATO}]]></textFieldExpression>
-				</textField>
+							<box>
+								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="79" height="25" uuid="f57ed7d6-8aca-47c3-b64d-a44c526c3724"/>
+								<box leftPadding="2">
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{DS_TIP_PRATO}]]></textFieldExpression>
+							</textField>
 						</cellContents>
-						</crosstabColumnHeader>
-						<crosstabTotalColumnHeader>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
 						<cellContents mode="Transparent">
-					<box topBorder="1Point" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="100"
-						height="25"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Total"]]></textFieldExpression>
-				</textField>
+							<box>
+								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="100" height="25" uuid="583f52e1-b48a-41d5-bdbf-dade28d15007"/>
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+							</textField>
 						</cellContents>
-						</crosstabTotalColumnHeader>
-					</columnGroup>
-
-					<measure name="QTD_Sum" class="java.lang.Integer" calculation="Sum">
-						<measureExpression><![CDATA[$F{QTD}]]></measureExpression>
-					</measure>
-					<measure name="ValorLiquido" class="java.lang.Double" calculation="Sum">
-						<measureExpression><![CDATA[$F{valor_liquido}]]></measureExpression>
-					</measure>
-					<crosstabCell width="80" height="30">
-						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="19"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="7"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="17"
-						y="0"
-						width="62"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="7"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{ValorLiquido}]]></textFieldExpression>
-				</textField>
-						</cellContents>
-					</crosstabCell>
-					<crosstabCell width="100" height="30" columnTotalGroup="DS_TIP_PRATO">
-						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="20"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="17"
-						y="0"
-						width="83"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" rightPadding="2" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{ValorLiquido_DS_TIP_PRATO_ALL}]]></textFieldExpression>
-				</textField>
-						</cellContents>
-					</crosstabCell>
-					<crosstabCell width="80" height="30" rowTotalGroup="DS_FORMA_PAGAMENTO">
-						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="17"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="17"
-						y="0"
-						width="62"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{ValorLiquido_DS_FORMA_PAGAMENTO_ALL}]]></textFieldExpression>
-				</textField>
-						</cellContents>
-					</crosstabCell>
-					<crosstabCell width="100" height="30" rowTotalGroup="DS_FORMA_PAGAMENTO" columnTotalGroup="DS_TIP_PRATO">
-						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="20"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="R$ #,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="17"
-						y="0"
-						width="83"
-						height="30"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" leftPadding="2" rightBorder="None" rightBorderColor="#000000" rightPadding="2" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{ValorLiquido_DS_FORMA_PAGAMENTO_ALL}]]></textFieldExpression>
-				</textField>
-						</cellContents>
-					</crosstabCell>
-					<whenNoDataCell>						<cellContents mode="Transparent">
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-						</cellContents>
-					</whenNoDataCell>					</crosstab>
-			</band>
-		</summary>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="QTD_Sum" class="java.lang.Integer" calculation="Sum">
+					<measureExpression><![CDATA[$F{QTD}]]></measureExpression>
+				</measure>
+				<measure name="ValorLiquido" class="java.lang.Double" calculation="Sum">
+					<measureExpression><![CDATA[$F{valor_liquido}]]></measureExpression>
+				</measure>
+				<crosstabCell width="80" height="30">
+					<cellContents mode="Transparent">
+						<box>
+							<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="" isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="19" height="30" uuid="12a323c8-e731-4ba6-a8ac-46298078f742"/>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
+						</textField>
+						<textField pattern="R$ #,##0.00" isBlankWhenNull="false">
+							<reportElement key="textField" x="17" y="0" width="62" height="30" uuid="928602f2-4b55-4efc-80c8-ef31550cac59"/>
+							<box leftPadding="2">
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{ValorLiquido}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="100" height="30" columnTotalGroup="DS_TIP_PRATO">
+					<cellContents mode="Transparent">
+						<box>
+							<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="20" height="30" uuid="e385da81-cd26-4330-a5dc-b309c2a40dd9"/>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
+						</textField>
+						<textField pattern="R$ #,##0.00" isBlankWhenNull="false">
+							<reportElement key="textField" x="17" y="0" width="83" height="30" uuid="5f084895-1214-4383-b8fd-e9c5616d3ccf"/>
+							<box leftPadding="2" rightPadding="2">
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{ValorLiquido_DS_TIP_PRATO_ALL}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="80" height="30" rowTotalGroup="DS_FORMA_PAGAMENTO">
+					<cellContents mode="Transparent">
+						<box>
+							<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="17" height="30" uuid="e71a1346-5ba6-4ceb-84bc-3146eb78f619"/>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
+						</textField>
+						<textField pattern="R$ #,##0.00" isBlankWhenNull="false">
+							<reportElement key="textField" x="17" y="0" width="62" height="30" uuid="19a7081b-c6ee-4f80-a70a-d9f6f8b1f92e"/>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{ValorLiquido_DS_FORMA_PAGAMENTO_ALL}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="100" height="30" rowTotalGroup="DS_FORMA_PAGAMENTO" columnTotalGroup="DS_TIP_PRATO">
+					<cellContents mode="Transparent">
+						<box>
+							<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="20" height="30" uuid="0f0fc60b-df6b-49fa-8580-19373677d0a6"/>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{QTD_Sum}]]></textFieldExpression>
+						</textField>
+						<textField pattern="R$ #,##0.00" isBlankWhenNull="false">
+							<reportElement key="textField" x="17" y="0" width="83" height="30" uuid="e220c08e-3aad-4ca6-9502-ce4e9925628f"/>
+							<box leftPadding="2" rightPadding="2">
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{ValorLiquido_DS_FORMA_PAGAMENTO_ALL}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<whenNoDataCell>
+					<cellContents mode="Transparent">
+						<box>
+							<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</whenNoDataCell>
+			</crosstab>
+		</band>
+	</summary>
 </jasperReport>

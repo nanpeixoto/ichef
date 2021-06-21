@@ -42,8 +42,8 @@
 		<defaultValueExpression ><![CDATA[new Integer("1")]]></defaultValueExpression>
 	</parameter>
 	<queryString><![CDATA[select 
-	SUM(dias) dias ,SUM( diaria) diaria
-    , cd_entregador, SUM((diaria*dias) )vl_mes,  NM_ENTREGADOR
+	max(dias) dias ,max( diaria) diaria
+    , cd_entregador, (max( diaria)*max(dias)) )vl_mes,  NM_ENTREGADOR
     , SUM(receita) receita ,
     SUM(receita) - SUM((diaria*dias))  total 
  from (
@@ -70,7 +70,7 @@ group by  p.cd_empresa, p.cd_entregador, concat(e.NM_ENTREGADOR, ' (', case when
 	<field name="dias" class="java.lang.Long"/>
 	<field name="diaria" class="java.lang.Float"/>
 	<field name="cd_entregador" class="java.lang.Integer"/>
-	<field name="vl_mes" class="java.lang.Float"/>
+	<field name="vl_mes" class="java.lang.Double"/>
 	<field name="NM_ENTREGADOR" class="java.lang.String"/>
 	<field name="receita" class="java.lang.Double"/>
 	<field name="total" class="java.lang.Double"/>
